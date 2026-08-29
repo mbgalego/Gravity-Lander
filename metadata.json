@@ -1,0 +1,6 @@
+{
+  "name": "Gravity Lander",
+  "description": "A physics-based lunar and cavern lander game featuring dual thrusters, heavy transport missions with rovers and trucks, vehicle logistics depots, multi-route alien worlds, and an interactive level editor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
