@@ -254,6 +254,7 @@ export function createInitialShip(world: WorldMap, modelId: ShipModelId = 'apoll
     hasWon: false,
     isSmoking: false,
     thrusterDegraded: false,
+    empDisabledTimer: 0,
     isRepairing: false,
     rampState: 'closed',
     rampProgress: 0,
@@ -413,9 +414,11 @@ export function updatePhysics(
 
   let newFuel = ship.fuel;
   let newHull = ship.hull;
+  let empDisabledTimer = Math.max(0, (ship.empDisabledTimer || 0) - safeDt);
   let isRepairing = false;
   let isSmoking = newHull < 50;
   let thrusterDegraded = newHull < 35;
+  const isEmpDisabled = empDisabledTimer > 0;
 
   // Fuel leak if hull is critically punctured (< 20%)
   if (newHull < 20 && newFuel > 0) {
@@ -425,6 +428,11 @@ export function updatePhysics(
   // Emit smoke if hull is damaged
   if (particles && isSmoking && Math.random() < (newHull < 25 ? 0.6 : 0.25)) {
     particles.emitSmoke(ship.pos, 1);
+  }
+
+  // Emit electrical sparks if EMP is active
+  if (particles && isEmpDisabled && Math.random() < 0.35) {
+    particles.emitSparks(ship.pos, 2);
   }
 
   const hasFuel = newFuel > 0;
@@ -474,7 +482,7 @@ export function updatePhysics(
   const rightX = Math.cos(ship.angle);
   const rightY = Math.sin(ship.angle);
 
-  if (hasFuel) {
+  if (hasFuel && !isEmpDisabled) {
     if (ship.leftThruster) {
       fx += upX * singleEngineThrust;
       fy += upY * singleEngineThrust;
@@ -553,6 +561,7 @@ export function updatePhysics(
     totalMassKg,
     isSmoking,
     thrusterDegraded,
+    empDisabledTimer,
     isRepairing,
   };
 
@@ -1149,15 +1158,21 @@ export function updatePhysics(
             particles.emitPlasmaArc(cargo.pos, 2);
           }
           if (cargo.chargeTimer <= 0) {
-            // EMP Burst!
+            // EMP Burst! Disables ship flight avionics and thruster ignition for 0.5s to 2.0s (randomized)
+            const blackoutDuration = Number((0.5 + Math.random() * 1.5).toFixed(2));
             sound.playPlasmaEMP();
-            if (particles) particles.emitPlasmaArc(cargo.pos, 16);
+            if (particles) {
+              particles.emitPlasmaArc(cargo.pos, 20);
+              particles.emitPlasmaArc(updatedShip.pos, 16);
+              particles.emitSparks(updatedShip.pos, 14);
+            }
             updatedShip.fuel = Math.max(0, updatedShip.fuel - 10.0);
             updatedShip.vel.x += (Math.random() - 0.5) * 3.5;
+            updatedShip.empDisabledTimer = blackoutDuration;
             cargo.chargeTimer = 30; // reset for next cycle
             lastCargoEvent = {
               type: 'attached',
-              text: 'WARNING: PLASMA CELL EMP DISCHARGE OCCURRED (-10% FUEL)!',
+              text: `⚡ CRITICAL EMP BURST! AVIONICS DISABLED FOR ${blackoutDuration.toFixed(1)}s!`,
               time: elapsedTime,
             };
           }

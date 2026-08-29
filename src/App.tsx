@@ -472,10 +472,11 @@ export default function App() {
         if (ctx) {
           // 1. Update Thruster States from user input
           const currentShip = shipRef.current;
+          const isEmpActive = (currentShip.empDisabledTimer || 0) > 0;
           currentShip.leftThruster =
-            leftPressed.current && currentShip.fuel > 0 && !currentShip.isCrashed && !currentShip.isLanded;
+            !isEmpActive && leftPressed.current && currentShip.fuel > 0 && !currentShip.isCrashed && !currentShip.isLanded;
           currentShip.rightThruster =
-            rightPressed.current && currentShip.fuel > 0 && !currentShip.isCrashed && !currentShip.isLanded;
+            !isEmpActive && rightPressed.current && currentShip.fuel > 0 && !currentShip.isCrashed && !currentShip.isLanded;
 
           // Sound update
           sound.setLeftThruster(currentShip.leftThruster);

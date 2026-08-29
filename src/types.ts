@@ -121,6 +121,7 @@ export interface ShipState {
   isSmoking?: boolean;
   isSparking?: number;
   thrusterDegraded?: boolean;
+  empDisabledTimer?: number; // EMP avionics shutdown duration in seconds
   isRepairing?: boolean;
   attachedCargoId?: string | null;
   deliveredCargoCount?: number;

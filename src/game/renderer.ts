@@ -2915,6 +2915,45 @@ export class GameRenderer {
       ctx.restore();
     }
 
+    // 5. EMP Electromagnetic Shockwave & Avionics Blackout FX
+    if (ship.empDisabledTimer && ship.empDisabledTimer > 0) {
+      ctx.save();
+      // Crackling Emerald/Cyan Lightning Arcs across hull
+      const arcs = 4;
+      for (let a = 0; a < arcs; a++) {
+        ctx.strokeStyle = Math.random() < 0.5 ? '#34d399' : '#38bdf8';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        let currX = (Math.random() - 0.5) * 36;
+        let currY = (Math.random() - 0.5) * 36;
+        ctx.moveTo(currX, currY);
+        for (let seg = 0; seg < 3; seg++) {
+          currX += (Math.random() - 0.5) * 16;
+          currY += (Math.random() - 0.5) * 16;
+          ctx.lineTo(currX, currY);
+        }
+        ctx.stroke();
+      }
+
+      // Flashing EMP Ring Aura
+      const empPulse = 28 + Math.sin(time * 24) * 6;
+      ctx.strokeStyle = 'rgba(52, 211, 153, 0.85)';
+      ctx.lineWidth = 2.0;
+      ctx.setLineDash([6, 3]);
+      ctx.beginPath();
+      ctx.arc(0, 0, empPulse, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // EMP Warning Tag above craft
+      ctx.font = 'bold 10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#34d399';
+      ctx.shadowColor = '#34d399';
+      ctx.shadowBlur = 6;
+      ctx.fillText(`⚡ EMP BLACKOUT (${ship.empDisabledTimer.toFixed(1)}s)`, 0, -32);
+      ctx.restore();
+    }
+
     ctx.restore();
   }
 

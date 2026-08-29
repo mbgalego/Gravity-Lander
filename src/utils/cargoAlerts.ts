@@ -81,7 +81,7 @@ export const CARGO_HAZARD_INFO: Record<
   plasma: {
     title: 'PLASMA BATTERY',
     hazardLevel: 'EMP DISCHARGE',
-    dangerWarning: 'Discharges disabling EMP pulses every 60s.',
+    dangerWarning: 'Discharges disabling EMP pulses (kills thrusters for 0.5s–2.0s & drains 10% fuel).',
     icon: 'zap',
     accentColor: '#34d399',
     badgeBg: 'bg-emerald-950/90',
