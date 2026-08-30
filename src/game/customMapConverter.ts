@@ -30,6 +30,7 @@ import {
   OFFICIAL_VESPERA_MAP,
   OFFICIAL_CALYPSO_MAP,
   OFFICIAL_ZEPHYR_MAP,
+  OFFICIAL_TARTARUS_MAP,
 } from '../utils/customMapsStorage';
 
 export const CUSTOM_THEMES: Record<string, CustomMapTheme> = {
@@ -527,6 +528,11 @@ export function convertCustomMapToWorld(customMap: CustomMapData): WorldMap {
     groundPoints,
     ceilingPoints,
     obstacles,
+    obstacleObjects: (customMap.obstacles || []).map((obs) => ({
+      points: obs.points,
+      type: obs.type,
+      name: obs.name,
+    })),
     segments,
     launchPad,
     landingPad,
@@ -608,6 +614,9 @@ export function convertOfficialPlanetToCustomMap(planet: PlanetConfig): CustomMa
   }
   if (planet.id === 'zephyr' || planet.id === 'official-zephyr') {
     return JSON.parse(JSON.stringify(OFFICIAL_ZEPHYR_MAP));
+  }
+  if (planet.id === 'tartarus' || planet.id === 'official-tartarus') {
+    return JSON.parse(JSON.stringify(OFFICIAL_TARTARUS_MAP));
   }
 
   const worldWidth = 8600;

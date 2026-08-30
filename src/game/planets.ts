@@ -370,7 +370,7 @@ export const PLANETS: PlanetConfig[] = [
     name: 'Tartarus Nexus',
     sizeCategory: 'Large',
     category: 'Deep Industrial Mining Citadel',
-    description: 'Multi-layer underground industrial refinery with 4 distinct elevator shafts, heavy robotic gantries, and dual vehicle transport depots.',
+    description: 'Multi-layer underground industrial refinery with 3 distinct elevator shafts, heavy robotic gantries, and dual vehicle transport depots.',
     gravity: 5.40,
     airResistance: 0.0012,
     fuelBurnRate: 6.4,
@@ -394,7 +394,7 @@ export const PLANETS: PlanetConfig[] = [
     },
     seed: 74902,
     targetTimeSec: 260,
-    difficulty: 'Extreme',
+    difficulty: 'Hard',
   },
 
   // =========================================================================

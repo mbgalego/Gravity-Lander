@@ -22,6 +22,11 @@ import {
   Star,
   Feather,
   Award,
+  Bomb,
+  Snowflake,
+  Atom,
+  Magnet,
+  Radio,
 } from 'lucide-react';
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../utils/achievements';
 
@@ -520,28 +525,107 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({
           {activeTab === 'logistics' && (
             <div className="space-y-4 animate-in fade-in duration-150">
               
-              {/* Cargo Containers */}
+              {/* Winch & Tether Mechanics */}
               <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-3">
                 <div className="flex items-center gap-2 text-amber-400 font-bold text-sm uppercase">
                   <Package className="w-4 h-4 text-amber-400" />
-                  <span>CARGO CONTAINERS & WINCH TETHER PHYSICS</span>
+                  <span>ELECTROMAGNETIC WINCH & TETHER DYNAMICS</span>
                 </div>
                 <p className="text-slate-300 text-[11px] leading-relaxed">
-                  Industrial supply vaults contain high-priority cargo containers waiting for planetary extraction:
+                  Industrial vaults and cargo stations contain valuable supply containers waiting for planetary extraction:
                 </p>
 
                 <div className="space-y-2 text-[11px] text-slate-300">
                   <div className="p-3 bg-slate-950/60 rounded-xl border border-white/5 space-y-1">
                     <span className="text-amber-300 font-bold">1. Electromagnetic Winch Hook:</span>
-                    <p className="text-slate-400">Hover steadily 30m–80m directly above a cargo container to automatically latch your electromagnetic cable.</p>
+                    <p className="text-slate-400">Hover steadily 30m–80m directly above a cargo container on a depot to automatically latch your electromagnetic winch cable.</p>
                   </div>
                   <div className="p-3 bg-slate-950/60 rounded-xl border border-white/5 space-y-1">
-                    <span className="text-amber-300 font-bold">2. Dynamic Pendulum Swing:</span>
-                    <p className="text-slate-400">Attached containers swing realistically on a tether, shifting your craft&apos;s center of mass. Counter-steer smoothly when banking through narrow shafts.</p>
+                    <span className="text-amber-300 font-bold">2. Dynamic Pendulum Swing & Mass:</span>
+                    <p className="text-slate-400">Attached containers swing realistically on a tether, shifting your craft&apos;s center of gravity. Counter-steer smoothly when banking through narrow shafts.</p>
                   </div>
                   <div className="p-3 bg-slate-950/60 rounded-xl border border-white/5 space-y-1">
                     <span className="text-amber-300 font-bold">3. Destination LZ Delivery:</span>
                     <p className="text-slate-400">Transport the container all the way to the final Landing Zone (LZ) and touchdown safely for a massive <strong className="text-amber-300">+5,000 pts</strong> mission bonus!</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 6 Specialized Cargo Classes */}
+              <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-3">
+                <div className="flex items-center gap-2 text-amber-300 font-bold text-sm uppercase">
+                  <AlertTriangle className="w-4 h-4 text-amber-400" />
+                  <span>SPECIALIZED HAZARDOUS CARGO CLASSIFICATIONS</span>
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  Each payload class possesses unique behavioral properties and hazards:
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px]">
+                  {/* Standard */}
+                  <div className="p-3 bg-slate-950/70 rounded-xl border border-amber-500/30 space-y-1">
+                    <div className="flex items-center gap-1.5 text-amber-400 font-bold">
+                      <Package className="w-3.5 h-3.5" />
+                      <span>Standard Titanium Crate (140-650kg)</span>
+                    </div>
+                    <p className="text-slate-400 text-[10px]">
+                      Reinforced mineral freight. Stable in flight with predictable pendulum oscillation.
+                    </p>
+                  </div>
+
+                  {/* Explosive */}
+                  <div className="p-3 bg-slate-950/70 rounded-xl border border-orange-500/30 space-y-1">
+                    <div className="flex items-center gap-1.5 text-orange-400 font-bold">
+                      <Bomb className="w-3.5 h-3.5" />
+                      <span>Volatile Explosive Munitions</span>
+                    </div>
+                    <p className="text-slate-400 text-[10px]">
+                      Highly sensitive to kinetic shock. If the container slams violently into rock walls, it detonates in a devastating fireball!
+                    </p>
+                  </div>
+
+                  {/* Cryogenic */}
+                  <div className="p-3 bg-slate-950/70 rounded-xl border border-sky-500/30 space-y-1">
+                    <div className="flex items-center gap-1.5 text-sky-300 font-bold">
+                      <Snowflake className="w-3.5 h-3.5" />
+                      <span>Sub-Zero Cryo Superconductor</span>
+                    </div>
+                    <p className="text-slate-400 text-[10px]">
+                      Venting freezing vapor trails. Requires gentle maneuvering to prevent thermal containment breach.
+                    </p>
+                  </div>
+
+                  {/* Quantum Isotope */}
+                  <div className="p-3 bg-slate-950/70 rounded-xl border border-purple-500/30 space-y-1">
+                    <div className="flex items-center gap-1.5 text-purple-300 font-bold">
+                      <Atom className="w-3.5 h-3.5" />
+                      <span>Quantum Fission Isotope</span>
+                    </div>
+                    <p className="text-slate-400 text-[10px]">
+                      Glows with Cherenkov radiation. Emits particle halos that challenge navigation instruments in pitch darkness.
+                    </p>
+                  </div>
+
+                  {/* Magnetic */}
+                  <div className="p-3 bg-slate-950/70 rounded-xl border border-amber-600/30 space-y-1">
+                    <div className="flex items-center gap-1.5 text-amber-500 font-bold">
+                      <Magnet className="w-3.5 h-3.5" />
+                      <span>Super-Dense Magnetic Dynamo</span>
+                    </div>
+                    <p className="text-slate-400 text-[10px]">
+                      Dense mass ballast that exerts magnetic drag against ferrous rock strata, dampening pendulum swings.
+                    </p>
+                  </div>
+
+                  {/* Plasma Volta with EMP */}
+                  <div className="p-3 bg-slate-950/70 rounded-xl border border-emerald-500/40 space-y-1 bg-emerald-950/20">
+                    <div className="flex items-center gap-1.5 text-emerald-300 font-bold">
+                      <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>High-Voltage Plasma Volta Battery</span>
+                    </div>
+                    <p className="text-slate-300 text-[10px]">
+                      Surges with voltaic arcing. Periodically discharges a randomized EMP blast that temporarily disables flight thruster controls for <strong className="text-emerald-400">0.5s to 2.0s</strong>! Prepare to glide on inertia!
+                    </p>
                   </div>
                 </div>
               </div>
@@ -575,7 +659,7 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({
             </div>
           )}
 
-          {/* TAB 4: TOUCHDOWN LIMITS & SIGNPOSTS */}
+          {/* TAB 4: TOUCHDOWN LIMITS, VOLCANOES & SIGNPOSTS */}
           {activeTab === 'thresholds' && (
             <div className="space-y-4 animate-in fade-in duration-150">
               
@@ -612,6 +696,46 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({
                 <div className="flex items-center gap-2 p-2.5 bg-emerald-950/30 rounded-xl border border-emerald-500/30 text-[11px] text-emerald-300">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>On-screen HUD gauges glow <strong>GREEN</strong> when all values are within safe touchdown limits!</span>
+                </div>
+              </div>
+
+              {/* Active Volcanoes Hazard */}
+              <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-3">
+                <div className="flex items-center gap-2 text-rose-400 font-bold text-sm uppercase">
+                  <Flame className="w-4 h-4 text-rose-400" />
+                  <span>ACTIVE VOLCANIC CALDERAS & ERUPTION PLUMES</span>
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  Planetary calderas erupt in rhythmic cycles, threatening low-flying exploration craft:
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+                  <div className="p-3 bg-slate-950/60 rounded-xl border border-rose-500/30 space-y-1">
+                    <strong className="text-rose-400 flex items-center gap-1">
+                      <Flame className="w-3.5 h-3.5" /> Thermal Blast Plume
+                    </strong>
+                    <p className="text-slate-400 text-[10px]">
+                      Vertical columns of superheated gas and plasma disintegrate ships on contact. Time your flight across caldera vents during quiescent rest phases.
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-slate-950/60 rounded-xl border border-amber-500/30 space-y-1">
+                    <strong className="text-amber-400 flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5" /> Ballistic Rock Ejecta
+                    </strong>
+                    <p className="text-slate-400 text-[10px]">
+                      Eruptions propel fiery volcanic debris high into the air that arch through gravity and rebound off subterranean cave ceilings.
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-slate-950/60 rounded-xl border border-purple-500/30 space-y-1">
+                    <strong className="text-purple-400 flex items-center gap-1">
+                      <Radio className="w-3.5 h-3.5" /> Caldera Variations
+                    </strong>
+                    <p className="text-slate-400 text-[10px]">
+                      Encounter Magma (Incandescent Red/Orange), Plasma (Cyan/Violet), Toxic (Emerald), and Cryo (Sub-Zero Frost) geothermal calderas.
+                    </p>
+                  </div>
                 </div>
               </div>
 

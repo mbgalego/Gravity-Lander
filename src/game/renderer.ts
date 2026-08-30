@@ -3,6 +3,29 @@ import { ParticleSystem } from './particles';
 import { getShipConfig } from './ships';
 import { renderShipHull } from './shipDrawers';
 
+function hexToRgba(hex: string, alpha: number): string {
+  if (!hex) return `rgba(56, 189, 248, ${alpha})`;
+  if (hex.startsWith('rgba(')) {
+    return hex.replace(/[\d\.]+\)$/g, `${alpha})`);
+  }
+  if (hex.startsWith('rgb(')) {
+    return hex.replace('rgb(', 'rgba(').replace(')', `, ${alpha})`);
+  }
+  const cleanHex = hex.replace('#', '');
+  if (cleanHex.length === 3) {
+    const r = parseInt(cleanHex[0] + cleanHex[0], 16);
+    const g = parseInt(cleanHex[1] + cleanHex[1], 16);
+    const b = parseInt(cleanHex[2] + cleanHex[2], 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  } else if (cleanHex.length >= 6) {
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return `rgba(56, 189, 248, ${alpha})`;
+}
+
 function transformPoint(local: Vector2D, pos: Vector2D, angle: number): Vector2D {
   const cos = Math.cos(angle);
   const sin = Math.sin(angle);
@@ -266,7 +289,16 @@ export class GameRenderer {
     ctx.restore();
 
     // 7. Draw Cavern Obstacles, Rock Bridges & Spires
-    for (const obs of world.obstacles) {
+    for (let i = 0; i < world.obstacles.length; i++) {
+      const obs = world.obstacles[i];
+      if (!obs || obs.length < 3) continue;
+
+      const meta = world.obstacleObjects?.[i];
+      const isCrystal =
+        meta?.type === 'crystals' ||
+        meta?.type === 'crystal' ||
+        meta?.name?.toLowerCase().includes('crystal');
+
       ctx.save();
       ctx.beginPath();
       ctx.moveTo(obs[0].x, obs[0].y);
@@ -274,21 +306,185 @@ export class GameRenderer {
         ctx.lineTo(obs[j].x, obs[j].y);
       }
       ctx.closePath();
-      ctx.fillStyle = planet.theme.terrainFill;
-      ctx.fill();
-      ctx.strokeStyle = planet.theme.terrainBorder;
-      ctx.lineWidth = 2.2;
-      ctx.stroke();
 
-      // Subtle mineral accent lines across large rock bridges
-      if (obs.length >= 6) {
-        ctx.strokeStyle = planet.theme.terrainAccent;
-        ctx.globalAlpha = 0.35;
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(obs[0].x + 30, obs[0].y + 10);
-        ctx.lineTo(obs[2].x - 30, obs[2].y + 10);
+      if (isCrystal) {
+        // Theme-adaptive crystal palette derived from active planet/map theme
+        const borderCol = planet.theme.terrainBorder || '#38bdf8';
+        const accentCol = planet.theme.terrainAccent || '#0284c7';
+        const dustCol = planet.theme.dustColor || '#38bdf8';
+        const fillCol = planet.theme.terrainFill || '#0f172a';
+
+        let minY = Infinity;
+        let maxY = -Infinity;
+        let minX = Infinity;
+        let maxX = -Infinity;
+        for (const p of obs) {
+          if (p.y < minY) minY = p.y;
+          if (p.y > maxY) maxY = p.y;
+          if (p.x < minX) minX = p.x;
+          if (p.x > maxX) maxX = p.x;
+        }
+        const midX = (minX + maxX) / 2;
+
+        // Multi-stop theme-adaptive crystal gradient
+        const grad = ctx.createLinearGradient(midX, minY, midX, maxY);
+        grad.addColorStop(0, hexToRgba(dustCol, 0.95)); // Radiant crown highlight
+        grad.addColorStop(0.35, hexToRgba(borderCol, 0.88)); // Upper vibrant crystal body
+        grad.addColorStop(0.70, hexToRgba(accentCol, 0.78)); // Deep mineral prism
+        grad.addColorStop(1, hexToRgba(fillCol, 0.95)); // Base bedrock anchor
+
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Dynamic internal prism light sweep reflection
+        const shimmerPhase = (Math.sin(time * 2.2 + minX * 0.01) + 1) * 0.5;
+        const shimmerGrad = ctx.createLinearGradient(minX, minY, maxX, maxY);
+        shimmerGrad.addColorStop(Math.max(0, shimmerPhase - 0.25), 'rgba(255, 255, 255, 0)');
+        shimmerGrad.addColorStop(shimmerPhase, hexToRgba(dustCol, 0.45));
+        shimmerGrad.addColorStop(Math.min(1, shimmerPhase + 0.25), 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = shimmerGrad;
+        ctx.fill();
+
+        // Radiant Glowing Crystal Contour Edge
+        ctx.strokeStyle = borderCol;
+        ctx.lineWidth = 2.8;
+        ctx.shadowColor = borderCol;
+        ctx.shadowBlur = 14;
         ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Gemstone Facet Lines connecting base to peaks & cross-ribs
+        ctx.strokeStyle = hexToRgba(dustCol, 0.60);
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        if (obs.length >= 7) {
+          const baseMidX = (obs[0].x + obs[obs.length - 1].x) / 2;
+          const baseMidY = (obs[0].y + obs[obs.length - 1].y) / 2;
+          ctx.moveTo(baseMidX, baseMidY);
+          ctx.lineTo(obs[2].x, obs[2].y);
+          ctx.moveTo(baseMidX, baseMidY);
+          ctx.lineTo(obs[4].x, obs[4].y);
+          ctx.moveTo(baseMidX, baseMidY);
+          ctx.lineTo(obs[6].x, obs[6].y);
+          // Horizontal / diagonal facet ridges
+          ctx.moveTo(obs[2].x, obs[2].y);
+          ctx.lineTo(obs[3].x, obs[3].y);
+          ctx.lineTo(obs[4].x, obs[4].y);
+          ctx.lineTo(obs[5].x, obs[5].y);
+          ctx.lineTo(obs[6].x, obs[6].y);
+        } else {
+          const cx = (minX + maxX) / 2;
+          const cy = (minY + maxY) / 2;
+          for (let j = 0; j < obs.length; j += 2) {
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(obs[j].x, obs[j].y);
+          }
+        }
+        ctx.stroke();
+
+        // HIGH VISIBILITY VIBRANT SPARKLE & LIGHT ANIMATIONS
+        const peaks: { x: number; y: number }[] = [];
+        if (obs.length >= 7) {
+          peaks.push(obs[2], obs[4], obs[6]);
+        } else {
+          const sorted = [...obs].sort((a, b) => a.y - b.y);
+          peaks.push(...sorted.slice(0, 3));
+        }
+
+        for (let pIdx = 0; pIdx < peaks.length; pIdx++) {
+          const tip = peaks[pIdx];
+          const seedOffset = minX * 0.05 + pIdx * 2.1;
+          const sparkleVal = Math.sin(time * 4.5 + seedOffset);
+          const sparkleScale = Math.max(0, sparkleVal * 0.5 + 0.5); // 0.0 to 1.0
+
+          if (sparkleScale > 0.05) {
+            const currentSize = 6 + sparkleScale * 10; // 6px to 16px radius
+            const rot = time * 1.5 + seedOffset;
+
+            // 1. Ambient Glow Flare Aura
+            ctx.fillStyle = hexToRgba(dustCol, 0.45 * sparkleScale);
+            ctx.beginPath();
+            ctx.arc(tip.x, tip.y, currentSize * 1.3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 2. High-intensity White Core Diamond
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(tip.x, tip.y, 2.8 * sparkleScale, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 3. Rotating 4-Point Starburst (Horizontal & Vertical)
+            ctx.save();
+            ctx.translate(tip.x, tip.y);
+            ctx.rotate(rot);
+
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.8 * sparkleScale;
+            ctx.beginPath();
+            ctx.moveTo(-currentSize, 0);
+            ctx.lineTo(currentSize, 0);
+            ctx.moveTo(0, -currentSize);
+            ctx.lineTo(0, currentSize);
+            ctx.stroke();
+
+            // 4. Secondary 45-degree Cross Rays for full 8-point dazzling star
+            ctx.strokeStyle = hexToRgba(dustCol, 0.85 * sparkleScale);
+            ctx.lineWidth = 1.2 * sparkleScale;
+            const diagSize = currentSize * 0.65;
+            ctx.beginPath();
+            ctx.moveTo(-diagSize, -diagSize);
+            ctx.lineTo(diagSize, diagSize);
+            ctx.moveTo(-diagSize, diagSize);
+            ctx.lineTo(diagSize, -diagSize);
+            ctx.stroke();
+
+            ctx.restore();
+          }
+        }
+
+        // Floating Sparkling Crystal Essence Flecks
+        for (let f = 0; f < 3; f++) {
+          const fleckTime = (time * 1.2 + minX * 0.03 + f * 1.7) % 2.5;
+          const progress = fleckTime / 2.5;
+          const fleckAlpha = Math.sin(progress * Math.PI) * 0.8;
+          if (fleckAlpha > 0.05) {
+            const fleckX = midX + Math.sin(time * 2.0 + f * 3) * (maxX - minX) * 0.35;
+            const fleckY = minY - progress * 40 - f * 5;
+            const fleckRadius = 1.5 + Math.sin(time * 5 + f) * 0.8;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(fleckX, fleckY, fleckRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = hexToRgba(dustCol, fleckAlpha);
+            ctx.lineWidth = 1.0;
+            ctx.beginPath();
+            ctx.moveTo(fleckX - 4, fleckY);
+            ctx.lineTo(fleckX + 4, fleckY);
+            ctx.moveTo(fleckX, fleckY - 4);
+            ctx.lineTo(fleckX, fleckY + 4);
+            ctx.stroke();
+          }
+        }
+      } else {
+        // Standard Cavern Obstacle Fill & Border
+        ctx.fillStyle = planet.theme.terrainFill;
+        ctx.fill();
+        ctx.strokeStyle = planet.theme.terrainBorder;
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+
+        // Subtle mineral accent lines across large rock bridges
+        if (obs.length >= 6) {
+          ctx.strokeStyle = planet.theme.terrainAccent;
+          ctx.globalAlpha = 0.35;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(obs[0].x + 30, obs[0].y + 10);
+          ctx.lineTo(obs[2].x - 30, obs[2].y + 10);
+          ctx.stroke();
+        }
       }
       ctx.restore();
     }

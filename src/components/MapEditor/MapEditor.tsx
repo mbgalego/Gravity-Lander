@@ -102,6 +102,9 @@ import {
   Radio,
   Magnet,
   Atom,
+  ClipboardPaste,
+  Files,
+  Gem,
 } from 'lucide-react';
 import { analyzeMapDifficulty, calculateMapDifficulty } from '../../utils/difficultyCalculator';
 
@@ -147,6 +150,29 @@ function isPointNearPolygon(p: TerrainPoint, vs: TerrainPoint[], tolerance: numb
   return false;
 }
 
+function hexToRgba(hex: string, alpha: number): string {
+  if (!hex) return `rgba(56, 189, 248, ${alpha})`;
+  if (hex.startsWith('rgba(')) {
+    return hex.replace(/[\d\.]+\)$/g, `${alpha})`);
+  }
+  if (hex.startsWith('rgb(')) {
+    return hex.replace('rgb(', 'rgba(').replace(')', `, ${alpha})`);
+  }
+  const cleanHex = hex.replace('#', '');
+  if (cleanHex.length === 3) {
+    const r = parseInt(cleanHex[0] + cleanHex[0], 16);
+    const g = parseInt(cleanHex[1] + cleanHex[1], 16);
+    const b = parseInt(cleanHex[2] + cleanHex[2], 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  } else if (cleanHex.length >= 6) {
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return `rgba(56, 189, 248, ${alpha})`;
+}
+
 export const MapEditor: React.FC<MapEditorProps> = ({
   initialMap,
   onSave,
@@ -161,7 +187,7 @@ export const MapEditor: React.FC<MapEditorProps> = ({
   // Active Tool
   const [activeTool, setActiveTool] = useState<EditorToolType>('select');
   const [selectedObstacleStamp, setSelectedObstacleStamp] = useState<
-    'arch' | 'island' | 'pillar' | 'spire' | 'shelf' | 'magma_shelf'
+    'arch' | 'island' | 'pillar' | 'spire' | 'shelf' | 'magma_shelf' | 'crystals'
   >('shelf');
   const [selectedFuelAmount, setSelectedFuelAmount] = useState<number>(65);
   const [selectedCargoWeight, setSelectedCargoWeight] = useState<CargoWeightClass>('medium');
@@ -196,6 +222,13 @@ export const MapEditor: React.FC<MapEditorProps> = ({
     index?: number;
     subIndex?: number;
     id?: string;
+  } | null>(null);
+
+  // Clipboard state for Copy / Paste / Duplicate feature
+  const [clipboardItem, setClipboardItem] = useState<{
+    type: string;
+    data: any;
+    name: string;
   } | null>(null);
 
   // Custom Polygon in-progress
@@ -238,6 +271,32 @@ export const MapEditor: React.FC<MapEditorProps> = ({
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isRandomizerOpen, setIsRandomizerOpen] = useState(false);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [moreMenuPos, setMoreMenuPos] = useState<{ top: number; right: number } | null>(null);
+  const moreBtnRef = useRef<HTMLButtonElement | null>(null);
+
+  const toggleMoreMenu = () => {
+    if (!isMoreMenuOpen && moreBtnRef.current) {
+      const rect = moreBtnRef.current.getBoundingClientRect();
+      setMoreMenuPos({
+        top: rect.bottom + 6,
+        right: Math.max(8, window.innerWidth - rect.right),
+      });
+      setIsMoreMenuOpen(true);
+    } else {
+      setIsMoreMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isMoreMenuOpen) return;
+    const handleClose = () => setIsMoreMenuOpen(false);
+    window.addEventListener('resize', handleClose);
+    window.addEventListener('scroll', handleClose, true);
+    return () => {
+      window.removeEventListener('resize', handleClose);
+      window.removeEventListener('scroll', handleClose, true);
+    };
+  }, [isMoreMenuOpen]);
   const [randomPreset, setRandomPreset] = useState<'caves' | 'volcanic' | 'glacial' | 'asteroid' | 'vertical_shaft' | 'labyrinth' | 'random'>('caves');
   const [randomSizePreset, setRandomSizePreset] = useState<'compact' | 'standard' | 'large' | 'abyss'>('standard');
   const [randomComplexity, setRandomComplexity] = useState<'simple' | 'medium' | 'complex'>('medium');
@@ -554,6 +613,267 @@ export const MapEditor: React.FC<MapEditorProps> = ({
     else if (onBackToMenu) onBackToMenu();
   };
 
+  // Copy Selected Item to Clipboard
+  const handleCopy = useCallback(() => {
+    if (!selectedItem) return;
+
+    let copiedData: any = null;
+    let copiedName = 'Object';
+
+    if (selectedItem.type === 'obstacle' && selectedItem.index !== undefined) {
+      const obs = mapData.obstacles[selectedItem.index];
+      if (obs) {
+        copiedData = {
+          name: obs.name,
+          type: obs.type,
+          points: obs.points.map((p) => ({ ...p })),
+        };
+        copiedName = obs.name || 'Obstacle';
+      }
+    } else if (selectedItem.type === 'cargo_platform' && selectedItem.index !== undefined) {
+      const cp = mapData.cargoPlatforms?.[selectedItem.index];
+      if (cp) {
+        copiedData = {
+          type: cp.type,
+          width: cp.width,
+          weightClass: cp.weightClass,
+          cargoType: cp.cargoType,
+          label: cp.label,
+          truckCount: cp.truckCount,
+          x: cp.x,
+          y: cp.y,
+        };
+        copiedName = cp.label || `${cp.cargoType?.toUpperCase() || ''} Cargo Platform`;
+      }
+    } else if (selectedItem.type === 'volcano' && selectedItem.index !== undefined) {
+      const v = mapData.volcanoes?.[selectedItem.index];
+      if (v) {
+        copiedData = {
+          name: v.name,
+          width: v.width,
+          height: v.height,
+          calderaWidth: v.calderaWidth,
+          eruptionHeight: v.eruptionHeight,
+          interval: v.interval,
+          duration: v.duration,
+          eruptionInterval: v.eruptionInterval,
+          eruptionDuration: v.eruptionDuration,
+          hazardRadius: v.hazardRadius,
+          colorTheme: v.colorTheme,
+          x: v.x,
+          y: v.y,
+        };
+        copiedName = v.name || `${(v.colorTheme || 'Magma').toUpperCase()} Volcano`;
+      }
+    } else if (selectedItem.type === 'signpost' && selectedItem.index !== undefined) {
+      const s = mapData.signposts?.[selectedItem.index];
+      if (s) {
+        copiedData = {
+          direction: s.direction,
+          targetType: s.targetType,
+          targetName: s.targetName,
+          subText: s.subText,
+          color: s.color,
+          distanceMeters: s.distanceMeters,
+          x: s.x,
+          y: s.y,
+        };
+        copiedName = `Signpost: ${s.targetName || 'Base Clue'}`;
+      }
+    } else if (selectedItem.type === 'text_note' && selectedItem.index !== undefined) {
+      const n = mapData.textNotes?.[selectedItem.index];
+      if (n) {
+        copiedData = {
+          text: n.text,
+          size: n.size,
+          color: n.color,
+          style: n.style,
+          showBorder: n.showBorder,
+          align: n.align,
+          x: n.x,
+          y: n.y,
+        };
+        copiedName = `Text: "${n.text.slice(0, 16)}"`;
+      }
+    } else if (selectedItem.type === 'fuel' && selectedItem.index !== undefined) {
+      const f = mapData.fuelPickups?.[selectedItem.index];
+      if (f) {
+        copiedData = {
+          amount: f.amount,
+          x: f.x,
+          y: f.y,
+        };
+        copiedName = `Fuel Canister (+${f.amount}L)`;
+      }
+    }
+
+    if (copiedData) {
+      setClipboardItem({
+        type: selectedItem.type,
+        data: copiedData,
+        name: copiedName,
+      });
+      sound.playClick();
+      if (toolNotificationTimeoutRef.current) clearTimeout(toolNotificationTimeoutRef.current);
+      setToolNotification({
+        id: Date.now().toString(),
+        name: `📋 COPIED: ${copiedName.toUpperCase()} (Ctrl+V to Paste)`,
+      });
+      toolNotificationTimeoutRef.current = setTimeout(() => setToolNotification(null), 2500);
+    }
+  }, [selectedItem, mapData]);
+
+  // Paste Item from Clipboard at Mouse World Position or Center
+  const handlePaste = useCallback(
+    (targetPos?: { x: number; y: number }) => {
+      if (!clipboardItem) {
+        if (toolNotificationTimeoutRef.current) clearTimeout(toolNotificationTimeoutRef.current);
+        setToolNotification({
+          id: Date.now().toString(),
+          name: '⚠️ CLIPBOARD EMPTY (Select object & press Ctrl+C first)',
+        });
+        toolNotificationTimeoutRef.current = setTimeout(() => setToolNotification(null), 2000);
+        return;
+      }
+
+      const w = mapData.worldWidth || 7200;
+      const h = mapData.worldHeight || 2400;
+
+      let posX: number;
+      let posY: number;
+
+      if (targetPos) {
+        posX = targetPos.x;
+        posY = targetPos.y;
+      } else if (
+        mouseWorldPosRef.current &&
+        mouseWorldPosRef.current.x > 50 &&
+        mouseWorldPosRef.current.x < w - 50 &&
+        mouseWorldPosRef.current.y > 50 &&
+        mouseWorldPosRef.current.y < h - 50
+      ) {
+        posX = mouseWorldPosRef.current.x;
+        posY = mouseWorldPosRef.current.y;
+      } else if (clipboardItem.data.x !== undefined && clipboardItem.data.y !== undefined) {
+        posX = Math.min(w - 150, clipboardItem.data.x + 120);
+        posY = Math.min(h - 150, clipboardItem.data.y + 80);
+      } else {
+        posX = (-pan.x + (canvasRef.current?.width || 1200) / 2) / zoom;
+        posY = (-pan.y + (canvasRef.current?.height || 800) / 2) / zoom;
+      }
+
+      posX = Math.max(60, Math.min(w - 60, Math.round(posX)));
+      posY = Math.max(60, Math.min(h - 60, Math.round(posY)));
+
+      if (clipboardItem.type === 'obstacle') {
+        const origPoints: TerrainPoint[] = clipboardItem.data.points;
+        const cx = origPoints.reduce((sum, p) => sum + p.x, 0) / origPoints.length;
+        const cy = origPoints.reduce((sum, p) => sum + p.y, 0) / origPoints.length;
+        const dx = posX - cx;
+        const dy = posY - cy;
+
+        const newObs: CustomObstacleData = {
+          id: `obs-pasted-${Date.now()}`,
+          name: `${clipboardItem.data.name} (Copy)`,
+          type: clipboardItem.data.type,
+          points: origPoints.map((p) => ({
+            x: Math.max(50, Math.min(w - 50, Math.round(p.x + dx))),
+            y: Math.max(50, Math.min(h - 50, Math.round(p.y + dy))),
+          })),
+        };
+        const next = {
+          ...mapData,
+          obstacles: [...mapData.obstacles, newObs],
+        };
+        pushHistory(next);
+        setSelectedItem({ type: 'obstacle', index: next.obstacles.length - 1 });
+      } else if (clipboardItem.type === 'cargo_platform') {
+        const newPlatform: CustomCargoPlatformData = {
+          ...clipboardItem.data,
+          id: `cargo-pasted-${Date.now()}`,
+          x: posX,
+          y: posY,
+        };
+        const next = {
+          ...mapData,
+          cargoPlatforms: [...(mapData.cargoPlatforms || []), newPlatform],
+        };
+        pushHistory(next);
+        setSelectedItem({ type: 'cargo_platform', index: (next.cargoPlatforms || []).length - 1 });
+      } else if (clipboardItem.type === 'volcano') {
+        const newVolcano: CustomVolcanoData = {
+          ...clipboardItem.data,
+          id: `volcano-pasted-${Date.now()}`,
+          x: posX,
+          y: posY,
+        };
+        const next = {
+          ...mapData,
+          volcanoes: [...(mapData.volcanoes || []), newVolcano],
+        };
+        pushHistory(next);
+        setSelectedItem({ type: 'volcano', index: (next.volcanoes || []).length - 1 });
+      } else if (clipboardItem.type === 'signpost') {
+        const newSignpost: CustomSignpostData = {
+          ...clipboardItem.data,
+          id: `sign-pasted-${Date.now()}`,
+          x: posX,
+          y: posY,
+        };
+        const next = {
+          ...mapData,
+          signposts: [...(mapData.signposts || []), newSignpost],
+        };
+        pushHistory(next);
+        setSelectedItem({ type: 'signpost', index: (next.signposts || []).length - 1 });
+      } else if (clipboardItem.type === 'text_note') {
+        const newTextNote: CustomTextNoteData = {
+          ...clipboardItem.data,
+          id: `text-pasted-${Date.now()}`,
+          x: posX,
+          y: posY,
+        };
+        const next = {
+          ...mapData,
+          textNotes: [...(mapData.textNotes || []), newTextNote],
+        };
+        pushHistory(next);
+        setSelectedItem({ type: 'text_note', index: (next.textNotes || []).length - 1 });
+      } else if (clipboardItem.type === 'fuel') {
+        const newFuel: CustomFuelData = {
+          ...clipboardItem.data,
+          id: `fuel-pasted-${Date.now()}`,
+          x: posX,
+          y: posY,
+        };
+        const next = {
+          ...mapData,
+          fuelPickups: [...mapData.fuelPickups, newFuel],
+        };
+        pushHistory(next);
+        setSelectedItem({ type: 'fuel', index: next.fuelPickups.length - 1 });
+      }
+
+      sound.playLandingChime();
+      if (toolNotificationTimeoutRef.current) clearTimeout(toolNotificationTimeoutRef.current);
+      setToolNotification({
+        id: Date.now().toString(),
+        name: `✅ PASTED: ${clipboardItem.name.toUpperCase()} at (${Math.round(posX)}, ${Math.round(posY)})`,
+      });
+      toolNotificationTimeoutRef.current = setTimeout(() => setToolNotification(null), 2500);
+    },
+    [clipboardItem, mapData, pan, zoom, pushHistory]
+  );
+
+  // Duplicate Selected Item (Instant Copy & Paste with offset)
+  const handleDuplicate = useCallback(() => {
+    if (!selectedItem) return;
+    handleCopy();
+    setTimeout(() => {
+      handlePaste();
+    }, 40);
+  }, [selectedItem, handleCopy, handlePaste]);
+
   // Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -568,6 +888,15 @@ export const MapEditor: React.FC<MapEditorProps> = ({
       } else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || e.key === 'Y')) {
         e.preventDefault();
         handleRedo();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
+        e.preventDefault();
+        handleCopy();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V')) {
+        e.preventDefault();
+        handlePaste();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'd' || e.key === 'D')) {
+        e.preventDefault();
+        handleDuplicate();
       } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
         handleSaveMap();
@@ -600,7 +929,7 @@ export const MapEditor: React.FC<MapEditorProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleUndo, handleRedo, selectedItem, mapData]);
+  }, [handleUndo, handleRedo, handleCopy, handlePaste, handleDuplicate, selectedItem, mapData]);
 
   // Prevent default mobile browser pinch/drag gestures on the canvas
   useEffect(() => {
@@ -719,7 +1048,7 @@ export const MapEditor: React.FC<MapEditorProps> = ({
 
   // Stamp Obstacle Presets at coordinates
   const stampPresetObstacle = (
-    type: 'arch' | 'island' | 'pillar' | 'spire' | 'shelf' | 'magma_shelf',
+    type: 'arch' | 'island' | 'pillar' | 'spire' | 'shelf' | 'magma_shelf' | 'crystals',
     cx: number,
     cy: number
   ) => {
@@ -772,11 +1101,24 @@ export const MapEditor: React.FC<MapEditorProps> = ({
         { x: cx + 20, y: cy + 200 },
         { x: cx - 20, y: cy + 200 },
       ];
+    } else if (type === 'crystals') {
+      // Intricate multi-facet crystalline spire cluster (~30% smaller compact footprint)
+      points = [
+        { x: Math.round(cx - 63), y: Math.round(cy + 91) },
+        { x: Math.round(cx - 91), y: Math.round(cy + 21) },
+        { x: Math.round(cx - 52), y: Math.round(cy - 63) },
+        { x: Math.round(cx - 31), y: Math.round(cy - 35) },
+        { x: Math.round(cx), y: Math.round(cy - 126) }, // Central crystal spire pinnacle (30% smaller)
+        { x: Math.round(cx + 31), y: Math.round(cy - 35) },
+        { x: Math.round(cx + 60), y: Math.round(cy - 77) },
+        { x: Math.round(cx + 95), y: Math.round(cy + 14) },
+        { x: Math.round(cx + 66), y: Math.round(cy + 91) },
+      ];
     }
 
     const newObs: CustomObstacleData = {
       id,
-      name: `${type.toUpperCase().replace('_', ' ')} Layer`,
+      name: type === 'crystals' ? 'Crystalline Spire Cluster' : `${type.toUpperCase().replace('_', ' ')} Layer`,
       type: type === 'shelf' || type === 'magma_shelf' ? 'strata' : type,
       points,
     };
@@ -1052,13 +1394,136 @@ export const MapEditor: React.FC<MapEditorProps> = ({
         }
         ctx.closePath();
 
-        const isSelected = selectedItem?.type === 'obstacle' && selectedItem.index === i;
-        ctx.fillStyle = isSelected ? '#1e293b' : theme.terrainFill;
-        ctx.fill();
+        const isCrystal =
+          obs.type === 'crystal' ||
+          obs.type === 'crystals' ||
+          obs.name?.toLowerCase().includes('crystal');
 
-        ctx.strokeStyle = isSelected ? '#38bdf8' : theme.terrainAccent;
-        ctx.lineWidth = isSelected ? 4 : 2.5;
-        ctx.stroke();
+        const isSelected = selectedItem?.type === 'obstacle' && selectedItem.index === i;
+
+        if (isCrystal) {
+          const borderCol = theme.terrainBorder || '#38bdf8';
+          const accentCol = theme.terrainAccent || '#0284c7';
+          const dustCol = theme.dustColor || '#38bdf8';
+          const fillCol = theme.terrainFill || '#0f172a';
+
+          let minY = Infinity;
+          let maxY = -Infinity;
+          let minX = Infinity;
+          let maxX = -Infinity;
+          for (const p of obs.points) {
+            if (p.y < minY) minY = p.y;
+            if (p.y > maxY) maxY = p.y;
+            if (p.x < minX) minX = p.x;
+            if (p.x > maxX) maxX = p.x;
+          }
+          const midX = (minX + maxX) / 2;
+
+          // Theme-adaptive radiant gradient
+          const grad = ctx.createLinearGradient(midX, minY, midX, maxY);
+          grad.addColorStop(0, hexToRgba(dustCol, 0.95)); // Apex radiant highlight
+          grad.addColorStop(0.35, hexToRgba(borderCol, isSelected ? 0.95 : 0.88)); // Upper crystal body
+          grad.addColorStop(0.70, hexToRgba(accentCol, 0.78)); // Deep mineral prism
+          grad.addColorStop(1, hexToRgba(fillCol, 0.95)); // Subterranean bedrock
+
+          ctx.fillStyle = grad;
+          ctx.fill();
+
+          ctx.strokeStyle = isSelected ? '#ffffff' : borderCol;
+          ctx.lineWidth = isSelected ? 4.5 / zoom : 3 / zoom;
+          ctx.shadowColor = borderCol;
+          ctx.shadowBlur = 12 / zoom;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+
+          // Internal gemstone facet lines connecting base to peaks & cross-ribs
+          if (obs.points.length >= 7) {
+            const baseMidX = (obs.points[0].x + obs.points[obs.points.length - 1].x) / 2;
+            const baseMidY = (obs.points[0].y + obs.points[obs.points.length - 1].y) / 2;
+            ctx.beginPath();
+            ctx.moveTo(baseMidX, baseMidY);
+            ctx.lineTo(obs.points[2].x, obs.points[2].y);
+            ctx.moveTo(baseMidX, baseMidY);
+            ctx.lineTo(obs.points[4].x, obs.points[4].y);
+            ctx.moveTo(baseMidX, baseMidY);
+            ctx.lineTo(obs.points[6].x, obs.points[6].y);
+            // Facet ridges connecting peaks
+            ctx.moveTo(obs.points[2].x, obs.points[2].y);
+            ctx.lineTo(obs.points[3].x, obs.points[3].y);
+            ctx.lineTo(obs.points[4].x, obs.points[4].y);
+            ctx.lineTo(obs.points[5].x, obs.points[5].y);
+            ctx.lineTo(obs.points[6].x, obs.points[6].y);
+            ctx.strokeStyle = hexToRgba(dustCol, 0.65);
+            ctx.lineWidth = 1.5 / zoom;
+            ctx.stroke();
+          } else if (obs.points.length >= 4) {
+            ctx.beginPath();
+            const cx = obs.points.reduce((s, p) => s + p.x, 0) / obs.points.length;
+            const cy = obs.points.reduce((s, p) => s + p.y, 0) / obs.points.length;
+            for (let j = 0; j < obs.points.length; j += 2) {
+              ctx.moveTo(cx, cy);
+              ctx.lineTo(obs.points[j].x, obs.points[j].y);
+            }
+            ctx.strokeStyle = hexToRgba(dustCol, 0.55);
+            ctx.lineWidth = 1.5 / zoom;
+            ctx.stroke();
+          }
+
+          // Live animated sparkles on peak tips in editor canvas
+          const editorTime = performance.now() * 0.001;
+          const peaks = obs.points.length >= 7 ? [obs.points[2], obs.points[4], obs.points[6]] : obs.points.slice(0, 3);
+          for (let pIdx = 0; pIdx < peaks.length; pIdx++) {
+            const tip = peaks[pIdx];
+            const seedOffset = minX * 0.05 + pIdx * 2.1;
+            const sparkleVal = Math.sin(editorTime * 4.5 + seedOffset);
+            const sparkleScale = Math.max(0, sparkleVal * 0.5 + 0.5);
+
+            if (sparkleScale > 0.08) {
+              const currentSize = (6 + sparkleScale * 9) / zoom;
+              const rot = editorTime * 1.5 + seedOffset;
+
+              ctx.save();
+              ctx.translate(tip.x, tip.y);
+              ctx.rotate(rot);
+
+              // Brilliant Diamond Core
+              ctx.fillStyle = '#ffffff';
+              ctx.beginPath();
+              ctx.arc(0, 0, (2.8 * sparkleScale) / zoom, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Rotating 4-pointed Star
+              ctx.strokeStyle = '#ffffff';
+              ctx.lineWidth = (1.8 * sparkleScale) / zoom;
+              ctx.beginPath();
+              ctx.moveTo(-currentSize, 0);
+              ctx.lineTo(currentSize, 0);
+              ctx.moveTo(0, -currentSize);
+              ctx.lineTo(0, currentSize);
+              ctx.stroke();
+
+              // Secondary 45-degree Cross
+              ctx.strokeStyle = hexToRgba(dustCol, 0.85 * sparkleScale);
+              ctx.lineWidth = (1.2 * sparkleScale) / zoom;
+              const diagSize = currentSize * 0.65;
+              ctx.beginPath();
+              ctx.moveTo(-diagSize, -diagSize);
+              ctx.lineTo(diagSize, diagSize);
+              ctx.moveTo(-diagSize, diagSize);
+              ctx.lineTo(diagSize, -diagSize);
+              ctx.stroke();
+
+              ctx.restore();
+            }
+          }
+        } else {
+          ctx.fillStyle = isSelected ? '#1e293b' : theme.terrainFill;
+          ctx.fill();
+
+          ctx.strokeStyle = isSelected ? '#38bdf8' : theme.terrainAccent;
+          ctx.lineWidth = isSelected ? 4 : 2.5;
+          ctx.stroke();
+        }
 
         // Draw obstacle vertex handles if selected
         if (isSelected) {
@@ -2711,8 +3176,8 @@ export const MapEditor: React.FC<MapEditorProps> = ({
         </div>
       )}
 
-      {/* 1. Editor Top Navigation & Action Header (Responsive for both Portrait & Landscape) */}
-      <header className="min-h-14 border-b border-slate-800 bg-slate-900/95 backdrop-blur-md px-2.5 sm:px-4 py-2 flex items-center justify-between z-20 shrink-0 gap-1.5 sm:gap-3 flex-wrap sm:flex-nowrap">
+      {/* 1. Editor Top Navigation & Action Header (Fully horizontally scrollable for all screen sizes) */}
+      <header className="min-h-14 border-b border-slate-800 bg-slate-900/95 backdrop-blur-md px-2.5 sm:px-4 py-2 flex items-center justify-between z-20 shrink-0 gap-2 sm:gap-4 overflow-x-auto overflow-y-visible flex-nowrap w-full select-none scrollbar-thin scrollbar-thumb-slate-700">
         {/* Left: Exit & Map Title */}
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           <button
@@ -2790,6 +3255,42 @@ export const MapEditor: React.FC<MapEditorProps> = ({
             </button>
           </div>
 
+          {/* Copy / Paste Quick Controls */}
+          <div className="flex items-center bg-slate-800/80 border border-slate-700/80 rounded-lg p-0.5 shrink-0">
+            <button
+              id="btn-editor-header-copy"
+              type="button"
+              onClick={handleCopy}
+              disabled={
+                !selectedItem ||
+                selectedItem.type === 'ground_node' ||
+                selectedItem.type === 'ceiling_node' ||
+                selectedItem.type === 'launch_pad' ||
+                selectedItem.type === 'landing_pad'
+              }
+              className="flex items-center gap-1 p-1 sm:px-2 sm:py-1 rounded text-slate-300 hover:text-sky-300 hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-transparent text-xs font-mono"
+              title="Copy Selected Object (Ctrl+C)"
+            >
+              <Copy className="w-3.5 h-3.5 text-sky-400" />
+              <span className="hidden xl:inline">Copy</span>
+            </button>
+            <button
+              id="btn-editor-header-paste"
+              type="button"
+              onClick={() => handlePaste()}
+              disabled={!clipboardItem}
+              className={`flex items-center gap-1 p-1 sm:px-2 sm:py-1 rounded text-xs font-mono transition-all ${
+                clipboardItem
+                  ? 'text-emerald-300 bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-500/40 shadow-[0_0_8px_rgba(16,185,129,0.25)]'
+                  : 'text-slate-500 opacity-40 cursor-not-allowed'
+              }`}
+              title={clipboardItem ? `Paste "${clipboardItem.name}" (Ctrl+V)` : 'Clipboard empty (Ctrl+V)'}
+            >
+              <ClipboardPaste className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden xl:inline">Paste</span>
+            </button>
+          </div>
+
           {/* Fullscreen Toggle button */}
           <button
             id="btn-editor-fullscreen"
@@ -2847,104 +3348,22 @@ export const MapEditor: React.FC<MapEditorProps> = ({
           </button>
 
           {/* More Actions Dropdown Toggle */}
-          <div className="relative">
+          <div className="relative shrink-0">
             <button
+              ref={moreBtnRef}
               id="btn-editor-more-actions"
               type="button"
-              onClick={() => setIsMoreMenuOpen((prev) => !prev)}
-              className="p-1.5 sm:p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-slate-100 border border-slate-700 shrink-0 flex items-center gap-0.5"
+              onClick={toggleMoreMenu}
+              className={`p-1.5 sm:p-2 rounded-lg border shrink-0 flex items-center gap-0.5 transition-colors ${
+                isMoreMenuOpen
+                  ? 'bg-slate-700 text-sky-300 border-sky-500/60'
+                  : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-slate-100 border-slate-700'
+              }`}
               title="More Actions (Save Copy, Discard, Import, Export, Randomize)"
             >
               <MoreHorizontal className="w-4 h-4" />
-              <ChevronDown className="w-3 h-3 text-slate-400" />
+              <ChevronDown className={`w-3 h-3 transition-transform ${isMoreMenuOpen ? 'rotate-180 text-sky-400' : 'text-slate-400'}`} />
             </button>
-
-            {/* Dropdown Menu Box */}
-            {isMoreMenuOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setIsMoreMenuOpen(false)}
-                />
-                <div className="absolute right-0 top-full mt-1.5 z-50 w-52 bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl p-1.5 space-y-1 font-mono text-xs animate-in fade-in zoom-in-95 duration-150">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMoreMenuOpen(false);
-                      handleSaveAsNew();
-                    }}
-                    className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-slate-200 hover:text-white hover:bg-slate-800 transition-colors"
-                  >
-                    <Copy className="w-3.5 h-3.5 text-sky-400" />
-                    <span>Save As New Copy</span>
-                  </button>
-
-                  {hasUnsavedChanges && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsMoreMenuOpen(false);
-                        handleDiscardChanges();
-                      }}
-                      className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors"
-                    >
-                      <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                      <span>Discard Changes</span>
-                    </button>
-                  )}
-
-                  <div className="h-px bg-slate-800 my-1" />
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMoreMenuOpen(false);
-                      setIsRandomizerOpen(true);
-                    }}
-                    className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-teal-300 hover:text-teal-200 hover:bg-teal-950/40 transition-colors"
-                  >
-                    <Wand2 className="w-3.5 h-3.5 text-teal-400" />
-                    <span>Procedural Generator</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMoreMenuOpen(false);
-                      setIsHelpOpen(true);
-                    }}
-                    className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-teal-300 hover:text-teal-200 hover:bg-teal-950/40 transition-colors"
-                  >
-                    <HelpCircle className="w-3.5 h-3.5 text-teal-400" />
-                    <span>Editor Manual & Guide</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMoreMenuOpen(false);
-                      setIsImportOpen(true);
-                    }}
-                    className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-slate-200 hover:text-white hover:bg-slate-800 transition-colors"
-                  >
-                    <Download className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Import Map (JSON)</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMoreMenuOpen(false);
-                      setIsExportOpen(true);
-                    }}
-                    className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-slate-200 hover:text-white hover:bg-slate-800 transition-colors"
-                  >
-                    <Share2 className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Export / Share Map</span>
-                  </button>
-                </div>
-              </>
-            )}
           </div>
 
           {/* Test Flight button */}
@@ -3171,18 +3590,21 @@ export const MapEditor: React.FC<MapEditorProps> = ({
         {activeTool === 'cave_layer' && (
           <div className="absolute left-14 sm:left-24 xl:left-52 top-2.5 sm:top-4 z-20 bg-slate-900/95 border border-slate-800 rounded-xl p-1.5 sm:p-2 shadow-2xl flex items-center gap-1.5 sm:gap-2 text-xs font-mono backdrop-blur-md max-w-[calc(100%-70px)] overflow-x-auto">
             <span className="text-slate-400 text-[10px] sm:text-[11px] px-1 font-bold shrink-0">STRATA:</span>
-            {(['shelf', 'magma_shelf', 'arch', 'pillar', 'spire', 'island'] as const).map((t) => (
+            {(['shelf', 'magma_shelf', 'crystals', 'arch', 'pillar', 'spire', 'island'] as const).map((t) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => setSelectedObstacleStamp(t)}
-                className={`px-2 sm:px-2.5 py-1 rounded-lg uppercase text-[10px] sm:text-[11px] font-bold transition-colors shrink-0 ${
+                className={`flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg uppercase text-[10px] sm:text-[11px] font-bold transition-colors shrink-0 ${
                   selectedObstacleStamp === t
-                    ? 'bg-teal-400 text-slate-950'
+                    ? t === 'crystals'
+                      ? 'bg-cyan-400 text-slate-950 font-extrabold shadow-[0_0_10px_rgba(6,182,212,0.4)]'
+                      : 'bg-teal-400 text-slate-950'
                     : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                 }`}
               >
-                {t.replace('_', ' ')}
+                {t === 'crystals' && <Gem className="w-3 h-3 text-cyan-200 shrink-0" />}
+                <span>{t === 'crystals' ? 'CRYSTALS' : t.replace('_', ' ')}</span>
               </button>
             ))}
           </div>
@@ -4018,6 +4440,37 @@ export const MapEditor: React.FC<MapEditorProps> = ({
               </div>
             )}
 
+            {/* Copy & Duplicate Action Buttons */}
+            {(selectedItem.type === 'obstacle' ||
+              selectedItem.type === 'cargo_platform' ||
+              selectedItem.type === 'volcano' ||
+              selectedItem.type === 'signpost' ||
+              selectedItem.type === 'text_note' ||
+              selectedItem.type === 'fuel') && (
+              <div className="flex items-center gap-1.5">
+                <button
+                  id="btn-copy-selected-item"
+                  type="button"
+                  onClick={handleCopy}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500 border border-sky-500/50 hover:border-sky-400 text-sky-300 hover:text-slate-950 font-bold transition-all shadow-sm cursor-pointer"
+                  title="Copy Object (Ctrl+C)"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Copy (Ctrl+C)</span>
+                </button>
+                <button
+                  id="btn-duplicate-selected-item"
+                  type="button"
+                  onClick={handleDuplicate}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-teal-500/20 hover:bg-teal-500 border border-teal-500/50 hover:border-teal-400 text-teal-300 hover:text-slate-950 font-bold transition-all shadow-sm cursor-pointer"
+                  title="Duplicate Object (Ctrl+D)"
+                >
+                  <Files className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Duplicate (Ctrl+D)</span>
+                </button>
+              </div>
+            )}
+
             <div className="h-4 w-px bg-slate-700" />
 
             {/* Quick Delete Item Button */}
@@ -4028,7 +4481,8 @@ export const MapEditor: React.FC<MapEditorProps> = ({
               selectedItem.type === 'fuel' ||
               selectedItem.type === 'cargo_platform' ||
               selectedItem.type === 'signpost' ||
-              selectedItem.type === 'text_note') && (
+              selectedItem.type === 'text_note' ||
+              selectedItem.type === 'volcano') && (
               <button
                 id="btn-delete-selected-item"
                 type="button"
@@ -5259,11 +5713,36 @@ export const MapEditor: React.FC<MapEditorProps> = ({
             {/* Scrollable Guide Content */}
             <div className="flex-1 overflow-y-auto pr-1 space-y-4 text-xs font-mono text-slate-300 leading-relaxed">
               
-              {/* Quick Navigation & Viewport */}
+              {/* Copy / Paste & Quick Shortcuts */}
+              <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl space-y-2">
+                <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase">
+                  <ClipboardPaste className="w-4 h-4 text-emerald-400" />
+                  <span>1. COPY, PASTE & DUPLICATE (PRODUCTIVITY WORKFLOW)</span>
+                </div>
+                <p className="text-slate-300 text-[11px]">
+                  Easily replicate complex map components without filling repetitive configuration forms:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+                  <div className="bg-slate-950/60 p-2.5 rounded-xl border border-white/5 space-y-1">
+                    <span className="text-sky-300 font-bold block">Copy Object [Ctrl+C]:</span>
+                    <p className="text-slate-400">Click any obstacle, volcano, cargo platform, signpost, fuel cache, or text note, then press Ctrl+C or the header Copy button.</p>
+                  </div>
+                  <div className="bg-slate-950/60 p-2.5 rounded-xl border border-white/5 space-y-1">
+                    <span className="text-emerald-300 font-bold block">Paste Object [Ctrl+V]:</span>
+                    <p className="text-slate-400">Press Ctrl+V to paste the copied object right at your current cursor world coordinates or canvas center.</p>
+                  </div>
+                  <div className="bg-slate-950/60 p-2.5 rounded-xl border border-white/5 space-y-1">
+                    <span className="text-teal-300 font-bold block">Instant Duplicate [Ctrl+D]:</span>
+                    <p className="text-slate-400">Press Ctrl+D or click Duplicate in the inspector bar to clone the selected item instantly with a subtle offset.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Viewport Navigation & Shortcuts */}
               <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl space-y-2">
                 <div className="flex items-center gap-2 text-teal-400 font-bold text-xs uppercase">
                   <Hand className="w-4 h-4 text-teal-400" />
-                  <span>1. VIEWPORT NAVIGATION & SHORTCUTS</span>
+                  <span>2. VIEWPORT NAVIGATION & SHORTCUTS</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
                   <div className="bg-slate-950/60 p-2.5 rounded-xl border border-white/5 space-y-1">
@@ -5276,25 +5755,42 @@ export const MapEditor: React.FC<MapEditorProps> = ({
                   </div>
                   <div className="bg-slate-950/60 p-2.5 rounded-xl border border-white/5 sm:col-span-2 space-y-1">
                     <span className="text-sky-300 font-bold block">Essential Shortcuts:</span>
-                    <p className="text-slate-400">[V] Select • [H] Pan • [Ctrl+Z] Undo • [Ctrl+Shift+Z] Redo • [Ctrl+S] Save • [Delete] Remove Selected</p>
+                    <p className="text-slate-400">[V] Select • [H] Pan • [Ctrl+C] Copy • [Ctrl+V] Paste • [Ctrl+D] Duplicate • [Ctrl+Z] Undo • [Ctrl+Shift+Z] Redo • [Ctrl+S] Save • [Del] Delete</p>
                   </div>
                 </div>
               </div>
 
-              {/* Sculpting Terrain & Caves */}
+              {/* Sculpting Terrain & Cave Layers */}
               <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl space-y-2.5">
                 <div className="flex items-center gap-2 text-sky-400 font-bold text-xs uppercase">
                   <Mountain className="w-4 h-4 text-sky-400" />
-                  <span>2. TERRAIN SCULPTING (GROUND & CAVERN CEILINGS)</span>
+                  <span>3. TERRAIN SCULPTING, STRATA & CRYSTALS</span>
                 </div>
                 <p className="text-slate-300 text-[11px]">
-                  Caverns are composed of floor nodes, overhead rock ceilings, and floating rock arches:
+                  Caverns are composed of floor nodes, overhead rock ceilings, floating strata shelves, and crystalline formations:
                 </p>
                 <ul className="list-disc list-inside space-y-1 text-slate-400 text-[11px]">
                   <li><strong className="text-slate-200">Ground Nodes (Floor):</strong> Click along the terrain to add floor nodes. Drag existing nodes to shape canyons, hills, and ravines.</li>
                   <li><strong className="text-slate-200">Ceiling Nodes (Roof):</strong> Add overhead rock barriers to create subterranean cavern shafts and tunnels.</li>
-                  <li><strong className="text-slate-200">Obstacle Stamps:</strong> Drop pre-fabricated rock arches, floating islands, basalt spires, and magma shelves directly into the world.</li>
-                  <li><strong className="text-slate-200">Curved vs. Straight Lines:</strong> Switch in Settings between authentic sharp polygonal rock walls or smooth Catmull-Rom splines.</li>
+                  <li><strong className="text-cyan-300">💎 Crystalline Spires:</strong> Select &quot;CRYSTALS&quot; in Cave Layer tool to stamp luminous crystalline pillars that shimmer with animated light and iridescent facets during flight.</li>
+                  <li><strong className="text-slate-200">Strata & Magma Shelves:</strong> Drop pre-fabricated rock shelves, basalt spires, floating islands, and volcanic magma shelves.</li>
+                  <li><strong className="text-slate-200">Curved vs. Straight Lines:</strong> Switch in Settings between sharp polygonal rock walls or smooth Catmull-Rom splines.</li>
+                </ul>
+              </div>
+
+              {/* Active Volcanoes & Geothermal Hazards */}
+              <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl space-y-2.5">
+                <div className="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase">
+                  <Flame className="w-4 h-4 text-rose-400" />
+                  <span>4. ACTIVE VOLCANO HAZARDS & ERUPTION CALDERAS</span>
+                </div>
+                <p className="text-slate-300 text-[11px]">
+                  Introduce high-stakes environmental hazards that test piloting timing and reflexes:
+                </p>
+                <ul className="list-disc list-inside space-y-1 text-slate-400 text-[11px]">
+                  <li><strong className="text-orange-300">Magma, Plasma, Toxic, & Cryo Themes:</strong> Configure the thermal chemistry and particle hues of the volcano.</li>
+                  <li><strong className="text-rose-300">Eruption Cycles:</strong> Set customizable eruption intervals and blast durations. Plumes emit lethal vertical thermal columns.</li>
+                  <li><strong className="text-amber-300">Ballistic Ejecta Rocks:</strong> Active eruptions fling fiery debris showers that ricochet off cavern walls.</li>
                 </ul>
               </div>
 
@@ -5302,7 +5798,7 @@ export const MapEditor: React.FC<MapEditorProps> = ({
               <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl space-y-2.5">
                 <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase">
                   <Package className="w-4 h-4 text-amber-400" />
-                  <span>3. BASES, CARGO DEPOTS & ROVER VEHICLES</span>
+                  <span>5. BASES, CARGO DEPOTS & ROVER VEHICLES</span>
                 </div>
                 <p className="text-slate-300 text-[11px]">
                   Every map needs an expedition path from launch to recovery:
@@ -5310,7 +5806,7 @@ export const MapEditor: React.FC<MapEditorProps> = ({
                 <ul className="list-disc list-inside space-y-1 text-slate-400 text-[11px]">
                   <li><strong className="text-emerald-300">Launch Pad (Origin):</strong> The starting base where your lander deploys. (Ensure clearance above the pad).</li>
                   <li><strong className="text-teal-300">Landing Zone LZ (Destination):</strong> The ultimate mission target. Delivering cargo containers and vehicle rovers here completes the mission with bonus scores!</li>
-                  <li><strong className="text-amber-300">Cargo Platform Depots:</strong> Place supply pods (Light 140kg, Medium 320kg, Heavy 650kg) for pilots to hook via electromagnetic winch.</li>
+                  <li><strong className="text-amber-300">6 Specialized Cargo Types:</strong> Standard containers, volatile Explosive Munitions, Sub-Zero Cryo Superconductors, Fragile Quantum Isotopes, Heavy Magnetic Dynamos, and High-Voltage Plasma Batteries with randomized EMP discharges!</li>
                   <li><strong className="text-blue-300">Vehicle Depots:</strong> Place ground depots with exploration rovers. When a lander touches down, rovers board for transport.</li>
                   <li><strong className="text-purple-300">Fuel Caches:</strong> Scatter orbital fuel stations along narrow shafts so pilots can refuel mid-mission.</li>
                 </ul>
@@ -5320,7 +5816,7 @@ export const MapEditor: React.FC<MapEditorProps> = ({
               <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl space-y-2">
                 <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase">
                   <Signpost className="w-4 h-4 text-emerald-400" />
-                  <span>4. DIRECTIONAL MINE SIGNPOSTS</span>
+                  <span>6. DIRECTIONAL MINE SIGNPOSTS</span>
                 </div>
                 <p className="text-slate-300 text-[11px]">
                   Add industrial signposts near cave forks, vertical shafts, and bases. Configure the 8-directional pointer arrow (Left, Right, Up, Down, Diagonals), target badge color, and custom text to guide pilots through deep cavern labyrinths.
@@ -5331,7 +5827,7 @@ export const MapEditor: React.FC<MapEditorProps> = ({
               <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl space-y-2">
                 <div className="flex items-center gap-2 text-purple-400 font-bold text-xs uppercase">
                   <Sliders className="w-4 h-4 text-purple-400" />
-                  <span>5. PHYSICS, CUSTOM PALETTES & TEST FLIGHT</span>
+                  <span>7. PHYSICS, CUSTOM PALETTES & TEST FLIGHT</span>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-slate-400 text-[11px]">
                   <li><strong className="text-slate-200">Custom Dimensions:</strong> Expand maps up to 3x standard width (21,600m) and 8,400m depth in Map Settings.</li>
@@ -5352,6 +5848,98 @@ export const MapEditor: React.FC<MapEditorProps> = ({
                 Back to Map Editor
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* More Actions Dropdown Menu (Rendered at root container to float cleanly over canvas) */}
+      {isMoreMenuOpen && moreMenuPos && (
+        <div className="fixed inset-0 z-50 pointer-events-auto">
+          {/* Backdrop Click Dismiss */}
+          <div
+            className="fixed inset-0 z-50 bg-black/20"
+            onClick={() => setIsMoreMenuOpen(false)}
+          />
+          {/* Dropdown Menu Box */}
+          <div
+            style={{ top: `${moreMenuPos.top}px`, right: `${moreMenuPos.right}px` }}
+            className="fixed z-50 w-56 bg-slate-900 border border-slate-700/90 rounded-xl shadow-2xl p-1.5 space-y-1 font-mono text-xs animate-in fade-in zoom-in-95 duration-150 backdrop-blur-md select-none"
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setIsMoreMenuOpen(false);
+                handleSaveAsNew();
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-slate-200 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              <Copy className="w-3.5 h-3.5 text-sky-400" />
+              <span>Save As New Copy</span>
+            </button>
+
+            {hasUnsavedChanges && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMoreMenuOpen(false);
+                  handleDiscardChanges();
+                }}
+                className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors cursor-pointer"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                <span>Discard Changes</span>
+              </button>
+            )}
+
+            <div className="h-px bg-slate-800 my-1" />
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsMoreMenuOpen(false);
+                setIsRandomizerOpen(true);
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-teal-300 hover:text-teal-200 hover:bg-teal-950/40 transition-colors cursor-pointer"
+            >
+              <Wand2 className="w-3.5 h-3.5 text-teal-400" />
+              <span>Procedural Generator</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsMoreMenuOpen(false);
+                setIsHelpOpen(true);
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-teal-300 hover:text-teal-200 hover:bg-teal-950/40 transition-colors cursor-pointer"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-teal-400" />
+              <span>Editor Manual & Guide</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsMoreMenuOpen(false);
+                setIsImportOpen(true);
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-slate-200 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5 text-slate-400" />
+              <span>Import Map (JSON)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsMoreMenuOpen(false);
+                setIsExportOpen(true);
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-slate-200 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              <Share2 className="w-3.5 h-3.5 text-slate-400" />
+              <span>Export / Share Map</span>
+            </button>
           </div>
         </div>
       )}

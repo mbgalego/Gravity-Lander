@@ -329,6 +329,7 @@ export interface WorldMap {
   groundPoints: TerrainPoint[];
   ceilingPoints: TerrainPoint[];
   obstacles: TerrainPoint[][];
+  obstacleObjects?: { points: TerrainPoint[]; type?: string; name?: string }[];
   segments: TerrainSegment[];
   launchPad: LandingPad;
   landingPad: LandingPad;
@@ -473,7 +474,7 @@ export interface CustomTextNoteData {
 export interface CustomObstacleData {
   id: string;
   name: string;
-  type: 'arch' | 'spire' | 'pillar' | 'island' | 'polygon' | 'strata' | 'cave_shelf' | 'tunnel';
+  type: 'arch' | 'spire' | 'pillar' | 'island' | 'polygon' | 'strata' | 'cave_shelf' | 'tunnel' | 'crystal' | 'crystals';
   points: TerrainPoint[];
 }
 
