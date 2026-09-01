@@ -4,6 +4,7 @@
 class SoundManager {
   private ctx: AudioContext | null = null;
   private isMuted: boolean = false;
+  private isMusicMuted: boolean = false;
   private volume: number = 0.7;
 
   // Master Gain
@@ -319,7 +320,8 @@ class SoundManager {
     const now = this.ctx.currentTime;
     this.menuMusicGain.gain.cancelScheduledValues(now);
     this.menuMusicGain.gain.setValueAtTime(0, now);
-    this.menuMusicGain.gain.linearRampToValueAtTime(this.isMuted ? 0 : 0.22, now + 1.5);
+    const targetVol = (this.isMuted || this.isMusicMuted) ? 0 : 0.22;
+    this.menuMusicGain.gain.linearRampToValueAtTime(targetVol, now + 1.5);
 
     // Harmonic chord definitions (Deep Space Synth progression in Eb/C minor)
     // Frequencies (Hz) for ethereal floating pads
@@ -1148,6 +1150,31 @@ class SoundManager {
 
   public getMuted(): boolean {
     return this.isMuted;
+  }
+
+  public toggleMusicMute(): boolean {
+    this.isMusicMuted = !this.isMusicMuted;
+    if (this.ctx && this.menuMusicGain) {
+      const now = this.ctx.currentTime;
+      this.menuMusicGain.gain.cancelScheduledValues(now);
+      const targetVol = (this.isMuted || this.isMusicMuted) ? 0 : 0.22;
+      this.menuMusicGain.gain.linearRampToValueAtTime(targetVol, now + 0.3);
+    }
+    return this.isMusicMuted;
+  }
+
+  public getMusicMuted(): boolean {
+    return this.isMusicMuted;
+  }
+
+  public setMusicMuted(muted: boolean): void {
+    this.isMusicMuted = muted;
+    if (this.ctx && this.menuMusicGain) {
+      const now = this.ctx.currentTime;
+      this.menuMusicGain.gain.cancelScheduledValues(now);
+      const targetVol = (this.isMuted || this.isMusicMuted) ? 0 : 0.22;
+      this.menuMusicGain.gain.linearRampToValueAtTime(targetVol, now + 0.3);
+    }
   }
 }
 

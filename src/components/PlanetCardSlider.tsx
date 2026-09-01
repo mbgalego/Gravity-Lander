@@ -219,7 +219,7 @@ export const PlanetCardSlider: React.FC<PlanetCardSliderProps> = ({
   const currentItem = allWorldItems[safeIndex] || allWorldItems[0];
   const currentPlanet = currentItem?.planetConfig || PLANETS[0];
   const isCompleted = currentItem?.isCompleted;
-  const record = currentItem ? getPlanetRecord(currentItem.id) : { bestTime: null, highScore: null, bestRank: null, completedCount: 0 };
+  const record = currentItem ? getPlanetRecord(currentItem.id) : { bestTime: null as number | null, highScore: null as number | null, bestRank: null as string | null, completedCount: 0 };
   const isLuna =
     currentItem?.id === 'luna' ||
     currentItem?.id === 'official-luna' ||
@@ -287,7 +287,7 @@ export const PlanetCardSlider: React.FC<PlanetCardSliderProps> = ({
   const burnLevel = Math.min(5, Math.max(1, Math.round((currentPlanet.fuelBurnRate - 12) / 3)));
 
   // Deck slide transition variants
-  const cardVariants = {
+  const cardVariants: any = {
     enter: (dir: number) => ({
       x: dir > 0 ? 100 : -100,
       scale: 0.8,
@@ -323,14 +323,14 @@ export const PlanetCardSlider: React.FC<PlanetCardSliderProps> = ({
   return (
     <div className="w-full flex flex-col items-center select-none">
       {/* Header Tag and Filter Chips */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
-        <div className="flex items-center gap-1.5 text-[11px] font-mono tracking-widest text-teal-400 font-bold uppercase">
-          <Globe className="w-3.5 h-3.5" />
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5 w-full px-1">
+        <div className="flex items-center gap-2 text-xs sm:text-sm font-mono tracking-wider text-teal-300 font-extrabold uppercase bg-teal-950/50 border border-teal-500/30 px-3 py-1 rounded-lg backdrop-blur-md shadow-sm">
+          <Globe className="w-4 h-4 text-teal-400" />
           <span>DESTINATION WORLD</span>
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-1 bg-slate-900/60 p-0.5 rounded-full border border-white/10 text-[10px] font-mono">
+        <div className="flex items-center gap-1 bg-slate-950/70 p-0.5 rounded-lg border border-white/10 text-[11px] font-mono">
           <button
             type="button"
             onClick={() => {

@@ -7,7 +7,7 @@
   "scope": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
-  "orientation": "any",
+  "orientation": "natural",
   "background_color": "#020617",
   "theme_color": "#020617",
   "categories": ["games", "simulation", "entertainment"],

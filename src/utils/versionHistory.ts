@@ -12,15 +12,51 @@ export interface VersionRelease {
   }[];
 }
 
-export const CURRENT_GAME_VERSION = 'v1.4.0';
+export const CURRENT_GAME_VERSION = 'v1.5.0';
 
 export const GAME_VERSION_HISTORY: VersionRelease[] = [
+  {
+    version: 'v1.5.0',
+    releaseDate: 'September 1, 2026',
+    title: 'Main Menu Visual Polish, Music Toggle & Cleaned Training Sector',
+    tag: 'LATEST',
+    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    summary:
+      'Refined main menu layout with clean transparent card decks, single-line action buttons on widescreen, dedicated music toggle, magnified title thrusters, and removed tutorial clutter on Luna.',
+    categories: [
+      {
+        name: 'Interface & Visual Design',
+        iconType: 'system',
+        items: [
+          'Removed semi-transparent section boxes and clipping borders on the main screen to provide an unobstructed view of the dynamic cosmic starfield.',
+          'Ensured planet and spacecraft detail modal pop-ups layer smoothly on top without clipping constraints.',
+          'Widescreen single-line action buttons: Launch, Level Editor, and Instructions buttons now display seamlessly without multi-line text wrapping.',
+          'Magnified dual-throttle afterburner plumes and supersonic shock diamonds on the title spacecraft emblem for high visibility across all screens.',
+          'Added a dismissible top-left quick update notification banner.',
+        ],
+      },
+      {
+        name: 'Audio & Music Controls',
+        iconType: 'audio',
+        items: [
+          'Added a dedicated Music Mute button in the main menu to silence background ambient synth chords independently while preserving sound effects (thrusters, clicks, chimes).',
+        ],
+      },
+      {
+        name: 'Campaign Worlds',
+        iconType: 'missions',
+        items: [
+          'Luna Core: Removed the large yellow tutorial billboard from the initial launch pad for a pristine flight staging area.',
+        ],
+      },
+    ],
+  },
   {
     version: 'v1.4.0',
     releaseDate: 'August 29, 2026',
     title: 'Official Maps Expansion & Volcano Timing Overhaul',
-    tag: 'LATEST',
-    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    tag: 'MAJOR',
+    tagColor: 'bg-teal-500/20 text-teal-300 border-teal-400/40',
     summary:
       'Integrated official world maps for Zephyr Tempest and Calypso Caldera. Expanded volcano eruption cycles with 10s and 20s intervals in both the simulation engine and Map Editor for tactical navigation through intense geothermal hazards.',
     categories: [

@@ -466,9 +466,9 @@ export const MapEditor: React.FC<MapEditorProps> = ({
   // Active difficulty resolves to manual user override if set, or auto-calculated
   const isManualDifficulty = mapData.difficultyMode === 'manual';
   const activeDifficulty: 'Easy' | 'Medium' | 'Hard' | 'Extreme' =
-    isManualDifficulty && mapData.difficulty
+    ((isManualDifficulty && mapData.difficulty
       ? mapData.difficulty
-      : difficultyAnalysis.difficulty;
+      : difficultyAnalysis.difficulty) as 'Easy' | 'Medium' | 'Hard' | 'Extreme') || 'Medium';
 
   const difficultyBadgeConfig: Record<
     'Easy' | 'Medium' | 'Hard' | 'Extreme',

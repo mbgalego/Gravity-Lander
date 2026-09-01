@@ -3,81 +3,288 @@ export interface Vector2D {
   y: number;
 }
 
-export type ShipModelId =
-  | 'apollo'
-  | 'titan'
-  | 'viper'
-  | 'aegis'
-  | 'nebula'
-  | 'vanguard'
-  | 'goliath'
-  | 'behemoth'
-  | 'leviathan'
-  | 'mammoth'
-  | 'wasp'
-  | 'kestrel'
-  | 'spectre'
-  | 'orion'
-  | 'valkyrie'
-  | 'juggernaut';
+export interface TerrainPoint {
+  x: number;
+  y: number;
+}
 
-export interface ShipLocalPoints {
-  nose: Vector2D;
-  leftShoulder: Vector2D;
-  rightShoulder: Vector2D;
-  leftHip: Vector2D;
-  rightHip: Vector2D;
-  leftFoot: Vector2D;
-  rightFoot: Vector2D;
-  leftThrusterPos: Vector2D;
-  rightThrusterPos: Vector2D;
-  extraLeftFoot?: Vector2D;
-  extraRightFoot?: Vector2D;
+export interface TerrainSegment {
+  p1: Vector2D;
+  p2: Vector2D;
+  angle?: number;
+  length?: number;
+  normal?: Vector2D;
+  isLandingPad?: boolean;
+  isCeiling?: boolean;
+  type?: string;
+}
+
+export interface LandingPad {
+  p1?: Vector2D;
+  p2?: Vector2D;
+  length?: number;
+  center: Vector2D;
+  isSecondary?: boolean;
+  isVehicleDepot?: boolean;
+  x?: number;
+  y: number;
+  x1?: number;
+  x2?: number;
+  width: number;
+}
+
+export interface FuelPickup {
+  id: string;
+  pos?: Vector2D;
+  x?: number;
+  y?: number;
+  radius?: number;
+  collected?: boolean;
+  amount?: number;
+  respawnTimer?: number;
+}
+
+export type CargoWeightClass = 'light' | 'medium' | 'heavy';
+export type CargoType = 'standard' | 'explosive' | 'cryogenic' | 'isotope' | 'magnetic' | 'plasma';
+
+export interface CargoContainer {
+  id: string;
+  name: string;
+  weightClass: CargoWeightClass;
+  cargoType: CargoType;
+  mass: number;
+  radius?: number;
+  width?: number;
+  height?: number;
+  color?: string;
+  accentColor?: string;
+  chargeTimer?: number;
+  maxChargeTimer?: number;
+  tetherLength?: number;
+  isDetonated?: boolean;
+  pos: Vector2D;
+  vel: Vector2D;
+  attached?: boolean;
+  delivered?: boolean;
+  deliveredTime?: number;
+  isAttached?: boolean;
+  isDelivered?: boolean;
+  integrity: number;
+  temperature?: number;
+  charge?: number;
+  timer?: number;
+  isExploded?: boolean;
+  glowColor?: string;
+  pickupPadId?: string;
+  platformId?: string;
+}
+
+export interface CargoPlatform {
+  id: string;
+  pos?: Vector2D;
+  width: number;
+  type: 'pickup' | 'delivery' | 'vehicle_depot';
+  label?: string;
+  cargo?: CargoContainer;
+  cargoId?: string;
+  cargoType?: CargoType;
+  weightClass?: CargoWeightClass;
+  cargoWeight?: any;
+  active?: boolean;
+  truckCount?: number;
+  center?: any;
+  y?: number;
+  x1?: number;
+  x2?: number;
+  isFulfilled?: boolean;
 }
 
 export interface PlanetaryTruck {
   id: string;
-  name: string;
-  type: 'rover' | 'heavy_truck';
-  pos: Vector2D;
-  vel: Vector2D;
+  name?: string;
+  x?: number;
+  y?: number;
   width: number;
   height: number;
-  state: 'waiting_at_depot' | 'driving_to_craft' | 'onboard' | 'driving_out' | 'delivered';
-  progress: number; // 0 to 1 for ramp driving animation
-  baseX: number;
-  baseY: number;
-  targetX: number;
-  targetY: number;
+  speed?: number;
+  minX?: number;
+  maxX?: number;
+  dir?: number;
+  wheelRotation?: number;
+  wheelAngle?: number;
+  color?: string;
+  accentColor?: string;
+  type?: string;
+  bedLoad?: 'empty' | 'ore' | 'cargo_crate' | 'fuel_cell' | any;
+  headlightGlow?: boolean;
+  headlightsOn?: boolean;
+  exhaustTimer?: number;
+  state?: string;
+  pos?: Vector2D;
+  vel?: Vector2D;
+  baseX?: number;
+  baseY?: number;
+  targetX?: number;
+  targetY?: number;
+  progress?: number;
+}
+
+export interface CaveZoneInfo {
+  id: string;
+  name: string;
+  description?: string;
+  level: number;
+  bounds: { x1: number; x2: number; y1: number; y2: number };
+}
+
+export interface MineSignpost {
+  id: string;
+  pos?: Vector2D;
+  x?: number;
+  y?: number;
+  direction: 'left' | 'right' | 'up' | 'down' | 'up_left' | 'up_right' | 'down_left' | 'down_right';
+  targetType: 'landing' | 'pickup' | 'hazard' | 'vehicle_depot' | 'fuel' | 'launch' | any;
+  targetName: string;
+  subText?: string;
   color: string;
-  accentColor: string;
-  wheelAngle: number;
-  headlightsOn: boolean;
-  depotId?: string;
+  distanceMeters?: number;
+}
+
+export interface VolcanoHazard {
+  id: string;
+  name?: string;
+  pos?: Vector2D;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  calderaWidth: number;
+  calderaX?: number;
+  calderaY?: number;
+  eruptionHeight: number;
+  eruptionInterval?: number;
+  eruptionDuration?: number;
+  timer?: number;
+  isErupting?: boolean;
+  colorTheme: 'magma' | 'plasma' | 'toxic' | 'cryo';
+  particleTimer?: number;
+  isCharging?: boolean;
+  eruptPhase?: number;
+  rocks?: VolcanicRock[];
+  cycleTimer?: number;
+  interval?: number;
+  duration?: number;
+  hazardRadius?: number;
+}
+
+export interface VolcanicRock {
+  id: string | number;
+  pos?: Vector2D;
+  vel?: Vector2D;
+  radius?: number;
+  rotation: number;
+  rotSpeed: number;
+  lifetime?: number;
+  maxLifetime?: number;
+  colorTheme?: 'magma' | 'plasma' | 'toxic' | 'cryo' | any;
+  active?: boolean;
+  maxLife?: number;
+  life?: number;
+  x?: number;
+  y?: number;
+  vx?: number;
+  vy?: number;
+  size?: number;
+  color?: string;
+  glowColor?: string;
+}
+
+export type MapTextSize = 'small' | 'medium' | 'large' | 'xl' | 'xxl';
+export type MapTextStyle = 'normal' | 'glow' | 'danger' | 'tech' | 'monospace' | 'mono' | 'sans-serif' | 'orbitron' | 'rajdhani' | 'courier' | string;
+export type MapTextAlign = 'left' | 'center' | 'right';
+
+export interface MapTextNote {
+  id: string;
+  pos?: Vector2D;
+  x?: number;
+  y?: number;
+  text: string;
+  size: MapTextSize;
+  style: MapTextStyle;
+  align?: MapTextAlign;
+  color: string;
+  showBorder?: boolean;
+}
+
+export interface WorldMap {
+  width: number;
+  height: number;
+  groundSegments?: TerrainSegment[];
+  ceilingSegments?: TerrainSegment[];
+  segments?: TerrainSegment[];
+  launchPad: LandingPad;
+  landingPad: LandingPad;
+  secondaryPads?: LandingPad[];
+  fuelPickups?: FuelPickup[];
+  pickups: FuelPickup[];
+  cargoPlatforms: CargoPlatform[];
+  cargoContainers?: CargoContainer[];
+  cargoItems?: CargoContainer[];
+  trucks: PlanetaryTruck[];
+  caveZones?: CaveZoneInfo[];
+  signposts: MineSignpost[];
+  volcanoes?: VolcanoHazard[];
+  volcanicRocks?: VolcanicRock[];
+  textNotes?: MapTextNote[];
+  groundPoints?: TerrainPoint[];
+  ceilingPoints?: TerrainPoint[];
+  obstacles?: any;
+  obstacleObjects?: any;
+  rawGroundPoints?: TerrainPoint[];
+  rawCeilingPoints?: TerrainPoint[];
+  rawObstacles?: CustomObstacleData[];
+}
+
+export type ShipModelId =
+  | 'viper'
+  | 'wasp'
+  | 'kestrel'
+  | 'spectre'
+  | 'apollo'
+  | 'aegis'
+  | 'nebula'
+  | 'vanguard'
+  | 'orion'
+  | 'valkyrie'
+  | 'titan'
+  | 'goliath'
+  | 'behemoth'
+  | 'leviathan'
+  | 'mammoth'
+  | 'juggernaut'
+  | 'sparrow'
+  | 'phoenix'
+  | 'nautilus'
+  | 'mantis'
+  | 'colossus';
+
+export interface ShipLocalPoints {
+  [key: string]: Vector2D;
 }
 
 export interface ShipModelConfig {
   id: ShipModelId;
   name: string;
-  codename: string;
-  tagline: string;
   description: string;
-  classType?: 'Small Recon' | 'Medium Explorer' | 'Heavy Transport' | 'Rover Transporter';
-  width: number;
-  height: number;
-  maxFuel: number;
-  thrustMultiplier: number;
-  torqueMultiplier: number;
-  mass: number;
-  armor: number; // 0.10 to 0.75 (damage absorption)
-  primaryColor: string;
-  accentColor: string;
-  visorColor: string;
-  localPoints: ShipLocalPoints;
-  footpadSpan: number;
+  codename?: string;
+  tagline?: string;
+  classType?: string;
+  width?: number;
+  height?: number;
   renderScale?: number;
-  isHeavyVehicleCarrier?: boolean;
-  canCarryVehicles?: boolean;
+  dryMass?: number;
+  mass?: number;
+  armor?: number;
   emptyMassTons?: number;
   maxThrustKn?: number;
   twr?: number;
@@ -85,359 +292,152 @@ export interface ShipModelConfig {
   armorRatingMm?: number;
   cargoHookCapacityKg?: number;
   roverBayCapacity?: string;
-  propulsionType?: string;
   operationalCeiling?: string;
   manufactureOrigin?: string;
-  stats: {
-    agility: number; // 1 to 5
-    fuelTank: number; // 1 to 5
-    stability: number; // 1 to 5
-    thrust: number; // 1 to 5
-    armor: number; // 1 to 5
+  footpadSpan?: number;
+  canCarryVehicles?: boolean;
+  isHeavyVehicleCarrier?: boolean;
+  maxFuel: number;
+  thrustMultiplier?: number;
+  torqueMultiplier?: number;
+  mainThrustForce?: number;
+  rcsThrustForce?: number;
+  fuelBurnRateMultiplier?: number;
+  maxLandingSpeed?: number;
+  maxLandingAngle?: number;
+  cableAnchorOffset?: Vector2D;
+  cargoCapacity?: 'light' | 'medium' | 'heavy';
+  hullHealthMax?: number;
+  propulsionType?: string;
+  rcsType?: string;
+  avionicsRating?: string;
+  dimensions?: { width: number; height: number };
+  visualColor?: string;
+  primaryColor: string;
+  accentColor: string;
+  visorColor: string;
+  thrusterColor?: string;
+  localPoints?: Record<string, Vector2D>;
+  stats?: {
+    agility: number;
+    fuelTank: number;
+    stability: number;
+    thrust: number;
+    armor: number;
   };
+  role?: string;
 }
 
 export interface ShipState {
   pos: Vector2D;
   vel: Vector2D;
-  angle: number; // in radians, 0 is pointing straight UP
-  angularVel: number; // in radians/s
+  angle: number;
+  angularVel: number;
   fuel: number;
   maxFuel: number;
-  hull: number; // 0 to 100%
-  maxHull: number;
-  modelId: ShipModelId;
-  leftThruster: boolean;
-  rightThruster: boolean;
-  isLanded: boolean;
-  landingSettling: boolean;
-  settleProgress: number; // 0 to 1.0
-  isCrashed: boolean;
-  crashTime: number;
+  health?: number;
+  maxHealth?: number;
+  altitude?: number;
+  isLanded?: boolean;
+  isCrashed?: boolean;
   crashReason?: string;
-  hasWon: boolean;
-  lastDamageTime?: number;
-  recentDamageAmount?: number;
-  isSmoking?: boolean;
-  isSparking?: number;
-  thrusterDegraded?: boolean;
-  empDisabledTimer?: number; // EMP avionics shutdown duration in seconds
-  isRepairing?: boolean;
-  attachedCargoId?: string | null;
-  deliveredCargoCount?: number;
-  totalCargoCount?: number;
+  crashTime?: number;
+  isRefueling?: boolean;
+  missionSuccess?: boolean;
+  hasWon?: boolean;
   totalMassKg?: number;
-  cargoTension?: number; // 0 to 1.0
-  rampState?: 'closed' | 'opening' | 'open' | 'closing';
-  rampProgress?: number; // 0 (closed) to 1 (fully lowered ramp)
-  gearCompression?: number; // 0.0 (fully extended in flight) to 1.0 (fully compressed upon heavy touchdown)
-  gearSpringVelocity?: number; // spring velocity for realistic suspension oscillation on landing and liftoff
-  loadedTrucksCount?: number;
+  attachedCargo?: CargoContainer | null;
+  attachedCargoId?: string | null;
+  winchCableLength?: number;
+  winchTargetLength?: number;
+  model?: ShipModelId;
+  modelId?: ShipModelId;
+  leftThruster?: number | boolean;
+  rightThruster?: number | boolean;
+  hull?: number;
+  maxHull?: number;
+  isRepairing?: boolean;
+  empDisabledTimer?: number;
+  rampProgress?: number;
+  gearCompression?: number;
+  gearSpringVelocity?: number;
+  rampState?: string;
+  lastCargoEvent?: any;
+  deliveredCargoCount?: number;
   deliveredTrucksCount?: number;
+  loadedTrucksCount?: number;
+  landingSettling?: number | boolean;
+  settleProgress?: number;
+  landingScore?: any;
+  isSmoking?: boolean;
+  thrusterDegraded?: boolean;
+  totalCargoCount?: number;
   totalTrucksCount?: number;
-  lastCargoEvent?: {
-    type: 'attached' | 'delivered' | 'snapped' | 'truck_loaded' | 'truck_delivered' | 'detached';
-    text: string;
-    time: number;
-  };
-  landingScore?: LandingScore;
+  cargoTension?: number;
 }
 
-export interface CargoDeliveryReport {
-  id: string;
-  name: string;
-  cargoType: CargoType;
-  weightClass: CargoWeightClass;
-  mass: number;
-  isDelivered: boolean;
-  baseScore: number;
-  conditionPct: number; // 0 to 100
-  conditionStatus: string;
-  conditionMultiplier: number;
-  finalScore: number;
-}
-
-export interface LandingScore {
-  softness: number;
-  fuelRemaining: number;
-  hullRemaining?: number;
-  hullBonus?: number;
-  timeBonus: number;
-  cargoBonus?: number;
-  vehicleBonus?: number;
-  cargoDetails?: CargoDeliveryReport[];
-  timeTaken: number;
-  parTime: number;
-  total: number;
-  rank?: 'S' | 'A' | 'B' | 'C';
-  isNewBestTime?: boolean;
-  isNewHighScore?: boolean;
-}
-
-export interface TerrainPoint {
-  x: number;
-  y: number;
-}
-
-export interface TerrainSegment {
-  p1: TerrainPoint;
-  p2: TerrainPoint;
-  type: 'ground' | 'ceiling' | 'wall' | 'landing_pad' | 'launch_pad';
-}
-
-export type CargoWeightClass = 'light' | 'medium' | 'heavy';
-export type CargoType = 'standard' | 'explosive' | 'cryogenic' | 'isotope' | 'magnetic' | 'plasma';
-
-export type MapTextSize = 'small' | 'medium' | 'large' | 'xl' | 'xxl';
-export type MapTextStyle = 'monospace' | 'mono' | 'sans-serif' | 'orbitron' | 'rajdhani' | 'courier';
-export type MapTextAlign = 'left' | 'center' | 'right';
-
-export interface MapTextNote {
-  id: string;
-  x: number;
-  y: number;
-  text: string;
-  size: MapTextSize;
-  color: string;
-  style: MapTextStyle;
-  showBorder: boolean;
-  align?: MapTextAlign;
-}
-
-export interface CargoContainer {
-  id: string;
-  name: string;
-  weightClass: CargoWeightClass;
-  cargoType?: CargoType;
-  mass: number; // in kg (e.g. 150, 350, 750)
-  pos: Vector2D;
-  vel: Vector2D;
-  width: number;
-  height: number;
-  isAttached: boolean;
-  isDelivered: boolean;
-  tetherLength: number; // nominal wire length in px
-  color: string;
-  accentColor: string;
-  deliveredTime?: number;
-  pickupPadId?: string;
-  platformId?: string;
-  dropZoneId?: string;
-  // Volatile & Fragile Cargo Transport attributes
-  integrity?: number; // 0 to 100% (for fragile isotope and physical structural damage)
-  temperature?: number; // 0 to 100% (for cryogenic pods; heats up near magma / friction)
-  chargeTimer?: number; // seconds remaining before discharge for plasma battery
-  maxChargeTimer?: number;
-  isDetonated?: boolean;
-  hazardStatus?: string;
-  empCooldown?: number;
-}
-
-export interface CargoPlatform {
-  id: string;
-  type: 'pickup' | 'vehicle_depot' | 'vehicle_dest';
-  x1: number;
-  x2: number;
-  y: number;
-  width: number;
-  center: Vector2D;
-  label: string;
-  weightClass?: CargoWeightClass;
-  cargoWeight?: CargoWeightClass;
-  cargoType?: CargoType;
-  cargoId?: string;
-  isFulfilled?: boolean;
-  truckCount?: number;
-}
-
-export interface CaveZoneInfo {
-  id: string;
-  name: string;
-  level: number; // 1 = Upper, 2 = Middle, 3 = Deep Abyss
-  bounds: { x1: number; x2: number; y1: number; y2: number };
-  description?: string;
-}
-
-export interface LandingPad {
-  x1: number;
-  x2: number;
-  y: number;
-  width: number;
-  center: Vector2D;
-}
-
-export interface FuelPickup {
-  id: string;
-  x: number;
-  y: number;
-  radius: number;
-  amount: number;
-  collected: boolean;
-}
-
-export interface MineSignpost {
-  id: string;
-  x: number;
-  y: number;
-  direction: 'left' | 'right' | 'down' | 'up' | 'down_left' | 'down_right' | 'up_left' | 'up_right';
-  targetType: 'pickup' | 'vehicle_depot' | 'drop' | 'landing' | 'launch' | 'fuel';
-  targetName: string;
-  color: string;
-  distanceMeters?: number;
-  subText?: string;
-}
-
-export interface VolcanicRock {
-  id: number;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  size: number;
-  rotation: number;
-  rotSpeed: number;
-  life: number;
-  maxLife: number;
-  color: string;
+export interface PlanetTheme {
+  skyTop: string;
+  skyBottom: string;
+  terrainFill: string;
+  terrainBorder: string;
+  terrainAccent: string;
+  gridColor: string;
+  dustColor: string;
   glowColor: string;
-  active: boolean;
-}
-
-export interface VolcanoHazard {
-  id: string;
-  name?: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  calderaWidth: number;
-  eruptionHeight: number;
-  interval: number;
-  duration: number;
-  hazardRadius: number;
-  colorTheme: 'magma' | 'plasma' | 'toxic' | 'cryo';
-  cycleTimer: number;
-  isErupting: boolean;
-  isCharging: boolean;
-  eruptPhase: number;
-  rocks: VolcanicRock[];
-}
-
-export interface WorldMap {
-  width: number;
-  height: number;
-  groundPoints: TerrainPoint[];
-  ceilingPoints: TerrainPoint[];
-  obstacles: TerrainPoint[][];
-  obstacleObjects?: { points: TerrainPoint[]; type?: string; name?: string }[];
-  segments: TerrainSegment[];
-  launchPad: LandingPad;
-  landingPad: LandingPad;
-  cargoPlatforms?: CargoPlatform[];
-  cargoItems?: CargoContainer[];
-  trucks?: PlanetaryTruck[];
-  caveZones?: CaveZoneInfo[];
-  signposts?: MineSignpost[];
-  textNotes?: MapTextNote[];
-  pickups: FuelPickup[];
-  checkpoints?: Vector2D[];
-  volcanoes?: VolcanoHazard[];
+  starDensity: number;
+  thrusterCore?: string;
+  [key: string]: any;
 }
 
 export interface PlanetConfig {
   id: string;
   name: string;
-  category: string;
+  subtitle?: string;
   description: string;
-  sizeCategory?: 'Small' | 'Medium' | 'Large' | 'Very Large';
+  gravity: number;
+  airResistance: number;
+  terrainRoughness?: number;
+  fuelBurnRate: number;
+  targetTimeSec: number;
+  hazards?: string[];
+  objectives?: string[];
+  visualTheme?: PlanetTheme;
+  theme: PlanetTheme;
+  difficulty: string;
+  category?: string;
+  sizeCategory?: string;
   width?: number;
   height?: number;
   surfacePressureBar?: number;
   surfaceTempC?: number;
   radiationRadPerHr?: number;
   windSpeedKmh?: number;
-  hazards?: string[];
-  objectives?: string[];
-  recommendedCraft?: string;
-  gravity: number; // e.g. 1.2 to 8.5
-  airResistance: number; // 0.0001 to 0.005
-  fuelBurnRate: number; // 15 to 30
-  theme: {
-    skyTop: string;
-    skyBottom: string;
-    terrainFill: string;
-    terrainBorder: string;
-    terrainAccent: string;
-    gridColor: string;
-    dustColor: string;
-    starDensity: number;
-    glowColor: string;
-  };
-  seed: number;
-  targetTimeSec: number;
-  difficulty: 'Easy' | 'Medium' | 'Hard' | 'Extreme';
+  windResistance?: number;
+  recommendedCraft?: any;
+  seed?: number;
+  author?: string;
+  isCustom?: boolean;
 }
 
-export interface GameSettings {
-  soundEnabled: boolean;
-  musicEnabled: boolean;
-  masterVolume: number;
-  showMinimap: boolean;
-  showFlightPath: boolean;
-  touchControls: boolean;
-  highPrecisionMode: boolean;
-}
-
-export interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  life: number;
-  maxLife: number;
-  size: number;
-  color: string;
-  alpha: number;
-  isGlow?: boolean;
-  glowColor?: string;
-}
-
-export type EditorToolType =
-  | 'select'
-  | 'pan'
-  | 'ground'
-  | 'ceiling'
-  | 'cave_layer'
-  | 'cave_tunnel'
-  | 'cargo_pickup'
-  | 'vehicle_depot'
-  | 'obstacle_polygon'
-  | 'volcano'
-  | 'signpost'
-  | 'text'
-  | 'fuel'
-  | 'eraser';
-
-export interface CustomVolcanoData {
+export interface CustomObstacleData {
   id: string;
-  name?: string;
+  name: string;
+  type: 'polygon' | 'arch' | 'spire' | 'strata' | 'crystals' | 'pillar' | 'island' | 'crystal' | string;
+  points: TerrainPoint[];
+  color?: string;
+}
+
+export interface CustomFuelData {
+  id: string;
   x: number;
   y: number;
-  width: number;
-  height: number;
-  calderaWidth?: number;
-  eruptionHeight?: number;
-  interval?: number;
-  duration?: number;
-  eruptionInterval?: number;
-  eruptionDuration?: number;
-  hazardRadius?: number;
-  colorTheme?: 'magma' | 'plasma' | 'toxic' | 'cryo';
+  amount: number;
 }
 
 export interface CustomCargoPlatformData {
   id: string;
-  type: 'pickup' | 'vehicle_depot' | 'vehicle_dest';
+  type: 'pickup' | 'delivery' | 'vehicle_depot';
   x: number;
   y: number;
   width: number;
@@ -451,11 +451,11 @@ export interface CustomSignpostData {
   id: string;
   x: number;
   y: number;
-  direction: 'left' | 'right' | 'down' | 'up' | 'down_left' | 'down_right' | 'up_left' | 'up_right';
-  targetType: 'landing' | 'pickup' | 'vehicle_depot' | 'drop' | 'launch' | 'fuel';
+  direction: 'left' | 'right' | 'up' | 'down' | 'up_left' | 'up_right' | 'down_left' | 'down_right';
+  targetType: 'landing' | 'pickup' | 'hazard' | 'vehicle_depot' | 'fuel' | 'launch' | any;
   targetName: string;
   subText?: string;
-  color?: string;
+  color: string;
   distanceMeters?: number;
 }
 
@@ -465,24 +465,27 @@ export interface CustomTextNoteData {
   y: number;
   text: string;
   size: MapTextSize;
-  color: string;
   style: MapTextStyle;
-  showBorder: boolean;
   align?: MapTextAlign;
+  color: string;
+  showBorder?: boolean;
 }
 
-export interface CustomObstacleData {
-  id: string;
-  name: string;
-  type: 'arch' | 'spire' | 'pillar' | 'island' | 'polygon' | 'strata' | 'cave_shelf' | 'tunnel' | 'crystal' | 'crystals';
-  points: TerrainPoint[];
-}
-
-export interface CustomFuelData {
+export interface CustomVolcanoData {
   id: string;
   x: number;
   y: number;
-  amount: number;
+  width: number;
+  height: number;
+  calderaWidth: number;
+  eruptionHeight: number;
+  eruptionInterval?: number;
+  eruptionDuration?: number;
+  colorTheme?: 'magma' | 'plasma' | 'toxic' | 'cryo';
+  interval?: number;
+  duration?: number;
+  hazardRadius?: number;
+  name?: string;
 }
 
 export interface CustomMapTheme {
@@ -497,43 +500,117 @@ export interface CustomMapTheme {
   dustColor: string;
   glowColor: string;
   starDensity: number;
+  isCustom?: boolean;
+  thrusterCore?: string;
 }
 
 export interface CustomMapData {
   id: string;
   name: string;
   description: string;
-  author: string;
+  author?: string;
   createdAt: number;
   updatedAt: number;
+  themeId?: string;
+  customTheme?: CustomMapTheme;
+  terrainLineStyle?: 'straight' | 'smooth' | 'curved';
   worldWidth: number;
   worldHeight: number;
   gravity: number;
   airResistance: number;
   fuelBurnRate: number;
   targetTimeSec: number;
-  difficulty: 'Easy' | 'Medium' | 'Hard' | 'Extreme';
-  difficultyMode?: 'auto' | 'manual';
-  themeId: string;
-  customTheme?: CustomMapTheme;
-  terrainLineStyle?: 'straight' | 'curved';
-  launchPad: {
-    x: number;
-    y: number;
-    width: number;
-  };
-  landingPad: {
-    x: number;
-    y: number;
-    width: number;
-  };
+  difficulty: string;
+  launchPad: { x: number; y: number; width: number };
+  landingPad: { x: number; y: number; width: number };
   groundNodes: TerrainPoint[];
-  ceilingNodes: TerrainPoint[];
-  obstacles: CustomObstacleData[];
-  fuelPickups: CustomFuelData[];
+  ceilingNodes?: TerrainPoint[];
+  obstacles?: CustomObstacleData[];
+  fuelPickups?: CustomFuelData[];
   cargoPlatforms?: CustomCargoPlatformData[];
   signposts?: CustomSignpostData[];
   textNotes?: CustomTextNoteData[];
+  difficultyMode?: 'auto' | 'manual';
   volcanoes?: CustomVolcanoData[];
+  basePlanet?: string;
 }
 
+export interface CargoDeliveryReport {
+  id?: string;
+  name?: string;
+  cargoName?: string;
+  weightClass?: CargoWeightClass;
+  cargoType?: CargoType;
+  timeElapsed?: number;
+  targetTime?: number;
+  fuelRemaining?: number;
+  cargoIntegrity?: number;
+  timeBonus?: number;
+  fuelBonus?: number;
+  conditionBonus?: number;
+  rawScore?: number;
+  baseScore?: number;
+  finalScore?: number;
+  mass?: number;
+  isDelivered?: boolean;
+  conditionPct?: number;
+  conditionStatus?: string;
+  conditionMultiplier?: number;
+  rating?: 'PERFECT' | 'EXCELLENT' | 'GOOD' | 'PASS' | 'FAILED';
+  specialBonusText?: string;
+}
+
+export interface Particle {
+  pos?: Vector2D;
+  vel?: Vector2D;
+  x?: number;
+  y?: number;
+  vx?: number;
+  vy?: number;
+  color: string;
+  glowColor?: string;
+  isGlow?: boolean;
+  size: number;
+  alpha: number;
+  maxLife: number;
+  life: number;
+  type?: 'thrust' | 'rcs' | 'dust' | 'spark' | 'explosion' | 'smoke' | 'debris' | 'magma' | 'geyser' | 'cryo' | 'plasma' | string;
+}
+
+export interface GameSettings {
+  soundVolume?: number;
+  musicVolume?: number;
+  controlSensitivity?: number;
+  showHUD?: boolean;
+  touchControls?: boolean;
+  colorblindMode?: boolean;
+  screenShake?: boolean;
+  particleQuality?: 'low' | 'medium' | 'high';
+  soundEnabled?: boolean;
+  musicEnabled?: boolean;
+  masterVolume?: number;
+  highPrecisionMode?: boolean;
+  showMinimap?: boolean;
+  showFlightPath?: boolean;
+}
+
+export type EditorToolType =
+  | 'select'
+  | 'pan'
+  | 'draw_ground'
+  | 'draw_ceiling'
+  | 'eraser'
+  | 'add_obstacle'
+  | 'add_fuel'
+  | 'add_cargo'
+  | 'add_signpost'
+  | 'add_volcano'
+  | 'add_text'
+  | 'signpost'
+  | 'text'
+  | 'volcano'
+  | 'cave_layer'
+  | 'fuel'
+  | 'cargo_pickup'
+  | 'vehicle_depot'
+  | string;

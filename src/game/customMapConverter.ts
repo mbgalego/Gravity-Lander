@@ -31,6 +31,7 @@ import {
   OFFICIAL_CALYPSO_MAP,
   OFFICIAL_ZEPHYR_MAP,
   OFFICIAL_TARTARUS_MAP,
+  OFFICIAL_HYPERION_MAP,
 } from '../utils/customMapsStorage';
 
 export const CUSTOM_THEMES: Record<string, CustomMapTheme> = {
@@ -112,7 +113,7 @@ export function interpolateParametricPath(
   width: number,
   defaultY = 1500,
   maxStep = 28,
-  lineStyle: 'straight' | 'curved' = 'straight'
+  lineStyle: 'straight' | 'curved' | 'smooth' = 'straight'
 ): TerrainPoint[] {
   if (!nodes || nodes.length === 0) {
     return [
@@ -618,6 +619,9 @@ export function convertOfficialPlanetToCustomMap(planet: PlanetConfig): CustomMa
   if (planet.id === 'tartarus' || planet.id === 'official-tartarus') {
     return JSON.parse(JSON.stringify(OFFICIAL_TARTARUS_MAP));
   }
+  if (planet.id === 'hyperion' || planet.id === 'official-hyperion') {
+    return JSON.parse(JSON.stringify(OFFICIAL_HYPERION_MAP));
+  }
 
   const worldWidth = 8600;
   const worldHeight = 3200;
@@ -651,11 +655,11 @@ export function convertOfficialPlanetToCustomMap(planet: PlanetConfig): CustomMa
   }
 
   // Map all actual geological obstacles (mesas, arched bridges, spires, rock islands, dividers)
-  const obstacles: CustomObstacleData[] = world.obstacles.map((poly, idx) => ({
+  const obstacles: CustomObstacleData[] = ((world.obstacles as any[]) || []).map((poly: any, idx: number) => ({
     id: `obs-${planet.id}-${idx + 1}`,
     name: `Geological Formation ${idx + 1}`,
     type: 'polygon',
-    points: poly.map((pt) => ({ x: Math.round(pt.x), y: Math.round(pt.y) })),
+    points: (poly || []).map((pt: any) => ({ x: Math.round(pt.x), y: Math.round(pt.y) })),
   }));
 
   // Launch pad center & width

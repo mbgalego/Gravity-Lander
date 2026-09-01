@@ -239,7 +239,7 @@ const VictoryScoreCard: React.FC<VictoryScoreCardProps> = ({ landingScore, targe
           </div>
 
           <div className="space-y-1.5">
-            {cargoDetails.map((cargo) => {
+            {cargoDetails.map((cargo: any) => {
               const Icon = getCargoIcon(cargo.cargoType);
               const theme = getCargoTheme(cargo.cargoType);
               const earnedPts = Math.round(progress * cargo.finalScore);

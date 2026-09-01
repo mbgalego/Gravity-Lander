@@ -1,4 +1,4 @@
-import { ShipState, WorldMap, PlanetConfig, Vector2D, PlanetaryTruck, VolcanoHazard } from '../types';
+import { ShipState, WorldMap, PlanetConfig, Vector2D, PlanetaryTruck, VolcanoHazard, GameSettings } from '../types';
 import { ParticleSystem } from './particles';
 import { getShipConfig } from './ships';
 import { renderShipHull } from './shipDrawers';
@@ -155,7 +155,7 @@ export class GameRenderer {
     world: WorldMap,
     planet: PlanetConfig,
     particles: ParticleSystem,
-    settings: { showMinimap: boolean; showFlightPath: boolean },
+    settings: Partial<GameSettings> | { showMinimap?: boolean; showFlightPath?: boolean },
     time: number
   ) {
     if (!this.starfieldInitialized || this.stars.length !== planet.theme.starDensity) {

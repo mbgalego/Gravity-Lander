@@ -1,8 +1,10 @@
-const CACHE_NAME = 'gravity-lander-v3';
+const CACHE_NAME = 'gravity-lander-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/icon.svg',
+  '/icon.png',
   '/icon-48.png',
   '/icon-72.png',
   '/icon-96.png',
@@ -18,8 +20,7 @@ const STATIC_ASSETS = [
   '/favicon-32x32.png',
   '/favicon.ico',
   '/screenshot-desktop.png',
-  '/screenshot-mobile.png',
-  '/icon.jpg'
+  '/screenshot-mobile.png'
 ];
 
 self.addEventListener('install', (event) => {

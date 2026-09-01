@@ -357,7 +357,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
     touchEndX.current = null;
   };
 
-  const cardVariants = {
+  const cardVariants: any = {
     enter: (dir: number) => ({
       x: dir > 0 ? 100 : -100,
       scale: 0.8,
@@ -393,10 +393,10 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
   return (
     <div className="w-full flex flex-col items-center select-none">
       {/* Section Subtitle Tag & Catalog Button */}
-      <div className="flex items-center justify-center gap-2 mb-1.5">
-        <div className="flex items-center gap-1.5 text-[11px] font-mono tracking-widest text-sky-400 font-bold uppercase">
-          <Rocket className="w-3.5 h-3.5" />
-          <span>SPACECRAFT HANGAR</span>
+      <div className="flex items-center justify-between gap-2 mb-2.5 w-full px-1">
+        <div className="flex items-center gap-2 text-xs sm:text-sm font-mono tracking-wider text-sky-300 font-extrabold uppercase bg-sky-950/50 border border-sky-500/30 px-3 py-1 rounded-lg backdrop-blur-md shadow-sm">
+          <Rocket className="w-4 h-4 text-sky-400" />
+          <span>SPACECRAFT FLEET</span>
         </div>
         {onOpenModal && (
           <button
@@ -404,10 +404,10 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
             type="button"
             onClick={onOpenModal}
             title="Open full Spacecraft Fleet Specifications & Hangar catalog"
-            className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-purple-300 bg-slate-900/40 hover:bg-slate-800/80 px-2.5 py-0.5 rounded-full border border-white/10 hover:border-purple-400/40 transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-1.5 text-xs font-mono text-sky-300 hover:text-white bg-slate-900/70 hover:bg-slate-800 border border-sky-400/30 hover:border-sky-400/60 px-3 py-1 rounded-lg transition-all cursor-pointer shadow-sm"
           >
-            <Layers className="w-2.5 h-2.5 text-purple-400" />
-            <span>CATALOG</span>
+            <Layers className="w-3.5 h-3.5 text-sky-400" />
+            <span>FLEET CATALOG</span>
           </button>
         )}
       </div>

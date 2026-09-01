@@ -97,6 +97,7 @@ export default function App() {
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
   const [showDebug, setShowDebug] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(sound.getMuted());
+  const [isMusicMuted, setIsMusicMuted] = useState<boolean>(sound.getMusicMuted());
   const [settings, setSettings] = useState<GameSettings>({
     soundEnabled: true,
     musicEnabled: true,
@@ -319,6 +320,12 @@ export default function App() {
   const handleToggleMute = useCallback(() => {
     const nextMuted = sound.toggleMute();
     setIsMuted(nextMuted);
+  }, []);
+
+  // Music only mute toggle
+  const handleToggleMusicMute = useCallback(() => {
+    const nextMusicMuted = sound.toggleMusicMute();
+    setIsMusicMuted(nextMusicMuted);
   }, []);
 
   // Thruster input handlers
@@ -623,6 +630,8 @@ export default function App() {
             completedPlanets={completedPlanets}
             isMuted={isMuted}
             onToggleMute={handleToggleMute}
+            isMusicMuted={isMusicMuted}
+            onToggleMusicMute={handleToggleMusicMute}
             onOpenEditor={handleOpenEditor}
           />
         </div>
@@ -669,8 +678,8 @@ export default function App() {
           <TouchControls
             onLeftThrusterChange={handleLeftThrusterChange}
             onRightThrusterChange={handleRightThrusterChange}
-            isLeftActive={hudShipState.leftThruster}
-            isRightActive={hudShipState.rightThruster}
+            isLeftActive={!!hudShipState.leftThruster}
+            isRightActive={!!hudShipState.rightThruster}
             disabled={hudShipState.isCrashed || hudShipState.isLanded}
           />
 

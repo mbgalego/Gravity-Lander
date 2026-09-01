@@ -3,8 +3,10 @@ import { CustomMapData, CargoWeightClass } from '../types';
 export interface DifficultyFactor {
   name: string;
   score: number;
+  maxScore?: number;
   rating: 'Low' | 'Moderate' | 'High' | 'Severe';
   detail: string;
+  description?: string;
 }
 
 export interface DifficultyAnalysisResult {

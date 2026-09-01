@@ -27,6 +27,7 @@ import {
   Smartphone,
   Sparkles,
   ExternalLink,
+  Music,
   X,
 } from 'lucide-react';
 
@@ -38,6 +39,8 @@ interface StartMenuProps {
   completedPlanets: Record<string, boolean>;
   isMuted: boolean;
   onToggleMute: () => void;
+  isMusicMuted?: boolean;
+  onToggleMusicMute?: () => void;
   onOpenEditor: (mapData?: CustomMapData) => void;
 }
 
@@ -49,6 +52,8 @@ export const StartMenu: React.FC<StartMenuProps> = ({
   completedPlanets,
   isMuted,
   onToggleMute,
+  isMusicMuted = sound.getMusicMuted(),
+  onToggleMusicMute,
   onOpenEditor,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -72,6 +77,13 @@ export const StartMenu: React.FC<StartMenuProps> = ({
       return false;
     }
   });
+  const [dismissUpdateBanner, setDismissUpdateBanner] = useState(() => {
+    try {
+      return sessionStorage.getItem(`dismiss_update_banner_${CURRENT_GAME_VERSION}`) === 'true';
+    } catch {
+      return false;
+    }
+  });
   const { isFullscreen, toggleFullscreen } = useFullscreen();
   const { canInstall, isInstalled, isIframe, triggerInstall, openInNewTab } = usePwaInstall();
 
@@ -80,6 +92,21 @@ export const StartMenu: React.FC<StartMenuProps> = ({
     try {
       sessionStorage.setItem('dismiss_pwa_banner', 'true');
     } catch {}
+  };
+
+  const handleDismissUpdateBanner = () => {
+    setDismissUpdateBanner(true);
+    try {
+      sessionStorage.setItem(`dismiss_update_banner_${CURRENT_GAME_VERSION}`, 'true');
+    } catch {}
+  };
+
+  const handleMusicToggle = () => {
+    if (onToggleMusicMute) {
+      onToggleMusicMute();
+    } else {
+      sound.toggleMusicMute();
+    }
   };
 
   const completedCount = Object.values(completedPlanets).filter(Boolean).length;
@@ -542,34 +569,54 @@ export const StartMenu: React.FC<StartMenuProps> = ({
       />
 
       {/* Top Header Controls */}
-      <header className="relative z-10 w-full px-4 sm:px-6 py-2.5 flex items-center justify-between">
-        {completedCount > 0 ? (
-          <div className="flex items-center gap-1.5 bg-emerald-950/40 border border-emerald-500/30 px-3 py-1 rounded-full text-[11px] font-mono text-emerald-300 backdrop-blur-md">
-            <Award className="w-3.5 h-3.5 text-emerald-400" />
-            <span>{completedCount}/{PLANETS.length} WORLDS</span>
-          </div>
-        ) : (
-          <div className="flex items-center gap-1.5 bg-sky-950/40 border border-sky-500/30 px-3 py-1 rounded-full text-[11px] font-mono text-sky-300 backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-            <span>EXPEDITION READY</span>
-          </div>
-        )}
-
-        <div className="flex items-center gap-2">
-          {/* PWA Install App Button */}
-          {!isInstalled && (
-            <button
-              id="btn-install-pwa"
-              type="button"
-              onClick={handleInstallClick}
-              className="px-3 py-1 rounded-full bg-gradient-to-r from-sky-500/20 to-teal-500/20 hover:from-sky-500/40 hover:to-teal-500/40 border border-sky-400/50 text-sky-300 hover:text-white transition-all text-xs font-mono backdrop-blur-md cursor-pointer flex items-center gap-1.5 shadow-[0_0_12px_rgba(56,189,248,0.2)]"
-              title="Install Gravity Lander to Homescreen/Desktop"
-            >
-              <Download className="w-3.5 h-3.5 text-sky-400" />
-              <span>INSTALL APP</span>
-            </button>
+      <header className="relative z-20 w-full px-3 sm:px-6 py-2.5 flex items-start justify-between gap-2">
+        <div className="flex flex-col items-start gap-2 max-w-[280px] sm:max-w-sm">
+          {completedCount > 0 && (
+            <div className="flex items-center gap-1.5 bg-emerald-950/50 border border-emerald-500/30 px-3 py-1 rounded-full text-[11px] font-mono text-emerald-300 backdrop-blur-md shadow-sm">
+              <Award className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{completedCount}/{PLANETS.length} WORLDS</span>
+            </div>
           )}
 
+          {/* Dismissible Top-Left Latest Update Banner (2-3 lines max) */}
+          {!dismissUpdateBanner && (
+            <div
+              id="banner-latest-update"
+              className="w-full p-2.5 sm:p-3 rounded-2xl bg-slate-950/80 border border-teal-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.6)] backdrop-blur-md text-left transition-all"
+            >
+              <div className="flex items-center justify-between gap-1.5 pb-1 border-b border-white/5">
+                <div className="flex items-center gap-1.5 font-mono text-[11px] font-bold text-teal-300">
+                  <Sparkles className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                  <span>{CURRENT_GAME_VERSION} UPDATE</span>
+                </div>
+                <button
+                  id="btn-dismiss-update-banner"
+                  type="button"
+                  onClick={handleDismissUpdateBanner}
+                  className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
+                  title="Dismiss update banner"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <p className="text-[11px] sm:text-[12px] text-slate-200 font-sans mt-1 leading-snug">
+                Transparent menu cards, single-line action buttons, dedicated music mute, magnified title thrusters & cleaned Luna base.
+              </p>
+              <div className="mt-1.5 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setShowVersionHistory(true)}
+                  className="text-[10px] font-mono text-teal-400 hover:text-teal-300 hover:underline flex items-center gap-1 cursor-pointer font-bold"
+                >
+                  <span>Changelog</span>
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Fullscreen Toggle */}
           <button
             id="btn-menu-toggle-fullscreen"
@@ -581,7 +628,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({
             {isFullscreen ? (
               <>
                 <Minimize className="w-3.5 h-3.5 text-sky-400" />
-                <span className="hidden sm:inline">EXIT FULLSCREEN</span>
+                <span className="hidden sm:inline">EXIT</span>
               </>
             ) : (
               <>
@@ -591,23 +638,43 @@ export const StartMenu: React.FC<StartMenuProps> = ({
             )}
           </button>
 
-          {/* Sound Mute Toggle */}
+          {/* Dedicated Menu Music Only Toggle */}
+          <button
+            id="btn-menu-toggle-music"
+            type="button"
+            onClick={handleMusicToggle}
+            className={`p-2 sm:px-3 sm:py-1 rounded-full border transition-all text-xs font-mono backdrop-blur-md cursor-pointer flex items-center gap-1.5 ${
+              isMusicMuted
+                ? 'bg-rose-950/50 border-rose-500/40 text-rose-300 hover:bg-rose-900/60'
+                : 'bg-slate-900/50 hover:bg-slate-800/80 border-white/10 text-slate-300 hover:text-white'
+            }`}
+            title={isMusicMuted ? 'Unmute Menu Ambient Music' : 'Mute Menu Ambient Music (Keep SFX)'}
+          >
+            <Music className={`w-3.5 h-3.5 ${isMusicMuted ? 'text-rose-400' : 'text-teal-400'}`} />
+            <span className="hidden sm:inline">{isMusicMuted ? 'MUSIC OFF' : 'MUSIC ON'}</span>
+          </button>
+
+          {/* Master Sound Effects / Audio Mute Toggle */}
           <button
             id="btn-menu-toggle-sound"
             type="button"
             onClick={onToggleMute}
-            className="p-2 sm:px-3 sm:py-1 rounded-full bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 text-slate-300 hover:text-white transition-all text-xs font-mono backdrop-blur-md cursor-pointer flex items-center gap-1.5"
-            title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
+            className={`p-2 sm:px-3 sm:py-1 rounded-full border transition-all text-xs font-mono backdrop-blur-md cursor-pointer flex items-center gap-1.5 ${
+              isMuted
+                ? 'bg-rose-950/50 border-rose-500/40 text-rose-300 hover:bg-rose-900/60'
+                : 'bg-slate-900/50 hover:bg-slate-800/80 border-white/10 text-slate-300 hover:text-white'
+            }`}
+            title={isMuted ? 'Unmute Master Audio' : 'Mute Master Audio'}
           >
             {isMuted ? (
               <>
-                <VolumeX className="w-3.5 h-3.5 text-red-400" />
+                <VolumeX className="w-3.5 h-3.5 text-rose-400" />
                 <span className="hidden sm:inline">MUTED</span>
               </>
             ) : (
               <>
                 <Volume2 className="w-3.5 h-3.5 text-sky-400" />
-                <span className="hidden sm:inline">AUDIO ON</span>
+                <span className="hidden sm:inline">SFX ON</span>
               </>
             )}
           </button>
@@ -618,19 +685,19 @@ export const StartMenu: React.FC<StartMenuProps> = ({
       <main className="relative z-10 w-full max-w-2xl mx-auto px-3 sm:px-4 py-1 sm:py-2 flex flex-col items-center text-center my-auto">
         
         {/* Game Title with Custom Dual-Throttle Spaceship 'A' */}
-        <h1 className="flex items-center justify-center flex-wrap gap-x-1 sm:gap-x-2 text-2xl sm:text-4xl md:text-5xl font-black font-mono tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)] mb-3">
+        <h1 className="flex items-center justify-center flex-wrap gap-x-1 sm:gap-x-2 text-3xl sm:text-5xl md:text-6xl font-black font-mono tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)] mb-4">
           <span className="inline-flex items-center">
             GR
-            {/* Custom Dual-Throttle Spaceship Letter 'A' */}
-            <span className="inline-flex items-center justify-center relative mx-[0.03em] align-middle" style={{ height: '0.94em', width: '0.84em' }}>
+            {/* Custom Dual-Throttle Spaceship Letter 'A' with Magnified Thrusters */}
+            <span className="inline-flex items-center justify-center relative mx-[0.03em] align-middle" style={{ height: '1.06em', width: '0.88em' }}>
               <svg
-                viewBox="0 0 100 120"
-                className="w-full h-full drop-shadow-[0_0_12px_rgba(56,189,248,0.7)] overflow-visible"
+                viewBox="0 0 100 148"
+                className="w-full h-full drop-shadow-[0_0_14px_rgba(56,189,248,0.85)] overflow-visible"
                 aria-label="A"
               >
                 <defs>
                   <filter id="afterburnerGlowFilter" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
                     <feMerge>
                       <feMergeNode in="blur" />
                       <feMergeNode in="SourceGraphic" />
@@ -680,28 +747,30 @@ export const StartMenu: React.FC<StartMenuProps> = ({
                 </defs>
 
                 {/* AFTERBURNER AMBIENT RADIAL LIGHT GLOW */}
-                <circle cx="18" cy="98" r="14" fill="url(#afterburnerBloom)" filter="url(#afterburnerGlowFilter)" className="animate-pulse" />
-                <circle cx="82" cy="98" r="14" fill="url(#afterburnerBloom)" filter="url(#afterburnerGlowFilter)" className="animate-pulse" />
+                <circle cx="18" cy="98" r="18" fill="url(#afterburnerBloom)" filter="url(#afterburnerGlowFilter)" className="animate-pulse" />
+                <circle cx="82" cy="98" r="18" fill="url(#afterburnerBloom)" filter="url(#afterburnerGlowFilter)" className="animate-pulse" />
 
                 {/* DUAL THROTTLE EXHAUST PLUMES */}
-                <polygon points="10,97 26,97 18,124" fill="url(#throttleFlameL)" filter="url(#afterburnerGlowFilter)" className="animate-pulse" />
-                <polygon points="74,97 90,97 82,124" fill="url(#throttleFlameR)" filter="url(#afterburnerGlowFilter)" className="animate-pulse" />
+                <polygon points="7,97 29,97 18,144" fill="url(#throttleFlameL)" filter="url(#afterburnerGlowFilter)" className="animate-pulse" />
+                <polygon points="71,97 93,97 82,144" fill="url(#throttleFlameR)" filter="url(#afterburnerGlowFilter)" className="animate-pulse" />
                 
                 {/* Inner Core Supersonic Jet */}
-                <polygon points="13,97 23,97 18,118" fill="url(#throttleFlameL)" />
-                <polygon points="77,97 87,97 82,118" fill="url(#throttleFlameR)" />
-                <polygon points="15,97 21,97 18,112" fill="#ffffff" opacity="0.95" />
-                <polygon points="79,97 85,97 82,112" fill="#ffffff" opacity="0.95" />
+                <polygon points="10,97 26,97 18,134" fill="url(#throttleFlameL)" />
+                <polygon points="74,97 90,97 82,134" fill="url(#throttleFlameR)" />
+                <polygon points="13,97 23,97 18,124" fill="#ffffff" opacity="0.95" />
+                <polygon points="77,97 87,97 82,124" fill="#ffffff" opacity="0.95" />
 
                 {/* Supersonic Shock Diamonds */}
-                <polygon points="18,102 19.5,105 18,108 16.5,105" fill="#ffffff" opacity="0.9" />
-                <polygon points="18,110 19,112.5 18,115 17,112.5" fill="#e0f2fe" opacity="0.8" />
-                <polygon points="82,102 83.5,105 82,108 80.5,105" fill="#ffffff" opacity="0.9" />
-                <polygon points="82,110 83,112.5 82,115 81,112.5" fill="#e0f2fe" opacity="0.8" />
+                <polygon points="18,103 20.5,107 18,111 15.5,107" fill="#ffffff" opacity="0.9" />
+                <polygon points="18,114 20,118 18,122 16,118" fill="#e0f2fe" opacity="0.8" />
+                <polygon points="18,125 19.5,129 18,133 16.5,129" fill="#bae6fd" opacity="0.75" />
+                <polygon points="82,103 84.5,107 82,111 79.5,107" fill="#ffffff" opacity="0.9" />
+                <polygon points="82,114 84,118 82,122 80,118" fill="#e0f2fe" opacity="0.8" />
+                <polygon points="82,125 83.5,129 82,133 80.5,129" fill="#bae6fd" opacity="0.75" />
 
                 {/* White-Hot Throat Flare Rings */}
-                <ellipse cx="18" cy="97.5" rx="5.5" ry="2" fill="url(#throatHotspot)" />
-                <ellipse cx="82" cy="97.5" rx="5.5" ry="2" fill="url(#throatHotspot)" />
+                <ellipse cx="18" cy="97.5" rx="6.5" ry="2.5" fill="url(#throatHotspot)" />
+                <ellipse cx="82" cy="97.5" rx="6.5" ry="2.5" fill="url(#throatHotspot)" />
 
                 {/* LANDING GEAR LEGS & STRUTS forming the 'A' Outer Slopes */}
                 {/* Left Leg Strut */}
@@ -781,34 +850,37 @@ export const StartMenu: React.FC<StartMenuProps> = ({
           </span>
         </h1>
 
-        {/* Separated Stacked Card Sliders: 1. Top Planet / Custom Map Slider */}
-        <div className="w-full mb-3">
-          <PlanetCardSlider
-            selectedWorldIndex={selectedWorldIndex}
-            selectedPlanetId={currentWorldItem?.id || selectedPlanetId}
-            onSelectWorld={handleSelectWorld}
-            completedPlanets={completedPlanets}
-            onOpenEditor={handleOpenEditorClick}
-            onOpenPlanetSelector={() => setIsPlanetSelectorOpen(true)}
-          />
+        {/* Main Selection Area: Fully Transparent and Unclipped */}
+        <div className="w-full flex flex-col gap-2.5 sm:gap-3.5 mb-4">
+          {/* Module 1: Destination World Selection */}
+          <div id="menu-destination-section" className="w-full relative overflow-visible">
+            <PlanetCardSlider
+              selectedWorldIndex={selectedWorldIndex}
+              selectedPlanetId={currentWorldItem?.id || selectedPlanetId}
+              onSelectWorld={handleSelectWorld}
+              completedPlanets={completedPlanets}
+              onOpenEditor={handleOpenEditorClick}
+              onOpenPlanetSelector={() => setIsPlanetSelectorOpen(true)}
+            />
+          </div>
+
+          {/* Module 2: Spacecraft Fleet Selection */}
+          <div id="menu-spacecraft-section" className="w-full relative overflow-visible">
+            <ShipSelector
+              selectedModelId={selectedShipId}
+              onSelectModel={onSelectShipId}
+              onOpenModal={() => setIsShipModalOpen(true)}
+            />
+          </div>
         </div>
 
-        {/* Separated Stacked Card Sliders: 2. Bottom Spacecraft Slider */}
-        <div className="w-full mb-4">
-          <ShipSelector
-            selectedModelId={selectedShipId}
-            onSelectModel={onSelectShipId}
-            onOpenModal={() => setIsShipModalOpen(true)}
-          />
-        </div>
-
-        {/* Primary Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full max-w-md justify-center pb-3">
+        {/* Primary Action Buttons: Single line on widescreen */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 w-full max-w-xl pb-3">
           <button
             id="btn-launch-mission"
             type="button"
             onClick={handleLaunch}
-            className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-sky-500 via-sky-400 to-teal-400 hover:from-sky-400 hover:to-teal-300 text-slate-950 font-mono font-extrabold text-sm sm:text-base tracking-wider uppercase shadow-[0_0_28px_rgba(56,189,248,0.55)] active:scale-98 transition-all duration-150 cursor-pointer"
+            className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3 rounded-full bg-gradient-to-r from-sky-500 via-sky-400 to-teal-400 hover:from-sky-400 hover:to-teal-300 text-slate-950 font-mono font-extrabold text-sm sm:text-base tracking-wider uppercase shadow-[0_0_28px_rgba(56,189,248,0.55)] active:scale-98 transition-all duration-150 cursor-pointer whitespace-nowrap"
           >
             <Play className="w-4 h-4 fill-slate-950" />
             <span>
@@ -820,7 +892,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({
             id="btn-open-level-editor"
             type="button"
             onClick={() => handleOpenEditorClick()}
-            className="w-full sm:w-auto px-5 py-3 rounded-full bg-slate-900/50 hover:bg-slate-800/80 border border-sky-400/30 hover:border-sky-400 text-sky-300 font-mono font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-1.5 backdrop-blur-md transition-all cursor-pointer"
+            className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-full bg-slate-900/60 hover:bg-slate-800/90 border border-sky-400/30 hover:border-sky-400 text-sky-300 font-mono font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-1.5 backdrop-blur-md transition-all cursor-pointer whitespace-nowrap shadow-sm"
           >
             <Map className="w-3.5 h-3.5 text-sky-400" />
             <span>LEVEL EDITOR</span>
@@ -830,7 +902,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({
             id="btn-open-instructions"
             type="button"
             onClick={() => setShowHowToPlay(true)}
-            className="w-full sm:w-auto px-4 py-3 rounded-full bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 hover:border-white/20 text-slate-300 font-mono font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-1.5 backdrop-blur-md transition-all cursor-pointer shadow-sm hover:text-white"
+            className="w-full sm:w-auto px-4 sm:px-5 py-3 rounded-full bg-slate-900/60 hover:bg-slate-800/90 border border-white/10 hover:border-white/20 text-slate-300 font-mono font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-1.5 backdrop-blur-md transition-all cursor-pointer shadow-sm hover:text-white whitespace-nowrap"
             title="Open Flight Instructions & Keyboard/Touch Controls"
           >
             <BookOpen className="w-3.5 h-3.5 text-sky-400" />
