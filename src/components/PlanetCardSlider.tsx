@@ -342,7 +342,7 @@ export const PlanetCardSlider: React.FC<PlanetCardSliderProps> = ({
       </div>
 
       {/* Sub-options Row: Filter Chips + Catalog (below the title) */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5 w-full px-1">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-2 mb-2.5 w-full px-1">
         <div className="flex items-center gap-1 bg-slate-950/70 p-0.5 rounded-lg border border-white/10 text-[11px] font-mono">
           <button
             type="button"
@@ -396,7 +396,7 @@ export const PlanetCardSlider: React.FC<PlanetCardSliderProps> = ({
             type="button"
             onClick={onOpenPlanetSelector}
             title="Open Full Expedition Destination Catalog & Custom Maps modal"
-            className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-teal-300 bg-slate-900/40 hover:bg-slate-800/80 px-2.5 py-0.5 rounded-full border border-white/10 hover:border-teal-400/40 transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-teal-300 bg-slate-900/40 hover:bg-slate-800/80 px-2.5 py-0.5 rounded-full border border-white/10 hover:border-teal-400/40 transition-all cursor-pointer shadow-sm self-center"
           >
             <Compass className="w-2.5 h-2.5 text-teal-400" />
             <span>CATALOG</span>

@@ -401,7 +401,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
       </div>
 
       {/* Sub-options Row: Catalog Button (below the title) */}
-      <div className="flex items-center justify-between gap-2 mb-2.5 w-full px-1">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-2 mb-2.5 w-full px-1">
         {onOpenModal && (
           <button
             id="btn-open-hangar-specs-modal"
