@@ -1,6 +1,7 @@
 import { ShipState, WorldMap, PlanetConfig, Vector2D, ShipModelId, CargoContainer, CargoDeliveryReport } from '../types';
 import { getShipConfig } from './ships';
 import { saveMissionScore } from '../utils/scoreStorage';
+import { checkMedals } from '../utils/medals';
 import { checkLandingAchievements, unlockAchievement } from '../utils/achievements';
 import { triggerCargoHazardAlert } from '../utils/cargoAlerts';
 import { sound } from './sound';
@@ -1671,7 +1672,35 @@ export function updatePhysics(
       const vehicleBonus = totalDeliveredTrucks * 15000 + Math.max(0, (updatedShip.loadedTrucksCount || 0) - totalDeliveredTrucks) * 7500;
       const totalScore = softnessScore * 10 + fuelScore + hullScore + timeBonus + cargoBonus + vehicleBonus;
 
-      const { isNewBestTime, isNewHighScore } = saveMissionScore(planet.id, timeTaken, totalScore);
+      // Evaluate medals for this landing
+      const earnedMedals = checkMedals({
+        verticalSpeed: vertSpeed,
+        horizontalSpeed: horizSpeed,
+        fuelUsed: Math.max(0, updatedShip.maxFuel - updatedShip.fuel),
+        fuelCapacity: updatedShip.maxFuel,
+        timeTaken,
+        parTime,
+        hullDamage: Math.max(0, 100 - (updatedShip.hull || 100)),
+        cargoCollected: totalDeliveredCargo,
+        cargoTotal: world.cargoItems?.length || 0,
+        roversCollected: totalDeliveredTrucks,
+        roversTotal: world.trucks?.length || 0,
+        cargoDelivered: totalDeliveredCargo,
+        volcanicRockHits: 0,
+        crashTimeMs: 0,
+        nearMisses: 0,
+        maxAltitude: 0,
+        isLanded: true,
+        isCrashed: false,
+      });
+
+      const { isNewBestTime, isNewHighScore } = saveMissionScore(planet.id, {
+        timeSec: timeTaken,
+        score: totalScore,
+        cargoCollected: totalDeliveredCargo,
+        roversCollected: totalDeliveredTrucks,
+        medalsEarned: earnedMedals.map((m) => m.id),
+      });
 
       // Check and trigger milestone achievements
       checkLandingAchievements({

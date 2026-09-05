@@ -34,6 +34,11 @@ interface FlightHUDProps {
   onOpenShips?: () => void;
   isTestFlight?: boolean;
   onReturnToEditor?: () => void;
+  // New props for cargo/rover tracking
+  totalCargo?: number;
+  totalRovers?: number;
+  collectedCargo?: number;
+  collectedRovers?: number;
 }
 
 export const FlightHUD: React.FC<FlightHUDProps> = ({
@@ -47,6 +52,10 @@ export const FlightHUD: React.FC<FlightHUDProps> = ({
   onOpenShips,
   isTestFlight = false,
   onReturnToEditor,
+  totalCargo,
+  totalRovers,
+  collectedCargo,
+  collectedRovers,
 }) => {
   const shipConfig = getShipConfig(ship.modelId);
   const fuelPct = Math.max(0, Math.min(100, (ship.fuel / ship.maxFuel) * 100));
@@ -95,6 +104,19 @@ export const FlightHUD: React.FC<FlightHUDProps> = ({
               <span className="text-[11px] sm:text-xs font-mono font-extrabold uppercase tracking-wider text-sky-300 truncate">
                 {planet.name.replace(/\s*\(Custom Edition\)/gi, '').trim()}
               </span>
+
+              {/* Cargo/Rover Counter Badge */}
+              {(totalCargo !== undefined && totalCargo > 0) || (totalRovers !== undefined && totalRovers > 0) ? (
+                <span
+                  className="px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold bg-slate-900/90 border border-sky-500/40 text-sky-300 flex items-center gap-1 shrink-0"
+                  title={`Cargo: ${collectedCargo || 0}/${totalCargo || 0}  Rovers: ${collectedRovers || 0}/${totalRovers || 0}`}
+                >
+                  <Package className="w-2.5 h-2.5" />
+                  <span>{collectedCargo || 0}/{totalCargo || 0}</span>
+                  <Truck className="w-2.5 h-2.5 ml-1" />
+                  <span>{collectedRovers || 0}/{totalRovers || 0}</span>
+                </span>
+              ) : null}
 
               {isTestFlight && (
                 <span

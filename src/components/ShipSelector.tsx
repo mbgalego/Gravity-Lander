@@ -392,12 +392,16 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
 
   return (
     <div className="w-full flex flex-col items-center select-none">
-      {/* Section Subtitle Tag & Catalog Button */}
-      <div className="flex items-center justify-between gap-2 mb-2.5 w-full px-1">
+      {/* Section Title on Top */}
+      <div className="w-full mb-2 px-1 flex items-center justify-center">
         <div className="flex items-center gap-2 text-xs sm:text-sm font-mono tracking-wider text-sky-300 font-extrabold uppercase bg-sky-950/50 border border-sky-500/30 px-3 py-1 rounded-lg backdrop-blur-md shadow-sm">
           <Rocket className="w-4 h-4 text-sky-400" />
           <span>SPACECRAFT FLEET</span>
         </div>
+      </div>
+
+      {/* Sub-options Row: Catalog Button (below the title) */}
+      <div className="flex items-center justify-between gap-2 mb-2.5 w-full px-1">
         {onOpenModal && (
           <button
             id="btn-open-hangar-specs-modal"

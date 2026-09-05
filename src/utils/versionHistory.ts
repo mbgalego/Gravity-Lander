@@ -12,15 +12,106 @@ export interface VersionRelease {
   }[];
 }
 
-export const CURRENT_GAME_VERSION = 'v1.5.0';
+export const CURRENT_GAME_VERSION = 'v1.6.1';
 
 export const GAME_VERSION_HISTORY: VersionRelease[] = [
+  {
+    version: 'v1.6.1',
+    releaseDate: 'September 2, 2026',
+    title: 'Logbook Polish, Custom-Map Navigation Fixes & Menu Refinements',
+    tag: 'LATEST',
+    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    summary:
+      'Refined the Mission Logbook with swipeable world tabs, prev/next arrows, and a proper earned-medal collection on the All Worlds page. Fixed custom-map "Next Planet" ordering and returning to the menu from a custom map, centered the main menu section titles, added more breathing room between sections, and added a dedicated LOGBOOK button between Launch Mission and Level Editor.',
+    categories: [
+      {
+        name: 'Mission Logbook',
+        iconType: 'missions',
+        items: [
+          'Earned medals now correctly display on the All Worlds page of the Logbook (previously only shown on individual planet tabs).',
+          'World tabs are swipeable left/right anywhere in the logbook content, and prev/next arrow buttons were added to the footer bar.',
+          'Keyboard arrows keep working for tab navigation.',
+        ],
+      },
+      {
+        name: 'Custom Map Navigation',
+        iconType: 'missions',
+        items: [
+          'FIXED: "Next Planet" on the completion screen now follows the same ordered world list as the main menu (official worlds, then custom maps) instead of jumping to Phobos when playing a custom map.',
+          'FIXED: Returning to the main menu (in-game button) from a custom map now correctly re-selects that same custom map instead of falling back to Luna.',
+        ],
+      },
+      {
+        name: 'Interface & Visual Design',
+        iconType: 'system',
+        items: [
+          'Main menu section titles (DESTINATION WORLD & SPACECRAFT FLEET) are now centered.',
+          'Increased vertical spacing between the Destination World and Spacecraft Fleet sections for clearer grouping.',
+          'Added a dedicated LOGBOOK button in the action row between Launch Mission and Level Editor, complementing the header icon.',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.6.0',
+    releaseDate: 'September 2, 2026',
+    title: 'Mission Logbook, Medal Collection & HUD Logistics Trackers',
+    tag: 'MAJOR',
+    tagColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/40',
+    summary:
+      'Added a full Mission Logbook tracking landings, medals, cargo & rover logistics per world, plus in-flight HUD counters and a complete medal achievement system. Refined the main menu section layout so Destination World and Spacecraft Fleet are clearly separated.',
+    categories: [
+      {
+        name: 'Mission Logbook',
+        iconType: 'missions',
+        items: [
+          'New LOGBOOK button in the main menu header opens an interactive modal with an All Worlds summary and per-planet detail tabs.',
+          'Tracks best score, best time, landing count, total cargo & rovers collected, first and last landing dates for every official world and any custom map you have flown.',
+          'World tabs and detail headers use the same procedural PlanetGraphic visuals as the main menu planet cards.',
+          'Data refreshes each time the Logbook opens so newly-recorded missions appear immediately.',
+        ],
+      },
+      {
+        name: 'Medal Achievement System',
+        iconType: 'missions',
+        items: [
+          '14 medals across flight, logistics, hazard, and misc categories — from Feather Touch to Cargo Master to Speed Runner.',
+          'Medals are evaluated automatically on every soft landing and persisted as permanent per-world collections visible in the Logbook.',
+          'All Worlds summary shows unique vs total medals earned with a full unobtained medal gallery grid.',
+        ],
+      },
+      {
+        name: 'Flight HUD Logistics Bidirectional Counters',
+        iconType: 'system',
+        items: [
+          'Cargo and rover counters now display live collected-vs-total badges (📦 0/3 · 🚚 0/2) next to the planet name in the in-flight HUD.',
+          'Counters update in real time as cargo pods and planetary trucks are delivered to the landing pad.',
+        ],
+      },
+      {
+        name: 'Interface & Visual Design',
+        iconType: 'system',
+        items: [
+          'Main menu sections restructured: section titles (DESTINATION WORLD, SPACECRAFT FLEET) now sit on top of the cards with their filter chips and catalog buttons stacked below, clearly separating the two selection modules.',
+        ],
+      },
+      {
+        name: 'Bug Fixes & Stability',
+        iconType: 'system',
+        items: [
+          'Fixed black screen on Launch caused by a Flight HUD ReferenceError for the cargo/rover counters.',
+          'Replaced unsupported Volcano icon with Mountain for lucide-react compatibility.',
+          'Updated mission score saving to the extended record format with medal and logistics persistence.',
+        ],
+      },
+    ],
+  },
   {
     version: 'v1.5.0',
     releaseDate: 'September 1, 2026',
     title: 'Main Menu Visual Polish, Music Toggle & Cleaned Training Sector',
-    tag: 'LATEST',
-    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    tag: 'MAJOR',
+    tagColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/40',
     summary:
       'Refined main menu layout with clean transparent card decks, single-line action buttons on widescreen, dedicated music toggle, magnified title thrusters, and removed tutorial clutter on Luna.',
     categories: [

@@ -167,47 +167,58 @@ export const PlanetCardSlider: React.FC<PlanetCardSliderProps> = ({
     return [...officials, ...customs, createSlide];
   }, [completedPlanets, customMaps, filterMode]);
 
-  // Match planet when selectedPlanetId is supplied or updated
+  // Match planet when selectedPlanetId is supplied or updated.
+  // Community custom maps load asynchronously, so if we can't find the target
+  // yet (e.g. returning to the menu after playing a custom map), we keep trying
+  // until the map is present instead of falling back to Luna.
   const hasMatchedInitialPlanet = useRef(false);
   const lastMatchedPlanetId = useRef<string | undefined>(undefined);
+
+  const findWorldIndex = (targetId: string): number => {
+    const cleanTarget = (targetId || '').replace(/^custom-/, '').replace(/^official-/, '');
+    return allWorldItems.findIndex(
+      (item) =>
+        item.id === targetId ||
+        item.id === cleanTarget ||
+        item.planetConfig.id === targetId ||
+        item.planetConfig.id === cleanTarget ||
+        (item.customMapData && item.customMapData.id === targetId) ||
+        (item.customMapData && item.customMapData.id === cleanTarget) ||
+        (item.customMapData && item.customMapData.id === `official-${cleanTarget}`)
+    );
+  };
 
   useEffect(() => {
     if (allWorldItems.length === 0) return;
 
-    if (!hasMatchedInitialPlanet.current) {
-      hasMatchedInitialPlanet.current = true;
-      if (selectedPlanetId) {
+    // 1. Honor an explicit selection whenever possible (keeps retrying for
+    //    async-loaded custom maps, so returning to menu restores the last world).
+    if (selectedPlanetId && !hasMatchedInitialPlanet.current) {
+      const foundIdx = findWorldIndex(selectedPlanetId);
+      if (foundIdx !== -1) {
+        hasMatchedInitialPlanet.current = true;
         lastMatchedPlanetId.current = selectedPlanetId;
-        const cleanTarget = selectedPlanetId.replace(/^custom-/, '').replace(/^official-/, '');
-        const foundIdx = allWorldItems.findIndex(
-          (item) =>
-            item.id === selectedPlanetId ||
-            item.id === cleanTarget ||
-            item.planetConfig.id === selectedPlanetId ||
-            item.planetConfig.id === cleanTarget ||
-            (item.customMapData && item.customMapData.id === selectedPlanetId) ||
-            (item.customMapData && item.customMapData.id === `official-${cleanTarget}`)
-        );
-        if (foundIdx !== -1) {
+        if (foundIdx !== selectedWorldIndex) {
+          setDirection(1);
           onSelectWorld(allWorldItems[foundIdx], foundIdx);
-          return;
         }
       }
-      // Default initial sync
+      return; // not found yet -> wait for customs to load
+    }
+
+    // 2. No selection pending (fresh app): default to the starting world.
+    if (!hasMatchedInitialPlanet.current) {
+      hasMatchedInitialPlanet.current = true;
+      lastMatchedPlanetId.current = selectedPlanetId;
       const initialIdx = Math.min(Math.max(0, selectedWorldIndex), allWorldItems.length - 1);
       onSelectWorld(allWorldItems[initialIdx], initialIdx);
-    } else if (selectedPlanetId && selectedPlanetId !== lastMatchedPlanetId.current) {
+      return;
+    }
+
+    // 3. Explicit change of the target world.
+    if (selectedPlanetId && selectedPlanetId !== lastMatchedPlanetId.current) {
       lastMatchedPlanetId.current = selectedPlanetId;
-      const cleanTarget = selectedPlanetId.replace(/^custom-/, '').replace(/^official-/, '');
-      const foundIdx = allWorldItems.findIndex(
-        (item) =>
-          item.id === selectedPlanetId ||
-          item.id === cleanTarget ||
-          item.planetConfig.id === selectedPlanetId ||
-          item.planetConfig.id === cleanTarget ||
-          (item.customMapData && item.customMapData.id === selectedPlanetId) ||
-          (item.customMapData && item.customMapData.id === `official-${cleanTarget}`)
-      );
+      const foundIdx = findWorldIndex(selectedPlanetId);
       if (foundIdx !== -1 && foundIdx !== selectedWorldIndex) {
         setDirection(1);
         onSelectWorld(allWorldItems[foundIdx], foundIdx);
@@ -322,14 +333,16 @@ export const PlanetCardSlider: React.FC<PlanetCardSliderProps> = ({
 
   return (
     <div className="w-full flex flex-col items-center select-none">
-      {/* Header Tag and Filter Chips */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5 w-full px-1">
+      {/* Section Title on Top */}
+      <div className="w-full mb-2 px-1 flex items-center justify-center">
         <div className="flex items-center gap-2 text-xs sm:text-sm font-mono tracking-wider text-teal-300 font-extrabold uppercase bg-teal-950/50 border border-teal-500/30 px-3 py-1 rounded-lg backdrop-blur-md shadow-sm">
           <Globe className="w-4 h-4 text-teal-400" />
           <span>DESTINATION WORLD</span>
         </div>
+      </div>
 
-        {/* Filter Pills */}
+      {/* Sub-options Row: Filter Chips + Catalog (below the title) */}
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5 w-full px-1">
         <div className="flex items-center gap-1 bg-slate-950/70 p-0.5 rounded-lg border border-white/10 text-[11px] font-mono">
           <button
             type="button"

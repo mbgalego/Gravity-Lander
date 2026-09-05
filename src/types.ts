@@ -533,6 +533,7 @@ export interface CustomMapData {
   difficultyMode?: 'auto' | 'manual';
   volcanoes?: CustomVolcanoData[];
   basePlanet?: string;
+  seed?: number;
 }
 
 export interface CargoDeliveryReport {

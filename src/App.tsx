@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ShipState, WorldMap, PlanetConfig, GameSettings, ShipModelId, CustomMapData } from './types';
-import { PLANETS } from './game/planets';
+import { PLANETS, createCustomPlanet } from './game/planets';
 import { generateWorld } from './game/procedural';
 import { createInitialShip, updatePhysics } from './game/physics';
 import { getShipConfig } from './game/ships';
 import { ParticleSystem } from './game/particles';
 import { GameRenderer } from './game/renderer';
 import { sound } from './game/sound';
-import { convertCustomMapToPlanet, convertCustomMapToWorld, convertOfficialPlanetToCustomMap } from './game/customMapConverter';
+import { convertCustomMapToPlanet, convertCustomMapToWorld } from './game/customMapConverter';
 import { createBlankCustomMap, getSavedMapForPlanet, getSavedCustomMaps } from './utils/customMapsStorage';
 import { StartMenu } from './components/StartMenu';
 import { FlightHUD } from './components/FlightHUD';
@@ -199,7 +199,6 @@ export default function App() {
       const idx = PLANETS.findIndex((item) => item.id === p.id);
       if (idx !== -1) setCurrentPlanetIndex(idx);
 
-      // Check if this official planet has a saved custom map override
       const savedOverride = getSavedMapForPlanet(p.id);
       if (savedOverride) {
         handlePlayCustomMap(savedOverride);
@@ -226,8 +225,8 @@ export default function App() {
         if (savedOverride) {
           setCurrentCustomMap(savedOverride);
         } else {
-          const generated = convertOfficialPlanetToCustomMap(activePlanet);
-          setCurrentCustomMap(generated);
+          const blankMap = createBlankCustomMap('New Custom Map');
+          setCurrentCustomMap(blankMap);
         }
       }
       setGameState('editor');
@@ -239,18 +238,27 @@ export default function App() {
   const handleSelectPlanet = useCallback(
     (selected: PlanetConfig) => {
       saveLastPlayedPlanetId(selected.id);
-      const idx = PLANETS.findIndex((p) => p.id === selected.id);
-      if (idx !== -1) setCurrentPlanetIndex(idx);
-
-      const savedOverride = getSavedMapForPlanet(selected.id);
-      if (savedOverride) {
-        setCurrentCustomMap(savedOverride);
-        const customPlanet = convertCustomMapToPlanet(savedOverride);
-        const customWorld = convertCustomMapToWorld(savedOverride);
-        initLevel(customPlanet, selectedShipId, customWorld);
-      } else {
+      // If this is a generated/procedural world (id starts with 'custom-')
+      if (selected.id.startsWith('custom-')) {
+        const seed = (selected.seed !== undefined && selected.seed > 0) ? selected.seed : parseInt(selected.id.replace('custom-', ''), 10) || 99999;
+        const worldFromSeed = generateWorld(seed, selected.width || 8600, selected.height || 3200, selected.id);
+        initLevel(selected, selectedShipId, worldFromSeed);
+        setCurrentPlanetIndex(-1);
         setCurrentCustomMap(null);
-        initLevel(selected, selectedShipId);
+      } else {
+        const idx = PLANETS.findIndex((p) => p.id === selected.id);
+        if (idx !== -1) setCurrentPlanetIndex(idx);
+
+        const savedOverride = getSavedMapForPlanet(selected.id);
+        if (savedOverride) {
+          setCurrentCustomMap(savedOverride);
+          const customPlanet = convertCustomMapToPlanet(savedOverride);
+          const customWorld = convertCustomMapToWorld(savedOverride);
+          initLevel(customPlanet, selectedShipId, customWorld);
+        } else {
+          setCurrentCustomMap(null);
+          initLevel(selected, selectedShipId);
+        }
       }
     },
     [initLevel, selectedShipId]
@@ -272,30 +280,66 @@ export default function App() {
   const handleNextPlanet = useCallback(() => {
     // Determine the current planet index reliably from the active planet object
     let currentId = planet.id;
+    let isGeneratedPlanet = false;
+    let currentSeed: number | undefined = undefined;
+    
     if (currentCustomMap) {
-      const match = PLANETS.find((p) => p.id === currentCustomMap.basePlanet || p.id === currentCustomMap.id);
-      if (match) currentId = match.id;
+      // Check if this is a generated/procedural world (starts with 'custom-')
+      if (currentCustomMap.id.startsWith('custom-') && currentCustomMap.seed) {
+        isGeneratedPlanet = true;
+        currentSeed = currentCustomMap.seed;
+        currentId = currentCustomMap.id;
+      } else {
+        // This is a saved custom map overriding an official planet
+        const match = PLANETS.find((p) => p.id === currentCustomMap.basePlanet || p.id === currentCustomMap.id);
+        if (match) currentId = match.id;
+      }
     }
-    const currentIdx = PLANETS.findIndex((p) => p.id === currentId);
-    const baseIdx = currentIdx !== -1 ? currentIdx : currentPlanetIndex;
-    const nextIdx = (baseIdx + 1) % PLANETS.length;
-    const nextPlanet = PLANETS[nextIdx];
+    
+    if (!isGeneratedPlanet) {
+      // Standard official planet progression
+      const currentIdx = PLANETS.findIndex((p) => p.id === currentId);
+      const baseIdx = currentIdx !== -1 ? currentIdx : currentPlanetIndex;
+      const nextIdx = (baseIdx + 1) % PLANETS.length;
+      const nextPlanet = PLANETS[nextIdx];
 
-    setCurrentPlanetIndex(nextIdx);
-    saveLastPlayedPlanetId(nextPlanet.id);
+      setCurrentPlanetIndex(nextIdx);
+      saveLastPlayedPlanetId(nextPlanet.id);
 
-    // Check if the next planet has a saved custom map override
-    const savedOverride = getSavedMapForPlanet(nextPlanet.id);
-    if (savedOverride) {
-      setCurrentCustomMap(savedOverride);
-      const customPlanet = convertCustomMapToPlanet(savedOverride);
-      const customWorld = convertCustomMapToWorld(savedOverride);
-      initLevel(customPlanet, selectedShipId, customWorld);
+      // Check if the next planet has a saved custom map override
+      const savedOverride = getSavedMapForPlanet(nextPlanet.id);
+      if (savedOverride) {
+        setCurrentCustomMap(savedOverride);
+        const customPlanet = convertCustomMapToPlanet(savedOverride);
+        const customWorld = convertCustomMapToWorld(savedOverride);
+        initLevel(customPlanet, selectedShipId, customWorld);
+      } else {
+        setCurrentCustomMap(null);
+        initLevel(nextPlanet, selectedShipId);
+      }
+      setGameState('playing');
     } else {
-      setCurrentCustomMap(null);
-      initLevel(nextPlanet, selectedShipId);
+      // Continue through procedural generation seeds
+      // Extract current seed from custom-map ID or from customMap
+      let seed = currentSeed || (currentId.startsWith('custom-') ? parseInt(currentId.replace('custom-', ''), 10) : 99999);
+      
+      // Increment seed and create next procedural planet
+      const nextSeed = seed + 1;
+      const nextCustomPlanet = createCustomPlanet(nextSeed, 3.5, 'Medium');
+      
+      // Check if there's a saved custom map for this seed
+      const savedOverride = getSavedMapForPlanet(nextCustomPlanet.id);
+      if (savedOverride) {
+        setCurrentCustomMap(savedOverride);
+        const customPlanet = convertCustomMapToPlanet(savedOverride);
+        const customWorld = convertCustomMapToWorld(savedOverride);
+        initLevel(customPlanet, selectedShipId, customWorld);
+      } else {
+        setCurrentCustomMap(null);
+        initLevel(nextCustomPlanet, selectedShipId);
+      }
+      setGameState('playing');
     }
-    setGameState('playing');
   }, [planet, currentCustomMap, currentPlanetIndex, initLevel, selectedShipId]);
 
   // Restart Current Planet / Map

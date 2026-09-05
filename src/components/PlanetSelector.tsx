@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PlanetConfig, CustomMapData } from '../types';
-import { PLANETS, createCustomPlanet } from '../game/planets';
+import { PLANETS } from '../game/planets';
 import {
   getSavedCustomMaps,
   deleteCustomMap,
@@ -53,11 +53,8 @@ export const PlanetSelector: React.FC<PlanetSelectorProps> = ({
   onOpenEditor,
   onSelectCustomMap,
 }) => {
-  const [activeTab, setActiveTab] = useState<'catalog' | 'user_maps' | 'procedural'>('catalog');
+  const [activeTab, setActiveTab] = useState<'catalog' | 'user_maps'>('catalog');
   const [customMaps, setCustomMaps] = useState<CustomMapData[]>([]);
-  const [customSeed, setCustomSeed] = useState<number>(() => Math.floor(Math.random() * 90000 + 10000));
-  const [customGravity, setCustomGravity] = useState<number>(3.5);
-  const [customDifficulty, setCustomDifficulty] = useState<'Easy' | 'Medium' | 'Hard' | 'Extreme'>('Medium');
   const [importNotification, setImportNotification] = useState<string | null>(null);
   const [importError, setImportError] = useState<string | null>(null);
   const [showResetConfirm, setShowResetConfirm] = useState<boolean>(false);
@@ -115,17 +112,6 @@ export const PlanetSelector: React.FC<PlanetSelectorProps> = ({
   };
 
   if (!isOpen) return null;
-
-  const handleLaunchCustom = () => {
-    const custom = createCustomPlanet(customSeed, customGravity, customDifficulty);
-    onSelectPlanet(custom);
-    onClose();
-  };
-
-  const handleRandomizeCustom = () => {
-    setCustomSeed(Math.floor(Math.random() * 90000 + 10000));
-    setCustomGravity(parseFloat((0.8 + Math.random() * 7.5).toFixed(2)));
-  };
 
   const handlePlayUserMap = (mapData: CustomMapData) => {
     if (onSelectCustomMap) {
@@ -227,14 +213,9 @@ export const PlanetSelector: React.FC<PlanetSelectorProps> = ({
           <button
             id="tab-procedural"
             type="button"
-            onClick={() => setActiveTab('procedural')}
-            className={`px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
-              activeTab === 'procedural'
-                ? 'bg-sky-500/20 border border-sky-400/70 text-sky-300 shadow-[0_0_12px_rgba(56,189,248,0.25)]'
-                : 'border border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
-            }`}
+            onClick={() => setActiveTab('user_maps')}
+            className="hidden"
           >
-            <Sliders className="w-3.5 h-3.5" />
             Seed Generator
           </button>
         </div>
@@ -480,84 +461,6 @@ export const PlanetSelector: React.FC<PlanetSelectorProps> = ({
             </div>
           )}
 
-          {activeTab === 'procedural' && (
-            <div className="space-y-4 p-4 sm:p-5 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-xl">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3.5">
-                  <div className="shrink-0 transition-transform hover:scale-105">
-                    <PlanetGraphic
-                      planet={createCustomPlanet(customSeed, customGravity, customDifficulty)}
-                      size={60}
-                      showGlow={true}
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-mono text-sm font-bold text-slate-200">
-                      Procedural Planetary Generator
-                    </h3>
-                    <p className="text-xs text-slate-400">
-                      Generate infinite unique cavern topologies with mathematical noise seeds.
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleRandomizeCustom}
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-mono text-xs border border-white/10 transition-colors cursor-pointer shrink-0"
-                >
-                  <Shuffle className="w-3.5 h-3.5 text-sky-400" />
-                  <span>RANDOM SEED</span>
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 bg-slate-950/60 rounded-xl border border-white/5">
-                  <label className="text-[10px] font-mono text-slate-400 block mb-1">SEED #</label>
-                  <input
-                    type="number"
-                    value={customSeed}
-                    onChange={(e) => setCustomSeed(parseInt(e.target.value) || 10000)}
-                    className="w-full bg-slate-900 border border-white/10 rounded-lg px-2.5 py-1 text-xs font-mono text-white focus:outline-none focus:border-sky-400"
-                  />
-                </div>
-
-                <div className="p-3 bg-slate-950/60 rounded-xl border border-white/5">
-                  <label className="text-[10px] font-mono text-slate-400 block mb-1">GRAVITY: {customGravity}g</label>
-                  <input
-                    type="range"
-                    min="0.8"
-                    max="8.5"
-                    step="0.1"
-                    value={customGravity}
-                    onChange={(e) => setCustomGravity(parseFloat(e.target.value))}
-                    className="w-full accent-sky-400"
-                  />
-                </div>
-
-                <div className="p-3 bg-slate-950/60 rounded-xl border border-white/5">
-                  <label className="text-[10px] font-mono text-slate-400 block mb-1">DIFFICULTY</label>
-                  <select
-                    value={customDifficulty}
-                    onChange={(e) => setCustomDifficulty(e.target.value as any)}
-                    className="w-full bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-xs font-mono text-white focus:outline-none focus:border-sky-400"
-                  >
-                    <option value="Easy">Easy (Wide Caves)</option>
-                    <option value="Medium">Medium (Balanced)</option>
-                    <option value="Hard">Hard (Tight Spires)</option>
-                    <option value="Extreme">Extreme (Subterranean Maze)</option>
-                  </select>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleLaunchCustom}
-                className="w-full py-3 rounded-full bg-gradient-to-r from-sky-500 via-sky-400 to-teal-400 text-slate-950 font-mono font-bold text-xs uppercase tracking-wider shadow-lg hover:from-sky-400 hover:to-teal-300 transition-all cursor-pointer"
-              >
-                LAUNCH PROCEDURAL EXPEDITION
-              </button>
-            </div>
-          )}
         </div>
       </div>
 

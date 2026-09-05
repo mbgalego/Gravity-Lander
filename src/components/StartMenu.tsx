@@ -11,6 +11,7 @@ import { ShipSelector } from './ShipSelector';
 import { PlanetSelector } from './PlanetSelector';
 import { InstructionsModal } from './InstructionsModal';
 import { VersionHistoryModal } from './VersionHistoryModal';
+import { LogbookModal } from './LogbookModal';
 import { CURRENT_GAME_VERSION } from '../utils/versionHistory';
 import {
   Play,
@@ -68,6 +69,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [showPwaModal, setShowPwaModal] = useState(false);
+  const [showLogbook, setShowLogbook] = useState(false);
   const [isPlanetSelectorOpen, setIsPlanetSelectorOpen] = useState(false);
   const [isShipModalOpen, setIsShipModalOpen] = useState(false);
   const [dismissInstallBanner, setDismissInstallBanner] = useState(() => {
@@ -678,8 +680,20 @@ export const StartMenu: React.FC<StartMenuProps> = ({
               </>
             )}
           </button>
-        </div>
-      </header>
+
+            {/* Logbook Button */}
+            <button
+              id="btn-menu-logbook"
+              type="button"
+              onClick={() => setShowLogbook(true)}
+              className="p-2 sm:px-3 sm:py-1 rounded-full bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 hover:border-sky-400/40 text-slate-300 hover:text-sky-300 transition-all text-xs font-mono backdrop-blur-md cursor-pointer flex items-center gap-1.5"
+              title="Mission Logbook — View stats, medals & records per world"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+              <span className="hidden sm:inline">LOGBOOK</span>
+            </button>
+          </div>
+        </header>
 
       {/* Main Center Content */}
       <main className="relative z-10 w-full max-w-2xl mx-auto px-3 sm:px-4 py-1 sm:py-2 flex flex-col items-center text-center my-auto">
@@ -851,7 +865,7 @@ export const StartMenu: React.FC<StartMenuProps> = ({
         </h1>
 
         {/* Main Selection Area: Fully Transparent and Unclipped */}
-        <div className="w-full flex flex-col gap-2.5 sm:gap-3.5 mb-4">
+        <div className="w-full flex flex-col gap-6 sm:gap-8 mb-5">
           {/* Module 1: Destination World Selection */}
           <div id="menu-destination-section" className="w-full relative overflow-visible">
             <PlanetCardSlider
@@ -886,6 +900,18 @@ export const StartMenu: React.FC<StartMenuProps> = ({
             <span>
               {currentWorldItem?.type === 'create_new' ? 'CREATE MAP' : 'LAUNCH MISSION'}
             </span>
+          </button>
+
+          {/* Logbook Button (between Launch Mission and Level Editor) */}
+          <button
+            id="btn-action-logbook"
+            type="button"
+            onClick={() => setShowLogbook(true)}
+            className="w-full sm:w-auto px-4 sm:px-5 py-3 rounded-full bg-slate-900/60 hover:bg-slate-800/90 border border-sky-400/30 hover:border-sky-400 text-sky-300 font-mono font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-1.5 backdrop-blur-md transition-all cursor-pointer whitespace-nowrap shadow-sm"
+            title="Mission Logbook — View stats, medals & records per world"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+            <span>LOGBOOK</span>
           </button>
 
           <button
@@ -1146,6 +1172,12 @@ export const StartMenu: React.FC<StartMenuProps> = ({
       <VersionHistoryModal
         isOpen={showVersionHistory}
         onClose={() => setShowVersionHistory(false)}
+      />
+
+      {/* Mission Logbook Modal */}
+      <LogbookModal
+        isOpen={showLogbook}
+        onClose={() => setShowLogbook(false)}
       />
     </div>
   );
