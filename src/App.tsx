@@ -27,6 +27,11 @@ import {
   getLastSelectedShipId,
   saveLastSelectedShipId,
 } from './utils/scoreStorage';
+import {
+  PlayerPrefs,
+  loadPlayerPrefs,
+  savePlayerPrefs,
+} from './utils/playerPrefs';
 
 export default function App() {
   // Game Navigation State
@@ -107,6 +112,21 @@ export default function App() {
     touchControls: true,
     highPrecisionMode: true,
   });
+
+  // Persisted player display preferences (zoom bias, minimap)
+  const [playerPrefs, setPlayerPrefs] = useState<PlayerPrefs>(loadPlayerPrefs);
+  const playerPrefsRef = useRef<PlayerPrefs>(playerPrefs);
+  useEffect(() => {
+    playerPrefsRef.current = playerPrefs;
+  }, [playerPrefs]);
+
+  const updatePlayerPrefs = useCallback((patch: Partial<PlayerPrefs>) => {
+    setPlayerPrefs((prev) => {
+      const next = { ...prev, ...patch };
+      savePlayerPrefs(next);
+      return next;
+    });
+  }, []);
 
   // Ship Simulation State
   const shipRef = useRef<ShipState>(createInitialShip(world, 'apollo'));
@@ -602,7 +622,7 @@ export default function App() {
 
           // 3. Update Particles & Camera
           particlesRef.current.update(dt, planet.gravity);
-          rendererRef.current.updateCamera(updatedShip, world, canvas.width, canvas.height, dt);
+          rendererRef.current.updateCamera(updatedShip, world, canvas.width, canvas.height, dt, playerPrefsRef.current.zoomBias);
 
           // 4. Render Scene
           rendererRef.current.render(
@@ -613,7 +633,12 @@ export default function App() {
             world,
             planet,
             particlesRef.current,
-            settings,
+            {
+              ...settings,
+              showMinimap: playerPrefsRef.current.showMinimap,
+              minimapSize: playerPrefsRef.current.minimapSize,
+              minimapCorner: playerPrefsRef.current.minimapCorner,
+            },
             now * 0.001
           );
 
@@ -716,6 +741,10 @@ export default function App() {
             onOpenShips={() => setIsShipSelectorOpen(true)}
             isTestFlight={isTestFlight}
             onReturnToEditor={handleReturnToEditor}
+            totalCargo={world.cargoItems?.length || 0}
+            collectedCargo={hudShipState.deliveredCargoCount || 0}
+            totalRovers={world.trucks?.length || 0}
+            collectedRovers={hudShipState.deliveredTrucksCount || 0}
           />
 
           {/* Invisible Dual Thruster Full-Screen Touch Zones (No Buttons) */}
@@ -744,6 +773,8 @@ export default function App() {
             onReturnToMenu={isTestFlight ? handleReturnToEditor : handleReturnToMenu}
             showDebug={showDebug}
             onToggleDebug={() => setShowDebug((prev) => !prev)}
+            playerPrefs={playerPrefs}
+            onUpdatePlayerPrefs={updatePlayerPrefs}
             isCustomMap={!!currentCustomMap}
             isTestFlight={isTestFlight}
             onReturnToEditor={handleReturnToEditor}

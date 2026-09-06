@@ -2,6 +2,7 @@ import { ShipState, WorldMap, PlanetConfig, Vector2D, PlanetaryTruck, VolcanoHaz
 import { ParticleSystem } from './particles';
 import { getShipConfig } from './ships';
 import { renderShipHull } from './shipDrawers';
+import type { MinimapSize, MinimapCorner } from '../utils/playerPrefs';
 
 function hexToRgba(hex: string, alpha: number): string {
   if (!hex) return `rgba(56, 189, 248, ${alpha})`;
@@ -75,7 +76,14 @@ export class GameRenderer {
     this.camera.targetZoom = 0.85;
   }
 
-  public updateCamera(ship: ShipState, world: WorldMap, canvasWidth: number, canvasHeight: number, dt: number) {
+  public updateCamera(
+    ship: ShipState,
+    world: WorldMap,
+    canvasWidth: number,
+    canvasHeight: number,
+    dt: number,
+    zoomBias = 1
+  ) {
     const isPortrait = canvasHeight > canvasWidth * 1.05;
     const speed = Math.hypot(ship.vel.x, ship.vel.y);
     const distToPad = Math.hypot(ship.pos.x - world.landingPad.center.x, ship.pos.y - world.landingPad.center.y);
@@ -111,6 +119,13 @@ export class GameRenderer {
         // Standard flight / exploring caverns
         this.camera.targetZoom = 0.85;
       }
+    }
+
+    // 1b. Apply the player zoom bias (a preference multiplier) on top of the
+    // auto zoom, so the camera can be tilted further in or out while still
+    // retaining the speed/orientation-aware behavior underneath.
+    if (zoomBias !== 1) {
+      this.camera.targetZoom = Math.max(0.45, Math.min(2.2, this.camera.targetZoom * zoomBias));
     }
 
     // Smoothly interpolate current zoom toward target zoom
@@ -155,7 +170,7 @@ export class GameRenderer {
     world: WorldMap,
     planet: PlanetConfig,
     particles: ParticleSystem,
-    settings: Partial<GameSettings> | { showMinimap?: boolean; showFlightPath?: boolean },
+    settings: Partial<GameSettings> & { showMinimap?: boolean; showFlightPath?: boolean; minimapSize?: MinimapSize; minimapCorner?: MinimapCorner },
     time: number
   ) {
     if (!this.starfieldInitialized || this.stars.length !== planet.theme.starDensity) {
@@ -551,6 +566,14 @@ export class GameRenderer {
     }
 
     ctx.restore();
+
+    // 18. Tactical Minimap (screen-space overlay, honors player prefs)
+    if (settings.showMinimap) {
+      this.drawRadar(ctx, canvasWidth, canvasHeight, ship, world, planet, time, {
+        size: settings.minimapSize || 'medium',
+        corner: settings.minimapCorner || 'top-right',
+      });
+    }
   }
 
   private drawCaveZones(
@@ -3183,14 +3206,68 @@ export class GameRenderer {
     ship: ShipState,
     world: WorldMap,
     planet: PlanetConfig,
-    time: number
+    time: number,
+    options?: { size?: MinimapSize; corner?: MinimapCorner }
   ) {
-    const isMobilePortrait = canvasWidth < 680 || canvasHeight > canvasWidth * 1.05;
-    const radarW = isMobilePortrait ? Math.min(220, canvasWidth - 24) : 250;
-    const radarH = isMobilePortrait ? 90 : 105;
+    // The canvas is sized in device pixels (CSS size x devicePixelRatio), so all
+    // geometry below is computed in CSS space first, then multiplied by dpr to
+    // render at a consistent on-screen size regardless of the device.
+    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+    const cssWidth = canvasWidth / dpr;
+    const cssHeight = canvasHeight / dpr;
+    const isMobilePortrait = cssWidth < 680 || cssHeight > cssWidth * 1.05;
+    const size = options?.size || 'medium';
+    const corner = options?.corner || 'top-right';
 
-    const rx = isMobilePortrait ? canvasWidth - radarW - 12 : canvasWidth - radarW - 16;
-    const ry = isMobilePortrait ? 122 : 16;
+    // Relative size multiplier (CSS-space). Portrait mobile bases are a fraction
+    // of screen width so the map is proportionally large on phones.
+    const sizeMul =
+      size === 'small' ? 0.85 :
+      size === 'large' ? 1.75 :
+      size === 'xl' ? 2.2 :
+      1.15; // medium
+
+    const baseWCss = isMobilePortrait ? Math.min(250, cssWidth * 0.75) : 260;
+    const baseHCss = isMobilePortrait ? 104 : 110;
+    let radarW = Math.round(baseWCss * sizeMul * dpr);
+    let radarH = Math.round(baseHCss * sizeMul * dpr);
+
+    const marginCss = isMobilePortrait ? 12 : 16;
+    const margin = marginCss * dpr;
+    // Keep the map inside the canvas, preserving aspect ratio.
+    const maxW = canvasWidth - margin * 2;
+    const maxH = canvasHeight - margin * 2;
+    if (radarW > maxW) {
+      radarH = Math.round(radarH * (maxW / radarW));
+      radarW = maxW;
+    }
+    if (radarH > maxH) {
+      radarW = Math.round(radarW * (maxH / radarH));
+      radarH = maxH;
+    }
+
+    // Top positions must clear the DOM flight HUD (roughly 100-130px tall),
+    // otherwise the HUD card covers the radar.
+    const topClearance = (isMobilePortrait ? 132 : 112) * dpr;
+    let rx: number;
+    let ry: number;
+    if (corner === 'top-left') {
+      rx = margin;
+      ry = topClearance;
+    } else if (corner === 'bottom-right') {
+      rx = canvasWidth - radarW - margin;
+      ry = canvasHeight - radarH - margin;
+    } else if (corner === 'bottom-left') {
+      rx = margin;
+      ry = canvasHeight - radarH - margin;
+    } else {
+      // top-right (default)
+      rx = canvasWidth - radarW - margin;
+      ry = topClearance;
+    }
+
+    // Unified scale for every internal element (fonts, dots, strokes, markers).
+    const u = dpr * sizeMul;
 
     ctx.save();
     // Glassy Radar frame with high contrast backdrop
@@ -3200,28 +3277,28 @@ export class GameRenderer {
     ctx.fill();
 
     ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = Math.max(1, 1.2 * u);
     ctx.stroke();
 
     // Radar Header with glowing pulse dot
-    ctx.font = 'bold 9px monospace';
+    ctx.font = `bold ${Math.round(9 * u)}px monospace`;
     ctx.fillStyle = '#38bdf8';
-    ctx.fillText('TACTICAL TOPOGRAPHY', rx + 16, ry + 12);
+    ctx.fillText('TACTICAL TOPOGRAPHY', rx + 16 * u, ry + 12 * u);
 
     const sweep = Math.sin(time * 4) * 0.5 + 0.5;
     ctx.fillStyle = `rgba(56, 189, 248, ${0.5 + sweep * 0.5})`;
     ctx.beginPath();
-    ctx.arc(rx + 9, ry + 9, 3, 0, Math.PI * 2);
+    ctx.arc(rx + 9 * u, ry + 9 * u, 3 * u, 0, Math.PI * 2);
     ctx.fill();
 
-    const scaleX = (radarW - 18) / world.width;
-    const scaleY = (radarH - 26) / world.height;
-    const mapOffsetX = rx + 9;
-    const mapOffsetY = ry + 18;
+    const scaleX = (radarW - 18 * u) / world.width;
+    const scaleY = (radarH - 26 * u) / world.height;
+    const mapOffsetX = rx + 9 * u;
+    const mapOffsetY = ry + 18 * u;
 
     // Mini ground line
     ctx.strokeStyle = planet.theme.terrainBorder;
-    ctx.lineWidth = 1.4;
+    ctx.lineWidth = 1.4 * u;
     ctx.beginPath();
     for (let i = 0; i < world.groundPoints.length; i++) {
       const pt = world.groundPoints[i];
@@ -3234,7 +3311,7 @@ export class GameRenderer {
 
     // Mini ceiling line
     ctx.strokeStyle = 'rgba(148, 163, 184, 0.65)';
-    ctx.lineWidth = 1.1;
+    ctx.lineWidth = 1.1 * u;
     ctx.beginPath();
     let ceilingStarted = false;
     for (let i = 0; i < world.ceilingPoints.length; i++) {
@@ -3254,7 +3331,7 @@ export class GameRenderer {
 
     // Mini Obstacle Bridges & Spires on Radar
     ctx.strokeStyle = 'rgba(251, 146, 60, 0.7)';
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1 * u;
     for (const obs of world.obstacles) {
       if (obs.length > 0) {
         ctx.beginPath();
@@ -3274,7 +3351,7 @@ export class GameRenderer {
         const py = mapOffsetY + pickup.y * scaleY;
         ctx.fillStyle = '#34d399';
         ctx.beginPath();
-        ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+        ctx.arc(px, py, 1.8 * u, 0, Math.PI * 2);
         ctx.fill();
       }
     }
@@ -3283,7 +3360,7 @@ export class GameRenderer {
     const lmx = mapOffsetX + world.launchPad.center.x * scaleX;
     const lmy = mapOffsetY + world.launchPad.center.y * scaleY;
     ctx.fillStyle = '#22c55e';
-    ctx.fillRect(lmx - 5, lmy - 2, 10, 3);
+    ctx.fillRect(lmx - 5 * u, lmy - 2 * u, 10 * u, 3 * u);
 
     // Cargo Platforms on Tactical Radar
     if (world.cargoPlatforms) {
@@ -3292,14 +3369,14 @@ export class GameRenderer {
         const cpy = mapOffsetY + cp.y * scaleY;
         if (cp.type === 'pickup') {
           ctx.fillStyle = '#f59e0b';
-          ctx.fillRect(cpx - 4, cpy - 2, 8, 3);
-          ctx.font = 'bold 7px monospace';
-          ctx.fillText('MINE', cpx - 8, cpy - 4);
+          ctx.fillRect(cpx - 4 * u, cpy - 2 * u, 8 * u, 3 * u);
+          ctx.font = `bold ${Math.round(7 * u)}px monospace`;
+          ctx.fillText('MINE', cpx - 8 * u, cpy - 4 * u);
         } else {
           ctx.fillStyle = cp.isFulfilled ? '#22c55e' : '#10b981';
-          ctx.fillRect(cpx - 4, cpy - 2, 8, 3);
-          ctx.font = 'bold 7px monospace';
-          ctx.fillText('DROP', cpx - 8, cpy - 4);
+          ctx.fillRect(cpx - 4 * u, cpy - 2 * u, 8 * u, 3 * u);
+          ctx.font = `bold ${Math.round(7 * u)}px monospace`;
+          ctx.fillText('DROP', cpx - 8 * u, cpy - 4 * u);
         }
       }
     }
@@ -3311,7 +3388,7 @@ export class GameRenderer {
           const itx = mapOffsetX + item.pos.x * scaleX;
           const ity = mapOffsetY + item.pos.y * scaleY;
           ctx.fillStyle = item.isAttached ? '#f59e0b' : '#38bdf8';
-          ctx.fillRect(itx - 2, ity - 2, 4, 4);
+          ctx.fillRect(itx - 2 * u, ity - 2 * u, 4 * u, 4 * u);
         }
       }
     }
@@ -3323,9 +3400,9 @@ export class GameRenderer {
         const vmy = mapOffsetY + (v.y - v.height * 0.5) * scaleY;
         ctx.fillStyle = v.isErupting ? '#ef4444' : '#f97316';
         ctx.beginPath();
-        ctx.moveTo(vmx, vmy - 4);
-        ctx.lineTo(vmx - 3.5, vmy + 3);
-        ctx.lineTo(vmx + 3.5, vmy + 3);
+        ctx.moveTo(vmx, vmy - 4 * u);
+        ctx.lineTo(vmx - 3.5 * u, vmy + 3 * u);
+        ctx.lineTo(vmx + 3.5 * u, vmy + 3 * u);
         ctx.closePath();
         ctx.fill();
       }
@@ -3337,12 +3414,12 @@ export class GameRenderer {
     const pulse = Math.sin(time * 6) * 0.5 + 0.5;
     ctx.fillStyle = `rgba(56, 189, 248, ${0.5 + pulse * 0.5})`;
     ctx.beginPath();
-    ctx.arc(tmx, tmy - 1, 4.5, 0, Math.PI * 2);
+    ctx.arc(tmx, tmy - 1, 4.5 * u, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.font = 'bold 8px monospace';
+    ctx.font = `bold ${Math.round(8 * u)}px monospace`;
     ctx.fillStyle = '#38bdf8';
-    ctx.fillText('LZ', tmx - 4, tmy - 6);
+    ctx.fillText('LZ', tmx - 4 * u, tmy - 6 * u);
 
     // Ship position & direction arrow
     const smx = mapOffsetX + ship.pos.x * scaleX;
@@ -3351,14 +3428,14 @@ export class GameRenderer {
     // Ship locator blip
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.arc(smx, smy, 2.8, 0, Math.PI * 2);
+    ctx.arc(smx, smy, 2.8 * u, 0, Math.PI * 2);
     ctx.fill();
 
     // Ship heading blip
-    const blipX = smx + Math.sin(ship.angle) * 7;
-    const blipY = smy - Math.cos(ship.angle) * 7;
+    const blipX = smx + Math.sin(ship.angle) * 7 * u;
+    const blipY = smy - Math.cos(ship.angle) * 7 * u;
     ctx.strokeStyle = '#f43f5e';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.5 * u;
     ctx.beginPath();
     ctx.moveTo(smx, smy);
     ctx.lineTo(blipX, blipY);

@@ -5,6 +5,13 @@ import { PlanetGraphic } from './PlanetGraphic';
 import { VersionHistoryModal } from './VersionHistoryModal';
 import { CURRENT_GAME_VERSION } from '../utils/versionHistory';
 import {
+  MIN_ZOOM_BIAS,
+  MAX_ZOOM_BIAS,
+  PlayerPrefs,
+  MinimapSize,
+  MinimapCorner,
+} from '../utils/playerPrefs';
+import {
   Volume2,
   VolumeX,
   Maximize,
@@ -26,6 +33,8 @@ import {
   ChevronUp,
   Sliders,
   History,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 
 interface SettingsModalProps {
@@ -47,6 +56,8 @@ interface SettingsModalProps {
   isCustomMap?: boolean;
   isTestFlight?: boolean;
   onReturnToEditor?: () => void;
+  playerPrefs: PlayerPrefs;
+  onUpdatePlayerPrefs: (patch: Partial<PlayerPrefs>) => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -68,6 +79,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   isCustomMap = false,
   isTestFlight = false,
   onReturnToEditor,
+  playerPrefs,
+  onUpdatePlayerPrefs,
 }) => {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
   const [isDebugSectionOpen, setIsDebugSectionOpen] = useState(false);
@@ -251,6 +264,102 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </span>
             </button>
           </div>
+        </div>
+
+        {/* Display & Camera Preferences */}
+        <div className="space-y-2 font-mono text-xs">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">
+            DISPLAY & CAMERA
+          </span>
+
+          {/* Viewport Zoom Bias Slider */}
+          <div className="p-2.5 rounded-xl bg-slate-900/60 border border-white/10">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-1.5 text-slate-200">
+                <ZoomOut className="w-4 h-4 text-sky-400" />
+                <span>Viewport Zoom</span>
+              </div>
+              <span className="text-[10px] font-bold text-sky-300">
+                {Math.round(playerPrefs.zoomBias * 100)}%
+              </span>
+            </div>
+            <input
+              id="slider-zoom-bias"
+              type="range"
+              min={MIN_ZOOM_BIAS * 100}
+              max={MAX_ZOOM_BIAS * 100}
+              step={5}
+              value={Math.round(playerPrefs.zoomBias * 100)}
+              onChange={(e) => onUpdatePlayerPrefs({ zoomBias: Number(e.target.value) / 100 })}
+              className="w-full accent-sky-400 cursor-pointer"
+              aria-label="Viewport zoom"
+            />
+            <p className="mt-1 text-[9px] text-slate-500 leading-snug">
+              Smaller keeps a wider view of the cavern; larger magnifies terrain, signs &amp; notes.
+            </p>
+          </div>
+
+          {/* Minimap Toggle */}
+          <button
+            id="btn-settings-toggle-minimap"
+            type="button"
+            onClick={() => onUpdatePlayerPrefs({ showMinimap: !playerPrefs.showMinimap })}
+            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-white/10 text-slate-200 transition-all cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <Map className="w-4 h-4 text-teal-400" />
+              <span>Tactical Minimap</span>
+            </div>
+            <span className={`text-[10px] font-bold ${playerPrefs.showMinimap ? 'text-emerald-400' : 'text-slate-500'}`}>
+              {playerPrefs.showMinimap ? 'ON' : 'OFF'}
+            </span>
+          </button>
+
+          {/* Minimap Size & Corner (only when enabled) */}
+          {playerPrefs.showMinimap && (
+            <div className="p-2.5 rounded-xl bg-slate-950/60 border border-white/10 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Size</span>
+                <div className="flex gap-1">
+                  {(['small', 'medium', 'large', 'xl'] as MinimapSize[]).map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => onUpdatePlayerPrefs({ minimapSize: size })}
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all cursor-pointer ${
+                        playerPrefs.minimapSize === size
+                          ? 'bg-teal-400 text-slate-950 shadow-[0_0_10px_rgba(45,212,191,0.4)]'
+                          : 'bg-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {size === 'small' ? 'S' : size === 'large' ? 'L' : size === 'xl' ? 'XL' : 'M'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Corner</span>
+                <div className="grid grid-cols-4 gap-1">
+                  {(['top-left', 'top-right', 'bottom-left', 'bottom-right'] as MinimapCorner[]).map((corner) => (
+                    <button
+                      key={corner}
+                      type="button"
+                      title={corner.replace('-', ' ').toUpperCase()}
+                      onClick={() => onUpdatePlayerPrefs({ minimapCorner: corner })}
+                      className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold uppercase transition-all cursor-pointer ${
+                        playerPrefs.minimapCorner === corner
+                          ? 'bg-teal-400 text-slate-950 shadow-[0_0_10px_rgba(45,212,191,0.4)]'
+                          : 'bg-slate-800 text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {corner === 'top-left' ? 'TL' : corner === 'top-right' ? 'TR' : corner === 'bottom-left' ? 'BL' : 'BR'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Special Collapsible Debug & Diagnostics Section */}
