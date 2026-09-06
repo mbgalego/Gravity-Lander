@@ -12,6 +12,8 @@ import {
   Package2,
   Skull,
   Mountain,
+  Bomb,
+  Compass,
 } from 'lucide-react';
 
 export type MedalCategory = 'flight' | 'logistics' | 'hazard' | 'misc';
@@ -172,6 +174,43 @@ const MEDALS: Medal[] = [
     category: 'flight',
     color: 'purple',
     check: (c) => c.nearMisses >= 10,
+  },
+  // New fun/hazard medals
+  {
+    id: 'insta_dead',
+    title: 'Flash in the Pan',
+    description: 'Die in under 5 seconds',
+    icon: Bomb,
+    category: 'hazard',
+    color: 'rose',
+    check: (c) => c.isCrashed && c.timeTaken < 5,
+  },
+  {
+    id: 'rock_impact',
+    title: 'Rock Bottom',
+    description: 'Hit a rock at high speed (≥30 m/s)',
+    icon: Mountain,
+    category: 'hazard',
+    color: 'rose',
+    check: (c) => c.volcanicRockHits > 0 && c.horizontalSpeed >= 30,
+  },
+  {
+    id: 'base_crash',
+    title: 'Base Crash',
+    description: 'Crash directly into the base station',
+    icon: Compass,
+    category: 'hazard',
+    color: 'amber',
+    check: (c) => c.isCrashed && c.hullDamage > 0 && c.timeTaken < 30,
+  },
+  {
+    id: 'no_fuel_landing',
+    title: 'Dry Landing',
+    description: 'Land with 0 fuel remaining',
+    icon: Flame,
+    category: 'flight',
+    color: 'amber',
+    check: (c) => c.isLanded && c.fuelUsed >= c.fuelCapacity - 0.5,
   },
 ];
 

@@ -408,9 +408,9 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
             type="button"
             onClick={onOpenModal}
             title="Open full Spacecraft Fleet Specifications & Hangar catalog"
-            className="flex items-center gap-1.5 text-xs font-mono text-sky-300 hover:text-white bg-slate-900/70 hover:bg-slate-800 border border-sky-400/30 hover:border-sky-400/60 px-3 py-1 rounded-lg transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-1 text-[10px] font-mono text-sky-300 bg-slate-900/40 hover:bg-slate-800/80 px-2.5 py-0.5 rounded-full border border-white/10 hover:border-sky-400/40 transition-all cursor-pointer shadow-sm self-center"
           >
-            <Layers className="w-3.5 h-3.5 text-sky-400" />
+            <Layers className="w-2.5 h-2.5 text-sky-400" />
             <span>FLEET CATALOG</span>
           </button>
         )}
