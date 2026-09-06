@@ -1178,6 +1178,8 @@ export const StartMenu: React.FC<StartMenuProps> = ({
       <LogbookModal
         isOpen={showLogbook}
         onClose={() => setShowLogbook(false)}
+        selectedWorldIndex={selectedWorldIndex}
+        onSelectWorld={setSelectedWorldIndex}
       />
     </div>
   );
