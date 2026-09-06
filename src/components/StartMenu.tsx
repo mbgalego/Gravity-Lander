@@ -26,9 +26,8 @@ import {
   Download,
   Check,
   Smartphone,
-  Sparkles,
-  ExternalLink,
   Music,
+  ExternalLink,
   X,
 } from 'lucide-react';
 
@@ -79,13 +78,6 @@ export const StartMenu: React.FC<StartMenuProps> = ({
       return false;
     }
   });
-  const [dismissUpdateBanner, setDismissUpdateBanner] = useState(() => {
-    try {
-      return sessionStorage.getItem(`dismiss_update_banner_${CURRENT_GAME_VERSION}`) === 'true';
-    } catch {
-      return false;
-    }
-  });
   const { isFullscreen, toggleFullscreen } = useFullscreen();
   const { canInstall, isInstalled, isIframe, triggerInstall, openInNewTab } = usePwaInstall();
 
@@ -93,13 +85,6 @@ export const StartMenu: React.FC<StartMenuProps> = ({
     setDismissInstallBanner(true);
     try {
       sessionStorage.setItem('dismiss_pwa_banner', 'true');
-    } catch {}
-  };
-
-  const handleDismissUpdateBanner = () => {
-    setDismissUpdateBanner(true);
-    try {
-      sessionStorage.setItem(`dismiss_update_banner_${CURRENT_GAME_VERSION}`, 'true');
     } catch {}
   };
 
@@ -577,43 +562,6 @@ export const StartMenu: React.FC<StartMenuProps> = ({
             <div className="flex items-center gap-1.5 bg-emerald-950/50 border border-emerald-500/30 px-3 py-1 rounded-full text-[11px] font-mono text-emerald-300 backdrop-blur-md shadow-sm">
               <Award className="w-3.5 h-3.5 text-emerald-400" />
               <span>{completedCount}/{PLANETS.length} WORLDS</span>
-            </div>
-          )}
-
-          {/* Dismissible Top-Left Latest Update Banner (2-3 lines max) */}
-          {!dismissUpdateBanner && (
-            <div
-              id="banner-latest-update"
-              className="w-full p-2.5 sm:p-3 rounded-2xl bg-slate-950/80 border border-teal-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.6)] backdrop-blur-md text-left transition-all"
-            >
-              <div className="flex items-center justify-between gap-1.5 pb-1 border-b border-white/5">
-                <div className="flex items-center gap-1.5 font-mono text-[11px] font-bold text-teal-300">
-                  <Sparkles className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                  <span>{CURRENT_GAME_VERSION} UPDATE</span>
-                </div>
-                <button
-                  id="btn-dismiss-update-banner"
-                  type="button"
-                  onClick={handleDismissUpdateBanner}
-                  className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
-                  title="Dismiss update banner"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-              <p className="text-[11px] sm:text-[12px] text-slate-200 font-sans mt-1 leading-snug">
-                Transparent menu cards, single-line action buttons, dedicated music mute, magnified title thrusters & cleaned Luna base.
-              </p>
-              <div className="mt-1.5 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setShowVersionHistory(true)}
-                  className="text-[10px] font-mono text-teal-400 hover:text-teal-300 hover:underline flex items-center gap-1 cursor-pointer font-bold"
-                >
-                  <span>Changelog</span>
-                  <ExternalLink className="w-2.5 h-2.5" />
-                </button>
-              </div>
             </div>
           )}
         </div>

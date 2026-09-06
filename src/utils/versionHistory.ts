@@ -12,15 +12,52 @@ export interface VersionRelease {
   }[];
 }
 
-export const CURRENT_GAME_VERSION = 'v1.6.1';
+export const CURRENT_GAME_VERSION = 'v1.7.0';
 
 export const GAME_VERSION_HISTORY: VersionRelease[] = [
+  {
+    version: 'v1.7.0',
+    releaseDate: 'September 5, 2026',
+    title: 'Medal & Rank Info Popups, Promethean Core World & New Hazard Medals',
+    tag: 'LATEST',
+    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    summary:
+      'Click any medal to read its full description and click a rank badge to see what each rank means, in the Mission Logbook. Added the colossal Promethean Core world, four new hazard medals, and polished the Logbook quick-stats bar and All Worlds overview.',
+    categories: [
+      {
+        name: 'Mission Logbook',
+        iconType: 'missions',
+        items: [
+          'Clicking any medal — earned or locked — opens a popup with its description and unlock status, from the All Worlds collection and every per-planet medal grid.',
+          'Clicking the rank badge (S/A/B/C/D) on any planet explains what ranks mean and their score thresholds.',
+          'All Worlds highlight cards (First Touchdown, Best Score, Favorite World) now show full planet names instead of uppercase IDs.',
+          'Removed the prev/next arrows from the quick-stats bar and switched the Earned counter to a medal icon for a clean single-line layout.',
+          'FIXED: switching tabs no longer snaps the Logbook back to the planet selected in the main menu.',
+        ],
+      },
+      {
+        name: 'New World',
+        iconType: 'missions',
+        items: [
+          'Promethean Core: a gigantic 15 km supermassive volcanic rift with multi-stage sinking basalt shafts, intense convective updrafts, and two separate vehicle loading bays.',
+        ],
+      },
+      {
+        name: 'Medal Achievement System',
+        iconType: 'missions',
+        items: [
+          'Flash in the Pan — crash within 5 seconds.',
+          'Rock Bottom — hit a rock at 30 m/s or faster.',
+          'Base Crash — crash directly into the base station.',
+          'Dry Landing — land with 0 fuel remaining.',
+        ],
+      },
+    ],
+  },
   {
     version: 'v1.6.1',
     releaseDate: 'September 2, 2026',
     title: 'Logbook Polish, Custom-Map Navigation Fixes & Menu Refinements',
-    tag: 'LATEST',
-    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
     summary:
       'Refined the Mission Logbook with swipeable world tabs, prev/next arrows, and a proper earned-medal collection on the All Worlds page. Fixed custom-map "Next Planet" ordering and returning to the menu from a custom map, centered the main menu section titles, added more breathing room between sections, and added a dedicated LOGBOOK button between Launch Mission and Level Editor.',
     categories: [
