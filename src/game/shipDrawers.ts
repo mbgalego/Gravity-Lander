@@ -599,8 +599,12 @@ export function drawAegis(
   ctx.fill();
   ctx.stroke();
 
-  // 2. Reinforced Hexagonal Armored Hull
-  ctx.fillStyle = '#064e3b';
+  // 2. Reinforced Hexagonal Armored Hull — multi-stop emerald gradient
+  const armorGrad = ctx.createLinearGradient(-25, -9, 25, 23);
+  armorGrad.addColorStop(0, '#047857');
+  armorGrad.addColorStop(0.5, '#064e3b');
+  armorGrad.addColorStop(1, '#022c22');
+  ctx.fillStyle = armorGrad;
   ctx.beginPath();
   ctx.moveTo(0, -25);
   ctx.lineTo(25, -9);
@@ -613,6 +617,23 @@ export function drawAegis(
   ctx.strokeStyle = '#10b981';
   ctx.lineWidth = 2.4;
   ctx.stroke();
+
+  // Armor panel seams (hex edges + cross braces)
+  ctx.strokeStyle = '#34d399';
+  ctx.lineWidth = 0.9;
+  ctx.beginPath();
+  ctx.moveTo(0, -25); ctx.lineTo(0, 23);             // center vertical
+  ctx.moveTo(-25, -9); ctx.lineTo(25, 14);            // left-to-right diagonal
+  ctx.moveTo(25, -9); ctx.lineTo(-25, 14);            // right-to-left diagonal
+  ctx.moveTo(-12, 2); ctx.lineTo(12, 2);              // mid horizontal
+  ctx.stroke();
+  // Rivet dots on armor seams
+  ctx.fillStyle = '#6ee7b7';
+  for (let rY of [-10, 5, 16]) {
+    ctx.beginPath(); ctx.arc(-20, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(20, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(0, 7, 0.8, 0, Math.PI * 2); ctx.fill();
 
   // Inner Kinetic Deflector Plate
   ctx.fillStyle = '#047857';

@@ -282,13 +282,23 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <ellipse cx="-33" cy="28" rx="6" ry="2.5" fill="#34d399" stroke="#064e3b" strokeWidth="1.3" />
             <ellipse cx="33" cy="28" rx="6" ry="2.5" fill="#34d399" stroke="#064e3b" strokeWidth="1.3" />
 
-            {/* 2. Reinforced Hexagonal Armored Hull */}
-            <polygon
-              points="0,-25 25,-9 25,14 0,23 -25,14 -25,-9"
-              fill="#064e3b"
-              stroke="#10b981"
-              strokeWidth="2.4"
-            />
+            {/* 2. Reinforced Hexagonal Armored Hull — emerald gradient + seams + rivets */}
+            <polygon points="0,-25 25,-9 25,14 0,23 -25,14 -25,-9" fill="url(#titanium-plate)" stroke="#10b981" strokeWidth="2.4" />
+            <g stroke="#34d399" strokeWidth="0.9">
+              <line x1="0" y1="-25" x2="0" y2="23" />
+              <line x1="-25" y1="-9" x2="25" y2="14" />
+              <line x1="25" y1="-9" x2="-25" y2="14" />
+              <line x1="-12" y1="2" x2="12" y2="2" />
+            </g>
+            <g fill="#6ee7b7">
+              <circle cx="-20" cy="-10" r="0.8" />
+              <circle cx="20" cy="-10" r="0.8" />
+              <circle cx="0" cy="7" r="0.8" />
+              <circle cx="-20" cy="5" r="0.8" />
+              <circle cx="20" cy="5" r="0.8" />
+              <circle cx="-20" cy="16" r="0.8" />
+              <circle cx="20" cy="16" r="0.8" />
+            </g>
             {/* Inner Kinetic Deflector Plate */}
             <polygon points="0,-18 19,-6 19,10 0,16 -19,10 -19,-6" fill="#047857" stroke="#34d399" strokeWidth="1.2" />
 
