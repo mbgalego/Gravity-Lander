@@ -615,21 +615,70 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         {modelId === 'wasp' && (
           <g>
             <g stroke="#94a3b8" strokeWidth="2.0" strokeLinecap="round">
-              <line x1="-10" y1="10" x2="-22" y2="28" />
-              <line x1="10" y1="10" x2="22" y2="28" />
+              <line x1="-12" y1="10" x2="-24" y2="28" />
+              <line x1="-8" y1="16" x2="-24" y2="28" strokeWidth="1.6" stroke="#64748b" />
+              <line x1="12" y1="10" x2="22" y2="28" />
+              <line x1="8" y1="16" x2="22" y2="28" strokeWidth="1.6" stroke="#64748b" />
             </g>
-            <rect x="-26" y="27" width="8" height="3" rx="1" fill="#475569" stroke="#eab308" strokeWidth="1" />
-            <rect x="18" y="27" width="8" height="3" rx="1" fill="#475569" stroke="#eab308" strokeWidth="1" />
+            <rect x="-28" y="27" width="9" height="3" rx="1" fill="#475569" stroke="#eab308" strokeWidth="1.2" />
+            <rect x="19" y="27" width="9" height="3" rx="1" fill="#475569" stroke="#eab308" strokeWidth="1.2" />
 
-            {/* Outrigger Pods */}
-            <rect x="-24" y="2" width="8" height="20" rx="2" fill="#1e293b" stroke="#eab308" strokeWidth="1.3" />
-            <rect x="16" y="2" width="8" height="20" rx="2" fill="#1e293b" stroke="#eab308" strokeWidth="1.3" />
+            {/* Outrigger Pods — brushed titanium gradient + panel seams + rivets */}
+            <rect x="-24" y="2" width="8" height="20" rx="2" fill="url(#titanium-plate)" stroke="#eab308" strokeWidth="1.3" />
+            <rect x="16" y="2" width="8" height="20" rx="2" fill="url(#titanium-plate)" stroke="#eab308" strokeWidth="1.3" />
+            <g stroke="#334155" strokeWidth="0.7">
+              <line x1="-24" y1="3" x2="-16" y2="3" />
+              <line x1="-24" y1="10" x2="-16" y2="10" />
+              <line x1="-24" y1="17" x2="-16" y2="17" />
+              <line x1="16" y1="3" x2="24" y2="3" />
+              <line x1="16" y1="10" x2="24" y2="10" />
+              <line x1="16" y1="17" x2="24" y2="17" />
+            </g>
+            <g fill="#94a3b8">
+              {[-23,-19,-17,-21].map((x)=><circle key={x} cx={x} cy={3} r={0.9} />)}
+              {[-23,-19,-17,-21].map((x)=><circle key={x+"b"} cx={x} cy={10} r={0.9} />)}
+              {[-23,-19,-17,-21].map((x)=><circle key={x+"c"} cx={x} cy={17} r={0.9} />)}
+              {[17,19,21,23].map((x)=><circle key={x+"a"} cx={x} cy={3} r={0.9} />)}
+              {[17,19,21,23].map((x)=><circle key={x+"d"} cx={x} cy={10} r={0.9} />)}
+              {[17,19,21,23].map((x)=><circle key={x+"e"} cx={x} cy={17} r={0.9} />)}
+            </g>
 
-            {/* Gold Foil Core */}
+            {/* Outrigger Trusses */}
+            <g stroke="#64748b" strokeWidth="1.8" strokeLinecap="round">
+              <line x1="-10" y1="4" x2="-16" y2="4" />
+              <line x1="-10" y1="14" x2="-16" y2="14" />
+              <line x1="10" y1="4" x2="16" y2="4" />
+              <line x1="10" y1="14" x2="16" y2="14" />
+            </g>
+
+            {/* Gold Foil Core — multi-stop gradient + quilting seams */}
             <polygon points="-12,4 -14,18 14,18 12,4" fill="url(#gold-foil)" stroke="#713f12" strokeWidth="1.2" />
+            <line x1="-12" y1="11" x2="12" y2="11" stroke="#a16207" strokeWidth="1.0" />
+            <line x1="-13" y1="7" x2="13" y2="7" stroke="#fde68a" strokeWidth="0.8" />
+            <line x1="-13" y1="15" x2="13" y2="15" stroke="#a16207" strokeWidth="0.6" />
 
-            {/* Upper Stinger Cabin */}
-            <polygon points="0,-27 13,-10 11,4 -11,4 -13,-10" fill="#1e293b" stroke="#eab308" strokeWidth="1.4" />
+            {/* Upper Stinger Cabin — faceted seams + rivets + gold trim */}
+            <polygon points="0,-27 13,-10 11,4 -11,4 -13,-10" fill="#0f172a" stroke="#eab308" strokeWidth="1.4" />
+            <g stroke="#94a3b8" strokeWidth="0.7">
+              <line x1="0" y1="-27" x2="0" y2="4" />
+              <line x1="-13" y1="-10" x2="-11" y2="4" />
+              <line x1="13" y1="-10" x2="11" y2="4" />
+              <line x1="-7" y1="-18" x2="7" y2="-18" />
+            </g>
+            <g fill="#64748b">
+              <circle cx="-11" cy="-18" r={0.8} />
+              <circle cx="11" cy="-18" r={0.8} />
+              <circle cx="0" cy="-18" r={0.8} />
+              <circle cx="-11" cy="-8" r={0.8} />
+              <circle cx="11" cy="-8" r={0.8} />
+            </g>
+
+            {/* Antenna Spikes on the Stinger Crown */}
+            <g stroke="#94a3b8" strokeWidth="1.0" strokeLinecap="round">
+              <line x1="-4" y1="-28" x2="-6" y2="-34" />
+              <line x1="4" y1="-28" x2="6" y2="-34" />
+            </g>
+
             <ellipse cx="0" cy="-14" rx="6.5" ry="4.5" fill="url(#visor-grad-wasp)" stroke="#fef08a" strokeWidth="1" />
             <ellipse cx="-2" cy="-15.5" rx="2.5" ry="1.2" fill="#ffffff" opacity="0.8" />
           </g>
