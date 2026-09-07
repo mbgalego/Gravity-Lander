@@ -327,18 +327,59 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <rect x="-29" y="29" width="10" height="3" rx="1.2" fill="#e879f9" stroke="#7e22ce" strokeWidth="1" />
             <rect x="19" y="29" width="10" height="3" rx="1.2" fill="#e879f9" stroke="#7e22ce" strokeWidth="1" />
 
-            {/* 2. Twin Aerodynamic Carbon Booms */}
-            <polygon points="-25,-25 -16,-10 -16,21 -27,23 -29,-14" fill="#3b0764" stroke="#c084fc" strokeWidth="2.0" />
-            <polygon points="25,-25 16,-10 16,21 27,23 29,-14" fill="#3b0764" stroke="#c084fc" strokeWidth="2.0" />
+            {/* 2. Twin Aerodynamic Carbon Booms — indigo gradient + seams + rivets */}
+            <polygon points="-25,-25 -16,-10 -16,21 -27,23 -29,-14" fill="url(#titanium-plate)" stroke="#c084fc" strokeWidth="2.0" />
+            <polygon points="25,-25 16,-10 16,21 27,23 29,-14" fill="url(#titanium-plate)" stroke="#c084fc" strokeWidth="2.0" />
+            <g stroke="#a78bfa" strokeWidth="0.8">
+              <line x1="-16" y1="-10" x2="-16" y2="21" />
+              <line x1="16" y1="-10" x2="16" y2="21" />
+            </g>
+            <g fill="#c084fc">
+              <circle cx="-18" cy="-10" r="0.7" />
+              <circle cx="-18" cy="0" r="0.7" />
+              <circle cx="-18" cy="6" r="0.7" />
+              <circle cx="-18" cy="15" r="0.7" />
+              <circle cx="18" cy="-10" r="0.7" />
+              <circle cx="18" cy="0" r="0.7" />
+              <circle cx="18" cy="6" r="0.7" />
+              <circle cx="18" cy="15" r="0.7" />
+            </g>
 
-            {/* 3. Central Xenon Fuel Sphere */}
-            <circle cx="0" cy="5" r="7" fill="url(#xenon-tank-grad)" stroke="#a855f7" strokeWidth="1.4" />
+            {/* 3. Central Xenon Fuel Sphere — gradient + seam + rivets */}
+            <circle cx="0" cy="5" r="7" fill="url(#titanium-plate)" stroke="#a855f7" strokeWidth="1.4" />
+            <g stroke="#f0abfc" strokeWidth="0.7">
+              <line x1="0" y1="-2" x2="0" y2="12" />
+            </g>
+            <g fill="#e879f9">
+              <circle cx="0" cy="0" r="0.6" />
+              <circle cx="0" cy="4" r="0.6" />
+              <circle cx="0" cy="8" r="0.6" />
+            </g>
 
-            {/* 4. Center Bridge & Wings */}
-            <polygon points="0,-15 16,0 16,13 -16,13 -16,0" fill="#581c87" stroke="#e879f9" strokeWidth="1.6" />
+            {/* 4. Center Bridge & Wings — violet gradient + seam + rivets */}
+            <polygon points="0,-15 16,0 16,13 -16,13 -16,0" fill="url(#titanium-plate)" stroke="#e879f9" strokeWidth="1.6" />
+            <g stroke="#a78bfa" strokeWidth="0.8">
+              <line x1="0" y1="-15" x2="0" y2="13" />
+              <line x1="-8" y1="3" x2="8" y2="3" />
+            </g>
+            <g fill="#e879f9">
+              <circle cx="-6" cy="7" r="0.6" />
+              <circle cx="0" cy="7" r="0.6" />
+              <circle cx="6" cy="7" r="0.6" />
+            </g>
 
-            {/* 5. Violet Sensor Canopy */}
+            {/* 5. Violet Sensor Canopy — seam + rivets */}
             <ellipse cx="0" cy="-3" rx="9" ry="5.5" fill="url(#visor-grad-nebula)" stroke="#f0abfc" strokeWidth="1.3" />
+            <g stroke="#f0abfc" strokeWidth="0.9">
+              <line x1="-9" y1="-3" x2="9" y2="-3" />
+              <line x1="0" y1="-8" x2="0" y2="2" />
+            </g>
+            <g fill="#e879f9">
+              <circle cx="-6" cy="-3" r="0.7" />
+              <circle cx="0" cy="-3" r="0.7" />
+              <circle cx="6" cy="-3" r="0.7" />
+              <circle cx="0" cy="-0.5" r="0.7" />
+            </g>
             <ellipse cx="-2.5" cy="-5" rx="3.5" ry="1.6" fill="#ffffff" opacity="0.75" />
 
             {/* 6. Ion Plasma Emitters */}

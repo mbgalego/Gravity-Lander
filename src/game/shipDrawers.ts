@@ -725,8 +725,12 @@ export function drawNebula(
   ctx.fill();
   ctx.stroke();
 
-  // 2. Twin Aerodynamic Carbon Booms
-  ctx.fillStyle = '#3b0764';
+  // 2. Twin Aerodynamic Carbon Booms — indigo gradient + panel seams + rivets
+  const boomGrad = ctx.createLinearGradient(-29, -14, 29, 23);
+  boomGrad.addColorStop(0, '#1e175b');
+  boomGrad.addColorStop(0.5, '#3b0764');
+  boomGrad.addColorStop(1, '#1e175b');
+  ctx.fillStyle = boomGrad;
   ctx.strokeStyle = '#c084fc';
   ctx.lineWidth = 2.0;
   ctx.beginPath();
@@ -739,6 +743,10 @@ export function drawNebula(
   ctx.fill();
   ctx.stroke();
 
+  // Right boom polygon (must match left)
+  ctx.fillStyle = boomGrad;
+  ctx.strokeStyle = '#c084fc';
+  ctx.lineWidth = 2.0;
   ctx.beginPath();
   ctx.moveTo(25, -25);
   ctx.lineTo(16, -10);
@@ -749,8 +757,27 @@ export function drawNebula(
   ctx.fill();
   ctx.stroke();
 
-  // 3. Central Xenon Fuel Sphere
-  ctx.fillStyle = createXenonTank(ctx, 0, 5, 7);
+  // Boom panel seams (longitudinal + cross braces)
+  ctx.strokeStyle = '#a78bfa';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(-16, -10); ctx.lineTo(-16, 21);     // left spine
+  ctx.moveTo(16, -10); ctx.lineTo(16, 21);       // right spine
+  ctx.moveTo(-22, -6); ctx.lineTo(22, -6);        // lower cross brace
+  ctx.moveTo(-22, 13); ctx.lineTo(22, 13);        // upper cross brace
+  ctx.stroke();
+  // Rivet rows along booms
+  ctx.fillStyle = '#c084fc';
+  for (let rY of [-10, 0, 6, 15]) {
+    ctx.beginPath(); ctx.arc(-18, rY, 0.7, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(18, rY, 0.7, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // 3. Central Xenon Fuel Sphere — gradient + longitudinal seam + rivets
+  const fuelGrad = ctx.createRadialGradient(0, 5, 0, 0, 5, 7);
+  fuelGrad.addColorStop(0, '#e879f9');
+  fuelGrad.addColorStop(1, '#5b21b6');
+  ctx.fillStyle = fuelGrad;
   ctx.beginPath();
   ctx.arc(0, 5, 7, 0, Math.PI * 2);
   ctx.fill();
@@ -758,8 +785,23 @@ export function drawNebula(
   ctx.lineWidth = 1.4;
   ctx.stroke();
 
-  // 4. Center Bridge & Wings
-  ctx.fillStyle = '#581c87';
+  // Fuel tank seam (vertical line) and rivets
+  ctx.strokeStyle = '#f0abfc';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(0, -2); ctx.lineTo(0, 12);
+  ctx.stroke();
+  ctx.fillStyle = '#e879f9';
+  for (let rY of [0, 4, 8]) {
+    ctx.beginPath(); ctx.arc(0, rY, 0.6, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // 4. Center Bridge & Wings — violet gradient + seam panel
+  const bridgeGrad = ctx.createLinearGradient(-16, 0, 16, 13);
+  bridgeGrad.addColorStop(0, '#3b0764');
+  bridgeGrad.addColorStop(0.5, '#581c87');
+  bridgeGrad.addColorStop(1, '#3b0764');
+  ctx.fillStyle = bridgeGrad;
   ctx.beginPath();
   ctx.moveTo(0, -15);
   ctx.lineTo(16, 0);
@@ -771,15 +813,35 @@ export function drawNebula(
   ctx.strokeStyle = '#e879f9';
   ctx.lineWidth = 1.6;
   ctx.stroke();
+  // Panel seams + rivets on bridge
+  ctx.strokeStyle = '#a78bfa';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(0, -15); ctx.lineTo(0, 13);     // center keel
+  ctx.moveTo(-8, 3); ctx.lineTo(8, 3);          // mid horizontal
+  ctx.stroke();
+  ctx.fillStyle = '#e879f9';
+  for (let rX of [-6, 0, 6]) {
+    ctx.beginPath(); ctx.arc(rX, 7, 0.6, 0, Math.PI * 2); ctx.fill();
+  }
 
-  // 5. Violet Sensor Canopy
+  // 5. Violet Sensor Canopy — specular gradient + seam + rivets
   ctx.fillStyle = createVisorGrad(ctx, 0, -3, 9, config.accentColor, config.visorColor);
   ctx.beginPath();
   ctx.ellipse(0, -3, 9, 5.5, 0, 0, Math.PI * 2);
   ctx.fill();
+  // Canopy seam (horizontal + vertical) + rivets on canopy edge
   ctx.strokeStyle = '#f0abfc';
-  ctx.lineWidth = 1.3;
+  ctx.lineWidth = 0.9;
+  ctx.beginPath();
+  ctx.moveTo(-9, -3); ctx.lineTo(9, -3);    // horizontal seam
+  ctx.moveTo(0, -8); ctx.lineTo(0, 2);      // vertical seam
   ctx.stroke();
+  ctx.fillStyle = '#e879f9';
+  for (let rX of [-6, 0, 6]) {
+    ctx.beginPath(); ctx.arc(rX, -3, 0.7, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(0, -0.5, 0.7, 0, Math.PI * 2); ctx.fill();
 
   ctx.fillStyle = '#ffffff';
   ctx.globalAlpha = 0.75;
@@ -788,12 +850,13 @@ export function drawNebula(
   ctx.fill();
   ctx.globalAlpha = 1.0;
 
-  // 6. Ion Plasma Emitters
+  // 6. Ion Plasma Emitters — violet glow + white core highlights
   ctx.fillStyle = '#c084fc';
   ctx.beginPath();
   ctx.arc(-21, 22, 4.5, 0, Math.PI * 2);
   ctx.arc(21, 22, 4.5, 0, Math.PI * 2);
   ctx.fill();
+  // Emitter core glow
   ctx.fillStyle = '#ffffff';
   ctx.beginPath();
   ctx.arc(-21, 22, 2.2, 0, Math.PI * 2);
