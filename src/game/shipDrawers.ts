@@ -2088,8 +2088,12 @@ export function drawKestrel(
   ctx.fill();
   ctx.stroke();
 
-  // 2. Swept Delta Wing Strakes
-  ctx.fillStyle = '#1e293b';
+  // 2. Swept Delta Wing Strakes — multi-stop gradient + panel seams + rivets
+  const wingGrad = ctx.createLinearGradient(-26, 12, 26, 18);
+  wingGrad.addColorStop(0, '#0f172a');
+  wingGrad.addColorStop(0.5, '#1e293b');
+  wingGrad.addColorStop(1, '#0f172a');
+  ctx.fillStyle = wingGrad;
   ctx.strokeStyle = '#06b6d4';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
@@ -2102,12 +2106,49 @@ export function drawKestrel(
   ctx.fill();
   ctx.stroke();
 
+  // Wing panel seams (leading-edge / trailing-edge / mid-span)
+  ctx.strokeStyle = '#0891b2';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(0, -22); ctx.lineTo(0, 18);            // center keel seam
+  ctx.moveTo(-13, -4); ctx.lineTo(-22, 14);          // left flank seam
+  ctx.moveTo(13, -4); ctx.lineTo(22, 14);             // right flank seam
+  ctx.moveTo(-20, 10); ctx.lineTo(20, 10);            // trailing seam
+  ctx.stroke();
+  // Rivet rows along wing seams
+  ctx.fillStyle = '#67e8f9';
+  for (let rY of [4, 11]) {
+    ctx.beginPath(); ctx.arc(-22, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(22, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(0, 11, 0.8, 0, Math.PI * 2); ctx.fill();
+
   // Wing Tip Pylons
   ctx.fillStyle = '#06b6d4';
   ctx.fillRect(-27, 8, 2, 7);
   ctx.fillRect(25, 8, 2, 7);
+  // Pylon rivets
+  ctx.fillStyle = '#94a3b8';
+  ctx.beginPath(); ctx.arc(-26, 11, 0.7, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(26, 11, 0.7, 0, Math.PI * 2); ctx.fill();
 
-  // 3. Central Needle Fuselage
+  // 3. Central Needle Fuselage — faceted seams + rivets
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(0, -32); ctx.lineTo(0, 16);               // center keel
+  ctx.moveTo(-8, -10); ctx.lineTo(-10, 16);            // left flank
+  ctx.moveTo(8, -10); ctx.lineTo(10, 16);              // right flank
+  ctx.moveTo(-4, -18); ctx.lineTo(4, -18);              // brow seam
+  ctx.stroke();
+  ctx.fillStyle = '#67e8f9';
+  for (let rY of [-18, -2, 10]) {
+    ctx.beginPath(); ctx.arc(-9, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(9, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(0, -18, 0.8, 0, Math.PI * 2); ctx.fill();
+
+  // 3b. Central Needle Fuselage (multi-stop gradient + cyan trim)
   ctx.fillStyle = createHullGrad(ctx, -10, -32, 10, 16, config.primaryColor);
   ctx.strokeStyle = '#67e8f9';
   ctx.lineWidth = 1.4;
