@@ -1009,7 +1009,7 @@ export function updatePhysics(
         const totalMass = mShip + mCargo;
 
         // Cable only exerts tension when pulled taut (and only when cargo is hanging/trailing, not pushing)
-        if (dist > nominalLength && ny >= -0.3) {
+        if (dist > nominalLength) {
           // 1. Smooth damped velocity impulse along cable axis
           const relVx = cargo.vel.x - updatedShip.vel.x;
           const relVy = cargo.vel.y - updatedShip.vel.y;
