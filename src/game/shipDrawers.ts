@@ -2222,8 +2222,12 @@ export function drawSpectre(
   ctx.fill();
   ctx.stroke();
 
-  // 2. Stealth Diamond Faceted Fuselage
-  ctx.fillStyle = '#090d16';
+  // 2. Stealth Diamond Faceted Fuselage — purple gradient + panel seams + rivets
+  const stealthGrad = ctx.createLinearGradient(-24, -32, 24, 18);
+  stealthGrad.addColorStop(0, '#1e1b4b');
+  stealthGrad.addColorStop(0.5, '#090d16');
+  stealthGrad.addColorStop(1, '#1e1b4b');
+  ctx.fillStyle = stealthGrad;
   ctx.strokeStyle = '#a855f7';
   ctx.lineWidth = 1.6;
   ctx.beginPath();
@@ -2236,18 +2240,22 @@ export function drawSpectre(
   ctx.fill();
   ctx.stroke();
 
-  // Inner Stealth Facet Panels
-  ctx.strokeStyle = '#6b21a8';
-  ctx.lineWidth = 1.0;
+  // Inner facet seams — diamond panel lines + rivets on edges
+  ctx.strokeStyle = '#8b5cf6';
+  ctx.lineWidth = 0.8;
   ctx.beginPath();
-  ctx.moveTo(0, -32);
-  ctx.lineTo(0, 18);
-  ctx.moveTo(-24, 0);
-  ctx.lineTo(0, 6);
-  ctx.lineTo(24, 0);
+  ctx.moveTo(0, -32); ctx.lineTo(0, 18);            // center keel
+  ctx.moveTo(-24, 0); ctx.lineTo(0, 6); ctx.lineTo(24, 0); // cross-facet
+  ctx.moveTo(-12, -11); ctx.lineTo(12, -11);          // brow seam
   ctx.stroke();
+  ctx.fillStyle = '#c084fc';
+  for (let rY of [-18, -4, 9]) {
+    ctx.beginPath(); ctx.arc(-12, rY, 0.7, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(12, rY, 0.7, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(0, -16, 0.7, 0, Math.PI * 2); ctx.fill();
 
-  // 3. Purple Slit Visor
+  // 3. Purple Slit Visor — specular highlight
   ctx.fillStyle = createVisorGrad(ctx, 0, -10, 6, config.accentColor, config.visorColor);
   ctx.beginPath();
   ctx.moveTo(0, -18);

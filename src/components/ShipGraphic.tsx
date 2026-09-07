@@ -743,9 +743,25 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <rect x="-28" y="28" width="8" height="3" rx="1" fill="#1e1b4b" stroke="#a855f7" strokeWidth="1" />
             <rect x="20" y="28" width="8" height="3" rx="1" fill="#1e1b4b" stroke="#a855f7" strokeWidth="1" />
 
-            {/* Stealth Diamond Hull */}
-            <polygon points="0,-32 24,0 18,18 -18,18 -24,0" fill="#090d16" stroke="#a855f7" strokeWidth="1.6" />
-            <line x1="0" y1="-32" x2="0" y2="18" stroke="#6b21a8" strokeWidth="1.0" />
+            {/* Stealth Diamond Hull — purple gradient + seams + rivets */}
+            <polygon points="0,-32 24,0 18,18 -18,18 -24,0" fill="url(#titanium-plate)" stroke="#a855f7" strokeWidth="1.6" />
+            <g stroke="#6b21a8" strokeWidth="1.0">
+              <line x1="0" y1="-32" x2="0" y2="18" />
+              <line x1="-24" y1="0" x2="0" y2="6" />
+              <line x1="24" y1="0" x2="0" y2="6" />
+            </g>
+            <g stroke="#8b5cf6" strokeWidth="0.8">
+              <line x1="-12" y1="-11" x2="12" y2="-11" />
+            </g>
+            <g fill="#c084fc">
+              <circle cx="-12" cy="-18" r="0.7" />
+              <circle cx="12" cy="-18" r="0.7" />
+              <circle cx="-12" cy="-4" r="0.7" />
+              <circle cx="12" cy="-4" r="0.7" />
+              <circle cx="0" cy="-16" r="0.7" />
+              <circle cx="-12" cy="9" r="0.7" />
+              <circle cx="12" cy="9" r="0.7" />
+            </g>
             {/* Purple Slit Visor */}
             <polygon points="0,-18 6,-8 0,-4 -6,-8" fill="url(#visor-grad-spectre)" stroke="#e9d5ff" strokeWidth="1" />
           </g>
