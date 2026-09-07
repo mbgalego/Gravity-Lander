@@ -1887,12 +1887,44 @@ export function drawWasp(
   ctx.fill();
   ctx.stroke();
 
-  // 2. Dual Side Engine Outrigger Pods
-  ctx.fillStyle = '#1e293b';
+  // 2a. Outrigger Pod Hull Textures — brushed metal panel lines and rivet rows
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(-24, 3); ctx.lineTo(-16, 3);
+  ctx.moveTo(-24, 10); ctx.lineTo(-16, 10);
+  ctx.moveTo(-24, 17); ctx.lineTo(-16, 17);
+  ctx.moveTo(16, 3); ctx.lineTo(24, 3);
+  ctx.moveTo(16, 10); ctx.lineTo(24, 10);
+  ctx.moveTo(16, 17); ctx.lineTo(24, 17);
+  ctx.stroke();
+  ctx.fillStyle = '#94a3b8';
+  for (let rX of [-23, -19, -17, -21]) {
+    ctx.beginPath(); ctx.arc(rX, 3, 0.9, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(rX, 10, 0.9, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(rX, 17, 0.9, 0, Math.PI * 2); ctx.fill();
+  }
+  for (let rX of [17, 19, 21, 23]) {
+    ctx.beginPath(); ctx.arc(rX, 3, 0.9, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(rX, 10, 0.9, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(rX, 17, 0.9, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // 2b. Dual Side Engine Outrigger Pods (brushed titanium gradient)
+  const podGradL = ctx.createLinearGradient(-24, 0, -16, 22);
+  podGradL.addColorStop(0, '#334155'); podGradL.addColorStop(0.4, '#0f172a'); podGradL.addColorStop(1, '#1e293b');
+  const podGradR = ctx.createLinearGradient(24, 0, 16, 22);
+  podGradR.addColorStop(0, '#334155'); podGradR.addColorStop(0.4, '#0f172a'); podGradR.addColorStop(1, '#1e293b');
+  ctx.fillStyle = podGradL;
   ctx.strokeStyle = '#eab308';
   ctx.lineWidth = 1.3;
   ctx.beginPath();
   roundRect(ctx, -24, 0, 8, 22, 2);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = podGradR;
+  ctx.beginPath();
   roundRect(ctx, 16, 0, 8, 22, 2);
   ctx.fill();
   ctx.stroke();
@@ -1911,8 +1943,13 @@ export function drawWasp(
   ctx.lineTo(16, 14);
   ctx.stroke();
 
-  // 3. Central Descent Core (Gold Thermal Foil)
-  ctx.fillStyle = createGoldFoil(ctx, 2, 18);
+  // 3. Central Descent Core (Gold Thermal Foil) — multi-stop gradient + quilting seams
+  const coreGrad = ctx.createLinearGradient(-14, 4, 14, 18);
+  coreGrad.addColorStop(0, '#fef08a');
+  coreGrad.addColorStop(0.3, '#eab308');
+  coreGrad.addColorStop(0.65, '#ca8a04');
+  coreGrad.addColorStop(1, '#713f12');
+  ctx.fillStyle = coreGrad;
   ctx.strokeStyle = '#713f12';
   ctx.lineWidth = 1.3;
   ctx.beginPath();
@@ -1924,7 +1961,7 @@ export function drawWasp(
   ctx.fill();
   ctx.stroke();
 
-  // Gold Quilting Lines
+  // Gold Quilting Lines (MLI thermal seam quilting)
   ctx.strokeStyle = '#a16207';
   ctx.lineWidth = 1.0;
   ctx.beginPath();
@@ -1932,7 +1969,21 @@ export function drawWasp(
   ctx.lineTo(12, 11);
   ctx.stroke();
 
-  // 4. Stinger Upper Cabin
+  // Additional quilting seam + MLI foil highlight
+  ctx.strokeStyle = '#fde68a';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(-13, 7);
+  ctx.lineTo(13, 7);
+  ctx.stroke();
+  ctx.strokeStyle = '#a16207';
+  ctx.lineWidth = 0.6;
+  ctx.beginPath();
+  ctx.moveTo(-13, 15);
+  ctx.lineTo(13, 15);
+  ctx.stroke();
+
+  // 4. Stinger Upper Cabin — faceted hull with seams + gold trim + rivets
   ctx.fillStyle = createHullGrad(ctx, -14, -26, 14, 4, config.primaryColor);
   ctx.strokeStyle = '#eab308';
   ctx.lineWidth = 1.5;
@@ -1945,6 +1996,22 @@ export function drawWasp(
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
+
+  // Faceted panel seams + rivet rows (over filled cabin)
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(0, -28); ctx.lineTo(0, 4);
+  ctx.moveTo(-14, -10); ctx.lineTo(-12, 4);
+  ctx.moveTo(14, -10); ctx.lineTo(12, 4);
+  ctx.moveTo(-7, -18); ctx.lineTo(7, -18);
+  ctx.stroke();
+  ctx.fillStyle = '#64748b';
+  for (let rY of [-18, -8]) {
+    ctx.beginPath(); ctx.arc(-11, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(11, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(0, -18, 0.8, 0, Math.PI * 2); ctx.fill();
 
   // 5. Amber Visor Canopy
   ctx.fillStyle = createVisorGrad(ctx, 0, -14, 6.5, config.accentColor, config.visorColor);
