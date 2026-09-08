@@ -2392,8 +2392,12 @@ export function drawOrion(
   ctx.fill();
   ctx.stroke();
 
-  // 2. Twin Side Booms & Sensor Array
-  ctx.fillStyle = '#1e293b';
+  // 2. Twin Side Booms & Sensor Array — steel gradient + seams + rivets
+  const boomGrad = ctx.createLinearGradient(-26, -8, 26, 16);
+  boomGrad.addColorStop(0, '#334155');
+  boomGrad.addColorStop(0.5, '#1e293b');
+  boomGrad.addColorStop(1, '#0f172a');
+  ctx.fillStyle = boomGrad;
   ctx.strokeStyle = '#38bdf8';
   ctx.lineWidth = 1.4;
   ctx.beginPath();
@@ -2401,6 +2405,18 @@ export function drawOrion(
   roundRect(ctx, 18, -8, 8, 24, 2);
   ctx.fill();
   ctx.stroke();
+  // Boom panel seams + rivets
+  ctx.strokeStyle = '#7dd3fc';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(-22, -8); ctx.lineTo(-22, 16);   // port boom seam
+  ctx.moveTo(22, -8); ctx.lineTo(22, 16);     // starboard boom seam
+  ctx.stroke();
+  ctx.fillStyle = '#38bdf8';
+  for (let rY of [-4, 4, 10]) {
+    ctx.beginPath(); ctx.arc(-22, rY, 0.6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(22, rY, 0.6, 0, Math.PI * 2); ctx.fill();
+  }
 
   // Dish on Port Boom
   ctx.strokeStyle = '#94a3b8';

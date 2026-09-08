@@ -830,9 +830,21 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <rect x="-30" y="29" width="9" height="3.5" rx="1" fill="#334155" stroke="#38bdf8" strokeWidth="1.2" />
             <rect x="21" y="29" width="9" height="3.5" rx="1" fill="#334155" stroke="#38bdf8" strokeWidth="1.2" />
 
-            {/* Side Booms */}
-            <rect x="-25" y="-8" width="8" height="24" rx="2" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.3" />
-            <rect x="17" y="-8" width="8" height="24" rx="2" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.3" />
+            {/* Side Booms — steel gradient + seams + rivets */}
+            <rect x="-25" y="-8" width="8" height="24" rx="2" fill="url(#titanium-plate)" stroke="#38bdf8" strokeWidth="1.3" />
+            <rect x="17" y="-8" width="8" height="24" rx="2" fill="url(#titanium-plate)" stroke="#38bdf8" strokeWidth="1.3" />
+            <g stroke="#7dd3fc" strokeWidth="0.7">
+              <line x1="-22" y1="-8" x2="-22" y2="16" />
+              <line x1="22" y1="-8" x2="22" y2="16" />
+            </g>
+            <g fill="#38bdf8">
+              <circle cx="-22" cy="-4" r="0.6" />
+              <circle cx="-22" cy="4" r="0.6" />
+              <circle cx="-22" cy="10" r="0.6" />
+              <circle cx="22" cy="-4" r="0.6" />
+              <circle cx="22" cy="4" r="0.6" />
+              <circle cx="22" cy="10" r="0.6" />
+            </g>
             <circle cx="-10" cy="8" r="4.5" fill="url(#xenon-tank-grad)" stroke="#0284c7" strokeWidth="1" />
             <circle cx="10" cy="8" r="4.5" fill="url(#xenon-tank-grad)" stroke="#0284c7" strokeWidth="1" />
 
