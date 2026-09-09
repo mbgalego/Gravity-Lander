@@ -76,10 +76,6 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <stop offset="50%" stopColor="#334155" />
             <stop offset="100%" stopColor="#0f172a" />
           </linearGradient>
-          <linearGradient id="armor-plate" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#047857"/><stop offset="50%" stopColor="#064e3b"/><stop offset="100%" stopColor="#022c22"/></linearGradient>
-          <linearGradient id="stealth-plate" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#1e1b4b"/><stop offset="50%" stopColor="#090d16"/><stop offset="100%" stopColor="#1e1b4b"/></linearGradient>
-          <linearGradient id="indigo-boom" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#1e175b"/><stop offset="50%" stopColor="#3b0764"/><stop offset="100%" stopColor="#1e175b"/></linearGradient>
-          <linearGradient id="steel-boom" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#334155"/><stop offset="50%" stopColor="#1e293b"/><stop offset="100%" stopColor="#0f172a"/></linearGradient>
 
           {/* Cockpit Canopy Shader */}
           <radialGradient
@@ -287,7 +283,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <ellipse cx="33" cy="28" rx="6" ry="2.5" fill="#34d399" stroke="#064e3b" strokeWidth="1.3" />
 
             {/* 2. Reinforced Hexagonal Armored Hull — emerald gradient + seams + rivets */}
-            <polygon points="0,-25 25,-9 25,14 0,23 -25,14 -25,-9" fill="url(#armor-plate)" stroke="#10b981" strokeWidth="2.4" />
+            <polygon points="0,-25 25,-9 25,14 0,23 -25,14 -25,-9" fill="url(#titanium-plate)" stroke="#10b981" strokeWidth="2.4" />
             <g stroke="#34d399" strokeWidth="0.9">
               <line x1="0" y1="-25" x2="0" y2="23" />
               <line x1="-25" y1="-9" x2="25" y2="14" />
@@ -350,7 +346,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             </g>
 
             {/* 3. Central Xenon Fuel Sphere — gradient + seam + rivets */}
-            <circle cx="0" cy="5" r="7" fill="url(#stealth-plate)" stroke="#a855f7" strokeWidth="1.4" />
+            <circle cx="0" cy="5" r="7" fill="url(#titanium-plate)" stroke="#a855f7" strokeWidth="1.4" />
             <g stroke="#f0abfc" strokeWidth="0.7">
               <line x1="0" y1="-2" x2="0" y2="12" />
             </g>
@@ -799,7 +795,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <rect x="20" y="28" width="8" height="3" rx="1" fill="#1e1b4b" stroke="#a855f7" strokeWidth="1" />
 
             {/* Stealth Diamond Hull — purple gradient + seams + rivets */}
-            <polygon points="0,-32 24,0 18,18 -18,18 -24,0" fill="url(#stealth-plate)" stroke="#a855f7" strokeWidth="1.6" />
+            <polygon points="0,-32 24,0 18,18 -18,18 -24,0" fill="url(#titanium-plate)" stroke="#a855f7" strokeWidth="1.6" />
             <g stroke="#6b21a8" strokeWidth="1.0">
               <line x1="0" y1="-32" x2="0" y2="18" />
               <line x1="-24" y1="0" x2="0" y2="6" />
@@ -827,49 +823,194 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         {/* ========================================================= */}
         {modelId === 'orion' && (
           <g>
-            <g stroke="#64748b" strokeWidth="2.2" strokeLinecap="round">
-              <line x1="-15" y1="12" x2="-26" y2="30" />
-              <line x1="15" y1="12" x2="26" y2="30" />
+            {/* 1. Heavy Structural Inter-Boom Trusses (Fuselage to Booms) */}
+            <g stroke="#475569" strokeWidth="1.6" strokeLinecap="round">
+              {/* Upper Horizontal & Diagonal Girders */}
+              <line x1="-14" y1="-2" x2="-18" y2="-2" />
+              <line x1="-14" y1="-2" x2="-18" y2="5" />
+              <line x1="-14" y1="5" x2="-18" y2="-2" />
+              <line x1="14" y1="-2" x2="18" y2="-2" />
+              <line x1="14" y1="-2" x2="18" y2="5" />
+              <line x1="14" y1="5" x2="18" y2="-2" />
+              {/* Lower Diagonal Girders (angled to booms, no horizontal bar at gear root) */}
+              <line x1="-14" y1="5" x2="-18" y2="11" />
+              <line x1="14" y1="5" x2="18" y2="11" />
             </g>
-            <rect x="-30" y="29" width="9" height="3.5" rx="1" fill="#334155" stroke="#38bdf8" strokeWidth="1.2" />
-            <rect x="21" y="29" width="9" height="3.5" rx="1" fill="#334155" stroke="#38bdf8" strokeWidth="1.2" />
 
-            {/* Side Booms — steel gradient + seams + rivets */}
-            <rect x="-25" y="-8" width="8" height="24" rx="2" fill="url(#steel-boom)" stroke="#38bdf8" strokeWidth="1.3" />
-            <rect x="17" y="-8" width="8" height="24" rx="2" fill="url(#steel-boom)" stroke="#38bdf8" strokeWidth="1.3" />
-            <g stroke="#7dd3fc" strokeWidth="0.7">
-              <line x1="-22" y1="-8" x2="-22" y2="16" />
-              <line x1="22" y1="-8" x2="22" y2="16" />
+            {/* 2. Telescopic Articulated Landing Gear */}
+            {/* Outer Oleo Cylinders */}
+            <g stroke="#64748b" strokeWidth="2.4" strokeLinecap="round">
+              <line x1="-15" y1="10" x2="-27" y2="28" />
+              <line x1="15" y1="10" x2="27" y2="28" />
             </g>
-            <g fill="#38bdf8">
-              <circle cx="-22" cy="-4" r="0.6" />
-              <circle cx="-22" cy="4" r="0.6" />
-              <circle cx="-22" cy="10" r="0.6" />
-              <circle cx="22" cy="-4" r="0.6" />
-              <circle cx="22" cy="4" r="0.6" />
-              <circle cx="22" cy="10" r="0.6" />
+            {/* Chrome Piston Shafts */}
+            <g stroke="#e2e8f0" strokeWidth="1.6" strokeLinecap="round">
+              <line x1="-22" y1="19" x2="-27" y2="28" />
+              <line x1="22" y1="19" x2="27" y2="28" />
             </g>
-            <circle cx="-10" cy="8" r="4.5" fill="url(#xenon-tank-grad)" stroke="#0284c7" strokeWidth="1" />
-            <circle cx="10" cy="8" r="4.5" fill="url(#xenon-tank-grad)" stroke="#0284c7" strokeWidth="1" />
+            {/* Articulated Knuckle Joints */}
+            <circle cx="-27" cy="28" r="2.2" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.1" />
+            <circle cx="27" cy="28" r="2.2" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.1" />
+            {/* Heavy-Duty Surveyor Footpads */}
+            <rect x="-33" y="27" width="12" height="3.6" rx="1.2" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.3" />
+            <rect x="21" y="27" width="12" height="3.6" rx="1.2" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.3" />
+            <line x1="-30" y1="30" x2="-24" y2="30" stroke="#0f172a" strokeWidth="0.9" />
+            <line x1="24" y1="30" x2="30" y2="30" stroke="#0f172a" strokeWidth="0.9" />
+            <circle cx="-27" cy="28.8" r="0.9" fill="#38bdf8" />
+            <circle cx="27" cy="28.8" r="0.9" fill="#38bdf8" />
 
-            {/* Central Fuselage */}
-            <polygon points="0,-32 14,-12 14,18 -14,18 -14,-12" fill="url(#steel-boom)" stroke="#38bdf8" strokeWidth="1.6" />
-            <ellipse cx="0" cy="-14" rx="7" ry="5" fill="url(#visor-grad-orion)" stroke="#bae6fd" strokeWidth="1.2" />
-
-            {/* Heat-sink array — radiator fins behind fuselage */}
-            <g stroke="#38bdf8" strokeWidth="0.9" fill="#0ea5e9" opacity="0.85">
-              <rect x="-14" y="-6" width="2" height="3" rx="0.3" />
-              <rect x="-14" y="-2" width="2" height="3" rx="0.3" />
-              <rect x="-14" y="2" width="2" height="3" rx="0.3" />
-              <rect x="-14" y="6" width="2" height="3" rx="0.3" />
-              <rect x="-14" y="10" width="2" height="3" rx="0.3" />
-              <rect x="12" y="-6" width="2" height="3" rx="0.3" />
-              <rect x="12" y="-2" width="2" height="3" rx="0.3" />
-              <rect x="12" y="2" width="2" height="3" rx="0.3" />
-              <rect x="12" y="6" width="2" height="3" rx="0.3" />
-              <rect x="12" y="10" width="2" height="3" rx="0.3" />
+            {/* 3. Port Science Boom (Subsurface Radar / High-Gain Parabolic Dish) */}
+            {/* Outer Radiator Fins */}
+            <g stroke="#0284c7" strokeWidth="0.8">
+              <line x1="-26" y1="-3" x2="-29" y2="-3" />
+              <line x1="-26" y1="3" x2="-29" y2="3" />
+              <line x1="-26" y1="9" x2="-29" y2="9" />
             </g>
-            <line x1="-12" y1="-2" x2="10" y2="-2" stroke="#bae6fd" strokeWidth="0.7" />
+            {/* Port Boom Structural Housing */}
+            <rect x="-26" y="-8" width="8" height="24" rx="2" fill="url(#titanium-plate)" stroke="#38bdf8" strokeWidth="1.4" />
+            {/* Panel Seams */}
+            <g stroke="#0284c7" strokeWidth="0.7">
+              <line x1="-26" y1="-1" x2="-18" y2="-1" />
+              <line x1="-26" y1="6" x2="-18" y2="6" />
+              <line x1="-26" y1="12" x2="-18" y2="12" />
+            </g>
+            {/* Precision Micro-Rivets */}
+            <g fill="#bae6fd">
+              <circle cx="-24.5" cy="-5" r="0.65" />
+              <circle cx="-19.5" cy="-5" r="0.65" />
+              <circle cx="-24.5" cy="2.5" r="0.65" />
+              <circle cx="-19.5" cy="2.5" r="0.65" />
+              <circle cx="-24.5" cy="9" r="0.65" />
+              <circle cx="-19.5" cy="9" r="0.65" />
+              <circle cx="-24.5" cy="14" r="0.65" />
+              <circle cx="-19.5" cy="14" r="0.65" />
+            </g>
+            {/* High-Gain Parabolic Deep Space Dish */}
+            <line x1="-22" y1="-8" x2="-22" y2="-16" stroke="#94a3b8" strokeWidth="1.6" />
+            <circle cx="-22" cy="-8" r="1.8" fill="#0f172a" stroke="#38bdf8" strokeWidth="0.9" />
+            {/* Parabolic Reflector Path */}
+            <path d="M -26.5,-14.5 Q -22,-22.5 -17.5,-14.5" fill="rgba(186, 230, 253, 0.25)" stroke="#38bdf8" strokeWidth="1.8" />
+            {/* Feed Horn Struts & Emitter */}
+            <line x1="-26" y1="-14.5" x2="-22" y2="-21" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="-18" y1="-14.5" x2="-22" y2="-21" stroke="#94a3b8" strokeWidth="0.8" />
+            <circle cx="-22" cy="-21" r="1.3" fill="#38bdf8" />
+            <circle cx="-22" cy="-21" r="0.6" fill="#ffffff" />
+
+            {/* 4. Starboard Science Boom (Multi-Spectral Spectrometer & Magnetometer) */}
+            {/* Outer Radiator Fins */}
+            <g stroke="#0284c7" strokeWidth="0.8">
+              <line x1="26" y1="-3" x2="29" y2="-3" />
+              <line x1="26" y1="3" x2="29" y2="3" />
+              <line x1="26" y1="9" x2="29" y2="9" />
+            </g>
+            {/* Starboard Boom Structural Housing */}
+            <rect x="18" y="-8" width="8" height="24" rx="2" fill="url(#titanium-plate)" stroke="#38bdf8" strokeWidth="1.4" />
+            {/* Panel Seams */}
+            <g stroke="#0284c7" strokeWidth="0.7">
+              <line x1="18" y1="-1" x2="26" y2="-1" />
+              <line x1="18" y1="6" x2="26" y2="6" />
+              <line x1="18" y1="12" x2="26" y2="12" />
+            </g>
+            {/* Precision Micro-Rivets */}
+            <g fill="#bae6fd">
+              <circle cx="19.5" cy="-5" r="0.65" />
+              <circle cx="24.5" cy="-5" r="0.65" />
+              <circle cx="19.5" cy="2.5" r="0.65" />
+              <circle cx="24.5" cy="2.5" r="0.65" />
+              <circle cx="19.5" cy="9" r="0.65" />
+              <circle cx="24.5" cy="9" r="0.65" />
+              <circle cx="19.5" cy="14" r="0.65" />
+              <circle cx="24.5" cy="14" r="0.65" />
+            </g>
+            {/* Spectrometer Sensor Turret & Multi-Spectral Lens */}
+            <circle cx="22" cy="-10" r="4.2" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.2" />
+            <circle cx="22" cy="-10" r="3.2" fill="url(#xenon-tank-grad)" />
+            <circle cx="21" cy="-11.2" r="0.9" fill="#ffffff" opacity="0.85" />
+            {/* Forward Magnetometer / RF Sensor Mast */}
+            <line x1="22" y1="-14" x2="22" y2="-26" stroke="#94a3b8" strokeWidth="1.4" />
+            <line x1="19" y1="-26" x2="25" y2="-26" stroke="#38bdf8" strokeWidth="0.9" />
+            <line x1="22" y1="-23" x2="22" y2="-29" stroke="#38bdf8" strokeWidth="0.9" />
+            <circle cx="22" cy="-26" r="1.2" fill="#38bdf8" />
+
+            {/* 5. Spherical Xenon Propellant Tanks */}
+            <circle cx="-10" cy="8" r="5.5" fill="url(#xenon-tank-grad)" stroke="#0284c7" strokeWidth="1.1" />
+            <path d="M -15,7.2 A 5.5 5.5 0 0 1 -5,7.2" fill="none" stroke="#0f172a" strokeWidth="1.2" />
+            <rect x="-11" y="7.2" width="2" height="1.6" fill="#38bdf8" />
+
+            <circle cx="10" cy="8" r="5.5" fill="url(#xenon-tank-grad)" stroke="#0284c7" strokeWidth="1.1" />
+            <path d="M 5,7.2 A 5.5 5.5 0 0 1 15,7.2" fill="none" stroke="#0f172a" strokeWidth="1.2" />
+            <rect x="9" y="7.2" width="2" height="1.6" fill="#38bdf8" />
+
+            <line x1="-5.5" y1="9" x2="-2" y2="12" stroke="#38bdf8" strokeWidth="0.8" />
+            <line x1="5.5" y1="9" x2="2" y2="12" stroke="#38bdf8" strokeWidth="0.8" />
+
+            {/* 6. Main Surveyor Command Fuselage */}
+            <polygon
+              points="0,-34 14,-14 15,17 11,18 7,18 0,13 -7,18 -11,18 -15,17 -14,-14"
+              fill="url(#hull-grad-orion)"
+              stroke="#38bdf8"
+              strokeWidth="1.7"
+            />
+            {/* Longitudinal Keel Seam & Structural Bulkhead Lines */}
+            <g stroke="#0284c7" strokeWidth="0.8">
+              <line x1="0" y1="-34" x2="0" y2="13" />
+              <line x1="-11" y1="-8" x2="11" y2="-8" />
+            </g>
+            {/* Hull Facet Lines */}
+            <g stroke="#38bdf8" strokeWidth="0.8" opacity="0.45">
+              <polyline points="0,-34 -8,-14 -8,18" />
+              <polyline points="0,-34 8,-14 8,18" />
+            </g>
+            {/* Fuselage Rivet Detailing */}
+            <g fill="#bae6fd">
+              <circle cx="-13" cy="-22" r="0.65" />
+              <circle cx="13" cy="-22" r="0.65" />
+              <circle cx="-13" cy="-16" r="0.65" />
+              <circle cx="13" cy="-16" r="0.65" />
+              <circle cx="-13" cy="-6" r="0.65" />
+              <circle cx="13" cy="-6" r="0.65" />
+              <circle cx="-13" cy="-1" r="0.65" />
+              <circle cx="13" cy="-1" r="0.65" />
+              <circle cx="-13" cy="5" r="0.65" />
+              <circle cx="13" cy="5" r="0.65" />
+              <circle cx="-13" cy="8" r="0.65" />
+              <circle cx="13" cy="8" r="0.65" />
+              <circle cx="-13" cy="14" r="0.65" />
+              <circle cx="13" cy="14" r="0.65" />
+            </g>
+
+            {/* 7. Panoramic Surveyor Visor & Cupola */}
+            <ellipse cx="0" cy="-14" rx="7.5" ry="5.5" fill="url(#visor-grad-orion)" stroke="#bae6fd" strokeWidth="1.3" />
+            {/* Window Mullions */}
+            <line x1="0" y1="-19.5" x2="0" y2="-8.5" stroke="#0f172a" strokeWidth="0.9" />
+            <line x1="-6.5" y1="-14" x2="6.5" y2="-14" stroke="#0f172a" strokeWidth="0.9" />
+            {/* Visor Frame Perimeter Rivets */}
+            <g fill="#e0f2fe">
+              <circle cx="-6" cy="-19" r="0.55" />
+              <circle cx="-3" cy="-19" r="0.55" />
+              <circle cx="0" cy="-19" r="0.55" />
+              <circle cx="3" cy="-19" r="0.55" />
+              <circle cx="6" cy="-19" r="0.55" />
+              <circle cx="-6" cy="-9" r="0.55" />
+              <circle cx="-3" cy="-9" r="0.55" />
+              <circle cx="0" cy="-9" r="0.55" />
+              <circle cx="3" cy="-9" r="0.55" />
+              <circle cx="6" cy="-9" r="0.55" />
+            </g>
+            {/* Glass Specular Gloss Arc */}
+            <ellipse cx="-2.8" cy="-16" rx="2.8" ry="1.4" transform="rotate(-15 -2.8 -16)" fill="#ffffff" opacity="0.85" />
+
+            {/* 8. Dual MPD Vector Thruster Nozzles */}
+            {/* Left Nozzle */}
+            <polygon points="-13.5,18 -7.5,18 -6,24 -15,24" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.1" />
+            <ellipse cx="-10.5" cy="23.5" rx="3.5" ry="1.2" fill="#38bdf8" />
+            <ellipse cx="-10.5" cy="23.5" rx="1.8" ry="0.7" fill="#ffffff" />
+            <line x1="-14.5" y1="18" x2="-14.5" y2="22" stroke="#64748b" strokeWidth="0.9" />
+            {/* Right Nozzle */}
+            <polygon points="7.5,18 13.5,18 15,24 6,24" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.1" />
+            <ellipse cx="10.5" cy="23.5" rx="3.5" ry="1.2" fill="#38bdf8" />
+            <ellipse cx="10.5" cy="23.5" rx="1.8" ry="0.7" fill="#ffffff" />
+            <line x1="14.5" y1="18" x2="14.5" y2="22" stroke="#64748b" strokeWidth="0.9" />
           </g>
         )}
 
