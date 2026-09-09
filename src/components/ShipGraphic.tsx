@@ -76,6 +76,10 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <stop offset="50%" stopColor="#334155" />
             <stop offset="100%" stopColor="#0f172a" />
           </linearGradient>
+          <linearGradient id="armor-plate" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#047857"/><stop offset="50%" stopColor="#064e3b"/><stop offset="100%" stopColor="#022c22"/></linearGradient>
+          <linearGradient id="stealth-plate" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#1e1b4b"/><stop offset="50%" stopColor="#090d16"/><stop offset="100%" stopColor="#1e1b4b"/></linearGradient>
+          <linearGradient id="indigo-boom" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#1e175b"/><stop offset="50%" stopColor="#3b0764"/><stop offset="100%" stopColor="#1e175b"/></linearGradient>
+          <linearGradient id="steel-boom" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#334155"/><stop offset="50%" stopColor="#1e293b"/><stop offset="100%" stopColor="#0f172a"/></linearGradient>
 
           {/* Cockpit Canopy Shader */}
           <radialGradient
@@ -283,7 +287,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <ellipse cx="33" cy="28" rx="6" ry="2.5" fill="#34d399" stroke="#064e3b" strokeWidth="1.3" />
 
             {/* 2. Reinforced Hexagonal Armored Hull — emerald gradient + seams + rivets */}
-            <polygon points="0,-25 25,-9 25,14 0,23 -25,14 -25,-9" fill="url(#titanium-plate)" stroke="#10b981" strokeWidth="2.4" />
+            <polygon points="0,-25 25,-9 25,14 0,23 -25,14 -25,-9" fill="url(#armor-plate)" stroke="#10b981" strokeWidth="2.4" />
             <g stroke="#34d399" strokeWidth="0.9">
               <line x1="0" y1="-25" x2="0" y2="23" />
               <line x1="-25" y1="-9" x2="25" y2="14" />
@@ -346,7 +350,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             </g>
 
             {/* 3. Central Xenon Fuel Sphere — gradient + seam + rivets */}
-            <circle cx="0" cy="5" r="7" fill="url(#titanium-plate)" stroke="#a855f7" strokeWidth="1.4" />
+            <circle cx="0" cy="5" r="7" fill="url(#stealth-plate)" stroke="#a855f7" strokeWidth="1.4" />
             <g stroke="#f0abfc" strokeWidth="0.7">
               <line x1="0" y1="-2" x2="0" y2="12" />
             </g>
@@ -795,7 +799,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <rect x="20" y="28" width="8" height="3" rx="1" fill="#1e1b4b" stroke="#a855f7" strokeWidth="1" />
 
             {/* Stealth Diamond Hull — purple gradient + seams + rivets */}
-            <polygon points="0,-32 24,0 18,18 -18,18 -24,0" fill="url(#titanium-plate)" stroke="#a855f7" strokeWidth="1.6" />
+            <polygon points="0,-32 24,0 18,18 -18,18 -24,0" fill="url(#stealth-plate)" stroke="#a855f7" strokeWidth="1.6" />
             <g stroke="#6b21a8" strokeWidth="1.0">
               <line x1="0" y1="-32" x2="0" y2="18" />
               <line x1="-24" y1="0" x2="0" y2="6" />
