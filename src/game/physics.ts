@@ -408,6 +408,8 @@ export function updatePhysics(
       settleProgress: nextProgress,
       isLanded: nextProgress >= 1.0,
       hasWon: nextProgress >= 1.0,
+      baseDistance: 0,
+      approachBaseFactor: 1.0,
     };
 
     return nextShip;
@@ -549,6 +551,32 @@ export function updatePhysics(
   gearSpringVel += springAcc * safeDt;
   gearComp = Math.max(0, Math.min(1.0, gearComp + gearSpringVel * safeDt));
 
+  // Proximity to landing/launch bases & platforms for approach spotlights
+  let minBaseDist = 99999;
+  if (world.landingPad) {
+    const d = Math.hypot(newPosX - world.landingPad.center.x, newPosY - world.landingPad.center.y);
+    if (d < minBaseDist) minBaseDist = d;
+  }
+  if (world.launchPad) {
+    const d = Math.hypot(newPosX - world.launchPad.center.x, newPosY - world.launchPad.center.y);
+    if (d < minBaseDist) minBaseDist = d;
+  }
+  if (world.secondaryPads) {
+    for (const sp of world.secondaryPads) {
+      const d = Math.hypot(newPosX - sp.center.x, newPosY - sp.y);
+      if (d < minBaseDist) minBaseDist = d;
+    }
+  }
+  if (world.cargoPlatforms) {
+    for (const cp of world.cargoPlatforms) {
+      const cX = cp.center?.x ?? ((cp.x1 !== undefined && cp.x2 !== undefined) ? (cp.x1 + cp.x2) / 2 : (cp.pos?.x ?? 0));
+      const cY = cp.center?.y ?? (cp.y ?? cp.pos?.y ?? 0);
+      const d = Math.hypot(newPosX - cX, newPosY - cY);
+      if (d < minBaseDist) minBaseDist = d;
+    }
+  }
+  const approachBaseFactor = Math.max(0, Math.min(1.0, (340 - minBaseDist) / 220));
+
   let updatedShip: ShipState = {
     ...ship,
     pos: { x: newPosX, y: newPosY },
@@ -564,6 +592,8 @@ export function updatePhysics(
     thrusterDegraded,
     empDisabledTimer,
     isRepairing,
+    baseDistance: minBaseDist,
+    approachBaseFactor,
   };
 
   // Perimeter Solid Cliff Wall Collisions

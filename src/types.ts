@@ -338,6 +338,8 @@ export interface ShipState {
   health?: number;
   maxHealth?: number;
   altitude?: number;
+  baseDistance?: number;
+  approachBaseFactor?: number;
   isLanded?: boolean;
   isCrashed?: boolean;
   crashReason?: string;
