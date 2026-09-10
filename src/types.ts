@@ -266,7 +266,9 @@ export type ShipModelId =
   | 'phoenix'
   | 'nautilus'
   | 'mantis'
-  | 'colossus';
+  | 'colossus'
+  | 'nutcracker'
+  | 'eagle';
 
 export interface ShipLocalPoints {
   [key: string]: Vector2D;

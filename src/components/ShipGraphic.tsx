@@ -11,22 +11,32 @@ interface ShipGraphicProps {
 
 export const ShipGraphic: React.FC<ShipGraphicProps> = ({
   ship,
-  size = 56,
+  size,
   className = '',
   showThrusters = false,
   showGlow = true,
 }) => {
   const modelId = ship.id;
+  const isEagle = modelId === 'eagle';
+  const viewBox = isEagle ? '-72 -24 144 52' : '-40 -40 80 80';
+
+  const effectiveSize = size === undefined && !className ? 56 : size;
+  const sizeStyle = effectiveSize
+    ? {
+        width: effectiveSize,
+        height: isEagle ? Math.round(effectiveSize * (52 / 144)) : effectiveSize,
+      }
+    : undefined;
 
   return (
     <div
       className={`relative flex items-center justify-center shrink-0 select-none ${className}`}
-      style={{ width: size, height: size }}
+      style={sizeStyle}
     >
       {/* Background Soft Thruster/Accent Glow */}
       {showGlow && (
         <div
-          className="absolute inset-0 rounded-xl blur-md opacity-40 pointer-events-none transition-all duration-300 group-hover:opacity-80 group-hover:scale-110"
+          className="absolute inset-0 rounded-2xl blur-lg opacity-40 pointer-events-none transition-all duration-300 group-hover:opacity-80 group-hover:scale-110"
           style={{
             background: `radial-gradient(circle, ${ship.accentColor} 0%, rgba(0,0,0,0) 70%)`,
           }}
@@ -35,8 +45,8 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
 
       {/* High-Fidelity SVG Craft Render */}
       <svg
-        viewBox="-40 -40 80 80"
-        className="w-full h-full drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)] relative z-10 overflow-visible"
+        viewBox={viewBox}
+        className="w-full h-full drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)] relative z-10 overflow-visible"
       >
         <defs>
           {/* Hull Shaders */}
@@ -136,6 +146,92 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <stop offset="25%" stopColor="#bae6fd" stopOpacity="0.45" />
             <stop offset="70%" stopColor="#06b6d4" stopOpacity="0.18" />
             <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.0" />
+          </linearGradient>
+
+          {/* Nutcracker Miner Shaders */}
+          <linearGradient id="nutcracker-drill" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#5a493d" />
+            <stop offset="35%" stopColor="#756050" />
+            <stop offset="75%" stopColor="#45372d" />
+            <stop offset="100%" stopColor="#2e241c" />
+          </linearGradient>
+
+          <linearGradient id="nutcracker-collar" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#caa66e" />
+            <stop offset="50%" stopColor="#ebd19d" />
+            <stop offset="100%" stopColor="#8a6b3b" />
+          </linearGradient>
+
+          <linearGradient id="nutcracker-chisel" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#8f7762" />
+            <stop offset="100%" stopColor="#5c4837" />
+          </linearGradient>
+
+          <linearGradient id="nutcracker-spotlight" x1="0%" y1="0%" x2="100%" y2="70%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.7" />
+            <stop offset="30%" stopColor="#38bdf8" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.0" />
+          </linearGradient>
+
+          <linearGradient id="nutcracker-glass" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#e0f2fe" />
+            <stop offset="35%" stopColor="#38bdf8" />
+            <stop offset="100%" stopColor="#0284c7" />
+          </linearGradient>
+
+          {/* Nautilus Vector Shaders */}
+          <linearGradient id="nautilus-hull" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="60%" stopColor="#f1f5f9" />
+            <stop offset="100%" stopColor="#e2e8f0" />
+          </linearGradient>
+
+          <linearGradient id="nautilus-visor" x1="0%" y1="0%" x2="100%" y2="60%">
+            <stop offset="0%" stopColor="#fef08a" />
+            <stop offset="50%" stopColor="#facc15" />
+            <stop offset="100%" stopColor="#eab308" />
+          </linearGradient>
+
+          <linearGradient id="nautilus-cowl" x1="0%" y1="0%" x2="100%" y2="80%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="40%" stopColor="#f8fafc" />
+            <stop offset="100%" stopColor="#cbd5e1" />
+          </linearGradient>
+
+          <linearGradient id="nautilus-engine" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="35%" stopColor="#f1f5f9" />
+            <stop offset="70%" stopColor="#e2e8f0" />
+            <stop offset="100%" stopColor="#94a3b8" />
+          </linearGradient>
+
+          {/* Eagle Transporter Shaders */}
+          <linearGradient id="eagle-pod" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="30%" stopColor="#f8fafc" />
+            <stop offset="70%" stopColor="#f1f5f9" />
+            <stop offset="100%" stopColor="#cbd5e1" />
+          </linearGradient>
+
+          <linearGradient id="eagle-bell" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#1e293b" />
+            <stop offset="35%" stopColor="#334155" />
+            <stop offset="70%" stopColor="#475569" />
+            <stop offset="100%" stopColor="#1e293b" />
+          </linearGradient>
+
+          <radialGradient id="eagle-tank" cx="30%" cy="30%" r="70%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="45%" stopColor="#f1f5f9" />
+            <stop offset="80%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#64748b" />
+          </radialGradient>
+
+          <linearGradient id="eagle-beak" x1="0%" y1="0%" x2="100%" y2="50%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="40%" stopColor="#f8fafc" />
+            <stop offset="80%" stopColor="#e2e8f0" />
+            <stop offset="100%" stopColor="#cbd5e1" />
           </linearGradient>
 
           {/* Cockpit Canopy Shader */}
@@ -1926,19 +2022,845 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
           </g>
         )}
 
+        {/* ========================================================= */}
+        {/* MODEL: NUTCRACKER MINER (EX-920 Heavy Excavator Carrier)  */}
+        {/* ========================================================= */}
+        {modelId === 'nutcracker' && (
+          <g>
+            {/* 1. Forward Spotlight Light Cone */}
+            <polygon
+              points="44,-33 65,5 55,15 44,-31"
+              fill="url(#nutcracker-spotlight)"
+            />
+
+            {/* 2. Five Articulated Excavator Suspension Footpads (Strictly Isolated Subpaths) */}
+            {/* Footpad 1: Rear-Outer (x: -37) */}
+            <circle cx="-37" cy="15" r="4.5" fill="#bfa06a" stroke="#4a3826" strokeWidth="1.6" />
+            <line x1="-39.5" y1="13" x2="-39.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <line x1="-34.5" y1="13" x2="-34.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <rect x="-41" y="18" width="8" height="8" rx="1.5" fill="#b84538" stroke="#5c1910" strokeWidth="1.4" />
+            <line x1="-37" y1="24" x2="-37" y2="31" stroke="#cbd5e1" strokeWidth="2.4" strokeLinecap="round" />
+            <polygon points="-42.5,30.5 -31.5,30.5 -30,34 -44,34" fill="#9c8265" stroke="#453524" strokeWidth="1.5" />
+            <line x1="-39" y1="31" x2="-39" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <line x1="-35" y1="31" x2="-35" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <ellipse cx="-37" cy="30.5" rx="3.2" ry="1.5" fill="#d4b276" />
+
+            {/* Footpad 2: Rear-Inner (x: -23) */}
+            <circle cx="-23" cy="15" r="4.5" fill="#bfa06a" stroke="#4a3826" strokeWidth="1.6" />
+            <line x1="-25.5" y1="13" x2="-25.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <line x1="-20.5" y1="13" x2="-20.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <rect x="-27" y="18" width="8" height="8" rx="1.5" fill="#b84538" stroke="#5c1910" strokeWidth="1.4" />
+            <line x1="-23" y1="24" x2="-23" y2="31" stroke="#cbd5e1" strokeWidth="2.4" strokeLinecap="round" />
+            <polygon points="-28.5,30.5 -17.5,30.5 -16,34 -30,34" fill="#9c8265" stroke="#453524" strokeWidth="1.5" />
+            <line x1="-25" y1="31" x2="-25" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <line x1="-21" y1="31" x2="-21" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <ellipse cx="-23" cy="30.5" rx="3.2" ry="1.5" fill="#d4b276" />
+
+            {/* Footpad 3: Forward-Inner (x: 11) */}
+            <circle cx="11" cy="15" r="4.5" fill="#bfa06a" stroke="#4a3826" strokeWidth="1.6" />
+            <line x1="8.5" y1="13" x2="8.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <line x1="13.5" y1="13" x2="13.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <rect x="7" y="18" width="8" height="8" rx="1.5" fill="#b84538" stroke="#5c1910" strokeWidth="1.4" />
+            <line x1="11" y1="24" x2="11" y2="31" stroke="#cbd5e1" strokeWidth="2.4" strokeLinecap="round" />
+            <polygon points="5.5,30.5 16.5,30.5 18,34 4,34" fill="#9c8265" stroke="#453524" strokeWidth="1.5" />
+            <line x1="9" y1="31" x2="9" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <line x1="13" y1="31" x2="13" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <ellipse cx="11" cy="30.5" rx="3.2" ry="1.5" fill="#d4b276" />
+
+            {/* Footpad 4: Forward-Mid (x: 23) */}
+            <circle cx="23" cy="15" r="4.5" fill="#bfa06a" stroke="#4a3826" strokeWidth="1.6" />
+            <line x1="20.5" y1="13" x2="20.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <line x1="25.5" y1="13" x2="25.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <rect x="19" y="18" width="8" height="8" rx="1.5" fill="#b84538" stroke="#5c1910" strokeWidth="1.4" />
+            <line x1="23" y1="24" x2="23" y2="31" stroke="#cbd5e1" strokeWidth="2.4" strokeLinecap="round" />
+            <polygon points="17.5,30.5 28.5,30.5 30,34 16,34" fill="#9c8265" stroke="#453524" strokeWidth="1.5" />
+            <line x1="21" y1="31" x2="21" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <line x1="25" y1="31" x2="25" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <ellipse cx="23" cy="30.5" rx="3.2" ry="1.5" fill="#d4b276" />
+
+            {/* Footpad 5: Forward-Prow (x: 37) */}
+            <circle cx="37" cy="15" r="4.5" fill="#bfa06a" stroke="#4a3826" strokeWidth="1.6" />
+            <line x1="34.5" y1="13" x2="34.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <line x1="39.5" y1="13" x2="39.5" y2="17" stroke="#6e5334" strokeWidth="1.0" />
+            <rect x="33" y="18" width="8" height="8" rx="1.5" fill="#b84538" stroke="#5c1910" strokeWidth="1.4" />
+            <line x1="37" y1="24" x2="37" y2="31" stroke="#cbd5e1" strokeWidth="2.4" strokeLinecap="round" />
+            <polygon points="31.5,30.5 42.5,30.5 44,34 30,34" fill="#9c8265" stroke="#453524" strokeWidth="1.5" />
+            <line x1="35" y1="31" x2="35" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <line x1="39" y1="31" x2="39" y2="34" stroke="#261f17" strokeWidth="1.2" />
+            <ellipse cx="37" cy="30.5" rx="3.2" ry="1.5" fill="#d4b276" />
+
+            {/* 3. Aft Armored Hull Block (X: -42 to -11, Y: -20 to 16) */}
+            <polygon
+              points="-42,-10 -35,-20 -11,-20 -11,16 -42,16"
+              fill="#b84538"
+              stroke="#5c1910"
+              strokeWidth="2.0"
+            />
+            {/* Aft Armor Seam */}
+            <path d="M-34 -18 L-13 -18 L-13 14" fill="none" stroke="#d96c5e" strokeWidth="1.0" />
+            {/* Aft Rivets */}
+            <circle cx="-33" cy="-16" r="0.9" fill="#64748b" />
+            <circle cx="-14" cy="-16" r="0.9" fill="#64748b" />
+            <circle cx="-14" cy="12" r="0.9" fill="#64748b" />
+            <circle cx="-39" cy="12" r="0.9" fill="#64748b" />
+            {/* Aft Louvers */}
+            <line x1="-24" y1="7" x2="-20" y2="11" stroke="#45120b" strokeWidth="1.4" />
+            <line x1="-21" y1="7" x2="-17" y2="11" stroke="#45120b" strokeWidth="1.4" />
+            <line x1="-18" y1="7" x2="-14" y2="11" stroke="#45120b" strokeWidth="1.4" />
+            <line x1="-15" y1="7" x2="-11" y2="11" stroke="#45120b" strokeWidth="1.4" />
+
+            {/* 4. Rock-Crusher Drill Arm ("Nutcracker", Aft-Mounted) */}
+            {/* Pivot Mount Bracket */}
+            <rect x="-44" y="-26" width="8" height="10" rx="2" fill="#4a3c32" stroke="#261f1a" strokeWidth="1.8" />
+            <circle cx="-40" cy="-21" r="2.5" fill="#d4b276" stroke="#6e5334" strokeWidth="1.2" />
+
+            {/* Angled Cylinder Body & Chisel Head */}
+            <g transform="translate(-40, -21) rotate(-14)">
+              {/* Cylinder Barrel */}
+              <rect x="-8" y="-12" width="16" height="26" rx="2" fill="url(#nutcracker-drill)" stroke="#261f1a" strokeWidth="1.8" />
+              <rect x="-5" y="-6" width="10" height="5" fill="#261f1a" />
+              <rect x="-3" y="-4" width="6" height="1.5" fill="#38bdf8" />
+
+              {/* Fluted Collar */}
+              <rect x="-9" y="14" width="18" height="7" rx="1" fill="url(#nutcracker-collar)" stroke="#5a4422" strokeWidth="1.6" />
+              <line x1="-6" y1="14" x2="-6" y2="21" stroke="#5a4422" strokeWidth="1.0" />
+              <line x1="-2" y1="14" x2="-2" y2="21" stroke="#5a4422" strokeWidth="1.0" />
+              <line x1="2" y1="14" x2="2" y2="21" stroke="#5a4422" strokeWidth="1.0" />
+              <line x1="6" y1="14" x2="6" y2="21" stroke="#5a4422" strokeWidth="1.0" />
+
+              {/* Faceted Chisel Head */}
+              <polygon points="-8,21 0,37 -2,37 -9,27" fill="#5c4837" stroke="#261f1a" strokeWidth="1.4" />
+              <polygon points="-8,21 8,21 0,37" fill="url(#nutcracker-chisel)" stroke="#261f1a" strokeWidth="1.4" />
+              <line x1="0" y1="21" x2="0" y2="37" stroke="#e8dccb" strokeWidth="1.2" />
+              <polygon points="-2,37 0,39 2,37" fill="#cbd5e1" />
+            </g>
+            {/* Hydraulic Line */}
+            <path d="M-33 -19 Q-39 -28 -44 -20" fill="none" stroke="#eab308" strokeWidth="1.8" />
+
+            {/* 5. Center Recessed Spine & Underslung Rover Bay Pod */}
+            {/* Recessed Backbone */}
+            <rect x="-11" y="-16" width="22" height="10" fill="#261f1a" stroke="#4a3c32" strokeWidth="1.6" />
+            <line x1="-9" y1="-16" x2="-4" y2="-6" stroke="#ca8a04" strokeWidth="1.4" />
+            <line x1="-4" y1="-16" x2="1" y2="-6" stroke="#ca8a04" strokeWidth="1.4" />
+            <line x1="1" y1="-16" x2="6" y2="-6" stroke="#ca8a04" strokeWidth="1.4" />
+
+            {/* Two Thick Yellow Feeder Hoses */}
+            <path d="M-6 -16 C-6 -11 -4 -9 -4 -6" fill="none" stroke="#ca8a04" strokeWidth="3.2" />
+            <path d="M-6 -16 C-6 -11 -4 -9 -4 -6" fill="none" stroke="#fde047" strokeWidth="1.8" />
+            <path d="M4 -16 C4 -11 2 -9 2 -6" fill="none" stroke="#ca8a04" strokeWidth="3.2" />
+            <path d="M4 -16 C4 -11 2 -9 2 -6" fill="none" stroke="#fde047" strokeWidth="1.8" />
+
+            {/* Underslung Rover Bay Pod */}
+            <rect x="-10" y="-6" width="20" height="22" rx="2" fill="#b84538" stroke="#5c1910" strokeWidth="1.8" />
+            {/* Status Visor */}
+            <rect x="-6" y="-2" width="12" height="4" fill="#082f49" />
+            <rect x="-5" y="-1" width="10" height="2" fill="#38bdf8" />
+            <rect x="-2" y="-0.5" width="4" height="1" fill="#ffffff" />
+            {/* Interior Garage Hold */}
+            <rect x="-8" y="3" width="16" height="12" fill="#171310" />
+            <circle cx="-4" cy="4.5" r="1.2" fill="#fef08a" />
+            <circle cx="4" cy="4.5" r="1.2" fill="#fef08a" />
+            <line x1="-6" y1="14" x2="6" y2="14" stroke="#0284c7" strokeWidth="0.8" />
+
+            {/* Onboard Rover */}
+            <g transform="translate(0, 9)">
+              <rect x="-7" y="-3" width="14" height="6" rx="1" fill="#261f1a" stroke="#d4b276" strokeWidth="1.0" />
+              <rect x="1" y="-5" width="5" height="3" fill="#38bdf8" />
+              <rect x="-6" y="-5" width="5" height="2.5" fill="#ea580c" />
+              <circle cx="-4.5" cy="3.5" r="1.8" fill="#0f172a" />
+              <circle cx="0" cy="3.5" r="1.8" fill="#0f172a" />
+              <circle cx="4.5" cy="3.5" r="1.8" fill="#0f172a" />
+            </g>
+
+            {/* Lowering Hydraulic Bay Door / Ramp (Partially Lowered in Menu Preview) */}
+            <line x1="8" y1="11" x2="-5" y2="24" stroke="#cbd5e1" strokeWidth="1.8" />
+            <line x1="-10" y1="14" x2="-22" y2="29" stroke="#453524" strokeWidth="4.8" strokeLinecap="round" />
+            <line x1="-10" y1="14" x2="-22" y2="29" stroke="#d4b276" strokeWidth="2.2" />
+            <circle cx="-22" cy="29" r="2.0" fill="#facc15" />
+
+            {/* 6. Forward Command Superstructure & Bridge (X: 10 to 44) */}
+            <polygon
+              points="10,16 10,-20 24,-20 30,-30 44,-30 44,16"
+              fill="#b84538"
+              stroke="#5c1910"
+              strokeWidth="2.0"
+            />
+            {/* Forward Armor Seam */}
+            <path d="M12 14 L12 -18 L25 -18 L31 -28 L42 -28 L42 14" fill="none" stroke="#d96c5e" strokeWidth="1.0" />
+            <circle cx="12" cy="-16" r="0.9" fill="#64748b" />
+            <circle cx="26" cy="-16" r="0.9" fill="#64748b" />
+            <circle cx="42" cy="-26" r="0.9" fill="#64748b" />
+            <circle cx="42" cy="12" r="0.9" fill="#64748b" />
+            <circle cx="12" cy="12" r="0.9" fill="#64748b" />
+
+            {/* Panoramic Cyan Bridge Visor (3 Faceted Window Panes) */}
+            <polygon points="31,-29 43,-29 41,-23 31,-23" fill="#1c1815" />
+            {/* Pane 1 */}
+            <polygon points="32,-28.5 34.5,-28.5 34.5,-23.5 32,-23.5" fill="url(#nutcracker-glass)" />
+            <polygon points="32.4,-28 34.1,-28 34.1,-26.5 32.4,-27" fill="#ffffff" opacity="0.85" />
+            {/* Pane 2 */}
+            <polygon points="35.5,-28.5 38.5,-28.5 38.5,-23.5 35.5,-23.5" fill="url(#nutcracker-glass)" />
+            <polygon points="35.9,-28 38.1,-28 38.1,-26.5 35.9,-27" fill="#ffffff" opacity="0.85" />
+            {/* Pane 3 */}
+            <polygon points="39.5,-28.5 42.5,-28.5 41,-23.5 39.5,-23.5" fill="url(#nutcracker-glass)" />
+            <polygon points="39.9,-28 42.1,-28 41.5,-26.5 39.9,-27" fill="#ffffff" opacity="0.85" />
+
+            {/* Dual Diagonal Intake Louvers */}
+            <polygon points="17,-15 21,-11 19,-9 15,-13" fill="#261f1a" stroke="#e2e8f0" strokeWidth="1.2" />
+            <polygon points="21,-17 25,-13 23,-11 19,-15" fill="#261f1a" stroke="#e2e8f0" strokeWidth="1.2" />
+
+            {/* Lower Forward Louvers */}
+            <line x1="28" y1="8" x2="31" y2="11" stroke="#45120b" strokeWidth="1.4" />
+            <line x1="31" y1="8" x2="34" y2="11" stroke="#45120b" strokeWidth="1.4" />
+            <line x1="34" y1="8" x2="37" y2="11" stroke="#45120b" strokeWidth="1.4" />
+            <line x1="37" y1="8" x2="40" y2="11" stroke="#45120b" strokeWidth="1.4" />
+
+            {/* Rooftop Antenna Mast & Searchlight */}
+            <line x1="35" y1="-30" x2="35" y2="-42" stroke="#cbd5e1" strokeWidth="1.4" />
+            <circle cx="35" cy="-42.5" r="1.6" fill="#ef4444" />
+            <rect x="39" y="-36" width="5" height="6" rx="1" fill="#4a3c32" stroke="#261f1a" strokeWidth="1.2" />
+            <ellipse cx="44" cy="-33" rx="1.2" ry="2.2" fill="#ffffff" />
+
+            {/* 7. Heavy Propulsion Bells */}
+            {/* Aft Bells */}
+            <polygon points="-36,16 -26,16 -24,24 -38,24" fill="#1c1917" stroke="#4a3c32" strokeWidth="1.4" />
+            <line x1="-38" y1="24" x2="-24" y2="24" stroke="#ea580c" strokeWidth="1.8" />
+            {/* Forward Bells */}
+            <polygon points="24,16 36,16 38,24 22,24" fill="#1c1917" stroke="#4a3c32" strokeWidth="1.4" />
+            <line x1="22" y1="24" x2="38" y2="24" stroke="#ea580c" strokeWidth="1.8" />
+            {/* Throat Idle Glow */}
+            <ellipse cx="-31" cy="23" rx="5" ry="1.5" fill="#38bdf8" opacity="0.45" />
+            <ellipse cx="30" cy="23" rx="5" ry="1.5" fill="#38bdf8" opacity="0.45" />
+          </g>
+        )}
+
+        {/* ================================================================= */}
+        {/* NAUTILUS VECTOR SCOUT (Modular Tactical Lander & Spiral Bow)      */}
+        {/* ================================================================= */}
+        {modelId === 'nautilus' && (
+          <g>
+            {/* 1. Aft Propulsion Unit & 4 Aerospike Stabilizing Fins */}
+            {/* Upper Fin */}
+            <polygon
+              points="-32,-11 -46,-21 -48,-20 -38,-11"
+              fill="#334155"
+              stroke="#0f172a"
+              strokeWidth="1.4"
+            />
+            {/* Lower Fin */}
+            <polygon
+              points="-32,11 -46,21 -48,20 -38,11"
+              fill="#334155"
+              stroke="#0f172a"
+              strokeWidth="1.4"
+            />
+            {/* Lateral Fin Ribs */}
+            <polygon
+              points="-42,-2 -47,-3 -47,3 -42,2"
+              fill="#1e293b"
+              stroke="#0f172a"
+              strokeWidth="1.2"
+            />
+            {/* Neck Conduit */}
+            <rect
+              x="-24"
+              y="-7"
+              width="8"
+              height="14"
+              rx="1.5"
+              fill="#1e293b"
+              stroke="#0f172a"
+              strokeWidth="1.6"
+            />
+            <line x1="-21" y1="-7" x2="-21" y2="7" stroke="#475569" strokeWidth="1.0" />
+            <line x1="-18" y1="-7" x2="-18" y2="7" stroke="#475569" strokeWidth="1.0" />
+
+            {/* White Engine Housing Body */}
+            <rect
+              x="-42"
+              y="-11"
+              width="18"
+              height="22"
+              rx="2"
+              fill="url(#nautilus-engine)"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            {/* Engine Cylinder Vertical Slits */}
+            <line x1="-36" y1="-5" x2="-36" y2="5" stroke="#0f172a" strokeWidth="1.4" />
+            <line x1="-33" y1="-5" x2="-33" y2="5" stroke="#0f172a" strokeWidth="1.4" />
+            <line x1="-30" y1="-5" x2="-30" y2="5" stroke="#0f172a" strokeWidth="1.4" />
+
+            {/* Aft Exhaust Collar & Throat */}
+            <rect
+              x="-45"
+              y="-12"
+              width="4"
+              height="24"
+              rx="1.5"
+              fill="#1e293b"
+              stroke="#0f172a"
+              strokeWidth="1.6"
+            />
+            <ellipse cx="-45" cy="0" rx="2" ry="9" fill="#0f172a" />
+            <ellipse cx="-45" cy="0" rx="1.5" ry="7" fill="#38bdf8" opacity="0.65" />
+
+            {/* 2. Angled Dorsal Hex Rocket / Sensor Pod (Tilted ~27.5 deg) */}
+            <g transform="translate(-16, -18) rotate(-27.5)">
+              {/* Mounting Bracket */}
+              <rect
+                x="-14"
+                y="5"
+                width="20"
+                height="5"
+                rx="1"
+                fill="#1e293b"
+                stroke="#0f172a"
+                strokeWidth="1.4"
+              />
+              {/* Faceted Pod Body */}
+              <polygon
+                points="-15,-4 -10,-9 12,-9 16,-4 16,4 12,9 -10,9 -15,4"
+                fill="url(#nautilus-hull)"
+                stroke="#0f172a"
+                strokeWidth="1.8"
+              />
+              {/* Longitudinal Seam Line & Vent Louvers */}
+              <line x1="-10" y1="0" x2="10" y2="0" stroke="#94a3b8" strokeWidth="1.0" />
+              <line x1="-6" y1="-6" x2="-4" y2="-4" stroke="#0f172a" strokeWidth="1.4" />
+              <line x1="-2" y1="-6" x2="0" y2="-4" stroke="#0f172a" strokeWidth="1.4" />
+
+              {/* Recessed Hex Face */}
+              <polygon
+                points="9,-7 15,-3 15,3 9,7"
+                fill="#1e293b"
+                stroke="#0f172a"
+                strokeWidth="1.4"
+              />
+              {/* 6 Circular Rocket Ports */}
+              <circle cx="10.5" cy="-4" r="1.2" fill="#0f172a" />
+              <circle cx="13.5" cy="-2" r="1.2" fill="#0f172a" />
+              <circle cx="10.5" cy="0" r="1.2" fill="#0f172a" />
+              <circle cx="13.5" cy="0" r="1.2" fill="#0f172a" />
+              <circle cx="10.5" cy="4" r="1.2" fill="#0f172a" />
+              <circle cx="13.5" cy="2" r="1.2" fill="#0f172a" />
+            </g>
+
+            {/* 3. Central Dark Backbone Spine & Modular Cabin */}
+            <rect
+              x="-18"
+              y="-17"
+              width="24"
+              height="11"
+              rx="2"
+              fill="#1e293b"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            {/* Spine Gantry Teeth */}
+            <rect x="-16" y="-18.5" width="2.4" height="2" fill="#0f172a" />
+            <rect x="-12" y="-18.5" width="2.4" height="2" fill="#0f172a" />
+            <rect x="-8" y="-18.5" width="2.4" height="2" fill="#0f172a" />
+            <rect x="-4" y="-18.5" width="2.4" height="2" fill="#0f172a" />
+            <rect x="0" y="-18.5" width="2.4" height="2" fill="#0f172a" />
+
+            {/* Crew Cabin Pod */}
+            <rect
+              x="-10"
+              y="-16"
+              width="18"
+              height="18"
+              rx="2.5"
+              fill="url(#nautilus-hull)"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            {/* Crew Window */}
+            <rect
+              x="-8"
+              y="-13"
+              width="7.5"
+              height="10"
+              rx="1.5"
+              fill="#0f172a"
+              stroke="#334155"
+              strokeWidth="1.2"
+            />
+            {/* Window Glass Specular Highlight */}
+            <polygon
+              points="-7.5,-12 -2,-12 -4,-9.5 -7.5,-9.5"
+              fill="#ffffff"
+              opacity="0.85"
+            />
+            {/* Status Dashes */}
+            <line x1="1" y1="-11" x2="1" y2="-9.5" stroke="#94a3b8" strokeWidth="1.0" />
+            <line x1="1" y1="-8" x2="1" y2="-6.5" stroke="#94a3b8" strokeWidth="1.0" />
+            <line x1="1" y1="-5" x2="1" y2="-3.5" stroke="#94a3b8" strokeWidth="1.0" />
+
+            {/* Vertical Intake Slit */}
+            <rect
+              x="3"
+              y="-14"
+              width="3.8"
+              height="14"
+              rx="1.8"
+              fill="#1e293b"
+              stroke="#0f172a"
+              strokeWidth="1.4"
+            />
+
+            {/* 4. Lower Armored Module & Triple Reaction Ports */}
+            {/* Center Block */}
+            <polygon
+              points="-10,0 4,0 4,21 -8,21 -10,18"
+              fill="url(#nautilus-hull)"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            {/* Slanted Louvers (// //) */}
+            <line x1="-7" y1="3" x2="-5" y2="8" stroke="#0f172a" strokeWidth="1.8" />
+            <line x1="-4" y1="3" x2="-2" y2="8" stroke="#0f172a" strokeWidth="1.8" />
+            <line x1="0" y1="3" x2="2" y2="8" stroke="#0f172a" strokeWidth="1.8" />
+            <line x1="3" y1="3" x2="5" y2="8" stroke="#0f172a" strokeWidth="1.8" />
+            {/* Lower Vent Slot */}
+            <rect x="-6" y="17" width="7" height="2" fill="#0f172a" />
+
+            {/* Lower Rear Pod */}
+            <polygon
+              points="-24,0 -10,0 -10,21 -22,21 -24,18"
+              fill="#f8fafc"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            {/* Rear Tan Markings */}
+            <rect x="-21" y="6" width="6" height="1.6" fill="#d4b276" />
+            <rect x="-21" y="10" width="6" height="1.6" fill="#d4b276" />
+            <rect x="-21" y="14" width="6" height="1.6" fill="#d4b276" />
+
+            {/* Lower Forward Pod */}
+            <polygon
+              points="4,-1 16,-1 16,21 6,21 4,19"
+              fill="#ffffff"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            {/* Forward Tan Markings */}
+            <rect x="7" y="6" width="5" height="1.6" fill="#d4b276" />
+            <rect x="7" y="10" width="5" height="1.6" fill="#d4b276" />
+            <rect x="7" y="14" width="5" height="1.6" fill="#d4b276" />
+
+            {/* Three Stacked Circular/Oval Reaction Thruster Ports */}
+            {/* Port 1 (Top) */}
+            <ellipse cx="16" cy="4" rx="2.8" ry="3.2" fill="#1e293b" stroke="#0f172a" strokeWidth="1.2" />
+            <ellipse cx="16" cy="4" rx="1.8" ry="2.4" fill="#0f172a" />
+            <ellipse cx="16" cy="4" rx="1.0" ry="1.5" fill="none" stroke="#facc15" strokeWidth="0.8" />
+            {/* Port 2 (Mid) */}
+            <ellipse cx="16" cy="11" rx="2.8" ry="3.2" fill="#1e293b" stroke="#0f172a" strokeWidth="1.2" />
+            <ellipse cx="16" cy="11" rx="1.8" ry="2.4" fill="#0f172a" />
+            <ellipse cx="16" cy="11" rx="1.0" ry="1.5" fill="none" stroke="#facc15" strokeWidth="0.8" />
+            {/* Port 3 (Bottom) */}
+            <ellipse cx="16" cy="18" rx="2.8" ry="3.2" fill="#1e293b" stroke="#0f172a" strokeWidth="1.2" />
+            <ellipse cx="16" cy="18" rx="1.8" ry="2.4" fill="#0f172a" />
+            <ellipse cx="16" cy="18" rx="1.0" ry="1.5" fill="none" stroke="#facc15" strokeWidth="0.8" />
+
+            {/* 5. Landing Skids with Stamped "X" Badges */}
+            {/* Skid 1: Rear */}
+            <rect x="-22" y="21" width="8" height="4" rx="1" fill="#ffffff" stroke="#0f172a" strokeWidth="1.4" />
+            <rect x="-22" y="24" width="8" height="7" rx="1" fill="#1e293b" stroke="#0f172a" strokeWidth="1.6" />
+            <line x1="-20.5" y1="25.5" x2="-15.5" y2="29.5" stroke="#94a3b8" strokeWidth="1.4" />
+            <line x1="-20.5" y1="29.5" x2="-15.5" y2="25.5" stroke="#94a3b8" strokeWidth="1.4" />
+
+            {/* Skid 2: Forward-Belly */}
+            <rect x="6" y="21" width="8" height="4" rx="1" fill="#ffffff" stroke="#0f172a" strokeWidth="1.4" />
+            <rect x="6" y="24" width="8" height="7" rx="1" fill="#1e293b" stroke="#0f172a" strokeWidth="1.6" />
+            <line x1="7.5" y1="25.5" x2="12.5" y2="29.5" stroke="#94a3b8" strokeWidth="1.4" />
+            <line x1="7.5" y1="29.5" x2="12.5" y2="25.5" stroke="#94a3b8" strokeWidth="1.4" />
+
+            {/* Skid 3: Prow */}
+            <rect x="25" y="17" width="8" height="4" rx="1" fill="#ffffff" stroke="#0f172a" strokeWidth="1.4" />
+            <rect x="25" y="20" width="8" height="7" rx="1" fill="#1e293b" stroke="#0f172a" strokeWidth="1.6" />
+            <line x1="26.5" y1="21.5" x2="31.5" y2="25.5" stroke="#94a3b8" strokeWidth="1.4" />
+            <line x1="26.5" y1="25.5" x2="31.5" y2="21.5" stroke="#94a3b8" strokeWidth="1.4" />
+
+            {/* 6. The Iconic Arched Spiral Cowled Bow */}
+            {/* Dark Core Hub */}
+            <circle cx="19" cy="-2" r="11" fill="#1e293b" stroke="#0f172a" strokeWidth="2.0" />
+            <circle cx="19" cy="-2" r="7.5" fill="#334155" stroke="#0f172a" strokeWidth="1.2" />
+
+            {/* Stator Blades */}
+            <line x1="23" y1="-2" x2="26.2" y2="-2" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="15" y1="-2" x2="11.8" y2="-2" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="19" y1="2" x2="19" y2="5.2" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="19" y1="-6" x2="19" y2="-9.2" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="21.8" y1="0.8" x2="24.1" y2="3.1" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="16.2" y1="-4.8" x2="13.9" y2="-7.1" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="21.8" y1="-4.8" x2="24.1" y2="-7.1" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="16.2" y1="0.8" x2="13.9" y2="3.1" stroke="#1e293b" strokeWidth="1.2" />
+
+            {/* Central Boss & Pin */}
+            <circle cx="19" cy="-2" r="3.5" fill="#94a3b8" stroke="#0f172a" strokeWidth="1.2" />
+            <circle cx="19" cy="-2" r="1.2" fill="#cbd5e1" />
+
+            {/* Crescent Armored Cowl Shell */}
+            <path
+              d="M 15,-22 C 27,-24 40,-14 41,0 C 41,10 36,18 29,21 L 25,17 C 31,13 34,7 33,-1 C 32,-8 25,-15 16,-16 Z"
+              fill="url(#nautilus-cowl)"
+              stroke="#0f172a"
+              strokeWidth="2.0"
+            />
+
+            {/* Radial Segment Seams on Cowl Shell */}
+            <line x1="27" y1="-19" x2="24" y2="-13" stroke="#0f172a" strokeWidth="1.4" />
+            <line x1="41" y1="0" x2="33" y2="0" stroke="#0f172a" strokeWidth="1.4" />
+            <line x1="37" y1="12" x2="30" y2="10" stroke="#0f172a" strokeWidth="1.4" />
+
+            {/* 4 Circular Studs / Sensor Apertures on Cowl */}
+            <circle cx="21" cy="-13" r="1.8" fill="#1e293b" stroke="#0f172a" strokeWidth="1.0" />
+            <circle cx="21" cy="-13" r="0.6" fill="#cbd5e1" />
+
+            <circle cx="34" cy="-4" r="1.8" fill="#1e293b" stroke="#0f172a" strokeWidth="1.0" />
+            <circle cx="34" cy="-4" r="0.6" fill="#cbd5e1" />
+
+            <circle cx="33" cy="7" r="1.8" fill="#1e293b" stroke="#0f172a" strokeWidth="1.0" />
+            <circle cx="33" cy="7" r="0.6" fill="#cbd5e1" />
+
+            <circle cx="25" cy="15" r="1.8" fill="#1e293b" stroke="#0f172a" strokeWidth="1.0" />
+            <circle cx="25" cy="15" r="0.6" fill="#cbd5e1" />
+
+            {/* Outer Glowing Amber-Gold Visor Perimeter Arc Strip */}
+            {/* Segment 1 */}
+            <path
+              d="M 22,-23.5 C 31,-23 38,-16 40.5,-8 L 38.5,-8 C 36,-14 30,-20.5 22,-21 Z"
+              fill="url(#nautilus-visor)"
+              stroke="#ca8a04"
+              strokeWidth="1.2"
+            />
+            {/* Segment 2 */}
+            <path
+              d="M 41.5,-6 C 43.5,0 42.5,7 39,13 L 37,12 C 40,6 41,0 39.5,-6 Z"
+              fill="url(#nautilus-visor)"
+              stroke="#ca8a04"
+              strokeWidth="1.2"
+            />
+          </g>
+        )}
+
+        {/* ================================================================= */}
+        {/* EAGLE TRANSPORTER (Space: 1999 Modular Lunar Cargo Lander)        */}
+        {/* ================================================================= */}
+        {modelId === 'eagle' && (
+          <g>
+            {/* 1. Aft Propulsion Block: Rocket Engine Bells & Fuel Tanks */}
+            {/* Thrust Mounting Truss Bars */}
+            <line x1="-44" y1="-9" x2="-53" y2="-11" stroke="#334155" strokeWidth="2.0" />
+            <line x1="-44" y1="9" x2="-53" y2="11" stroke="#334155" strokeWidth="2.0" />
+            <line x1="-44" y1="0" x2="-53" y2="0" stroke="#334155" strokeWidth="2.0" />
+
+            {/* Upper Rocket Engine Bell */}
+            <path
+              d="M -52,-11.5 C -58,-11.5 -64,-13.5 -68,-14 L -68,-1 C -64,-1.5 -58,-3.5 -52,-3.5 Z"
+              fill="url(#eagle-bell)"
+              stroke="#0f172a"
+              strokeWidth="1.6"
+            />
+            <line x1="-57" y1="-12" x2="-57" y2="-3" stroke="#64748b" strokeWidth="1.0" />
+            <line x1="-62" y1="-12.8" x2="-62" y2="-2.2" stroke="#64748b" strokeWidth="1.0" />
+            <ellipse cx="-68" cy="-7.5" rx="2.0" ry="5.7" fill="#0f172a" />
+            <ellipse cx="-68" cy="-7.5" rx="1.2" ry="4.0" fill="#38bdf8" opacity="0.6" />
+            <line x1="-68" y1="-14" x2="-68" y2="-1" stroke="#0f172a" strokeWidth="1.4" />
+
+            {/* Lower Rocket Engine Bell */}
+            <path
+              d="M -52,3.5 C -58,3.5 -64,1.5 -68,1 L -68,14 C -64,13.5 -58,11.5 -52,11.5 Z"
+              fill="url(#eagle-bell)"
+              stroke="#0f172a"
+              strokeWidth="1.6"
+            />
+            <line x1="-57" y1="3" x2="-57" y2="12" stroke="#64748b" strokeWidth="1.0" />
+            <line x1="-62" y1="2.2" x2="-62" y2="12.8" stroke="#64748b" strokeWidth="1.0" />
+            <ellipse cx="-68" cy="7.5" rx="2.0" ry="5.7" fill="#0f172a" />
+            <ellipse cx="-68" cy="7.5" rx="1.2" ry="4.0" fill="#38bdf8" opacity="0.6" />
+            <line x1="-68" y1="1" x2="-68" y2="14" stroke="#0f172a" strokeWidth="1.4" />
+
+            {/* 4 Spherical Propellant Tanks */}
+            {/* Upper Aft Tank */}
+            <circle cx="-51" cy="-6" r="5.0" fill="url(#eagle-tank)" stroke="#0f172a" strokeWidth="1.4" />
+            <ellipse cx="-51" cy="-6" rx="4.8" ry="1.8" fill="none" stroke="#94a3b8" strokeWidth="0.8" />
+            <rect x="-53.5" y="-7.2" width="5" height="2.4" fill="#ea580c" stroke="#0f172a" strokeWidth="0.6" />
+
+            {/* Upper Fore Tank */}
+            <circle cx="-44.5" cy="-6" r="4.6" fill="url(#eagle-tank)" stroke="#0f172a" strokeWidth="1.4" />
+            <ellipse cx="-44.5" cy="-6" rx="4.4" ry="1.6" fill="none" stroke="#94a3b8" strokeWidth="0.8" />
+            <rect x="-47" y="-7.2" width="5" height="2.4" fill="#ea580c" stroke="#0f172a" strokeWidth="0.6" />
+
+            {/* Lower Aft Tank */}
+            <circle cx="-51" cy="6" r="5.0" fill="url(#eagle-tank)" stroke="#0f172a" strokeWidth="1.4" />
+            <ellipse cx="-51" cy="6" rx="4.8" ry="1.8" fill="none" stroke="#94a3b8" strokeWidth="0.8" />
+            <rect x="-53.5" y="4.8" width="5" height="2.4" fill="#ea580c" stroke="#0f172a" strokeWidth="0.6" />
+
+            {/* Lower Fore Tank */}
+            <circle cx="-44.5" cy="6" r="4.6" fill="url(#eagle-tank)" stroke="#0f172a" strokeWidth="1.4" />
+            <ellipse cx="-44.5" cy="6" rx="4.4" ry="1.6" fill="none" stroke="#94a3b8" strokeWidth="0.8" />
+            <rect x="-47" y="4.8" width="5" height="2.4" fill="#ea580c" stroke="#0f172a" strokeWidth="0.6" />
+
+            {/* Plumbing Conduits */}
+            <line x1="-51" y1="-1" x2="-44" y2="-1" stroke="#64748b" strokeWidth="1.2" />
+            <line x1="-51" y1="1" x2="-44" y2="1" stroke="#64748b" strokeWidth="1.2" />
+
+            {/* 2. Open Tubular Spaceframe Catwalk (The Space: 1999 Spine Truss) */}
+            {/* Aft Catwalk Lattice */}
+            <line x1="-44" y1="-8" x2="-24" y2="-8" stroke="#ffffff" strokeWidth="1.6" />
+            <line x1="-44" y1="-14" x2="-24" y2="-14" stroke="#ffffff" strokeWidth="1.6" />
+            <polyline
+              points="-44,-8 -39,-14 -34,-8 -29,-14 -24,-8"
+              fill="none"
+              stroke="#475569"
+              strokeWidth="1.2"
+            />
+            <polyline
+              points="-44,-14 -39,-8 -34,-14 -29,-8 -24,-14"
+              fill="none"
+              stroke="#475569"
+              strokeWidth="1.2"
+            />
+
+            {/* Central Elevated Catwalk Truss (above Cargo Pod) */}
+            <line x1="-24" y1="-16.5" x2="24" y2="-16.5" stroke="#ffffff" strokeWidth="1.8" />
+            <line x1="-24" y1="-10.5" x2="24" y2="-10.5" stroke="#ffffff" strokeWidth="1.8" />
+            <line x1="-24" y1="-10" x2="-24" y2="-16.5" stroke="#0f172a" strokeWidth="2.0" />
+            <line x1="24" y1="-10" x2="24" y2="-16.5" stroke="#0f172a" strokeWidth="2.0" />
+            {/* Triangulated Diagonal Webbing */}
+            <polyline
+              points="-24,-10.5 -20,-16.5 -16,-10.5 -12,-16.5 -8,-10.5 -4,-16.5 0,-10.5 4,-16.5 8,-10.5 12,-16.5 16,-10.5 20,-16.5 24,-10.5"
+              fill="none"
+              stroke="#475569"
+              strokeWidth="1.2"
+            />
+            <line x1="-20" y1="-10.5" x2="-20" y2="-16.5" stroke="#475569" strokeWidth="1.0" />
+            <line x1="-12" y1="-10.5" x2="-12" y2="-16.5" stroke="#475569" strokeWidth="1.0" />
+            <line x1="-4" y1="-10.5" x2="-4" y2="-16.5" stroke="#475569" strokeWidth="1.0" />
+            <line x1="4" y1="-10.5" x2="4" y2="-16.5" stroke="#475569" strokeWidth="1.0" />
+            <line x1="12" y1="-10.5" x2="12" y2="-16.5" stroke="#475569" strokeWidth="1.0" />
+            <line x1="20" y1="-10.5" x2="20" y2="-16.5" stroke="#475569" strokeWidth="1.0" />
+
+            {/* Forward Catwalk Lattice */}
+            <line x1="24" y1="-8" x2="44" y2="-8" stroke="#ffffff" strokeWidth="1.6" />
+            <line x1="24" y1="-14" x2="44" y2="-14" stroke="#ffffff" strokeWidth="1.6" />
+            <polyline
+              points="24,-8 29,-14 34,-8 39,-14 44,-8"
+              fill="none"
+              stroke="#475569"
+              strokeWidth="1.2"
+            />
+            <polyline
+              points="24,-14 29,-8 34,-14 39,-8 44,-14"
+              fill="none"
+              stroke="#475569"
+              strokeWidth="1.2"
+            />
+
+            {/* Red & White Hazard Docking Collars */}
+            <rect x="-44" y="-15" width="2.5" height="8" fill="#ffffff" stroke="#0f172a" strokeWidth="0.8" />
+            <rect x="-44" y="-15" width="1.2" height="8" fill="#ef4444" />
+            <rect x="-24" y="-17.5" width="2.5" height="8" fill="#ffffff" stroke="#0f172a" strokeWidth="0.8" />
+            <rect x="-24" y="-17.5" width="1.2" height="8" fill="#ef4444" />
+            <rect x="21.5" y="-17.5" width="2.5" height="8" fill="#ffffff" stroke="#0f172a" strokeWidth="0.8" />
+            <rect x="21.5" y="-17.5" width="1.2" height="8" fill="#ef4444" />
+            <rect x="42" y="-15" width="2.5" height="8" fill="#ffffff" stroke="#0f172a" strokeWidth="0.8" />
+            <rect x="42" y="-15" width="1.2" height="8" fill="#ef4444" />
+
+            {/* 3. Central Modular Cargo / Passenger Transporter Pod */}
+            {/* Pod Shell */}
+            <polygon
+              points="-24,-7 -22,-9 22,-9 24,-7 24,7 22,8.5 -22,8.5 -24,7"
+              fill="url(#eagle-pod)"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+
+            {/* Upper Viewport Strip */}
+            <rect x="-22" y="-8.2" width="44" height="3.4" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="1.0" />
+            {/* 4 Viewport Windows */}
+            <rect x="-19" y="-7.5" width="5.5" height="2.0" fill="#0f172a" />
+            <rect x="-18.4" y="-7.1" width="4.3" height="0.6" fill="#38bdf8" />
+            <rect x="-11" y="-7.5" width="5.5" height="2.0" fill="#0f172a" />
+            <rect x="-10.4" y="-7.1" width="4.3" height="0.6" fill="#38bdf8" />
+            <rect x="7" y="-7.5" width="5.5" height="2.0" fill="#0f172a" />
+            <rect x="7.6" y="-7.1" width="4.3" height="0.6" fill="#38bdf8" />
+            <rect x="15" y="-7.5" width="5.5" height="2.0" fill="#0f172a" />
+            <rect x="15.6" y="-7.1" width="4.3" height="0.6" fill="#38bdf8" />
+
+            {/* Center Embossed Airlock Door with "X" / "H" Stamping */}
+            <rect x="-5" y="-4.5" width="10" height="12" fill="#f8fafc" stroke="#0f172a" strokeWidth="1.4" />
+            <rect x="-3.8" y="-3.2" width="7.6" height="9.4" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="1.0" />
+            <line x1="-3" y1="-2" x2="3" y2="5" stroke="#64748b" strokeWidth="1.4" />
+            <line x1="3" y1="-2" x2="-3" y2="5" stroke="#64748b" strokeWidth="1.4" />
+            <line x1="-3" y1="1.5" x2="3" y2="1.5" stroke="#64748b" strokeWidth="1.4" />
+            <rect x="2.6" y="1" width="1.2" height="2.5" fill="#ef4444" />
+
+            {/* Flanking Corrugated Equipment Sections */}
+            <rect x="-22" y="-2.5" width="15" height="8.5" fill="#e2e8f0" stroke="#0f172a" strokeWidth="1.0" />
+            <line x1="-21.5" y1="-1.2" x2="-7.5" y2="-1.2" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="-21.5" y1="0.2" x2="-7.5" y2="0.2" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="-21.5" y1="1.6" x2="-7.5" y2="1.6" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="-21.5" y1="3.0" x2="-7.5" y2="3.0" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="-21.5" y1="4.4" x2="-7.5" y2="4.4" stroke="#94a3b8" strokeWidth="0.8" />
+
+            <rect x="7" y="-2.5" width="15" height="8.5" fill="#e2e8f0" stroke="#0f172a" strokeWidth="1.0" />
+            <line x1="7.5" y1="-1.2" x2="21.5" y2="-1.2" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="7.5" y1="0.2" x2="21.5" y2="0.2" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="7.5" y1="1.6" x2="21.5" y2="1.6" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="7.5" y1="3.0" x2="21.5" y2="3.0" stroke="#94a3b8" strokeWidth="0.8" />
+            <line x1="7.5" y1="4.4" x2="21.5" y2="4.4" stroke="#94a3b8" strokeWidth="0.8" />
+
+            {/* Moonbase Alpha Insignia Blue Decals */}
+            <rect x="-21" y="-4.2" width="3.2" height="1.4" fill="#1d4ed8" />
+            <rect x="18" y="-4.2" width="3.2" height="1.4" fill="#1d4ed8" />
+
+            {/* 4. Belly Downward VTOL Lift Thruster Bells */}
+            {/* Aft VTOL Bell */}
+            <rect x="-13.5" y="8.5" width="5" height="2" fill="#334155" stroke="#0f172a" strokeWidth="1.2" />
+            <polygon points="-13,10.5 -9,10.5 -6.8,15 -15.2,15" fill="#1e293b" stroke="#0f172a" strokeWidth="1.4" />
+            <ellipse cx="-11" cy="15" rx="4.0" ry="1.2" fill="#0f172a" />
+            <ellipse cx="-11" cy="15" rx="2.2" ry="0.6" fill="#f59e0b" />
+
+            {/* Forward VTOL Bell */}
+            <rect x="8.5" y="8.5" width="5" height="2" fill="#334155" stroke="#0f172a" strokeWidth="1.2" />
+            <polygon points="9,10.5 13,10.5 15.2,15 6.8,15" fill="#1e293b" stroke="#0f172a" strokeWidth="1.4" />
+            <ellipse cx="11" cy="15" rx="4.0" ry="1.2" fill="#0f172a" />
+            <ellipse cx="11" cy="15" rx="2.2" ry="0.6" fill="#f59e0b" />
+
+            {/* 5. Aft Outrigger Service Pod & 4-Way RCS Quad */}
+            <polygon
+              points="-42,-4 -39,-7 -29,-7 -26,-4 -26,5 -29,8 -39,8 -42,5"
+              fill="url(#eagle-pod)"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            <rect x="-38.5" y="-6.2" width="4.0" height="2.2" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
+            {/* Roundel Emblem */}
+            <circle cx="-31.5" cy="-5.0" r="1.8" fill="#ffffff" stroke="#1d4ed8" strokeWidth="1.0" />
+            <circle cx="-31.5" cy="-5.0" r="0.8" fill="#1d4ed8" />
+            {/* RCS 4-Way Thruster Quad */}
+            <polygon points="-34,-1.8 -30.2,0.5 -34,2.8 -37.8,0.5" fill="#0f172a" stroke="#334155" strokeWidth="1.0" />
+            <line x1="-37" y1="-1" x2="-31" y2="2" stroke="#64748b" strokeWidth="1.0" />
+            <line x1="-31" y1="-1" x2="-37" y2="2" stroke="#64748b" strokeWidth="1.0" />
+            {/* Micro Nozzles */}
+            <polygon points="-35,-1.8 -33,-1.8 -32.4,-3.6 -35.6,-3.6" fill="#e2e8f0" stroke="#0f172a" strokeWidth="0.8" />
+            <polygon points="-35,2.8 -33,2.8 -32.4,4.6 -35.6,4.6" fill="#e2e8f0" stroke="#0f172a" strokeWidth="0.8" />
+            <polygon points="-37.8,-0.5 -37.8,1.5 -39.6,2.1 -39.6,-1.1" fill="#e2e8f0" stroke="#0f172a" strokeWidth="0.8" />
+            <polygon points="-30.2,-0.5 -30.2,1.5 -28.4,2.1 -28.4,-1.1" fill="#e2e8f0" stroke="#0f172a" strokeWidth="0.8" />
+            <circle cx="-34" cy="0.5" r="0.9" fill="#f59e0b" />
+
+            {/* 6. Forward Outrigger Service Pod & 4-Way RCS Quad */}
+            <polygon
+              points="26,-4 29,-7 39,-7 42,-4 42,5 39,8 29,8 26,5"
+              fill="url(#eagle-pod)"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            <rect x="29.5" y="-6.2" width="4.0" height="2.2" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
+            {/* Roundel Emblem */}
+            <circle cx="36.5" cy="-5.0" r="1.8" fill="#ffffff" stroke="#1d4ed8" strokeWidth="1.0" />
+            <circle cx="36.5" cy="-5.0" r="0.8" fill="#1d4ed8" />
+            {/* RCS 4-Way Thruster Quad */}
+            <polygon points="34,-1.8 37.8,0.5 34,2.8 30.2,0.5" fill="#0f172a" stroke="#334155" strokeWidth="1.0" />
+            <line x1="31" y1="-1" x2="37" y2="2" stroke="#64748b" strokeWidth="1.0" />
+            <line x1="37" y1="-1" x2="31" y2="2" stroke="#64748b" strokeWidth="1.0" />
+            {/* Micro Nozzles */}
+            <polygon points="33,-1.8 35,-1.8 35.6,-3.6 32.4,-3.6" fill="#e2e8f0" stroke="#0f172a" strokeWidth="0.8" />
+            <polygon points="33,2.8 35,2.8 35.6,4.6 32.4,4.6" fill="#e2e8f0" stroke="#0f172a" strokeWidth="0.8" />
+            <polygon points="30.2,-0.5 30.2,1.5 28.4,2.1 28.4,-1.1" fill="#e2e8f0" stroke="#0f172a" strokeWidth="0.8" />
+            <polygon points="37.8,-0.5 37.8,1.5 39.6,2.1 39.6,-1.1" fill="#e2e8f0" stroke="#0f172a" strokeWidth="0.8" />
+            <circle cx="34" cy="0.5" r="0.9" fill="#f59e0b" />
+
+            {/* 7. Heavy-Duty Articulated Landing Gear (Aft & Forward) */}
+            {/* Aft Landing Gear */}
+            <rect x="-36.5" y="8" width="5" height="2.5" fill="#334155" stroke="#0f172a" strokeWidth="1.4" />
+            <rect x="-35.5" y="10.5" width="3.0" height="5.0" fill="#1e293b" stroke="#0f172a" strokeWidth="1.2" />
+            <line x1="-34" y1="15.5" x2="-34" y2="19.5" stroke="#cbd5e1" strokeWidth="2.0" />
+            <polyline points="-34,11 -37.5,15 -34,18.5" fill="none" stroke="#475569" strokeWidth="1.4" />
+            <circle cx="-37.5" cy="15" r="1.0" fill="#94a3b8" />
+            {/* Aft Footpad */}
+            <polygon points="-39.5,22 -36.5,18.8 -31.5,18.8 -28.5,22" fill="#475569" stroke="#0f172a" strokeWidth="1.6" />
+            <rect x="-40.5" y="22" width="13" height="2.2" fill="#0f172a" />
+
+            {/* Forward Landing Gear */}
+            <rect x="31.5" y="8" width="5" height="2.5" fill="#334155" stroke="#0f172a" strokeWidth="1.4" />
+            <rect x="32.5" y="10.5" width="3.0" height="5.0" fill="#1e293b" stroke="#0f172a" strokeWidth="1.2" />
+            <line x1="34" y1="15.5" x2="34" y2="19.5" stroke="#cbd5e1" strokeWidth="2.0" />
+            <polyline points="34,11 30.5,15 34,18.5" fill="none" stroke="#475569" strokeWidth="1.4" />
+            <circle cx="30.5" cy="15" r="1.0" fill="#94a3b8" />
+            {/* Forward Footpad */}
+            <polygon points="28.5,22 31.5,18.8 36.5,18.8 39.5,22" fill="#475569" stroke="#0f172a" strokeWidth="1.6" />
+            <rect x="27.5" y="22" width="13" height="2.2" fill="#0f172a" />
+
+            {/* 8. Forward Command Module Beak Cockpit */}
+            {/* Red/White Hazard Collar Ring */}
+            <rect x="43" y="-7.5" width="2.5" height="15" fill="#ffffff" stroke="#0f172a" strokeWidth="1.2" />
+            <rect x="43" y="-7.5" width="1.2" height="15" fill="#ef4444" />
+
+            {/* Faceted Aerodynamic Beak Nose */}
+            <path
+              d="M 45.5,-7.5 L 54,-8.0 C 60,-8.0 64,-5.0 66.5,0.0 C 64,4.5 60,7.0 54,7.0 L 45.5,7.0 Z"
+              fill="url(#eagle-beak)"
+              stroke="#0f172a"
+              strokeWidth="1.8"
+            />
+            <line x1="47" y1="-3.5" x2="54" y2="-3.5" stroke="#94a3b8" strokeWidth="1.0" />
+            <line x1="47" y1="3.5" x2="54" y2="3.5" stroke="#94a3b8" strokeWidth="1.0" />
+
+            {/* Dual Iconic Cockpit Viewports */}
+            {/* Upper Viewport */}
+            <polygon points="54,-6.5 63.5,-0.8 54,-0.8" fill="#0f172a" stroke="#334155" strokeWidth="1.2" />
+            <polygon points="55,-5.5 60.5,-1.8 55,-1.8" fill="#38bdf8" opacity="0.8" />
+            {/* Lower Viewport */}
+            <polygon points="54,0.8 63.5,0.8 54,5.5" fill="#0f172a" stroke="#334155" strokeWidth="1.2" />
+            <polygon points="55,1.8 60.5,1.8 55,4.5" fill="#38bdf8" opacity="0.8" />
+            {/* Window Center Mullion */}
+            <line x1="53.5" y1="0.0" x2="64.5" y2="0.0" stroke="#f8fafc" strokeWidth="1.4" />
+
+            {/* Side Circular Service Port / Sensor Hatch */}
+            <circle cx="49.5" cy="-0.5" r="2.6" fill="#cbd5e1" stroke="#475569" strokeWidth="1.0" />
+            <circle cx="49.5" cy="-0.5" r="1.0" fill="#0f172a" />
+
+            {/* Moonbase Alpha Insignia Emblem */}
+            <rect x="57" y="4.0" width="2.8" height="1.6" fill="#1d4ed8" />
+            {/* Forward Probe Tip */}
+            <rect x="66.5" y="-0.6" width="1.8" height="1.2" fill="#334155" />
+          </g>
+        )}
+
         {/* Thruster Flame Animation */}
         {showThrusters && (
           <g>
-            <polygon
-              points="-18,24 -14,37 -10,24"
-              fill="url(#thruster-flame)"
-              opacity="0.9"
-            />
-            <polygon
-              points="10,24 14,37 18,24"
-              fill="url(#thruster-flame)"
-              opacity="0.9"
-            />
+            {isEagle ? (
+              <>
+                <polygon
+                  points="-13.5,15 -11,23.5 -8.5,15"
+                  fill="url(#thruster-flame)"
+                  opacity="0.9"
+                />
+                <polygon
+                  points="8.5,15 11,23.5 13.5,15"
+                  fill="url(#thruster-flame)"
+                  opacity="0.9"
+                />
+              </>
+            ) : (
+              <>
+                <polygon
+                  points="-18,24 -14,37 -10,24"
+                  fill="url(#thruster-flame)"
+                  opacity="0.9"
+                />
+                <polygon
+                  points="10,24 14,37 18,24"
+                  fill="url(#thruster-flame)"
+                  opacity="0.9"
+                />
+              </>
+            )}
           </g>
         )}
       </svg>
