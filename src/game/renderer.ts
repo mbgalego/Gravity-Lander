@@ -562,7 +562,7 @@ export class GameRenderer {
 
     // 17. Draw Spaceship
     if (!ship.isCrashed) {
-      this.drawShip(ctx, ship, planet, time);
+      this.drawShip(ctx, ship, planet, time, world);
     }
 
     ctx.restore();
@@ -2939,7 +2939,13 @@ export class GameRenderer {
     ctx.restore();
   }
 
-  private drawShip(ctx: CanvasRenderingContext2D, ship: ShipState, planet: PlanetConfig, time: number) {
+  private drawShip(
+    ctx: CanvasRenderingContext2D,
+    ship: ShipState,
+    planet: PlanetConfig,
+    time: number,
+    world?: WorldMap
+  ) {
     const config = getShipConfig(ship.modelId);
     ctx.save();
     ctx.translate(ship.pos.x, ship.pos.y);
@@ -3071,7 +3077,7 @@ export class GameRenderer {
     }
 
     // 2. Main Full-Fidelity Ship Hull & Model Architecture (1:1 with Menu ShipGraphic)
-    this.drawShipHullModel(ctx, config, lp, time, ship);
+    this.drawShipHullModel(ctx, config, lp, time, ship, world);
 
     // 3. Dynamic Damage FX (Fractures, Scorch Marks, Emergency Alerts)
     if (ship.hull < 80) {
@@ -3181,9 +3187,10 @@ export class GameRenderer {
     config: ReturnType<typeof getShipConfig>,
     lp: ReturnType<typeof getShipConfig>['localPoints'],
     time: number,
-    ship: ShipState
+    ship: ShipState,
+    world?: WorldMap
   ) {
-    renderShipHull(ctx, config, lp, time, ship);
+    renderShipHull(ctx, config, lp, time, ship, world);
   }
 
   private drawWreckageMarker(ctx: CanvasRenderingContext2D, pos: Vector2D, planet: PlanetConfig) {

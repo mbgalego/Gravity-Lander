@@ -256,8 +256,8 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                       }`}
                     >
                       {/* Realistic Craft Graphic Preview */}
-                      <div className="transition-transform duration-200 group-hover:scale-110 shrink-0">
-                        <ShipGraphic ship={ship} size={58} showGlow={isSelected} />
+                      <div className="w-20 h-16 sm:w-24 sm:h-18 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shrink-0">
+                        <ShipGraphic ship={ship} className="w-full h-full max-h-16" showGlow={isSelected} />
                       </div>
 
                       <div className="flex flex-col flex-1 min-w-0">
@@ -451,10 +451,10 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
               className="w-full flex flex-col items-center text-center"
             >
               {/* Spacecraft Visual Render */}
-              <div className="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center relative mb-1 transition-transform duration-200">
+              <div className="w-48 h-32 sm:w-64 sm:h-44 md:w-72 md:h-48 flex items-center justify-center relative my-1 sm:my-2 transition-transform duration-200">
                 <ShipGraphic
                   ship={currentShip}
-                  size={90}
+                  className="w-full h-full max-w-full max-h-full"
                   showGlow={true}
                   showThrusters={true}
                 />
@@ -630,8 +630,8 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
               {/* Header */}
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 flex items-center justify-center relative">
-                    <ShipGraphic ship={currentShip} size={48} showGlow={true} />
+                  <div className="w-16 h-14 sm:w-20 sm:h-16 flex items-center justify-center relative shrink-0">
+                    <ShipGraphic ship={currentShip} className="w-full h-full max-h-16" showGlow={true} />
                   </div>
                   <div>
                     <h3 className="font-mono text-base font-bold text-slate-100 flex items-center gap-2">
