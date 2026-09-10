@@ -5896,14 +5896,6 @@ export function drawValkyrie(
   ctx.strokeStyle = '#e2e8f0';
   ctx.lineWidth = 1.6;
   ctx.beginPath();
-<<<<<<< HEAD
-  roundRect(ctx, -34, footPadY - 3.5, 11, 3.5, 1.5);
-  roundRect(ctx, 23, footPadY - 3.5, 11, 3.5, 1.5);
-  ctx.fill();
-=======
-  ctx.moveTo(-24, footPadY - 10); ctx.lineTo(-29, footPadY - 2.5);
-  ctx.moveTo(24, footPadY - 10); ctx.lineTo(29, footPadY - 2.5);
->>>>>>> origin/main
   ctx.stroke();
 
   // A-Frame Diagonal Retraction Braces / Scissor Links
