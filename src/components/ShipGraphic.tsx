@@ -275,6 +275,45 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <stop offset="100%" stopColor="#1e293b" />
           </linearGradient>
 
+          {/* Juggernaut Heavy Lifter Shaders & Patterns */}
+          <pattern id="juggernaut-hazard" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect x="0" y="0" width="4" height="8" fill="#f59e0b" />
+            <rect x="4" y="0" width="4" height="8" fill="#0f172a" />
+          </pattern>
+
+          <linearGradient id="juggernaut-hull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#334155" />
+            <stop offset="30%" stopColor="#1e293b" />
+            <stop offset="70%" stopColor="#0f172a" />
+            <stop offset="100%" stopColor="#090d16" />
+          </linearGradient>
+
+          <linearGradient id="juggernaut-armor-facet" x1="0%" y1="0%" x2="100%" y2="50%">
+            <stop offset="0%" stopColor="#475569" />
+            <stop offset="45%" stopColor="#1e293b" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          <linearGradient id="juggernaut-thruster-bell" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#1e293b" />
+            <stop offset="35%" stopColor="#475569" />
+            <stop offset="70%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          <radialGradient id="juggernaut-plasma-core" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="35%" stopColor="#34d399" />
+            <stop offset="75%" stopColor="#059669" />
+            <stop offset="100%" stopColor="#064e3b" />
+          </radialGradient>
+
+          <linearGradient id="juggernaut-docking-beam" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#34d399" stopOpacity="0.32" />
+            <stop offset="50%" stopColor="#34d399" stopOpacity="0.10" />
+            <stop offset="100%" stopColor="#34d399" stopOpacity="0.0" />
+          </linearGradient>
+
           {/* Cockpit Canopy Shader */}
           <radialGradient
             id={`visor-grad-${modelId}`}
@@ -2349,26 +2388,233 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         {/* ========================================================= */}
         {modelId === 'juggernaut' && (
           <g>
-            <g stroke="#475569" strokeWidth="3" strokeLinecap="round">
-              <line x1="-30" y1="14" x2="-38" y2="34" />
-              <line x1="30" y1="14" x2="38" y2="34" />
+            {/* 0. Downward Docking & Landing Floodlight Cones */}
+            <polygon points="-38,-10 -46,38 -28,38 -34,-10" fill="url(#juggernaut-docking-beam)" />
+            <polygon points="38,-10 28,38 46,38 34,-10" fill="url(#juggernaut-docking-beam)" />
+
+            {/* 1. Heavy Quad Fusion Exhaust Thruster Nozzles (Underchassis Array) */}
+            {/* Outer Port Thruster (x: -33) */}
+            <polygon points="-38,24 -28,24 -26,33 -40,33" fill="url(#juggernaut-thruster-bell)" stroke="#475569" strokeWidth="1.2" />
+            <rect x="-37" y="23" width="8" height="2" rx="0.6" fill="#10b981" />
+            <line x1="-39" y1="24" x2="-39" y2="30" stroke="#94a3b8" strokeWidth="1.0" />
+            <ellipse cx="-33" cy="32.5" rx="5.5" ry="1.8" fill="url(#juggernaut-plasma-core)" />
+            <ellipse cx="-33" cy="32.5" rx="2.5" ry="0.9" fill="#ffffff" opacity="0.95" />
+
+            {/* Inner Port Thruster (x: -17) */}
+            <polygon points="-21,24 -13,24 -12,32 -22,32" fill="url(#juggernaut-thruster-bell)" stroke="#475569" strokeWidth="1.2" />
+            <rect x="-20" y="23" width="6" height="2" rx="0.6" fill="#10b981" />
+            <line x1="-21.5" y1="24" x2="-21.5" y2="29" stroke="#94a3b8" strokeWidth="0.9" />
+            <ellipse cx="-17" cy="31.5" rx="4.2" ry="1.5" fill="url(#juggernaut-plasma-core)" />
+            <ellipse cx="-17" cy="31.5" rx="1.8" ry="0.7" fill="#ffffff" opacity="0.9" />
+
+            {/* Inner Starboard Thruster (x: 17) */}
+            <polygon points="13,24 21,24 22,32 12,32" fill="url(#juggernaut-thruster-bell)" stroke="#475569" strokeWidth="1.2" />
+            <rect x="14" y="23" width="6" height="2" rx="0.6" fill="#10b981" />
+            <line x1="21.5" y1="24" x2="21.5" y2="29" stroke="#94a3b8" strokeWidth="0.9" />
+            <ellipse cx="17" cy="31.5" rx="4.2" ry="1.5" fill="url(#juggernaut-plasma-core)" />
+            <ellipse cx="17" cy="31.5" rx="1.8" ry="0.7" fill="#ffffff" opacity="0.9" />
+
+            {/* Outer Starboard Thruster (x: 33) */}
+            <polygon points="28,24 38,24 40,33 26,33" fill="url(#juggernaut-thruster-bell)" stroke="#475569" strokeWidth="1.2" />
+            <rect x="29" y="23" width="8" height="2" rx="0.6" fill="#10b981" />
+            <line x1="39" y1="24" x2="39" y2="30" stroke="#94a3b8" strokeWidth="1.0" />
+            <ellipse cx="33" cy="32.5" rx="5.5" ry="1.8" fill="url(#juggernaut-plasma-core)" />
+            <ellipse cx="33" cy="32.5" rx="2.5" ry="0.9" fill="#ffffff" opacity="0.95" />
+
+            {/* 2. Quad Reinforced Tungsten Outrigger Landing Gear (Strictly Isolated Subpaths) */}
+            {/* Outer Port Outrigger Assembly (x: -46) */}
+            <circle cx="-35" cy="14" r="3.2" fill="#334155" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="-35" y1="14" x2="-46" y2="34" stroke="#475569" strokeWidth="3.2" strokeLinecap="round" />
+            <line x1="-42" y1="27" x2="-46" y2="34" stroke="#f8fafc" strokeWidth="1.8" strokeLinecap="round" />
+            <line x1="-24" y1="20" x2="-43" y2="32" stroke="#334155" strokeWidth="1.6" />
+            <circle cx="-46" cy="34" r="2.0" fill="#1e293b" stroke="#10b981" strokeWidth="1.0" />
+            <rect x="-52" y="33.5" width="12" height="4" rx="1.5" fill="#0f172a" stroke="#10b981" strokeWidth="1.4" />
+            <line x1="-50" y1="37.5" x2="-50" y2="39.5" stroke="#475569" strokeWidth="1.4" />
+            <line x1="-46" y1="37.5" x2="-46" y2="39.5" stroke="#475569" strokeWidth="1.4" />
+            <line x1="-42" y1="37.5" x2="-42" y2="39.5" stroke="#475569" strokeWidth="1.4" />
+
+            {/* Inner Port Stabilizer Outrigger (x: -18) */}
+            <circle cx="-18" cy="22" r="2.4" fill="#334155" stroke="#1e293b" strokeWidth="1.0" />
+            <line x1="-18" y1="23" x2="-18" y2="34" stroke="#94a3b8" strokeWidth="2.2" strokeLinecap="round" />
+            <line x1="-18" y1="28" x2="-18" y2="34" stroke="#f8fafc" strokeWidth="1.4" />
+            <rect x="-22" y="34" width="8" height="3.5" rx="1.2" fill="#0f172a" stroke="#10b981" strokeWidth="1.2" />
+            <line x1="-20" y1="37.5" x2="-20" y2="39" stroke="#475569" strokeWidth="1.2" />
+            <line x1="-16" y1="37.5" x2="-16" y2="39" stroke="#475569" strokeWidth="1.2" />
+
+            {/* Inner Starboard Stabilizer Outrigger (x: 18) */}
+            <circle cx="18" cy="22" r="2.4" fill="#334155" stroke="#1e293b" strokeWidth="1.0" />
+            <line x1="18" y1="23" x2="18" y2="34" stroke="#94a3b8" strokeWidth="2.2" strokeLinecap="round" />
+            <line x1="18" y1="28" x2="18" y2="34" stroke="#f8fafc" strokeWidth="1.4" />
+            <rect x="14" y="34" width="8" height="3.5" rx="1.2" fill="#0f172a" stroke="#10b981" strokeWidth="1.2" />
+            <line x1="16" y1="37.5" x2="16" y2="39" stroke="#475569" strokeWidth="1.2" />
+            <line x1="20" y1="37.5" x2="20" y2="39" stroke="#475569" strokeWidth="1.2" />
+
+            {/* Outer Starboard Outrigger Assembly (x: 46) */}
+            <circle cx="35" cy="14" r="3.2" fill="#334155" stroke="#1e293b" strokeWidth="1.2" />
+            <line x1="35" y1="14" x2="46" y2="34" stroke="#475569" strokeWidth="3.2" strokeLinecap="round" />
+            <line x1="42" y1="27" x2="46" y2="34" stroke="#f8fafc" strokeWidth="1.8" strokeLinecap="round" />
+            <line x1="24" y1="20" x2="43" y2="32" stroke="#334155" strokeWidth="1.6" />
+            <circle cx="46" cy="34" r="2.0" fill="#1e293b" stroke="#10b981" strokeWidth="1.0" />
+            <rect x="40" y="33.5" width="12" height="4" rx="1.5" fill="#0f172a" stroke="#10b981" strokeWidth="1.4" />
+            <line x1="42" y1="37.5" x2="42" y2="39.5" stroke="#475569" strokeWidth="1.4" />
+            <line x1="46" y1="37.5" x2="46" y2="39.5" stroke="#475569" strokeWidth="1.4" />
+            <line x1="50" y1="37.5" x2="50" y2="39.5" stroke="#475569" strokeWidth="1.4" />
+
+            {/* 3. Colossal Armored Fuselage & Heavy Sponsons */}
+            {/* Main Keel & Sponson Hull Polygon */}
+            <polygon
+              points="0,-44 18,-30 44,-20 46,24 24,25 -24,25 -46,24 -44,-20 -18,-30"
+              fill="url(#juggernaut-hull-grad)"
+              stroke="#10b981"
+              strokeWidth="2.0"
+            />
+
+            {/* Sponson Armor Facet Overlays */}
+            <polygon
+              points="-18,-29 -43,-19 -45,23 -24,24 -21,-8"
+              fill="url(#juggernaut-armor-facet)"
+              stroke="#334155"
+              strokeWidth="1.2"
+            />
+            <polygon
+              points="18,-29 43,-19 45,23 24,24 21,-8"
+              fill="url(#juggernaut-armor-facet)"
+              stroke="#334155"
+              strokeWidth="1.2"
+            />
+
+            {/* Sponson Armor Chine Accent Seams */}
+            <line x1="-43" y1="-19" x2="-23" y2="10" stroke="#10b981" strokeWidth="0.9" />
+            <line x1="43" y1="-19" x2="23" y2="10" stroke="#10b981" strokeWidth="0.9" />
+
+            {/* APU Radiator Cooling Louvers */}
+            <rect x="-37" y="-5" width="10" height="6" rx="1" fill="#090d16" stroke="#475569" strokeWidth="0.8" />
+            <line x1="-35" y1="-3" x2="-29" y2="-3" stroke="#64748b" strokeWidth="0.8" />
+            <line x1="-35" y1="-1" x2="-29" y2="-1" stroke="#64748b" strokeWidth="0.8" />
+
+            <rect x="27" y="-5" width="10" height="6" rx="1" fill="#090d16" stroke="#475569" strokeWidth="0.8" />
+            <line x1="29" y1="-3" x2="35" y2="-3" stroke="#64748b" strokeWidth="0.8" />
+            <line x1="29" y1="-1" x2="35" y2="-1" stroke="#64748b" strokeWidth="0.8" />
+
+            {/* Forged Titanium Crane Lifting Lugs (3500kg Heavy Cargo Anchor Points) */}
+            <rect x="-43" y="-14" width="4" height="6" rx="1" fill="#475569" stroke="#94a3b8" strokeWidth="0.8" />
+            <circle cx="-41" cy="-11" r="1.1" fill="#0f172a" />
+            <rect x="39" y="-14" width="4" height="6" rx="1" fill="#475569" stroke="#94a3b8" strokeWidth="0.8" />
+            <circle cx="41" cy="-11" r="1.1" fill="#0f172a" />
+
+            {/* Sponson Reaction Control Thruster (RCS) Quads */}
+            <rect x="-45.5" y="-22" width="2.5" height="4" fill="#1e293b" stroke="#334155" strokeWidth="0.6" />
+            <circle cx="-45.5" cy="-21" r="0.7" fill="#d97706" />
+            <circle cx="-45.5" cy="-19" r="0.7" fill="#d97706" />
+
+            <rect x="43" y="-22" width="2.5" height="4" fill="#1e293b" stroke="#334155" strokeWidth="0.6" />
+            <circle cx="45.5" cy="-21" r="0.7" fill="#d97706" />
+            <circle cx="45.5" cy="-19" r="0.7" fill="#d97706" />
+
+            {/* Structural Bulkhead Armor Micro-Rivets */}
+            {[-12, -4, 4, 12, 20].map((ry) => (
+              <g key={`sponson-rivet-${ry}`}>
+                <circle cx="-43.5" cy={ry} r="0.7" fill="#6ee7b7" opacity="0.8" />
+                <circle cx="43.5" cy={ry} r="0.7" fill="#6ee7b7" opacity="0.8" />
+              </g>
+            ))}
+
+            {/* Wingtip Tactical Formation Nav Lights */}
+            <circle cx="-45" cy="22" r="1.4" fill="#ef4444" />
+            <circle cx="45" cy="22" r="1.4" fill="#10b981" />
+
+            {/* 4. Drive-Through Heavy Vehicle Ramp Hold (Central Bay) */}
+            {/* Interior Vehicle Hold Cavity */}
+            <rect x="-19" y="-6" width="38" height="30" rx="2" fill="#040810" stroke="#059669" strokeWidth="1.4" />
+
+            {/* Overhead Gantry Crane Monorail Track */}
+            <line x1="-17" y1="-3" x2="17" y2="-3" stroke="#475569" strokeWidth="1.6" />
+            <rect x="-4" y="-4.5" width="8" height="3" rx="0.5" fill="#f59e0b" stroke="#b45309" strokeWidth="0.6" />
+
+            {/* Onboard Planetary Exploration Rover (Heavy All-Terrain Transporter inside Bay) */}
+            <g id="juggernaut-onboard-rover">
+              {/* Rover Tires (Left and Right Axles) */}
+              <rect x="-17" y="14" width="4" height="8" rx="1.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.8" />
+              <rect x="-17" y="7" width="4" height="7" rx="1.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.8" />
+              <rect x="13" y="14" width="4" height="8" rx="1.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.8" />
+              <rect x="13" y="7" width="4" height="7" rx="1.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.8" />
+
+              {/* Rover Chassis Body */}
+              <polygon points="-13,19 13,19 12,9 -12,9" fill="#10b981" stroke="#047857" strokeWidth="1.0" />
+              <line x1="-12" y1="14" x2="12" y2="14" stroke="#064e3b" strokeWidth="1.0" />
+
+              {/* Rover Armored Cabin & Emerald Visor */}
+              <polygon points="-8,13 8,13 6,8 -6,8" fill="#064e3b" stroke="#34d399" strokeWidth="0.8" />
+              <line x1="0" y1="8" x2="0" y2="13" stroke="#022c22" strokeWidth="0.7" />
+              <ellipse cx="-2.5" cy="10" rx="1.8" ry="0.8" fill="#ffffff" opacity="0.85" />
+
+              {/* Rover High-Intensity Forward Headlights */}
+              <circle cx="-9" cy="16.5" r="1.4" fill="#fef08a" />
+              <circle cx="9" cy="16.5" r="1.4" fill="#fef08a" />
+              <circle cx="-9" cy="16.5" r="0.6" fill="#ffffff" />
+              <circle cx="9" cy="16.5" r="0.6" fill="#ffffff" />
+
+              {/* Rover Comms Dish on Roof */}
+              <line x1="4" y1="8" x2="4" y2="5" stroke="#94a3b8" strokeWidth="0.8" />
+              <ellipse cx="4" cy="5" rx="2.5" ry="1.2" fill="#475569" stroke="#94a3b8" strokeWidth="0.6" />
             </g>
-            <rect x="-42" y="33" width="12" height="4.5" rx="1.5" fill="#10b981" stroke="#047857" strokeWidth="1.2" />
-            <rect x="30" y="33" width="12" height="4.5" rx="1.5" fill="#10b981" stroke="#047857" strokeWidth="1.2" />
 
-            {/* Massive Heavy Chassis */}
-            <polygon points="0,-38 36,-20 38,22 -38,22 -36,-20" fill="#0f172a" stroke="#10b981" strokeWidth="2.2" />
-            {/* Center Vehicle Bay */}
-            <rect x="-15" y="-4" width="30" height="24" rx="2" fill="#050b14" stroke="#34d399" strokeWidth="1.2" />
-            {/* Hazard lines */}
-            <line x1="-12" y1="18" x2="-6" y2="12" stroke="#f59e0b" strokeWidth="1.6" />
-            <line x1="-2" y1="18" x2="4" y2="12" stroke="#f59e0b" strokeWidth="1.6" />
-            <line x1="8" y1="18" x2="14" y2="12" stroke="#f59e0b" strokeWidth="1.6" />
+            {/* Heavy Hydraulic Vehicle Ramp Threshold & Chevrons */}
+            <rect x="-19" y="21" width="38" height="4" fill="url(#juggernaut-hazard)" stroke="#f59e0b" strokeWidth="1.0" />
+            <line x1="-19" y1="21" x2="19" y2="21" stroke="#10b981" strokeWidth="1.2" />
 
-            {/* Emerald Bridge Tower */}
-            <polygon points="0,-38 14,-24 14,-6 -14,-6 -14,-24" fill="#1e293b" stroke="#10b981" strokeWidth="1.6" />
-            <ellipse cx="0" cy="-26" rx="8" ry="5.5" fill="url(#visor-grad-juggernaut)" stroke="#6ee7b7" strokeWidth="1.2" />
-            <ellipse cx="-2.5" cy="-28" rx="3.2" ry="1.5" fill="#ffffff" opacity="0.85" />
+            {/* Ramp Hydraulic Actuators & Hinge Knuckles */}
+            <rect x="-18" y="19" width="3" height="5" rx="0.8" fill="#334155" stroke="#94a3b8" strokeWidth="0.6" />
+            <line x1="-16.5" y1="16" x2="-16.5" y2="22" stroke="#f8fafc" strokeWidth="1.2" />
+            <rect x="15" y="19" width="3" height="5" rx="0.8" fill="#334155" stroke="#94a3b8" strokeWidth="0.6" />
+            <line x1="16.5" y1="16" x2="16.5" y2="22" stroke="#f8fafc" strokeWidth="1.2" />
+
+            {/* 5. Emerald Command Bridge Citadel & Sensor Spire */}
+            {/* Command Superstructure Citadel */}
+            <polygon
+              points="0,-45 16,-28 16,-8 -16,-8 -16,-28"
+              fill="#1e293b"
+              stroke="#10b981"
+              strokeWidth="1.8"
+            />
+            {/* Facet armor plates on bridge */}
+            <polygon points="0,-45 16,-28 0,-24" fill="#334155" opacity="0.6" />
+            <polygon points="0,-45 -16,-28 0,-24" fill="#0f172a" opacity="0.5" />
+
+            {/* Panoramic Emerald Command Visor */}
+            <ellipse
+              cx="0"
+              cy="-28"
+              rx="8.5"
+              ry="6"
+              fill="url(#visor-grad-juggernaut)"
+              stroke="#6ee7b7"
+              strokeWidth="1.3"
+            />
+
+            {/* Visor Armored Window Mullions */}
+            <line x1="0" y1="-34" x2="0" y2="-22" stroke="#0f172a" strokeWidth="1.1" />
+            <line x1="-7.5" y1="-28" x2="7.5" y2="-28" stroke="#0f172a" strokeWidth="0.9" />
+
+            {/* Visor Perimeter Micro-Rivets */}
+            {[-6, -3, 0, 3, 6].map((vx) => (
+              <circle key={`v-rivet-${vx}`} cx={vx} cy="-33" r="0.5" fill="#e0f2fe" />
+            ))}
+
+            {/* Visor Specular Glass Arc Highlight */}
+            <ellipse cx="-2.8" cy="-30.5" rx="3.5" ry="1.6" fill="#ffffff" opacity="0.85" />
+
+            {/* Dorsal Sensor Radome Blister */}
+            <ellipse cx="0" cy="-44" rx="4" ry="2" fill="#0f172a" stroke="#10b981" strokeWidth="1.0" />
+
+            {/* Dual Whip Comms Antennas & Flashing Telemetry Beacons */}
+            <line x1="-7" y1="-42" x2="-7" y2="-51" stroke="#94a3b8" strokeWidth="1.0" />
+            <line x1="-9" y1="-51" x2="-5" y2="-51" stroke="#34d399" strokeWidth="0.8" />
+            <circle cx="-7" cy="-51" r="1.3" fill="#10b981" />
+
+            <line x1="7" y1="-42" x2="7" y2="-51" stroke="#94a3b8" strokeWidth="1.0" />
+            <line x1="5" y1="-51" x2="9" y2="-51" stroke="#34d399" strokeWidth="0.8" />
+            <circle cx="7" cy="-51" r="1.3" fill="#34d399" />
           </g>
         )}
 
