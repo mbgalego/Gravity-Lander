@@ -87,6 +87,42 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <stop offset="100%" stopColor="#0f172a" />
           </linearGradient>
 
+          {/* Colonial Viper: Light Battleship Grey Hull */}
+          <linearGradient id="viper-hull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#e8eef5" />
+            <stop offset="55%" stopColor="#c5c9d0" />
+            <stop offset="100%" stopColor="#7f8b99" />
+          </linearGradient>
+
+          {/* Colonial Viper: Broad Delta Wing Shader */}
+          <linearGradient id="viper-wing-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#e2e8f0" />
+            <stop offset="60%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#8b9cb0" />
+          </linearGradient>
+
+          {/* Colonial Viper: Golden Laser Cannon Barrel */}
+          <linearGradient id="viper-gun-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#fde68a" />
+            <stop offset="50%" stopColor="#ddbe00" />
+            <stop offset="100%" stopColor="#a16207" />
+          </linearGradient>
+
+          {/* Colonial Viper: Twin Engine Nacelle Block */}
+          <linearGradient id="viper-nozzle-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#475569" />
+            <stop offset="60%" stopColor="#1e293b" />
+            <stop offset="100%" stopColor="#0b1220" />
+          </linearGradient>
+
+          {/* Colonial Viper: Faceted Navy Canopy */}
+          <radialGradient id="viper-canopy-grad" cx="30%" cy="30%" r="70%">
+            <stop offset="0%" stopColor="#5b6bcf" />
+            <stop offset="45%" stopColor="#24306e" />
+            <stop offset="85%" stopColor="#0d1b4c" />
+            <stop offset="100%" stopColor="#060d24" />
+          </radialGradient>
+
           {/* Valkyrie Tactical Armored Slate Hull */}
           <linearGradient id="valkyrie-hull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#334155" />
@@ -626,53 +662,114 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         )}
 
         {/* ========================================================= */}
-        {/* MODEL: VIPER DART (Stealth High-Agility Interceptor)      */}
+        {/* MODEL: COLONIAL VIPER (Mk II Fleet Interceptor)          */}
         {/* ========================================================= */}
         {modelId === 'viper' && (
           <g>
-            {/* 1. Sleek Carbon Retractable Gear Struts & Footpads */}
-            <g stroke="#f43f5e" strokeWidth="2.2" strokeLinecap="round">
-              <line x1="-16" y1="16" x2="-24" y2="30" />
-              <line x1="16" y1="16" x2="24" y2="30" />
+            {/* 1. Landing Gear — Inset Struts & Trapezoid Footpads */}
+            <g stroke="#94a3b8" strokeWidth="1.8" strokeLinecap="round">
+              <line x1="-15" y1="12" x2="-24" y2="30" />
+              <line x1="15" y1="12" x2="24" y2="30" />
             </g>
-            <ellipse cx="-24" cy="30" rx="4.5" ry="1.8" fill="#fda4af" stroke="#9f1239" strokeWidth="1.1" />
-            <ellipse cx="24" cy="30" rx="4.5" ry="1.8" fill="#fda4af" stroke="#9f1239" strokeWidth="1.1" />
+            <ellipse cx="-24" cy="30" rx="5" ry="1.7" fill="#334155" stroke="#0f172a" strokeWidth="1" />
+            <ellipse cx="24" cy="30" rx="5" ry="1.7" fill="#334155" stroke="#0f172a" strokeWidth="1" />
 
-            {/* 2. Aerodynamic Stealth Delta Wings */}
-            <polygon
-              points="0,-33 19,13 28,21 14,24 0,16 -14,24 -28,21 -19,13"
-              fill="#090d16"
-              stroke="#f43f5e"
-              strokeWidth="2.0"
-            />
-
-            {/* 3. Titanium High-Pressure Fuel Core */}
-            <circle cx="0" cy="5" r="6" fill="url(#fuel-tank-grad)" stroke="#be123c" strokeWidth="1.2" />
-
-            {/* 4. Center Fuselage Razor Spine */}
-            <polygon
-              points="0,-35 10,11 0,17 -10,11"
-              fill="#1e293b"
-              stroke="#fb7185"
-              strokeWidth="1.2"
-            />
-
-            {/* 5. Crimson Stealth Holographic Cockpit */}
-            <polygon
-              points="0,-25 6,-7 0,-3 -6,-7"
-              fill="url(#visor-grad-viper)"
-              stroke="#fda4af"
+            {/* 2. Broad Swept Delta Wings — Curved Leading Edges, Light Grey */}
+            <path
+              d="M0 -2 L6 -2 Q22 3 34 15 L22 21 L7 19 L0 17 L-7 19 L-22 21 L-34 15 Q-22 3 -6 -2 Z"
+              fill="url(#viper-wing-grad)"
+              stroke="#334155"
               strokeWidth="1.3"
             />
-            <ellipse cx="0" cy="-14" rx="2.5" ry="5" fill="#ffffff" opacity="0.65" />
 
-            {/* 6. Vectoring Exhaust Bells */}
-            <polygon points="-12,22 -6,22 -4,28 -14,28" fill="#e11d48" stroke="#fda4af" strokeWidth="0.8" />
-            <polygon points="6,22 12,22 14,28 4,28" fill="#e11d48" stroke="#fda4af" strokeWidth="0.8" />
+            {/* Red accent stripes on wing leading edges */}
+            <path d="M6 -2 Q22 3 33.5 14.5" stroke="#d32f2f" strokeWidth="1.7" strokeLinecap="round" fill="none" />
+            <path d="M-6 -2 Q-22 3 -33.5 14.5" stroke="#d32f2f" strokeWidth="1.7" strokeLinecap="round" fill="none" />
+
+            {/* Wing panel seams */}
+            <path
+              d="M-32 8 L-10 17 M32 8 L10 17 M-24 3 L-24 20 M24 3 L24 20"
+              stroke="#9aa9ba"
+              strokeWidth="0.7"
+              fill="none"
+            />
+
+            {/* 3. Twin Golden Laser Cannon Mounts — Forward of Canopy */}
+            {/* Port cannon body + pointed muzzle */}
+            <path d="M-13.8 -16 L-10.2 -16 L-10.2 -2 L-13.8 -2 Z" fill="url(#viper-gun-grad)" stroke="#713f12" strokeWidth="0.9" />
+            <path d="M-13.8 -16 L-12 -19.5 L-10.2 -16 Z" fill="url(#viper-gun-grad)" stroke="#713f12" strokeWidth="0.9" />
+            {/* Starboard cannon body + pointed muzzle */}
+            <path d="M10.2 -16 L13.8 -16 L13.8 -2 L10.2 -2 Z" fill="url(#viper-gun-grad)" stroke="#713f12" strokeWidth="0.9" />
+            <path d="M10.2 -16 L12 -19.5 L13.8 -16 Z" fill="url(#viper-gun-grad)" stroke="#713f12" strokeWidth="0.9" />
+            {/* Black stripe bands near cannon bases */}
+            <path
+              d="M-13.8 -9.5 L-10.2 -9.5 M-13.8 -11.5 L-10.2 -11.5 M10.2 -9.5 L13.8 -9.5 M10.2 -11.5 L13.8 -11.5"
+              stroke="#1f2937"
+              strokeWidth="1"
+              fill="none"
+            />
+
+            {/* 4. Twin Engine Nacelles — Exhausts Aligned to In-Game Thrusters */}
+            <rect x="-12.5" y="16" width="10" height="8" rx="1.5" fill="url(#viper-nozzle-grad)" stroke="#0f172a" strokeWidth="1.1" />
+            <rect x="2.5" y="16" width="10" height="8" rx="1.5" fill="url(#viper-nozzle-grad)" stroke="#0f172a" strokeWidth="1.1" />
+
+            {/* Horizontal vent slits (grilles) */}
+            <path
+              d="M-12.5 18 L-2.5 18 M-12.5 19.6 L-2.5 19.6 M-12.5 21.2 L-2.5 21.2 M2.5 18 L12.5 18 M2.5 19.6 L12.5 19.6 M2.5 21.2 L12.5 21.2"
+              stroke="#090d16"
+              strokeWidth="1"
+              fill="none"
+            />
+
+            {/* Dark rectangular exhaust faces */}
+            <rect x="-12" y="22.8" width="9" height="1.3" rx="0.4" fill="#050b14" />
+            <rect x="3" y="22.8" width="9" height="1.3" rx="0.4" fill="#050b14" />
+
+            {/* 5. Center Fuselage & Needle Nose — Detailed Light Grey Hull */}
+            <path
+              d="M0 -38 L3 -16 L4.6 -6 L5.4 2 L5.2 10 L4.2 16 L-4.2 16 L-5.2 10 L-5.4 2 L-4.6 -6 L-3 -16 Z"
+              fill="url(#viper-hull-grad)"
+              stroke="#3f4a57"
+              strokeWidth="1.1"
+            />
+
+            {/* Nose sensor port */}
+            <circle cx="0" cy="-37.2" r="1.1" fill="#111827" />
+
+            {/* Fuselage panel seams — grid near rear half */}
+            <path
+              d="M-3 -24 L3 -24 M-4.8 -10 L4.8 -10 M-5.3 6 L5.3 6 M-4.8 13 L4.8 13 M0 2 L0 16"
+              stroke="#9aa9ba"
+              strokeWidth="0.7"
+              fill="none"
+            />
+            <path d="M0 -30 L0 -4" stroke="#aab7c4" strokeWidth="0.7" fill="none" />
+
+            {/* Access hatches — small black-bordered squares */}
+            <rect x="-4.4" y="8" width="2.4" height="2.4" fill="#c5c9d0" stroke="#1f2937" strokeWidth="0.6" />
+            <rect x="2" y="8" width="2.4" height="2.4" fill="#c5c9d0" stroke="#1f2937" strokeWidth="0.6" />
+            <rect x="-4" y="12.4" width="2" height="2" fill="#c5c9d0" stroke="#1f2937" strokeWidth="0.6" />
+            <rect x="2" y="12.4" width="2" height="2" fill="#c5c9d0" stroke="#1f2937" strokeWidth="0.6" />
+
+            {/* Red dorsal stripe — rear through mid, ending near nose root */}
+            <path d="M0 15 L1 4 L0.8 -8 L-0.8 -8 L-1 4 Z" fill="#d32f2f" />
+
+            {/* 6. Hexagonal Navy Canopy — Pointed Front/Rear, Framed Panes */}
+            <path
+              d="M0 -6 L7 -2 L7 6 L0 10 L-7 6 L-7 -2 Z"
+              fill="url(#viper-canopy-grad)"
+              stroke="#0a0f1e"
+              strokeWidth="1.4"
+            />
+            <path
+              d="M-5 -1 L5 -1 M-6 3 L6 3 M0 -6 L0 10"
+              stroke="#0d1b4c"
+              strokeWidth="0.7"
+              fill="none"
+            />
+            <ellipse cx="-1" cy="0" rx="2.4" ry="3.2" fill="#ffffff" opacity="0.5" />
           </g>
         )}
-
-        {/* ========================================================= */}
         {/* MODEL: AEGIS FORTRESS (Armored Heavy Planetary Pod)       */}
         {/* ========================================================= */}
         {modelId === 'aegis' && (

@@ -953,107 +953,324 @@ export function drawViper(
 ) {
   const footPadY = 30 + gearSpringOffset;
 
-  // 1. Sleek Carbon Retractable Gear Struts & Footpads
-  ctx.strokeStyle = '#f43f5e';
-  ctx.lineWidth = 2.2;
+  // =================================================================
+  // 1. LANDING GEAR — Inset Struts & Isolated Footpads
+  // =================================================================
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1.8;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(-16, 16);
+  ctx.moveTo(-15, 12);
   ctx.lineTo(-24, footPadY);
-  ctx.moveTo(16, 16);
+  ctx.moveTo(15, 12);
   ctx.lineTo(24, footPadY);
   ctx.stroke();
 
-  ctx.fillStyle = '#fda4af';
-  ctx.strokeStyle = '#9f1239';
+  // Port footpad (isolated subpath)
+  ctx.fillStyle = '#334155';
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.ellipse(-24, footPadY - 1.6, 5.0, 1.7, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  // Starboard footpad (isolated subpath)
+  ctx.fillStyle = '#334155';
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.ellipse(24, footPadY - 1.6, 5.0, 1.7, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  // =================================================================
+  // 2. BROAD SWEPT DELTA WINGS — Curved Leading Edges, Light Grey
+  // =================================================================
+  const wingGrad = ctx.createLinearGradient(0, -3, 0, 22);
+  wingGrad.addColorStop(0, '#e2e8f0');
+  wingGrad.addColorStop(0.6, '#cbd5e1');
+  wingGrad.addColorStop(1, '#8b9cb0');
+  ctx.fillStyle = wingGrad;
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1.3;
+  ctx.beginPath();
+  ctx.moveTo(0, -2);
+  ctx.lineTo(6, -2);
+  ctx.quadraticCurveTo(22, 3, 34, 15); // curved right leading edge
+  ctx.lineTo(22, 21);
+  ctx.lineTo(7, 19);
+  ctx.lineTo(0, 17);
+  ctx.lineTo(-7, 19);
+  ctx.lineTo(-22, 21);
+  ctx.lineTo(-34, 15);
+  ctx.quadraticCurveTo(-22, 3, -6, -2); // curved left leading edge
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Red accent stripes on wing leading edges
+  ctx.strokeStyle = '#d32f2f';
+  ctx.lineWidth = 1.7;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(6, -2);
+  ctx.quadraticCurveTo(22, 3, 33.5, 14.5);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(-6, -2);
+  ctx.quadraticCurveTo(-22, 3, -33.5, 14.5);
+  ctx.stroke();
+
+  // Wing panel seams
+  ctx.strokeStyle = '#9aa9ba';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(-32, 8);
+  ctx.lineTo(-10, 17);
+  ctx.moveTo(32, 8);
+  ctx.lineTo(10, 17);
+  ctx.moveTo(-24, 3);
+  ctx.lineTo(-24, 20);
+  ctx.moveTo(24, 3);
+  ctx.lineTo(24, 20);
+  ctx.stroke();
+
+  // =================================================================
+  // 3. TWIN GOLDEN LASER CANNON MOUNTS — Forward of Canopy
+  // =================================================================
+  const gunGrad = ctx.createLinearGradient(0, -18, 0, -2);
+  gunGrad.addColorStop(0, '#fde68a');
+  gunGrad.addColorStop(0.5, '#ddbe00');
+  gunGrad.addColorStop(1, '#a16207');
+  ctx.fillStyle = gunGrad;
+  ctx.strokeStyle = '#713f12';
+  ctx.lineWidth = 0.9;
+
+  // Port cannon body + pointed muzzle
+  ctx.beginPath();
+  ctx.moveTo(-13.8, -16);
+  ctx.lineTo(-10.2, -16);
+  ctx.lineTo(-10.2, -2);
+  ctx.lineTo(-13.8, -2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(-13.8, -16);
+  ctx.lineTo(-12.0, -19.5);
+  ctx.lineTo(-10.2, -16);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Starboard cannon body + pointed muzzle
+  ctx.beginPath();
+  ctx.moveTo(10.2, -16);
+  ctx.lineTo(13.8, -16);
+  ctx.lineTo(13.8, -2);
+  ctx.lineTo(10.2, -2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(10.2, -16);
+  ctx.lineTo(12.0, -19.5);
+  ctx.lineTo(13.8, -16);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Black stripe bands near cannon bases
+  ctx.strokeStyle = '#1f2937';
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.moveTo(-13.8, -9.5);
+  ctx.lineTo(-10.2, -9.5);
+  ctx.moveTo(-13.8, -11.5);
+  ctx.lineTo(-10.2, -11.5);
+  ctx.moveTo(10.2, -9.5);
+  ctx.lineTo(13.8, -9.5);
+  ctx.moveTo(10.2, -11.5);
+  ctx.lineTo(13.8, -11.5);
+  ctx.stroke();
+
+  // =================================================================
+  // 4. TWIN ENGINE NACELLES — Exhaust Faces Aligned to Thruster Anchors
+  //    (local ±7.5 → world ±10.5 at renderScale 1.4)
+  // =================================================================
+  const nacGrad = ctx.createLinearGradient(0, 16, 0, 24);
+  nacGrad.addColorStop(0, '#475569');
+  nacGrad.addColorStop(0.6, '#1e293b');
+  nacGrad.addColorStop(1, '#0b1220');
+  ctx.fillStyle = nacGrad;
+  ctx.strokeStyle = '#0f172a';
   ctx.lineWidth = 1.1;
   ctx.beginPath();
-  ctx.ellipse(-24, footPadY - 1.8, 4.5, 1.8, 0, 0, Math.PI * 2);
-  ctx.moveTo(24 + 4.5, footPadY - 1.8);
-  ctx.ellipse(24, footPadY - 1.8, 4.5, 1.8, 0, 0, Math.PI * 2);
+  roundRect(ctx, -12.5, 16, 10, 8, 1.5);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  roundRect(ctx, 2.5, 16, 10, 8, 1.5);
   ctx.fill();
   ctx.stroke();
 
-  // 2. Aerodynamic Stealth Delta Wings
-  ctx.fillStyle = '#090d16';
+  // Horizontal vent slits (grilles)
+  ctx.strokeStyle = '#090d16';
+  ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.moveTo(0, -33);
-  ctx.lineTo(19, 13);
-  ctx.lineTo(28, 21);
-  ctx.lineTo(14, 24);
+  ctx.moveTo(-12.5, 18);
+  ctx.lineTo(-2.5, 18);
+  ctx.moveTo(-12.5, 19.6);
+  ctx.lineTo(-2.5, 19.6);
+  ctx.moveTo(-12.5, 21.2);
+  ctx.lineTo(-2.5, 21.2);
+  ctx.moveTo(2.5, 18);
+  ctx.lineTo(12.5, 18);
+  ctx.moveTo(2.5, 19.6);
+  ctx.lineTo(12.5, 19.6);
+  ctx.moveTo(2.5, 21.2);
+  ctx.lineTo(12.5, 21.2);
+  ctx.stroke();
+
+  // Dark exhaust faces (rectangular, at y≈23.5 == thruster anchor plane)
+  ctx.fillStyle = '#050b14';
+  ctx.beginPath();
+  roundRect(ctx, -12, 22.8, 9, 1.3, 0.4);
+  ctx.fill();
+  ctx.beginPath();
+  roundRect(ctx, 3, 22.8, 9, 1.3, 0.4);
+  ctx.fill();
+
+  // =================================================================
+  // 5. CENTER FUSELAGE & NEEDLE NOSE — Light Grey, Detailed Panels
+  // =================================================================
+  const hullGrad = ctx.createLinearGradient(0, -38, 0, 16);
+  hullGrad.addColorStop(0, '#e8eef5');
+  hullGrad.addColorStop(0.55, '#c5c9d0');
+  hullGrad.addColorStop(1, '#7f8b99');
+  ctx.fillStyle = hullGrad;
+  ctx.strokeStyle = '#3f4a57';
+  ctx.lineWidth = 1.1;
+  ctx.beginPath();
+  ctx.moveTo(0, -38);
+  ctx.lineTo(3.0, -16);
+  ctx.lineTo(4.6, -6);
+  ctx.lineTo(5.4, 2);
+  ctx.lineTo(5.2, 10);
+  ctx.lineTo(4.2, 16);
+  ctx.lineTo(-4.2, 16);
+  ctx.lineTo(-5.2, 10);
+  ctx.lineTo(-5.4, 2);
+  ctx.lineTo(-4.6, -6);
+  ctx.lineTo(-3.0, -16);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Nose sensor port (small black circle at tip)
+  ctx.fillStyle = '#111827';
+  ctx.beginPath();
+  ctx.arc(0, -37.2, 1.1, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Fuselage panel seams — grid near rear half
+  ctx.strokeStyle = '#9aa9ba';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(-3.0, -24);
+  ctx.lineTo(3.0, -24);
+  ctx.moveTo(-4.8, -10);
+  ctx.lineTo(4.8, -10);
+  ctx.moveTo(-5.3, 6);
+  ctx.lineTo(5.3, 6);
+  ctx.moveTo(-4.8, 13);
+  ctx.lineTo(4.8, 13);
+  ctx.moveTo(0, 2);
   ctx.lineTo(0, 16);
-  ctx.lineTo(-14, 24);
-  ctx.lineTo(-28, 21);
-  ctx.lineTo(-19, 13);
+  ctx.stroke();
+
+  // Forward center spine seam (lighter)
+  ctx.strokeStyle = '#aab7c4';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(0, -30);
+  ctx.lineTo(0, -4);
+  ctx.stroke();
+
+  // Access hatches (small black-bordered squares, rear fuselage)
+  ctx.fillStyle = '#c5c9d0';
+  ctx.strokeStyle = '#1f2937';
+  ctx.lineWidth = 0.6;
+  ctx.beginPath();
+  ctx.rect(-4.4, 8, 2.4, 2.4);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.rect(2.0, 8, 2.4, 2.4);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.rect(-4.0, 12.4, 2.0, 2.0);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.rect(2.0, 12.4, 2.0, 2.0);
+  ctx.fill();
+  ctx.stroke();
+
+  // Red dorsal stripe — rear, through mid, ending at nose root
+  ctx.fillStyle = '#d32f2f';
+  ctx.beginPath();
+  ctx.moveTo(0, 15);
+  ctx.lineTo(1.0, 4);
+  ctx.lineTo(0.8, -8);
+  ctx.lineTo(-0.8, -8);
+  ctx.lineTo(-1.0, 4);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = '#f43f5e';
-  ctx.lineWidth = 2.0;
-  ctx.stroke();
 
-  // 3. Titanium High-Pressure Fuel Core
-  ctx.fillStyle = createFuelTank(ctx, 0, 5, 6);
+  // =================================================================
+  // 6. HEXAGONAL NAVY CANOPY — Pointed Front/Rear, Framed Panes
+  // =================================================================
+  const canopyGrad = ctx.createRadialGradient(-1, -1, 1, 0, 2, 8.5);
+  canopyGrad.addColorStop(0, '#5b6bcf');
+  canopyGrad.addColorStop(0.45, '#24306e');
+  canopyGrad.addColorStop(0.85, '#0d1b4c');
+  canopyGrad.addColorStop(1, '#060d24');
+  ctx.fillStyle = canopyGrad;
+  ctx.strokeStyle = '#0a0f1e';
+  ctx.lineWidth = 1.4;
   ctx.beginPath();
-  ctx.arc(0, 5, 6, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = '#be123c';
-  ctx.lineWidth = 1.2;
-  ctx.stroke();
-
-  // 4. Center Fuselage Razor Spine
-  ctx.fillStyle = '#1e293b';
-  ctx.beginPath();
-  ctx.moveTo(0, -35);
-  ctx.lineTo(10, 11);
-  ctx.lineTo(0, 17);
-  ctx.lineTo(-10, 11);
+  ctx.moveTo(0, -6);
+  ctx.lineTo(7, -2);
+  ctx.lineTo(7, 6);
+  ctx.lineTo(0, 10);
+  ctx.lineTo(-7, 6);
+  ctx.lineTo(-7, -2);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = '#fb7185';
-  ctx.lineWidth = 1.2;
   ctx.stroke();
 
-  // 5. Crimson Stealth Holographic Cockpit
-  ctx.fillStyle = createVisorGrad(ctx, 0, -14, 11, config.accentColor, config.visorColor);
+  // Canopy internal framing lines
+  ctx.strokeStyle = '#0d1b4c';
+  ctx.lineWidth = 0.7;
   ctx.beginPath();
-  ctx.moveTo(0, -25);
-  ctx.lineTo(6, -7);
-  ctx.lineTo(0, -3);
-  ctx.lineTo(-6, -7);
-  ctx.closePath();
-  ctx.fill();
-  ctx.strokeStyle = '#fda4af';
-  ctx.lineWidth = 1.3;
+  ctx.moveTo(-5, -1);
+  ctx.lineTo(5, -1);
+  ctx.moveTo(-6, 3);
+  ctx.lineTo(6, 3);
+  ctx.moveTo(0, -6);
+  ctx.lineTo(0, 10);
   ctx.stroke();
 
+  // Specular highlight
   ctx.fillStyle = '#ffffff';
-  ctx.globalAlpha = 0.65;
+  ctx.globalAlpha = 0.5;
   ctx.beginPath();
-  ctx.ellipse(0, -14, 2.5, 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(-1, 0, 2.4, 3.2, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.globalAlpha = 1.0;
-
-  // 6. Vectoring Exhaust Bells
-  ctx.fillStyle = '#e11d48';
-  ctx.strokeStyle = '#fda4af';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  ctx.moveTo(-12, 22);
-  ctx.lineTo(-6, 22);
-  ctx.lineTo(-4, 28);
-  ctx.lineTo(-14, 28);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(6, 22);
-  ctx.lineTo(12, 22);
-  ctx.lineTo(14, 28);
-  ctx.lineTo(4, 28);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
 }
 
 // =====================================================================
