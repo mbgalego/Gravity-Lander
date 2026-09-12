@@ -89,39 +89,85 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
 
           {/* Colonial Viper: Light Battleship Grey Hull */}
           <linearGradient id="viper-hull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#e8eef5" />
-            <stop offset="55%" stopColor="#c5c9d0" />
-            <stop offset="100%" stopColor="#7f8b99" />
+            <stop offset="0%" stopColor="#f8fafc" />
+            <stop offset="40%" stopColor="#e2e8f0" />
+            <stop offset="85%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#94a3b8" />
           </linearGradient>
 
-          {/* Colonial Viper: Broad Delta Wing Shader */}
+          {/* Colonial Viper: Delta Wing Shader (same hull gradient) */}
           <linearGradient id="viper-wing-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#e2e8f0" />
-            <stop offset="60%" stopColor="#cbd5e1" />
-            <stop offset="100%" stopColor="#8b9cb0" />
+            <stop offset="0%" stopColor="#f8fafc" />
+            <stop offset="40%" stopColor="#e2e8f0" />
+            <stop offset="85%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#94a3b8" />
           </linearGradient>
 
           {/* Colonial Viper: Golden Laser Cannon Barrel */}
           <linearGradient id="viper-gun-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#fde68a" />
-            <stop offset="50%" stopColor="#ddbe00" />
-            <stop offset="100%" stopColor="#a16207" />
+            <stop offset="0%" stopColor="#eab308" />
+            <stop offset="50%" stopColor="#ca8a04" />
+            <stop offset="100%" stopColor="#854d0e" />
           </linearGradient>
 
           {/* Colonial Viper: Twin Engine Nacelle Block */}
           <linearGradient id="viper-nozzle-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#475569" />
-            <stop offset="60%" stopColor="#1e293b" />
-            <stop offset="100%" stopColor="#0b1220" />
+            <stop offset="0%" stopColor="#475467" />
+            <stop offset="50%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#1e293b" />
           </linearGradient>
 
           {/* Colonial Viper: Faceted Navy Canopy */}
-          <radialGradient id="viper-canopy-grad" cx="30%" cy="30%" r="70%">
-            <stop offset="0%" stopColor="#5b6bcf" />
-            <stop offset="45%" stopColor="#24306e" />
-            <stop offset="85%" stopColor="#0d1b4c" />
-            <stop offset="100%" stopColor="#060d24" />
-          </radialGradient>
+          <linearGradient id="viper-canopy-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#1e1b4b" />
+            <stop offset="50%" stopColor="#0f172a" />
+            <stop offset="100%" stopColor="#020617" />
+          </linearGradient>
+
+          {/* Colonial Viper: Red Livery Accent */}
+          <linearGradient id="viper-red-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ef4444" />
+            <stop offset="100%" stopColor="#b91c1c" />
+          </linearGradient>
+
+          {/* Wasp Heavy Fighter: Light Armor Hull */}
+          <linearGradient id="wasp-hull-light-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#f1f5f9" />
+            <stop offset="100%" stopColor="#94a3b8" />
+          </linearGradient>
+
+          {/* Wasp Heavy Fighter: Dark Armor / Wings */}
+          <linearGradient id="wasp-hull-dark-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#94a3b8" />
+            <stop offset="100%" stopColor="#475569" />
+          </linearGradient>
+
+          {/* Wasp Heavy Fighter: Horizontal Engine Pod Shader */}
+          <linearGradient id="wasp-pod-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#475569" />
+            <stop offset="30%" stopColor="#cbd5e1" />
+            <stop offset="70%" stopColor="#94a3b8" />
+            <stop offset="100%" stopColor="#334155" />
+          </linearGradient>
+
+          {/* Wasp Heavy Fighter: Inset Canopy Glass */}
+          <linearGradient id="wasp-canopy-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#0f172a" />
+            <stop offset="40%" stopColor="#1e293b" />
+            <stop offset="100%" stopColor="#020617" />
+          </linearGradient>
+
+          {/* Wasp Heavy Fighter: Orange Flank Accents */}
+          <linearGradient id="wasp-orange-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#fb923c" />
+            <stop offset="100%" stopColor="#ea580c" />
+          </linearGradient>
+
+          {/* Wasp Heavy Fighter: Yellow Fin / Tail Accents */}
+          <linearGradient id="wasp-yellow-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#fde047" />
+            <stop offset="100%" stopColor="#ca8a04" />
+          </linearGradient>
 
           {/* Valkyrie Tactical Armored Slate Hull */}
           <linearGradient id="valkyrie-hull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -664,112 +710,141 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         {/* ========================================================= */}
         {/* MODEL: COLONIAL VIPER (Mk II Fleet Interceptor)          */}
         {/* ========================================================= */}
-        {modelId === 'viper' && (
+                {modelId === 'viper' && (
           <g>
-            {/* 1. Landing Gear — Inset Struts & Trapezoid Footpads */}
-            <g stroke="#94a3b8" strokeWidth="1.8" strokeLinecap="round">
-              <line x1="-15" y1="12" x2="-24" y2="30" />
-              <line x1="15" y1="12" x2="24" y2="30" />
+            {/* 1. Landing Gear — Dual-Strut Legs & Isolated Footpads */}
+            <g stroke="#475467" strokeWidth="1.6" strokeLinecap="round" fill="none">
+              <line x1="-14" y1="10" x2="-22" y2="29" />
+              <line x1="14" y1="10" x2="22" y2="29" />
             </g>
-            <ellipse cx="-24" cy="30" rx="5" ry="1.7" fill="#334155" stroke="#0f172a" strokeWidth="1" />
-            <ellipse cx="24" cy="30" rx="5" ry="1.7" fill="#334155" stroke="#0f172a" strokeWidth="1" />
+            <g stroke="#334155" strokeWidth="1.0" strokeLinecap="round" fill="none">
+              <line x1="-7" y1="15" x2="-22" y2="29" />
+              <line x1="7" y1="15" x2="22" y2="29" />
+            </g>
+            <ellipse cx="-22" cy="29.5" rx="4.5" ry="1.2" fill="#1e293b" stroke="#0f172a" strokeWidth="0.6" />
+            <ellipse cx="22" cy="29.5" rx="4.5" ry="1.2" fill="#1e293b" stroke="#0f172a" strokeWidth="0.6" />
 
-            {/* 2. Broad Swept Delta Wings — Curved Leading Edges, Light Grey */}
+            {/* 2. Wings — Light Grey Deltas with Curved Cutouts near Cannon Mounts */}
             <path
-              d="M0 -2 L6 -2 Q22 3 34 15 L22 21 L7 19 L0 17 L-7 19 L-22 21 L-34 15 Q-22 3 -6 -2 Z"
+              d="M-8.5 16.5 L-32 16.5 L-32 -3 L-16 -3 C-16 2 -14 7 -10.5 7 L-8.5 7 Z"
               fill="url(#viper-wing-grad)"
               stroke="#334155"
-              strokeWidth="1.3"
+              strokeWidth="0.75"
+            />
+            <path
+              d="M8.5 16.5 L32 16.5 L32 -3 L16 -3 C16 2 14 7 10.5 7 L8.5 7 Z"
+              fill="url(#viper-wing-grad)"
+              stroke="#334155"
+              strokeWidth="0.75"
             />
 
-            {/* Red accent stripes on wing leading edges */}
-            <path d="M6 -2 Q22 3 33.5 14.5" stroke="#d32f2f" strokeWidth="1.7" strokeLinecap="round" fill="none" />
-            <path d="M-6 -2 Q-22 3 -33.5 14.5" stroke="#d32f2f" strokeWidth="1.7" strokeLinecap="round" fill="none" />
-
-            {/* Wing panel seams */}
+            {/* 3. Center Fuselage & Needle Nose — Light Grey Hull */}
             <path
-              d="M-32 8 L-10 17 M32 8 L10 17 M-24 3 L-24 20 M24 3 L24 20"
-              stroke="#9aa9ba"
-              strokeWidth="0.7"
-              fill="none"
-            />
-
-            {/* 3. Twin Golden Laser Cannon Mounts — Forward of Canopy */}
-            {/* Port cannon body + pointed muzzle */}
-            <path d="M-13.8 -16 L-10.2 -16 L-10.2 -2 L-13.8 -2 Z" fill="url(#viper-gun-grad)" stroke="#713f12" strokeWidth="0.9" />
-            <path d="M-13.8 -16 L-12 -19.5 L-10.2 -16 Z" fill="url(#viper-gun-grad)" stroke="#713f12" strokeWidth="0.9" />
-            {/* Starboard cannon body + pointed muzzle */}
-            <path d="M10.2 -16 L13.8 -16 L13.8 -2 L10.2 -2 Z" fill="url(#viper-gun-grad)" stroke="#713f12" strokeWidth="0.9" />
-            <path d="M10.2 -16 L12 -19.5 L13.8 -16 Z" fill="url(#viper-gun-grad)" stroke="#713f12" strokeWidth="0.9" />
-            {/* Black stripe bands near cannon bases */}
-            <path
-              d="M-13.8 -9.5 L-10.2 -9.5 M-13.8 -11.5 L-10.2 -11.5 M10.2 -9.5 L13.8 -9.5 M10.2 -11.5 L13.8 -11.5"
-              stroke="#1f2937"
-              strokeWidth="1"
-              fill="none"
-            />
-
-            {/* 4. Twin Engine Nacelles — Exhausts Aligned to In-Game Thrusters */}
-            <rect x="-12.5" y="16" width="10" height="8" rx="1.5" fill="url(#viper-nozzle-grad)" stroke="#0f172a" strokeWidth="1.1" />
-            <rect x="2.5" y="16" width="10" height="8" rx="1.5" fill="url(#viper-nozzle-grad)" stroke="#0f172a" strokeWidth="1.1" />
-
-            {/* Horizontal vent slits (grilles) */}
-            <path
-              d="M-12.5 18 L-2.5 18 M-12.5 19.6 L-2.5 19.6 M-12.5 21.2 L-2.5 21.2 M2.5 18 L12.5 18 M2.5 19.6 L12.5 19.6 M2.5 21.2 L12.5 21.2"
-              stroke="#090d16"
-              strokeWidth="1"
-              fill="none"
-            />
-
-            {/* Dark rectangular exhaust faces */}
-            <rect x="-12" y="22.8" width="9" height="1.3" rx="0.4" fill="#050b14" />
-            <rect x="3" y="22.8" width="9" height="1.3" rx="0.4" fill="#050b14" />
-
-            {/* 5. Center Fuselage & Needle Nose — Detailed Light Grey Hull */}
-            <path
-              d="M0 -38 L3 -16 L4.6 -6 L5.4 2 L5.2 10 L4.2 16 L-4.2 16 L-5.2 10 L-5.4 2 L-4.6 -6 L-3 -16 Z"
+              d="M0 -38 L3.8 -34 L4.2 -8 L6.8 -2 L6.8 17 L0 20 L-6.8 17 L-6.8 -2 L-4.2 -8 L-3.8 -34 Z"
               fill="url(#viper-hull-grad)"
-              stroke="#3f4a57"
-              strokeWidth="1.1"
+              stroke="#334155"
+              strokeWidth="0.75"
             />
+            <path d="M0 -38 L3.8 -34 L-3.8 -34 Z" fill="#475467" stroke="#334155" strokeWidth="0.4" />
 
-            {/* Nose sensor port */}
-            <circle cx="0" cy="-37.2" r="1.1" fill="#111827" />
+            {/* 4. Engine Nacelles & Nozzles (center nozzle is static detail only) */}
+            <path d="M-18.5 1 L-8.5 1 L-8 18 L-18.5 18 Z" fill="url(#viper-nozzle-grad)" stroke="#1e293b" strokeWidth="0.6" />
+            <path d="M8.5 1 L18.5 1 L18.5 18 L8 18 Z" fill="url(#viper-nozzle-grad)" stroke="#1e293b" strokeWidth="0.6" />
+            <path d="M-18 18 L-9 18 L-10 24 L-17 24 Z" fill="#0f172a" stroke="#334155" strokeWidth="0.6" />
+            <path d="M-4.5 19 L4.5 19 L3.5 25 L-3.5 25 Z" fill="#0f172a" stroke="#334155" strokeWidth="0.6" />
+            <path d="M9 18 L18 18 L17 24 L10 24 Z" fill="#0f172a" stroke="#334155" strokeWidth="0.6" />
 
-            {/* Fuselage panel seams — grid near rear half */}
+            {/* 5. Faceted BSG Canopy — Dark Navy Glass Panes */}
+            <path d="M-4.5 -8 L4.5 -8 L5.5 3 L0 5.5 L-5.5 3 Z" fill="#1e293b" stroke="#0f172a" strokeWidth="0.5" />
+            <g stroke="#38bdf8" strokeWidth="0.4" strokeOpacity="0.9">
+              <path d="M-3.2 -7.2 L3.2 -7.2 L2.2 -3 L-2.2 -3 Z" fill="url(#viper-canopy-grad)" />
+              <path d="M-3.2 -7.2 L-2.2 -3 L-4.5 2 L-4.8 -2 Z" fill="url(#viper-canopy-grad)" />
+              <path d="M3.2 -7.2 L2.2 -3 L4.5 2 L4.8 -2 Z" fill="url(#viper-canopy-grad)" />
+              <path d="M-2.2 -3 L0 -3 L0 4 L-4.5 2 Z" fill="url(#viper-canopy-grad)" />
+              <path d="M2.2 -3 L0 -3 L0 4 L4.5 2 Z" fill="url(#viper-canopy-grad)" />
+            </g>
+
+            {/* 6. Livery & Details (source paint order — panel seams OVER stripes) */}
+            {/* Red liver stripes — separated above/below the canopy */}
+            <path d="M-1.8 -33.5 L1.8 -33.5 L1.8 -8 L-1.8 -8 Z" fill="url(#viper-red-grad)" />
+            <path d="M-1.8 5.5 L1.8 5.5 L2.2 16 L-2.2 16 Z" fill="url(#viper-red-grad)" />
+
+            {/* Wing red markings (contoured around the wing cutouts) */}
             <path
-              d="M-3 -24 L3 -24 M-4.8 -10 L4.8 -10 M-5.3 6 L5.3 6 M-4.8 13 L4.8 13 M0 2 L0 16"
-              stroke="#9aa9ba"
-              strokeWidth="0.7"
+              d="M-6.5 -3 L-31.5 -3 L-31.5 0 L-24 0 C-17 0 -14 3 -12 6 L-8.5 6 L-8.5 8.5 L-11.5 8.5 C-14 6 -17 2.5 -24 2.5 L-28.5 2.5 L-28.5 16.5 L-31.5 16.5 Z"
+              fill="url(#viper-red-grad)"
+            />
+            <path d="M-31.5 14 L-8.5 14 L-8.5 16.5 L-31.5 16.5 Z" fill="url(#viper-red-grad)" />
+            <path
+              d="M6.5 -3 L31.5 -3 L31.5 0 L24 0 C17 0 14 3 12 6 L8.5 6 L8.5 8.5 L11.5 8.5 C14 6 17 2.5 24 2.5 L28.5 2.5 L28.5 16.5 L31.5 16.5 Z"
+              fill="url(#viper-red-grad)"
+            />
+            <path d="M31.5 14 L8.5 14 L8.5 16.5 L31.5 16.5 Z" fill="url(#viper-red-grad)" />
+
+            {/* Four red status squares per engine block */}
+            <g fill="url(#viper-red-grad)" stroke="#7f1d1d" strokeWidth="0.3">
+              <rect x="-16.2" y="3" width="2" height="2" />
+              <rect x="-16.2" y="6" width="2" height="2" />
+              <rect x="-16.2" y="9" width="2" height="2" />
+              <rect x="-16.2" y="12" width="2" height="2" />
+              <rect x="14.2" y="3" width="2" height="2" />
+              <rect x="14.2" y="6" width="2" height="2" />
+              <rect x="14.2" y="9" width="2" height="2" />
+              <rect x="14.2" y="12" width="2" height="2" />
+            </g>
+
+            {/* Wing-mounted laser cannons (inside the wing cutout gaps) */}
+            <rect x="-11.2" y="-8" width="2.4" height="14" rx="0.4" fill="url(#viper-nozzle-grad)" stroke="#1e293b" strokeWidth="0.4" />
+            <rect x="8.8" y="-8" width="2.4" height="14" rx="0.4" fill="url(#viper-nozzle-grad)" stroke="#1e293b" strokeWidth="0.4" />
+            <rect x="-10.7" y="-13" width="1.4" height="5" fill="url(#viper-nozzle-grad)" />
+            <rect x="9.3" y="-13" width="1.4" height="5" fill="url(#viper-nozzle-grad)" />
+            <rect x="-10.4" y="-23" width="0.8" height="10" fill="url(#viper-gun-grad)" stroke="#744210" strokeWidth="0.3" />
+            <rect x="9.6" y="-23" width="0.8" height="10" fill="url(#viper-gun-grad)" stroke="#744210" strokeWidth="0.3" />
+            <path
+              d="M-10.4 -20 L-9.6 -20 M-10.4 -18 L-9.6 -18 M-10.4 -16 L-9.6 -16 M9.6 -20 L10.4 -20 M9.6 -18 L10.4 -18 M9.6 -16 L10.4 -16"
+              stroke="#451a03"
+              strokeWidth="0.4"
               fill="none"
             />
-            <path d="M0 -30 L0 -4" stroke="#aab7c4" strokeWidth="0.7" fill="none" />
 
-            {/* Access hatches — small black-bordered squares */}
-            <rect x="-4.4" y="8" width="2.4" height="2.4" fill="#c5c9d0" stroke="#1f2937" strokeWidth="0.6" />
-            <rect x="2" y="8" width="2.4" height="2.4" fill="#c5c9d0" stroke="#1f2937" strokeWidth="0.6" />
-            <rect x="-4" y="12.4" width="2" height="2" fill="#c5c9d0" stroke="#1f2937" strokeWidth="0.6" />
-            <rect x="2" y="12.4" width="2" height="2" fill="#c5c9d0" stroke="#1f2937" strokeWidth="0.6" />
-
-            {/* Red dorsal stripe — rear through mid, ending near nose root */}
-            <path d="M0 15 L1 4 L0.8 -8 L-0.8 -8 L-1 4 Z" fill="#d32f2f" />
-
-            {/* 6. Hexagonal Navy Canopy — Pointed Front/Rear, Framed Panes */}
+            {/* Engine intake grills */}
             <path
-              d="M0 -6 L7 -2 L7 6 L0 10 L-7 6 L-7 -2 Z"
-              fill="url(#viper-canopy-grad)"
-              stroke="#0a0f1e"
-              strokeWidth="1.4"
-            />
-            <path
-              d="M-5 -1 L5 -1 M-6 3 L6 3 M0 -6 L0 10"
-              stroke="#0d1b4c"
-              strokeWidth="0.7"
+              d="M-13.5 3 L-9 3 M-13.5 5.5 L-9 5.5 M-13.5 8 L-9 8 M-13.5 10.5 L-9 10.5 M-13.5 13 L-9 13 M9 3 L13.5 3 M9 5.5 L13.5 5.5 M9 8 L13.5 8 M9 10.5 L13.5 10.5 M9 13 L13.5 13"
+              stroke="#64748b"
+              strokeWidth="0.5"
               fill="none"
             />
-            <ellipse cx="-1" cy="0" rx="2.4" ry="3.2" fill="#ffffff" opacity="0.5" />
+
+            {/* Panel seams — kept OVER the stripes (source order) */}
+            <path
+              d="M-3.7 -28 L3.7 -28 M-3.9 -20 L3.9 -20 M-4.1 -14 L4.1 -14"
+              stroke="#94a3b8"
+              strokeWidth="0.4"
+              fill="none"
+            />
+
+            {/* Wing surface circular access ports */}
+            <circle cx="-23" cy="7" r="1.2" fill="none" stroke="#64748b" strokeWidth="0.4" />
+            <circle cx="23" cy="7" r="1.2" fill="none" stroke="#64748b" strokeWidth="0.4" />
+            <circle cx="-23" cy="7" r="0.3" fill="#64748b" />
+            <circle cx="23" cy="7" r="0.3" fill="#64748b" />
+
+            {/* "000" identification markings */}
+            <g fill="#334155">
+              <rect x="-30.5" y="14.5" width="0.6" height="1.2" />
+              <rect x="-29.6" y="14.5" width="0.6" height="1.2" />
+              <rect x="-28.7" y="14.5" width="0.6" height="1.2" />
+              <rect x="27.3" y="14.5" width="0.6" height="1.2" />
+              <rect x="28.2" y="14.5" width="0.6" height="1.2" />
+              <rect x="29.1" y="14.5" width="0.6" height="1.2" />
+            </g>
+
+            {/* Navigation lights */}
+            <circle cx="-31.5" cy="-2.5" r="0.7" fill="#ef4444" />
+            <circle cx="31.5" cy="-2.5" r="0.7" fill="#22c55e" />
           </g>
         )}
+
         {/* MODEL: AEGIS FORTRESS (Armored Heavy Planetary Pod)       */}
         {/* ========================================================= */}
         {modelId === 'aegis' && (
@@ -1895,77 +1970,92 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         {/* ========================================================= */}
         {/* MODEL: WASP SCOUT (WS-2 Stinger Micro Lander)             */}
         {/* ========================================================= */}
-        {modelId === 'wasp' && (
+                {modelId === 'wasp' && (
           <g>
-            <g stroke="#94a3b8" strokeWidth="2.0" strokeLinecap="round">
-              <line x1="-12" y1="10" x2="-24" y2="28" />
-              <line x1="-8" y1="16" x2="-24" y2="28" strokeWidth="1.6" stroke="#64748b" />
-              <line x1="12" y1="10" x2="22" y2="28" />
-              <line x1="8" y1="16" x2="22" y2="28" strokeWidth="1.6" stroke="#64748b" />
+            {/* 1. Landring Gear — Twin Struts & Isolated Footpads */}
+            <g stroke="#475569" strokeWidth="2.5" strokeLinecap="round" fill="none">
+              <line x1="-12" y1="12" x2="-24" y2="28" />
+              <line x1="12" y1="12" x2="24" y2="28" />
             </g>
-            <rect x="-28" y="27" width="9" height="3" rx="1" fill="#475569" stroke="#eab308" strokeWidth="1.2" />
-            <rect x="19" y="27" width="9" height="3" rx="1" fill="#475569" stroke="#eab308" strokeWidth="1.2" />
-
-            {/* Outrigger Pods — brushed titanium gradient + panel seams + rivets */}
-            <rect x="-24" y="2" width="8" height="20" rx="2" fill="url(#titanium-plate)" stroke="#eab308" strokeWidth="1.3" />
-            <rect x="16" y="2" width="8" height="20" rx="2" fill="url(#titanium-plate)" stroke="#eab308" strokeWidth="1.3" />
-            <g stroke="#334155" strokeWidth="0.7">
-              <line x1="-24" y1="3" x2="-16" y2="3" />
-              <line x1="-24" y1="10" x2="-16" y2="10" />
-              <line x1="-24" y1="17" x2="-16" y2="17" />
-              <line x1="16" y1="3" x2="24" y2="3" />
-              <line x1="16" y1="10" x2="24" y2="10" />
-              <line x1="16" y1="17" x2="24" y2="17" />
+            <g stroke="#94a3b8" strokeWidth="1.0" strokeLinecap="round" fill="none">
+              <line x1="-12" y1="12" x2="-24" y2="28" />
+              <line x1="12" y1="12" x2="24" y2="28" />
             </g>
-            <g fill="#94a3b8">
-              {[-23,-19,-17,-21].map((x)=><circle key={x} cx={x} cy={3} r={0.9} />)}
-              {[-23,-19,-17,-21].map((x)=><circle key={x+"b"} cx={x} cy={10} r={0.9} />)}
-              {[-23,-19,-17,-21].map((x)=><circle key={x+"c"} cx={x} cy={17} r={0.9} />)}
-              {[17,19,21,23].map((x)=><circle key={x+"a"} cx={x} cy={3} r={0.9} />)}
-              {[17,19,21,23].map((x)=><circle key={x+"d"} cx={x} cy={10} r={0.9} />)}
-              {[17,19,21,23].map((x)=><circle key={x+"e"} cx={x} cy={17} r={0.9} />)}
+            <g>
+              <rect x="-31" y="27.5" width="14" height="4" rx="1.5" fill="#1e293b" />
+              <rect x="-29" y="28" width="10" height="2" rx="1" fill="#64748b" />
+              <rect x="17" y="27.5" width="14" height="4" rx="1.5" fill="#1e293b" />
+              <rect x="19" y="28" width="10" height="2" rx="1" fill="#64748b" />
             </g>
 
-            {/* Outrigger Trusses */}
-            <g stroke="#64748b" strokeWidth="1.8" strokeLinecap="round">
-              <line x1="-10" y1="4" x2="-16" y2="4" />
-              <line x1="-10" y1="14" x2="-16" y2="14" />
-              <line x1="10" y1="4" x2="16" y2="4" />
-              <line x1="10" y1="14" x2="16" y2="14" />
+            {/* 2. Wings — Swept Heavy Wings */}
+            <path d="M-10 -8 C-20 2 -28 12 -34 20 L-36 28 L-24 24 L-12 20 Z" fill="url(#wasp-hull-dark-grad)" stroke="#1e293b" strokeWidth="1" />
+            <path d="M10 -8 C20 2 28 12 34 20 L36 28 L24 24 L12 20 Z" fill="url(#wasp-hull-dark-grad)" stroke="#1e293b" strokeWidth="1" />
+
+            {/* Wing cannon pods + collars */}
+            <rect x="-30" y="-4" width="4" height="26" rx="2" fill="url(#wasp-pod-grad)" stroke="#1e293b" strokeWidth="0.8" />
+            <rect x="26" y="-4" width="4" height="26" rx="2" fill="url(#wasp-pod-grad)" stroke="#1e293b" strokeWidth="0.8" />
+            <path d="M-29 -10 L-27 -10 L-27 -4 L-29 -4 Z" fill="#64748b" stroke="#1e293b" strokeWidth="0.5" />
+            <path d="M27 -10 L29 -10 L29 -4 L27 -4 Z" fill="#64748b" stroke="#1e293b" strokeWidth="0.5" />
+
+            {/* 3. Hull — Armored Fuselage, Raised Plate, Crossbrace */}
+            <path
+              d="M0 -38 L6 -26 C12 -16 16 -6 16 10 L12 24 L-12 24 L-16 10 C-16 -6 -12 -16 -6 -26 Z"
+              fill="url(#wasp-hull-light-grad)"
+              stroke="#1e293b"
+              strokeWidth="1.2"
+            />
+            <path d="M0 -26 L8 -14 L8 4 L4 8 L-4 8 L-8 4 L-8 -14 Z" fill="url(#wasp-hull-dark-grad)" stroke="#334155" strokeWidth="0.8" />
+            <rect x="-10" y="-6" width="20" height="6" rx="1" fill="#475569" stroke="#1e293b" strokeWidth="0.8" />
+            <line x1="-8" y1="-3" x2="8" y2="-3" stroke="#1e293b" strokeWidth="1" />
+
+            {/* Engine cylinders (on hull) + ribbing */}
+            <rect x="-15" y="4" width="11" height="20" rx="4.5" fill="url(#wasp-pod-grad)" stroke="#1e293b" strokeWidth="1" />
+            <rect x="4" y="4" width="11" height="20" rx="4.5" fill="url(#wasp-pod-grad)" stroke="#1e293b" strokeWidth="1" />
+            <g stroke="#1e293b" strokeWidth="0.8" opacity="0.6">
+              <line x1="-14" y1="12" x2="-5" y2="12" />
+              <line x1="-14" y1="15" x2="-5" y2="15" />
+              <line x1="-14" y1="18" x2="-5" y2="18" />
+              <line x1="-14" y1="21" x2="-5" y2="21" />
+              <line x1="5" y1="12" x2="14" y2="12" />
+              <line x1="5" y1="15" x2="14" y2="15" />
+              <line x1="5" y1="18" x2="14" y2="18" />
+              <line x1="5" y1="21" x2="14" y2="21" />
             </g>
 
-            {/* Gold Foil Core — multi-stop gradient + quilting seams */}
-            <polygon points="-12,4 -14,18 14,18 12,4" fill="url(#gold-foil)" stroke="#713f12" strokeWidth="1.2" />
-            <line x1="-12" y1="11" x2="12" y2="11" stroke="#a16207" strokeWidth="1.0" />
-            <line x1="-13" y1="7" x2="13" y2="7" stroke="#fde68a" strokeWidth="0.8" />
-            <line x1="-13" y1="15" x2="13" y2="15" stroke="#a16207" strokeWidth="0.6" />
+            {/* 4. Engine Nozzles */}
+            <path d="M-13 24 L-6 24 L-7 28 L-12 28 Z" fill="#0f172a" stroke="#1e293b" strokeWidth="1" />
+            <path d="M6 24 L13 24 L12 28 L7 28 Z" fill="#0f172a" stroke="#1e293b" strokeWidth="1" />
+            <rect x="-11" y="27" width="4" height="2" fill="#334155" />
+            <rect x="7" y="27" width="4" height="2" fill="#334155" />
 
-            {/* Upper Stinger Cabin — faceted seams + rivets + gold trim */}
-            <polygon points="0,-27 13,-10 11,4 -11,4 -13,-10" fill="#0f172a" stroke="#eab308" strokeWidth="1.4" />
-            <g stroke="#94a3b8" strokeWidth="0.7">
-              <line x1="0" y1="-27" x2="0" y2="4" />
-              <line x1="-13" y1="-10" x2="-11" y2="4" />
-              <line x1="13" y1="-10" x2="11" y2="4" />
-              <line x1="-7" y1="-18" x2="7" y2="-18" />
-            </g>
-            <g fill="#64748b">
-              <circle cx="-11" cy="-18" r={0.8} />
-              <circle cx="11" cy="-18" r={0.8} />
-              <circle cx="0" cy="-18" r={0.8} />
-              <circle cx="-11" cy="-8" r={0.8} />
-              <circle cx="11" cy="-8" r={0.8} />
-            </g>
+            {/* 5. Canopy — Deep Inset Cockpit Glass */}
+            <path d="M0 -29 L4 -18 L3 -13 L-3 -13 L-4 -18 Z" fill="url(#wasp-canopy-grad)" stroke="#0f172a" strokeWidth="1.2" />
+            <path d="M0 -27 L2 -18 L2 -14 M0 -27 L-2 -18 L-2 -14" stroke="#475569" strokeWidth="0.6" fill="none" />
 
-            {/* Antenna Spikes on the Stinger Crown */}
-            <g stroke="#94a3b8" strokeWidth="1.0" strokeLinecap="round">
-              <line x1="-4" y1="-28" x2="-6" y2="-34" />
-              <line x1="4" y1="-28" x2="6" y2="-34" />
+            {/* 6. Details — antennae, accents, fin, decals */}
+            <g stroke="#475569" strokeWidth="0.8" strokeLinecap="round">
+              <line x1="-3" y1="-32" x2="-3" y2="-39.4" />
+              <line x1="3" y1="-32" x2="3" y2="-39.4" />
             </g>
+            <circle cx="-3" cy="-39.4" r="0.7" fill="#ef4444" />
+            <circle cx="3" cy="-39.4" r="0.7" fill="#10b981" />
 
-            <ellipse cx="0" cy="-14" rx="6.5" ry="4.5" fill="url(#visor-grad-wasp)" stroke="#fef08a" strokeWidth="1" />
-            <ellipse cx="-2" cy="-15.5" rx="2.5" ry="1.2" fill="#ffffff" opacity="0.8" />
+            <path d="M-11 -6 L-13 8 L-10 8 L-8 -6 Z" fill="url(#wasp-orange-grad)" stroke="#9a3412" strokeWidth="0.6" />
+            <path d="M11 -6 L13 8 L10 8 L8 -6 Z" fill="url(#wasp-orange-grad)" stroke="#9a3412" strokeWidth="0.6" />
+
+            <polygon points="-1,6 1,6 1.5,25 0,27 -1.5,25" fill="url(#wasp-yellow-grad)" stroke="#a16207" strokeWidth="0.5" />
+            <polygon points="-29,14 -27,26 -30,26" fill="url(#wasp-yellow-grad)" stroke="#a16207" strokeWidth="0.4" />
+            <polygon points="29,14 27,26 30,26" fill="url(#wasp-yellow-grad)" stroke="#a16207" strokeWidth="0.4" />
+
+            <line x1="-6" y1="-20" x2="-14" y2="-12" stroke="#64748b" strokeWidth="0.5" />
+            <line x1="6" y1="-20" x2="14" y2="-12" stroke="#64748b" strokeWidth="0.5" />
+
+            <polygon points="0,-4 3,-1 0,2 -3,-1" fill="#facc15" opacity="0.8" />
+            <polygon points="0,0 2,2 0,4 -2,2" fill="#facc15" opacity="0.8" />
           </g>
         )}
+
 
         {/* ========================================================= */}
         {/* MODEL: KESTREL STUNT (KS-9 Aerobatic Dart)                */}

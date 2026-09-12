@@ -946,336 +946,470 @@ export function drawTitan(
 // =====================================================================
 // 3. VIPER DART (Stealth High-Agility Interceptor)
 // =====================================================================
+// =====================================================================
+// 3. VIPER DART (Stealth High-Agility Interceptor)
+// =====================================================================
 export function drawViper(
   ctx: CanvasRenderingContext2D,
   config: ShipModelConfig,
   gearSpringOffset: number
 ) {
-  const footPadY = 30 + gearSpringOffset;
+  const footPadY = 29.5 + gearSpringOffset;
 
   // =================================================================
-  // 1. LANDING GEAR — Inset Struts & Isolated Footpads
+  // 1. LANDING GEAR — Dual-Strut Legs & Isolated Footpads
   // =================================================================
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 1.8;
   ctx.lineCap = 'round';
+  ctx.strokeStyle = '#475467';
+  ctx.lineWidth = 1.6;
   ctx.beginPath();
-  ctx.moveTo(-15, 12);
-  ctx.lineTo(-24, footPadY);
-  ctx.moveTo(15, 12);
-  ctx.lineTo(24, footPadY);
+  ctx.moveTo(-14, 10);
+  ctx.lineTo(-22, footPadY);
+  ctx.moveTo(14, 10);
+  ctx.lineTo(22, footPadY);
   ctx.stroke();
 
-  // Port footpad (isolated subpath)
-  ctx.fillStyle = '#334155';
-  ctx.strokeStyle = '#0f172a';
+  ctx.strokeStyle = '#334155';
   ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.ellipse(-24, footPadY - 1.6, 5.0, 1.7, 0, 0, Math.PI * 2);
+  ctx.moveTo(-7, 15);
+  ctx.lineTo(-22, footPadY);
+  ctx.moveTo(7, 15);
+  ctx.lineTo(22, footPadY);
+  ctx.stroke();
+
+  // Port footpad (isolated subpath — never connect to starboard)
+  ctx.fillStyle = '#1e293b';
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 0.6;
+  ctx.beginPath();
+  ctx.ellipse(-22, footPadY, 4.5, 1.2, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
 
   // Starboard footpad (isolated subpath)
-  ctx.fillStyle = '#334155';
-  ctx.strokeStyle = '#0f172a';
-  ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.ellipse(24, footPadY - 1.6, 5.0, 1.7, 0, 0, Math.PI * 2);
+  ctx.ellipse(22, footPadY, 4.5, 1.2, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
 
   // =================================================================
-  // 2. BROAD SWEPT DELTA WINGS — Curved Leading Edges, Light Grey
+  // 2. WINGS — Light Grey Deltas with Curved Cutouts over Cannons
   // =================================================================
-  const wingGrad = ctx.createLinearGradient(0, -3, 0, 22);
-  wingGrad.addColorStop(0, '#e2e8f0');
-  wingGrad.addColorStop(0.6, '#cbd5e1');
-  wingGrad.addColorStop(1, '#8b9cb0');
+  const wingGrad = ctx.createLinearGradient(0, -3, 0, 17);
+  wingGrad.addColorStop(0, '#f8fafc');
+  wingGrad.addColorStop(0.4, '#e2e8f0');
+  wingGrad.addColorStop(0.85, '#cbd5e1');
+  wingGrad.addColorStop(1, '#94a3b8');
   ctx.fillStyle = wingGrad;
   ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 1.3;
+  ctx.lineWidth = 0.75;
+
+  // Port wing (cutout notch for the cannon mount)
   ctx.beginPath();
-  ctx.moveTo(0, -2);
-  ctx.lineTo(6, -2);
-  ctx.quadraticCurveTo(22, 3, 34, 15); // curved right leading edge
-  ctx.lineTo(22, 21);
-  ctx.lineTo(7, 19);
-  ctx.lineTo(0, 17);
-  ctx.lineTo(-7, 19);
-  ctx.lineTo(-22, 21);
-  ctx.lineTo(-34, 15);
-  ctx.quadraticCurveTo(-22, 3, -6, -2); // curved left leading edge
+  ctx.moveTo(-8.5, 16.5);
+  ctx.lineTo(-32, 16.5);
+  ctx.lineTo(-32, -3);
+  ctx.lineTo(-16, -3);
+  ctx.bezierCurveTo(-16, 2, -14, 7, -10.5, 7);
+  ctx.lineTo(-8.5, 7);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  // Red accent stripes on wing leading edges
-  ctx.strokeStyle = '#d32f2f';
-  ctx.lineWidth = 1.7;
-  ctx.lineCap = 'round';
+  // Starboard wing (cutout notch)
   ctx.beginPath();
-  ctx.moveTo(6, -2);
-  ctx.quadraticCurveTo(22, 3, 33.5, 14.5);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(-6, -2);
-  ctx.quadraticCurveTo(-22, 3, -33.5, 14.5);
-  ctx.stroke();
-
-  // Wing panel seams
-  ctx.strokeStyle = '#9aa9ba';
-  ctx.lineWidth = 0.7;
-  ctx.beginPath();
-  ctx.moveTo(-32, 8);
-  ctx.lineTo(-10, 17);
-  ctx.moveTo(32, 8);
-  ctx.lineTo(10, 17);
-  ctx.moveTo(-24, 3);
-  ctx.lineTo(-24, 20);
-  ctx.moveTo(24, 3);
-  ctx.lineTo(24, 20);
-  ctx.stroke();
-
-  // =================================================================
-  // 3. TWIN GOLDEN LASER CANNON MOUNTS — Forward of Canopy
-  // =================================================================
-  const gunGrad = ctx.createLinearGradient(0, -18, 0, -2);
-  gunGrad.addColorStop(0, '#fde68a');
-  gunGrad.addColorStop(0.5, '#ddbe00');
-  gunGrad.addColorStop(1, '#a16207');
-  ctx.fillStyle = gunGrad;
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 0.9;
-
-  // Port cannon body + pointed muzzle
-  ctx.beginPath();
-  ctx.moveTo(-13.8, -16);
-  ctx.lineTo(-10.2, -16);
-  ctx.lineTo(-10.2, -2);
-  ctx.lineTo(-13.8, -2);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(-13.8, -16);
-  ctx.lineTo(-12.0, -19.5);
-  ctx.lineTo(-10.2, -16);
+  ctx.moveTo(8.5, 16.5);
+  ctx.lineTo(32, 16.5);
+  ctx.lineTo(32, -3);
+  ctx.lineTo(16, -3);
+  ctx.bezierCurveTo(16, 2, 14, 7, 10.5, 7);
+  ctx.lineTo(8.5, 7);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  // Starboard cannon body + pointed muzzle
-  ctx.beginPath();
-  ctx.moveTo(10.2, -16);
-  ctx.lineTo(13.8, -16);
-  ctx.lineTo(13.8, -2);
-  ctx.lineTo(10.2, -2);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(10.2, -16);
-  ctx.lineTo(12.0, -19.5);
-  ctx.lineTo(13.8, -16);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  // Black stripe bands near cannon bases
-  ctx.strokeStyle = '#1f2937';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.moveTo(-13.8, -9.5);
-  ctx.lineTo(-10.2, -9.5);
-  ctx.moveTo(-13.8, -11.5);
-  ctx.lineTo(-10.2, -11.5);
-  ctx.moveTo(10.2, -9.5);
-  ctx.lineTo(13.8, -9.5);
-  ctx.moveTo(10.2, -11.5);
-  ctx.lineTo(13.8, -11.5);
-  ctx.stroke();
-
   // =================================================================
-  // 4. TWIN ENGINE NACELLES — Exhaust Faces Aligned to Thruster Anchors
-  //    (local ±7.5 → world ±10.5 at renderScale 1.4)
+  // 3. CENTER FUSELAGE & NEEDLE NOSE — Light Grey Hull
   // =================================================================
-  const nacGrad = ctx.createLinearGradient(0, 16, 0, 24);
-  nacGrad.addColorStop(0, '#475569');
-  nacGrad.addColorStop(0.6, '#1e293b');
-  nacGrad.addColorStop(1, '#0b1220');
-  ctx.fillStyle = nacGrad;
-  ctx.strokeStyle = '#0f172a';
-  ctx.lineWidth = 1.1;
-  ctx.beginPath();
-  roundRect(ctx, -12.5, 16, 10, 8, 1.5);
-  ctx.fill();
-  ctx.stroke();
-  ctx.beginPath();
-  roundRect(ctx, 2.5, 16, 10, 8, 1.5);
-  ctx.fill();
-  ctx.stroke();
-
-  // Horizontal vent slits (grilles)
-  ctx.strokeStyle = '#090d16';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.moveTo(-12.5, 18);
-  ctx.lineTo(-2.5, 18);
-  ctx.moveTo(-12.5, 19.6);
-  ctx.lineTo(-2.5, 19.6);
-  ctx.moveTo(-12.5, 21.2);
-  ctx.lineTo(-2.5, 21.2);
-  ctx.moveTo(2.5, 18);
-  ctx.lineTo(12.5, 18);
-  ctx.moveTo(2.5, 19.6);
-  ctx.lineTo(12.5, 19.6);
-  ctx.moveTo(2.5, 21.2);
-  ctx.lineTo(12.5, 21.2);
-  ctx.stroke();
-
-  // Dark exhaust faces (rectangular, at y≈23.5 == thruster anchor plane)
-  ctx.fillStyle = '#050b14';
-  ctx.beginPath();
-  roundRect(ctx, -12, 22.8, 9, 1.3, 0.4);
-  ctx.fill();
-  ctx.beginPath();
-  roundRect(ctx, 3, 22.8, 9, 1.3, 0.4);
-  ctx.fill();
-
-  // =================================================================
-  // 5. CENTER FUSELAGE & NEEDLE NOSE — Light Grey, Detailed Panels
-  // =================================================================
-  const hullGrad = ctx.createLinearGradient(0, -38, 0, 16);
-  hullGrad.addColorStop(0, '#e8eef5');
-  hullGrad.addColorStop(0.55, '#c5c9d0');
-  hullGrad.addColorStop(1, '#7f8b99');
+  const hullGrad = ctx.createLinearGradient(0, -38, 0, 20);
+  hullGrad.addColorStop(0, '#f8fafc');
+  hullGrad.addColorStop(0.4, '#e2e8f0');
+  hullGrad.addColorStop(0.85, '#cbd5e1');
+  hullGrad.addColorStop(1, '#94a3b8');
   ctx.fillStyle = hullGrad;
-  ctx.strokeStyle = '#3f4a57';
-  ctx.lineWidth = 1.1;
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 0.75;
   ctx.beginPath();
   ctx.moveTo(0, -38);
-  ctx.lineTo(3.0, -16);
-  ctx.lineTo(4.6, -6);
-  ctx.lineTo(5.4, 2);
-  ctx.lineTo(5.2, 10);
-  ctx.lineTo(4.2, 16);
-  ctx.lineTo(-4.2, 16);
-  ctx.lineTo(-5.2, 10);
-  ctx.lineTo(-5.4, 2);
-  ctx.lineTo(-4.6, -6);
-  ctx.lineTo(-3.0, -16);
+  ctx.lineTo(3.8, -34);
+  ctx.lineTo(4.2, -8);
+  ctx.lineTo(6.8, -2);
+  ctx.lineTo(6.8, 17);
+  ctx.lineTo(0, 20);
+  ctx.lineTo(-6.8, 17);
+  ctx.lineTo(-6.8, -2);
+  ctx.lineTo(-4.2, -8);
+  ctx.lineTo(-3.8, -34);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  // Nose sensor port (small black circle at tip)
-  ctx.fillStyle = '#111827';
+  // Nose tip point (dark gunmetal cap)
+  ctx.fillStyle = '#475467';
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 0.4;
   ctx.beginPath();
-  ctx.arc(0, -37.2, 1.1, 0, Math.PI * 2);
+  ctx.moveTo(0, -38);
+  ctx.lineTo(3.8, -34);
+  ctx.lineTo(-3.8, -34);
+  ctx.closePath();
   ctx.fill();
-
-  // Fuselage panel seams — grid near rear half
-  ctx.strokeStyle = '#9aa9ba';
-  ctx.lineWidth = 0.7;
-  ctx.beginPath();
-  ctx.moveTo(-3.0, -24);
-  ctx.lineTo(3.0, -24);
-  ctx.moveTo(-4.8, -10);
-  ctx.lineTo(4.8, -10);
-  ctx.moveTo(-5.3, 6);
-  ctx.lineTo(5.3, 6);
-  ctx.moveTo(-4.8, 13);
-  ctx.lineTo(4.8, 13);
-  ctx.moveTo(0, 2);
-  ctx.lineTo(0, 16);
   ctx.stroke();
 
-  // Forward center spine seam (lighter)
-  ctx.strokeStyle = '#aab7c4';
-  ctx.lineWidth = 0.7;
-  ctx.beginPath();
-  ctx.moveTo(0, -30);
-  ctx.lineTo(0, -4);
-  ctx.stroke();
+  // =================================================================
+  // 4. ENGINE NACELLES & NOZZLES (L/R nozzles align to thruster anchors)
+  // =================================================================
+  const nacGrad = ctx.createLinearGradient(0, 1, 0, 18);
+  nacGrad.addColorStop(0, '#475467');
+  nacGrad.addColorStop(0.5, '#334155');
+  nacGrad.addColorStop(1, '#1e293b');
 
-  // Access hatches (small black-bordered squares, rear fuselage)
-  ctx.fillStyle = '#c5c9d0';
-  ctx.strokeStyle = '#1f2937';
+  ctx.fillStyle = nacGrad;
+  ctx.strokeStyle = '#1e293b';
   ctx.lineWidth = 0.6;
   ctx.beginPath();
-  ctx.rect(-4.4, 8, 2.4, 2.4);
-  ctx.fill();
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.rect(2.0, 8, 2.4, 2.4);
-  ctx.fill();
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.rect(-4.0, 12.4, 2.0, 2.0);
-  ctx.fill();
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.rect(2.0, 12.4, 2.0, 2.0);
-  ctx.fill();
-  ctx.stroke();
-
-  // Red dorsal stripe — rear, through mid, ending at nose root
-  ctx.fillStyle = '#d32f2f';
-  ctx.beginPath();
-  ctx.moveTo(0, 15);
-  ctx.lineTo(1.0, 4);
-  ctx.lineTo(0.8, -8);
-  ctx.lineTo(-0.8, -8);
-  ctx.lineTo(-1.0, 4);
+  ctx.moveTo(-18.5, 1);
+  ctx.lineTo(-8.5, 1);
+  ctx.lineTo(-8, 18);
+  ctx.lineTo(-18.5, 18);
   ctx.closePath();
   ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(8.5, 1);
+  ctx.lineTo(18.5, 1);
+  ctx.lineTo(18.5, 18);
+  ctx.lineTo(8, 18);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Nozzle bells (dark exhaust openings)
+  ctx.fillStyle = '#0f172a';
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 0.6;
+  // Port engine nozzle (exit plane y=24 → thruster anchor plane)
+  ctx.beginPath();
+  ctx.moveTo(-18, 18);
+  ctx.lineTo(-9, 18);
+  ctx.lineTo(-10, 24);
+  ctx.lineTo(-17, 24);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Center tail nozzle (static detail — no dynamic flame)
+  ctx.beginPath();
+  ctx.moveTo(-4.5, 19);
+  ctx.lineTo(4.5, 19);
+  ctx.lineTo(3.5, 25);
+  ctx.lineTo(-3.5, 25);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Starboard engine nozzle
+  ctx.beginPath();
+  ctx.moveTo(9, 18);
+  ctx.lineTo(18, 18);
+  ctx.lineTo(17, 24);
+  ctx.lineTo(10, 24);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
 
   // =================================================================
-  // 6. HEXAGONAL NAVY CANOPY — Pointed Front/Rear, Framed Panes
+  // 5. FACETED BSG CANOPY — Dark Navy Glass Panes
   // =================================================================
-  const canopyGrad = ctx.createRadialGradient(-1, -1, 1, 0, 2, 8.5);
-  canopyGrad.addColorStop(0, '#5b6bcf');
-  canopyGrad.addColorStop(0.45, '#24306e');
-  canopyGrad.addColorStop(0.85, '#0d1b4c');
-  canopyGrad.addColorStop(1, '#060d24');
+  ctx.fillStyle = '#1e293b';
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(-4.5, -8);
+  ctx.lineTo(4.5, -8);
+  ctx.lineTo(5.5, 3);
+  ctx.lineTo(0, 5.5);
+  ctx.lineTo(-5.5, 3);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  const canopyGrad = ctx.createLinearGradient(0, -8, 0, 5.5);
+  canopyGrad.addColorStop(0, '#1e1b4b');
+  canopyGrad.addColorStop(0.5, '#0f172a');
+  canopyGrad.addColorStop(1, '#020617');
   ctx.fillStyle = canopyGrad;
-  ctx.strokeStyle = '#0a0f1e';
-  ctx.lineWidth = 1.4;
+  ctx.strokeStyle = '#38bdf8';
+  ctx.lineWidth = 0.4;
+  ctx.globalAlpha = 0.9;
+
+  // Front upper facet
   ctx.beginPath();
-  ctx.moveTo(0, -6);
-  ctx.lineTo(7, -2);
-  ctx.lineTo(7, 6);
-  ctx.lineTo(0, 10);
-  ctx.lineTo(-7, 6);
-  ctx.lineTo(-7, -2);
+  ctx.moveTo(-3.2, -7.2);
+  ctx.lineTo(3.2, -7.2);
+  ctx.lineTo(2.2, -3);
+  ctx.lineTo(-2.2, -3);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
-
-  // Canopy internal framing lines
-  ctx.strokeStyle = '#0d1b4c';
-  ctx.lineWidth = 0.7;
+  // Left side facet
   ctx.beginPath();
-  ctx.moveTo(-5, -1);
-  ctx.lineTo(5, -1);
-  ctx.moveTo(-6, 3);
-  ctx.lineTo(6, 3);
-  ctx.moveTo(0, -6);
-  ctx.lineTo(0, 10);
+  ctx.moveTo(-3.2, -7.2);
+  ctx.lineTo(-2.2, -3);
+  ctx.lineTo(-4.5, 2);
+  ctx.lineTo(-4.8, -2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Right side facet
+  ctx.beginPath();
+  ctx.moveTo(3.2, -7.2);
+  ctx.lineTo(2.2, -3);
+  ctx.lineTo(4.5, 2);
+  ctx.lineTo(4.8, -2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Center lower left facet
+  ctx.beginPath();
+  ctx.moveTo(-2.2, -3);
+  ctx.lineTo(0, -3);
+  ctx.lineTo(0, 4);
+  ctx.lineTo(-4.5, 2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Center lower right facet
+  ctx.beginPath();
+  ctx.moveTo(2.2, -3);
+  ctx.lineTo(0, -3);
+  ctx.lineTo(0, 4);
+  ctx.lineTo(4.5, 2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.globalAlpha = 1.0;
+
+  // =================================================================
+  // 6. LIVERY & DETAILS (source paint order — seams OVER stripes)
+  // =================================================================
+  const redGrad = ctx.createLinearGradient(0, -33.5, 0, 16);
+  redGrad.addColorStop(0, '#ef4444');
+  redGrad.addColorStop(1, '#b91c1c');
+
+  // Red liver stripes (separated above/below the canopy glass)
+  ctx.fillStyle = redGrad;
+  ctx.beginPath();
+  ctx.moveTo(-1.8, -33.5);
+  ctx.lineTo(1.8, -33.5);
+  ctx.lineTo(1.8, -8);
+  ctx.lineTo(-1.8, -8);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(-1.8, 5.5);
+  ctx.lineTo(1.8, 5.5);
+  ctx.lineTo(2.2, 16);
+  ctx.lineTo(-2.2, 16);
+  ctx.closePath();
+  ctx.fill();
+
+  // Wing red markings (contoured around the wing cutouts)
+  ctx.beginPath();
+  ctx.moveTo(-6.5, -3);
+  ctx.lineTo(-31.5, -3);
+  ctx.lineTo(-31.5, 0);
+  ctx.lineTo(-24, 0);
+  ctx.bezierCurveTo(-17, 0, -14, 3, -12, 6);
+  ctx.lineTo(-8.5, 6);
+  ctx.lineTo(-8.5, 8.5);
+  ctx.lineTo(-11.5, 8.5);
+  ctx.bezierCurveTo(-14, 6, -17, 2.5, -24, 2.5);
+  ctx.lineTo(-28.5, 2.5);
+  ctx.lineTo(-28.5, 16.5);
+  ctx.lineTo(-31.5, 16.5);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(-31.5, 14);
+  ctx.lineTo(-8.5, 14);
+  ctx.lineTo(-8.5, 16.5);
+  ctx.lineTo(-31.5, 16.5);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(6.5, -3);
+  ctx.lineTo(31.5, -3);
+  ctx.lineTo(31.5, 0);
+  ctx.lineTo(24, 0);
+  ctx.bezierCurveTo(17, 0, 14, 3, 12, 6);
+  ctx.lineTo(8.5, 6);
+  ctx.lineTo(8.5, 8.5);
+  ctx.lineTo(11.5, 8.5);
+  ctx.bezierCurveTo(14, 6, 17, 2.5, 24, 2.5);
+  ctx.lineTo(28.5, 2.5);
+  ctx.lineTo(28.5, 16.5);
+  ctx.lineTo(31.5, 16.5);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(31.5, 14);
+  ctx.lineTo(8.5, 14);
+  ctx.lineTo(8.5, 16.5);
+  ctx.lineTo(31.5, 16.5);
+  ctx.closePath();
+  ctx.fill();
+
+  // Four red status squares per engine block
+  ctx.fillStyle = '#ef4444';
+  ctx.strokeStyle = '#7f1d1d';
+  ctx.lineWidth = 0.3;
+  for (let i = 0; i < 4; i++) {
+    const y = 3 + i * 3;
+    ctx.beginPath();
+    ctx.rect(-16.2, y, 2, 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.rect(14.2, y, 2, 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  // Wing-mounted laser cannons (inside the wing cutout gaps)
+  const goldGrad = ctx.createLinearGradient(0, -23, 0, -13);
+  goldGrad.addColorStop(0, '#eab308');
+  goldGrad.addColorStop(0.5, '#ca8a04');
+  goldGrad.addColorStop(1, '#854d0e');
+
+  ctx.fillStyle = nacGrad;
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 0.4;
+  // Port cannon base
+  ctx.beginPath();
+  roundRect(ctx, -11.2, -8, 2.4, 14, 0.4);
+  ctx.fill();
+  ctx.stroke();
+  // Starboard cannon base
+  ctx.beginPath();
+  roundRect(ctx, 8.8, -8, 2.4, 14, 0.4);
+  ctx.fill();
+  ctx.stroke();
+  // Port cannon collar
+  ctx.beginPath();
+  ctx.rect(-10.7, -13, 1.4, 5);
+  ctx.fill();
+  // Starboard cannon collar
+  ctx.beginPath();
+  ctx.rect(9.3, -13, 1.4, 5);
+  ctx.fill();
+
+  // Gold barrels
+  ctx.fillStyle = goldGrad;
+  ctx.strokeStyle = '#744210';
+  ctx.lineWidth = 0.3;
+  ctx.beginPath();
+  ctx.rect(-10.4, -23, 0.8, 10);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.rect(9.6, -23, 0.8, 10);
+  ctx.fill();
   ctx.stroke();
 
-  // Specular highlight
-  ctx.fillStyle = '#ffffff';
-  ctx.globalAlpha = 0.5;
+  // Barrel ribs
+  ctx.strokeStyle = '#451a03';
+  ctx.lineWidth = 0.4;
   ctx.beginPath();
-  ctx.ellipse(-1, 0, 2.4, 3.2, 0, 0, Math.PI * 2);
+  ctx.moveTo(-10.4, -20);
+  ctx.lineTo(-9.6, -20);
+  ctx.moveTo(-10.4, -18);
+  ctx.lineTo(-9.6, -18);
+  ctx.moveTo(-10.4, -16);
+  ctx.lineTo(-9.6, -16);
+  ctx.moveTo(9.6, -20);
+  ctx.lineTo(10.4, -20);
+  ctx.moveTo(9.6, -18);
+  ctx.lineTo(10.4, -18);
+  ctx.moveTo(9.6, -16);
+  ctx.lineTo(10.4, -16);
+  ctx.stroke();
+
+  // Engine intake grills
+  ctx.strokeStyle = '#64748b';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    ctx.moveTo(-13.5, 3 + i * 2.5);
+    ctx.lineTo(-9, 3 + i * 2.5);
+    ctx.moveTo(9, 3 + i * 2.5);
+    ctx.lineTo(13.5, 3 + i * 2.5);
+  }
+  ctx.stroke();
+
+  // Panel seams & technical markings (kept OVER stripes per source order)
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 0.4;
+  ctx.beginPath();
+  ctx.moveTo(-3.7, -28);
+  ctx.lineTo(3.7, -28);
+  ctx.moveTo(-3.9, -20);
+  ctx.lineTo(3.9, -20);
+  ctx.moveTo(-4.1, -14);
+  ctx.lineTo(4.1, -14);
+  ctx.stroke();
+
+  // Wing surface circular access ports
+  ctx.strokeStyle = '#64748b';
+  ctx.beginPath();
+  ctx.arc(-23, 7, 1.2, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(23, 7, 1.2, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = '#64748b';
+  ctx.beginPath();
+  ctx.arc(-23, 7, 0.3, 0, Math.PI * 2);
   ctx.fill();
-  ctx.globalAlpha = 1.0;
+  ctx.beginPath();
+  ctx.arc(23, 7, 0.3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // "000" identification markings (three bars per wing)
+  ctx.fillStyle = '#334155';
+  ctx.beginPath();
+  ctx.rect(-30.5, 14.5, 0.6, 1.2);
+  ctx.rect(-29.6, 14.5, 0.6, 1.2);
+  ctx.rect(-28.7, 14.5, 0.6, 1.2);
+  ctx.rect(27.3, 14.5, 0.6, 1.2);
+  ctx.rect(28.2, 14.5, 0.6, 1.2);
+  ctx.rect(29.1, 14.5, 0.6, 1.2);
+  ctx.fill();
+
+  // Navigation lights
+  ctx.fillStyle = '#ef4444';
+  ctx.beginPath();
+  ctx.arc(-31.5, -2.5, 0.7, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#22c55e';
+  ctx.beginPath();
+  ctx.arc(31.5, -2.5, 0.7, 0, Math.PI * 2);
+  ctx.fill();
 }
 
-// =====================================================================
-// 4. AEGIS FORTRESS (Armored Heavy Planetary Pod)
-// =====================================================================
 export function drawAegis(
   ctx: CanvasRenderingContext2D,
   config: ShipModelConfig,
@@ -5488,212 +5622,404 @@ export function drawMammoth(
 // =====================================================================
 // 11. WASP SCOUT (WS-2 Stinger - Dual-Pod Micro Recon Lander)
 // =====================================================================
+// =====================================================================
+// 11. WASP HEAVY FIGHTER (WS-3 Stinger — Armored Gunship Interceptor)
+// =====================================================================
 export function drawWasp(
   ctx: CanvasRenderingContext2D,
   config: ShipModelConfig,
   gearSpringOffset: number
 ) {
-  const footPadY = 28 + gearSpringOffset;
+  const footPadY = 29.5 + gearSpringOffset;
 
-  // 1. Landing Gear Struts
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 2.0;
+  // ---- gradients (user-space, per sub-shape bbox) ----
+  const hullLight = ctx.createLinearGradient(0, -38, 0, 24);
+  hullLight.addColorStop(0, '#f1f5f9');
+  hullLight.addColorStop(1, '#94a3b8');
+
+  const hullDark = ctx.createLinearGradient(0, -26, 0, 28);
+  hullDark.addColorStop(0, '#94a3b8');
+  hullDark.addColorStop(1, '#475569');
+
+  const podL = ctx.createLinearGradient(-30, 0, -26, 0);
+  podL.addColorStop(0, '#475569');
+  podL.addColorStop(0.3, '#cbd5e1');
+  podL.addColorStop(0.7, '#94a3b8');
+  podL.addColorStop(1, '#334155');
+  const podR = ctx.createLinearGradient(26, 0, 30, 0);
+  podR.addColorStop(0, '#475569');
+  podR.addColorStop(0.3, '#cbd5e1');
+  podR.addColorStop(0.7, '#94a3b8');
+  podR.addColorStop(1, '#334155');
+  const cylL = ctx.createLinearGradient(-15, 0, -4, 0);
+  cylL.addColorStop(0, '#475569');
+  cylL.addColorStop(0.3, '#cbd5e1');
+  cylL.addColorStop(0.7, '#94a3b8');
+  cylL.addColorStop(1, '#334155');
+  const cylR = ctx.createLinearGradient(4, 0, 15, 0);
+  cylR.addColorStop(0, '#475569');
+  cylR.addColorStop(0.3, '#cbd5e1');
+  cylR.addColorStop(0.7, '#94a3b8');
+  cylR.addColorStop(1, '#334155');
+
+  const canopyGrad = ctx.createLinearGradient(0, -29, 0, -13);
+  canopyGrad.addColorStop(0, '#0f172a');
+  canopyGrad.addColorStop(0.4, '#1e293b');
+  canopyGrad.addColorStop(1, '#020617');
+
+  const orangeGrad = ctx.createLinearGradient(0, -6, 0, 8);
+  orangeGrad.addColorStop(0, '#fb923c');
+  orangeGrad.addColorStop(1, '#ea580c');
+
+  const yellowGrad = ctx.createLinearGradient(0, 6, 0, 27);
+  yellowGrad.addColorStop(0, '#fde047');
+  yellowGrad.addColorStop(1, '#ca8a04');
+
+  // =================================================================
+  // 1. LANDING GEAR — Twin Struts & Isolated Footpads
+  // =================================================================
   ctx.lineCap = 'round';
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 2.5;
   ctx.beginPath();
-  ctx.moveTo(-12, 10);
-  ctx.lineTo(-24, footPadY);
-  ctx.moveTo(-8, 16);
-  ctx.lineTo(-24, footPadY);
-  ctx.moveTo(12, 10);
-  ctx.lineTo(24, footPadY);
-  ctx.moveTo(8, 16);
-  ctx.lineTo(24, footPadY);
+  ctx.moveTo(-12, 12);
+  ctx.lineTo(-24, footPadY - 1.5);
+  ctx.moveTo(12, 12);
+  ctx.lineTo(24, footPadY - 1.5);
   ctx.stroke();
 
-  // Skid Footpads
-  ctx.fillStyle = '#475569';
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 1.2;
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1.0;
   ctx.beginPath();
-  roundRect(ctx, -28, footPadY - 3.0, 9, 3.0, 1);
-  roundRect(ctx, 19, footPadY - 3.0, 9, 3.0, 1);
+  ctx.moveTo(-12, 12);
+  ctx.lineTo(-24, footPadY - 1.5);
+  ctx.moveTo(12, 12);
+  ctx.lineTo(24, footPadY - 1.5);
+  ctx.stroke();
+
+  // Port footpad (isolated subpath)
+  ctx.fillStyle = '#1e293b';
+  ctx.beginPath();
+  roundRect(ctx, -31, footPadY - 2, 14, 4, 1.5);
+  ctx.fill();
+  ctx.fillStyle = '#64748b';
+  ctx.beginPath();
+  roundRect(ctx, -29, footPadY - 1.5, 10, 2, 1);
+  ctx.fill();
+
+  // Starboard footpad (isolated subpath)
+  ctx.fillStyle = '#1e293b';
+  ctx.beginPath();
+  roundRect(ctx, 17, footPadY - 2, 14, 4, 1.5);
+  ctx.fill();
+  ctx.fillStyle = '#64748b';
+  ctx.beginPath();
+  roundRect(ctx, 19, footPadY - 1.5, 10, 2, 1);
+  ctx.fill();
+
+  // =================================================================
+  // 2. WINGS — Swept Heavy Wings (hullDark grey)
+  // =================================================================
+  ctx.fillStyle = hullDark;
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 1.0;
+  // Port wing
+  ctx.beginPath();
+  ctx.moveTo(-10, -8);
+  ctx.bezierCurveTo(-20, 2, -28, 12, -34, 20);
+  ctx.lineTo(-36, 28);
+  ctx.lineTo(-24, 24);
+  ctx.lineTo(-12, 20);
+  ctx.closePath();
   ctx.fill();
   ctx.stroke();
-
-  // 2a. Outrigger Pod Hull Textures — brushed metal panel lines and rivet rows
-  ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 0.7;
+  // Starboard wing
   ctx.beginPath();
-  ctx.moveTo(-24, 3); ctx.lineTo(-16, 3);
-  ctx.moveTo(-24, 10); ctx.lineTo(-16, 10);
-  ctx.moveTo(-24, 17); ctx.lineTo(-16, 17);
-  ctx.moveTo(16, 3); ctx.lineTo(24, 3);
-  ctx.moveTo(16, 10); ctx.lineTo(24, 10);
-  ctx.moveTo(16, 17); ctx.lineTo(24, 17);
-  ctx.stroke();
-  ctx.fillStyle = '#94a3b8';
-  for (let rX of [-23, -19, -17, -21]) {
-    ctx.beginPath(); ctx.arc(rX, 3, 0.9, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(rX, 10, 0.9, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(rX, 17, 0.9, 0, Math.PI * 2); ctx.fill();
-  }
-  for (let rX of [17, 19, 21, 23]) {
-    ctx.beginPath(); ctx.arc(rX, 3, 0.9, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(rX, 10, 0.9, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(rX, 17, 0.9, 0, Math.PI * 2); ctx.fill();
-  }
-
-  // 2b. Dual Side Engine Outrigger Pods (brushed titanium gradient)
-  const podGradL = ctx.createLinearGradient(-24, 0, -16, 22);
-  podGradL.addColorStop(0, '#334155'); podGradL.addColorStop(0.4, '#0f172a'); podGradL.addColorStop(1, '#1e293b');
-  const podGradR = ctx.createLinearGradient(24, 0, 16, 22);
-  podGradR.addColorStop(0, '#334155'); podGradR.addColorStop(0.4, '#0f172a'); podGradR.addColorStop(1, '#1e293b');
-  ctx.fillStyle = podGradL;
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 1.3;
-  ctx.beginPath();
-  roundRect(ctx, -24, 0, 8, 22, 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = podGradR;
-  ctx.beginPath();
-  roundRect(ctx, 16, 0, 8, 22, 2);
-  ctx.fill();
-  ctx.stroke();
-
-  // Outrigger Trusses
-  ctx.strokeStyle = '#64748b';
-  ctx.lineWidth = 1.8;
-  ctx.beginPath();
-  ctx.moveTo(-10, 4);
-  ctx.lineTo(-16, 4);
-  ctx.moveTo(-10, 14);
-  ctx.lineTo(-16, 14);
-  ctx.moveTo(10, 4);
-  ctx.lineTo(16, 4);
-  ctx.moveTo(10, 14);
-  ctx.lineTo(16, 14);
-  ctx.stroke();
-
-  // 3. Central Descent Core (Gold Thermal Foil) — multi-stop gradient + quilting seams
-  const coreGrad = ctx.createLinearGradient(-14, 4, 14, 18);
-  coreGrad.addColorStop(0, '#fef08a');
-  coreGrad.addColorStop(0.3, '#eab308');
-  coreGrad.addColorStop(0.65, '#ca8a04');
-  coreGrad.addColorStop(1, '#713f12');
-  ctx.fillStyle = coreGrad;
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 1.3;
-  ctx.beginPath();
-  ctx.moveTo(-12, 4);
-  ctx.lineTo(-14, 18);
-  ctx.lineTo(14, 18);
-  ctx.lineTo(12, 4);
+  ctx.moveTo(10, -8);
+  ctx.bezierCurveTo(20, 2, 28, 12, 34, 20);
+  ctx.lineTo(36, 28);
+  ctx.lineTo(24, 24);
+  ctx.lineTo(12, 20);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  // Gold Quilting Lines (MLI thermal seam quilting)
-  ctx.strokeStyle = '#a16207';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.moveTo(-12, 11);
-  ctx.lineTo(12, 11);
-  ctx.stroke();
-
-  // Additional quilting seam + MLI foil highlight
-  ctx.strokeStyle = '#fde68a';
+  // Cannon pods (on the wings)
+  ctx.fillStyle = podL;
+  ctx.strokeStyle = '#1e293b';
   ctx.lineWidth = 0.8;
   ctx.beginPath();
-  ctx.moveTo(-13, 7);
-  ctx.lineTo(13, 7);
+  roundRect(ctx, -30, -4, 4, 26, 2);
+  ctx.fill();
   ctx.stroke();
-  ctx.strokeStyle = '#a16207';
-  ctx.lineWidth = 0.6;
+  ctx.fillStyle = podR;
   ctx.beginPath();
-  ctx.moveTo(-13, 15);
-  ctx.lineTo(13, 15);
+  roundRect(ctx, 26, -4, 4, 26, 2);
+  ctx.fill();
   ctx.stroke();
 
-  // 4. Stinger Upper Cabin — faceted hull with seams + gold trim + rivets
-  ctx.fillStyle = createHullGrad(ctx, -14, -26, 14, 4, config.primaryColor);
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 1.5;
+  // Pod collars
+  ctx.fillStyle = '#64748b';
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 0.5;
   ctx.beginPath();
-  ctx.moveTo(0, -28);
-  ctx.lineTo(14, -10);
-  ctx.lineTo(12, 4);
-  ctx.lineTo(-12, 4);
-  ctx.lineTo(-14, -10);
+  ctx.moveTo(-29, -10);
+  ctx.lineTo(-27, -10);
+  ctx.lineTo(-27, -4);
+  ctx.lineTo(-29, -4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(27, -10);
+  ctx.lineTo(29, -10);
+  ctx.lineTo(29, -4);
+  ctx.lineTo(27, -4);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  // Faceted panel seams + rivet rows (over filled cabin)
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 0.7;
+  // =================================================================
+  // 3. HULL — Armored Fuselage, Raised Plate & Crossbrace
+  // =================================================================
+  ctx.fillStyle = hullLight;
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.moveTo(0, -28); ctx.lineTo(0, 4);
-  ctx.moveTo(-14, -10); ctx.lineTo(-12, 4);
-  ctx.moveTo(14, -10); ctx.lineTo(12, 4);
-  ctx.moveTo(-7, -18); ctx.lineTo(7, -18);
+  ctx.moveTo(0, -38);
+  ctx.lineTo(6, -26);
+  ctx.bezierCurveTo(12, -16, 16, -6, 16, 10);
+  ctx.lineTo(12, 24);
+  ctx.lineTo(-12, 24);
+  ctx.lineTo(-16, 10);
+  ctx.bezierCurveTo(-16, -6, -12, -16, -6, -26);
+  ctx.closePath();
+  ctx.fill();
   ctx.stroke();
-  ctx.fillStyle = '#64748b';
-  for (let rY of [-18, -8]) {
-    ctx.beginPath(); ctx.arc(-11, rY, 0.8, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(11, rY, 0.8, 0, Math.PI * 2); ctx.fill();
+
+  // Raised center armor plate
+  ctx.fillStyle = hullDark;
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(0, -26);
+  ctx.lineTo(8, -14);
+  ctx.lineTo(8, 4);
+  ctx.lineTo(4, 8);
+  ctx.lineTo(-4, 8);
+  ctx.lineTo(-8, 4);
+  ctx.lineTo(-8, -14);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Mid-section crossbrace
+  ctx.fillStyle = '#475569';
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  roundRect(ctx, -10, -6, 20, 6, 1);
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.moveTo(-8, -3);
+  ctx.lineTo(8, -3);
+  ctx.stroke();
+
+  // Engine cylinders (strapped to the hull)
+  ctx.fillStyle = cylL;
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  roundRect(ctx, -15, 4, 11, 20, 4.5);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = cylR;
+  ctx.beginPath();
+  roundRect(ctx, 4, 4, 11, 20, 4.5);
+  ctx.fill();
+  ctx.stroke();
+
+  // Cylindrical ribbing
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 0.8;
+  ctx.globalAlpha = 0.6;
+  ctx.beginPath();
+  for (let i = 0; i < 4; i++) {
+    const y = 12 + i * 3;
+    ctx.moveTo(-14, y);
+    ctx.lineTo(-5, y);
+    ctx.moveTo(5, y);
+    ctx.lineTo(14, y);
   }
-  ctx.beginPath(); ctx.arc(0, -18, 0.8, 0, Math.PI * 2); ctx.fill();
-
-  // 5. Amber Visor Canopy
-  ctx.fillStyle = createVisorGrad(ctx, 0, -14, 6.5, config.accentColor, config.visorColor);
-  ctx.beginPath();
-  ctx.ellipse(0, -14, 6.5, 4.5, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = '#fef08a';
-  ctx.lineWidth = 1.1;
   ctx.stroke();
-
-  ctx.fillStyle = '#ffffff';
-  ctx.globalAlpha = 0.8;
-  ctx.beginPath();
-  ctx.ellipse(-2, -15.5, 2.5, 1.2, 0, 0, Math.PI * 2);
-  ctx.fill();
   ctx.globalAlpha = 1.0;
 
-  // 6. Antenna Spikes
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.moveTo(-4, -28);
-  ctx.lineTo(-6, -34);
-  ctx.moveTo(4, -28);
-  ctx.lineTo(6, -34);
-  ctx.stroke();
-
-  // 7. Engine Nozzles
+  // =================================================================
+  // 4. ENGINE NOZZLES (L/R exits aligned to thruster anchor planes)
+  // =================================================================
   ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#94a3b8';
+  ctx.strokeStyle = '#1e293b';
   ctx.lineWidth = 1.0;
+  // Port nozzle
   ctx.beginPath();
-  ctx.moveTo(-23, 22);
-  ctx.lineTo(-17, 22);
-  ctx.lineTo(-16, 26);
-  ctx.lineTo(-24, 26);
-  ctx.closePath();
-  ctx.moveTo(17, 22);
-  ctx.lineTo(23, 22);
-  ctx.lineTo(24, 26);
-  ctx.lineTo(16, 26);
+  ctx.moveTo(-13, 24);
+  ctx.lineTo(-6, 24);
+  ctx.lineTo(-7, 28);
+  ctx.lineTo(-12, 28);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
+  // Starboard nozzle
+  ctx.beginPath();
+  ctx.moveTo(6, 24);
+  ctx.lineTo(13, 24);
+  ctx.lineTo(12, 28);
+  ctx.lineTo(7, 28);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Nozzle apertures
+  ctx.fillStyle = '#334155';
+  ctx.beginPath();
+  ctx.rect(-11, 27, 4, 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.rect(7, 27, 4, 2);
+  ctx.fill();
+
+  // =================================================================
+  // 5. CANOPY — Deep Inset Cockpit Glass
+  // =================================================================
+  ctx.fillStyle = canopyGrad;
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(0, -29);
+  ctx.lineTo(4, -18);
+  ctx.lineTo(3, -13);
+  ctx.lineTo(-3, -13);
+  ctx.lineTo(-4, -18);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Canopy highlights
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 0.6;
+  ctx.beginPath();
+  ctx.moveTo(0, -27);
+  ctx.lineTo(2, -18);
+  ctx.lineTo(2, -14);
+  ctx.moveTo(0, -27);
+  ctx.lineTo(-2, -18);
+  ctx.lineTo(-2, -14);
+  ctx.stroke();
+
+  // =================================================================
+  // 6. DETAILS — Antennae, Accent Struts, Fin, Decals
+  // =================================================================
+  // Antenna spikes (tips nudged inside viewBox so menu card never clips)
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(-3, -32);
+  ctx.lineTo(-3, -39.4);
+  ctx.moveTo(3, -32);
+  ctx.lineTo(3, -39.4);
+  ctx.stroke();
+  ctx.fillStyle = '#ef4444';
+  ctx.beginPath();
+  ctx.arc(-3, -39.4, 0.7, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#10b981';
+  ctx.beginPath();
+  ctx.arc(3, -39.4, 0.7, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Orange flanking struts
+  ctx.fillStyle = orangeGrad;
+  ctx.strokeStyle = '#9a3412';
+  ctx.lineWidth = 0.6;
+  ctx.beginPath();
+  ctx.moveTo(-11, -6);
+  ctx.lineTo(-13, 8);
+  ctx.lineTo(-10, 8);
+  ctx.lineTo(-8, -6);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(11, -6);
+  ctx.lineTo(13, 8);
+  ctx.lineTo(10, 8);
+  ctx.lineTo(8, -6);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Central yellow tail fin
+  ctx.fillStyle = yellowGrad;
+  ctx.strokeStyle = '#a16207';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(-1, 6);
+  ctx.lineTo(1, 6);
+  ctx.lineTo(1.5, 25);
+  ctx.lineTo(0, 27);
+  ctx.lineTo(-1.5, 25);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Wing yellow accent stripes
+  ctx.beginPath();
+  ctx.moveTo(-29, 14);
+  ctx.lineTo(-27, 26);
+  ctx.lineTo(-30, 26);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(29, 14);
+  ctx.lineTo(27, 26);
+  ctx.lineTo(30, 26);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Wing panel lines
+  ctx.strokeStyle = '#64748b';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(-6, -20);
+  ctx.lineTo(-14, -12);
+  ctx.moveTo(6, -20);
+  ctx.lineTo(14, -12);
+  ctx.stroke();
+
+  // Center geometric decal
+  ctx.fillStyle = '#facc15';
+  ctx.globalAlpha = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(0, -4);
+  ctx.lineTo(3, -1);
+  ctx.lineTo(0, 2);
+  ctx.lineTo(-3, -1);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(2, 2);
+  ctx.lineTo(0, 4);
+  ctx.lineTo(-2, 2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.globalAlpha = 1.0;
 }
 
-// =====================================================================
-// 12. KESTREL STUNT (KS-9 Aerobatic Dart)
-// =====================================================================
 export function drawKestrel(
   ctx: CanvasRenderingContext2D,
   config: ShipModelConfig,
