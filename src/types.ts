@@ -268,7 +268,8 @@ export type ShipModelId =
   | 'mantis'
   | 'colossus'
   | 'nutcracker'
-  | 'eagle';
+  | 'eagle'
+  | 'vulcan';
 
 export interface ShipLocalPoints {
   [key: string]: Vector2D;
@@ -320,6 +321,7 @@ export interface ShipModelConfig {
   visorColor: string;
   thrusterColor?: string;
   localPoints?: Record<string, Vector2D>;
+  collisionPolygon?: Vector2D[];
   stats?: {
     agility: number;
     fuelTank: number;

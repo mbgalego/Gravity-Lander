@@ -24,6 +24,19 @@ export function transformPoint(pt: Vector2D, center: Vector2D, angle: number): V
   };
 }
 
+export function isPointInPolygon(pt: Vector2D, poly: Vector2D[]): boolean {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const xi = poly[i].x;
+    const yi = poly[i].y;
+    const xj = poly[j].x;
+    const yj = poly[j].y;
+    const intersect = yi > pt.y !== yj > pt.y && pt.x < ((xj - xi) * (pt.y - yi)) / (yj - yi) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
 export function getShipWorldPoints(ship: ShipState) {
   const config = getShipConfig(ship.modelId);
   const lp = config.localPoints;
@@ -1819,21 +1832,47 @@ export function updatePhysics(
   }
 
   // 3. Terrain & Obstacle Collision Handling with Progressive Damage
-  const shipEdges = [
-    { a: points.nose, b: points.leftShoulder, name: 'nose_left' },
-    { a: points.leftShoulder, b: points.leftFoot, name: 'left_flank' },
-    { a: points.leftFoot, b: points.rightFoot, name: 'keel_gear' },
-    { a: points.rightFoot, b: points.rightShoulder, name: 'right_flank' },
-    { a: points.rightShoulder, b: points.nose, name: 'nose_right' },
-  ];
+  let shipEdges: { a: Vector2D; b: Vector2D; name: string }[] = [];
+  let testPoints: { pt: Vector2D; weight: number; name: string }[] = [];
+  let polyWorldPoints: Vector2D[] = [];
 
-  const testPoints = [
-    { pt: points.nose, weight: 1.35, name: 'Cockpit Canopy' },
-    { pt: points.leftShoulder, weight: 1.0, name: 'Port Hull' },
-    { pt: points.rightShoulder, weight: 1.0, name: 'Starboard Hull' },
-    { pt: points.leftFoot, weight: 0.6, name: 'Port Landing Strut' },
-    { pt: points.rightFoot, weight: 0.6, name: 'Starboard Landing Strut' },
-  ];
+  if (config.collisionPolygon && config.collisionPolygon.length >= 3) {
+    polyWorldPoints = config.collisionPolygon.map((lp) =>
+      transformPoint(lp, updatedShip.pos, updatedShip.angle)
+    );
+    shipEdges = polyWorldPoints.map((pt, i) => {
+      const nextPt = polyWorldPoints[(i + 1) % polyWorldPoints.length];
+      return { a: pt, b: nextPt, name: `hull_edge_${i}` };
+    });
+    testPoints = [
+      ...polyWorldPoints.map((pt, i) => ({ pt, weight: 1.0, name: `Hull Vertex ${i}` })),
+      ...polyWorldPoints.map((pt, i) => {
+        const nextPt = polyWorldPoints[(i + 1) % polyWorldPoints.length];
+        return {
+          pt: { x: (pt.x + nextPt.x) * 0.5, y: (pt.y + nextPt.y) * 0.5 },
+          weight: 1.0,
+          name: `Hull Midpoint ${i}`,
+        };
+      }),
+      { pt: points.leftFoot, weight: 0.6, name: 'Port Landing Strut' },
+      { pt: points.rightFoot, weight: 0.6, name: 'Starboard Landing Strut' },
+    ];
+  } else {
+    shipEdges = [
+      { a: points.nose, b: points.leftShoulder, name: 'nose_left' },
+      { a: points.leftShoulder, b: points.leftFoot, name: 'left_flank' },
+      { a: points.leftFoot, b: points.rightFoot, name: 'keel_gear' },
+      { a: points.rightFoot, b: points.rightShoulder, name: 'right_flank' },
+      { a: points.rightShoulder, b: points.nose, name: 'nose_right' },
+    ];
+    testPoints = [
+      { pt: points.nose, weight: 1.35, name: 'Cockpit Canopy' },
+      { pt: points.leftShoulder, weight: 1.0, name: 'Port Hull' },
+      { pt: points.rightShoulder, weight: 1.0, name: 'Starboard Hull' },
+      { pt: points.leftFoot, weight: 0.6, name: 'Port Landing Strut' },
+      { pt: points.rightFoot, weight: 0.6, name: 'Starboard Landing Strut' },
+    ];
+  }
 
   let collisionOccurred = false;
   let collisionNormal: Vector2D = { x: 0, y: -1 };
@@ -1841,7 +1880,14 @@ export function updatePhysics(
   let collisionPartMultiplier = 1.0;
   let collisionType: 'ground' | 'ceiling' | 'wall' = 'ground';
 
-  const proximityRadius = Math.max(75, config.width * 0.6 + 25);
+  let maxExtent = config.width * 0.5;
+  if (config.collisionPolygon && config.collisionPolygon.length > 0) {
+    for (const cp of config.collisionPolygon) {
+      const d = Math.hypot(cp.x, cp.y);
+      if (d > maxExtent) maxExtent = d;
+    }
+  }
+  const proximityRadius = Math.max(75, maxExtent + 35, config.width * 0.6 + 25);
 
   for (const seg of world.segments) {
     if (seg.type === 'launch_pad' || seg.type === 'landing_pad') {
@@ -1896,6 +1942,30 @@ export function updatePhysics(
       updatedShip.pos.y > maxSegY
     ) {
       continue;
+    }
+
+    // Test if either terrain endpoint has penetrated inside the ship polygon
+    if (polyWorldPoints.length >= 3) {
+      if (isPointInPolygon(seg.p1, polyWorldPoints)) {
+        collisionOccurred = true;
+        collisionPoint = seg.p1;
+        const toShipX = updatedShip.pos.x - seg.p1.x;
+        const toShipY = updatedShip.pos.y - seg.p1.y;
+        const dist = Math.hypot(toShipX, toShipY) || 1;
+        collisionNormal = { x: toShipX / dist, y: toShipY / dist };
+        collisionType = seg.type === 'ceiling' ? 'ceiling' : seg.type === 'wall' ? 'wall' : 'ground';
+        break;
+      }
+      if (isPointInPolygon(seg.p2, polyWorldPoints)) {
+        collisionOccurred = true;
+        collisionPoint = seg.p2;
+        const toShipX = updatedShip.pos.x - seg.p2.x;
+        const toShipY = updatedShip.pos.y - seg.p2.y;
+        const dist = Math.hypot(toShipX, toShipY) || 1;
+        collisionNormal = { x: toShipX / dist, y: toShipY / dist };
+        collisionType = seg.type === 'ceiling' ? 'ceiling' : seg.type === 'wall' ? 'wall' : 'ground';
+        break;
+      }
     }
 
     // Test edge-to-edge intersections

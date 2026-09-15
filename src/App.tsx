@@ -566,15 +566,15 @@ export default function App() {
 
             if (currentShip.leftThruster) {
               const leftPos = {
-                x: currentShip.pos.x + (shipCfg.localPoints.leftThrusterPos.x * cosA - shipCfg.localPoints.leftThrusterPos.y * sinA) * rScale,
-                y: currentShip.pos.y + (shipCfg.localPoints.leftThrusterPos.x * sinA + shipCfg.localPoints.leftThrusterPos.y * cosA) * rScale,
+                x: currentShip.pos.x + (shipCfg.localPoints.leftThrusterPos.x * cosA - shipCfg.localPoints.leftThrusterPos.y * sinA),
+                y: currentShip.pos.y + (shipCfg.localPoints.leftThrusterPos.x * sinA + shipCfg.localPoints.leftThrusterPos.y * cosA),
               };
               particlesRef.current.emitThruster(leftPos, currentShip.angle, planet.theme.thrusterCore, shipCfg.thrustMultiplier);
             }
             if (currentShip.rightThruster) {
               const rightPos = {
-                x: currentShip.pos.x + (shipCfg.localPoints.rightThrusterPos.x * cosA - shipCfg.localPoints.rightThrusterPos.y * sinA) * rScale,
-                y: currentShip.pos.y + (shipCfg.localPoints.rightThrusterPos.x * sinA + shipCfg.localPoints.rightThrusterPos.y * cosA) * rScale,
+                x: currentShip.pos.x + (shipCfg.localPoints.rightThrusterPos.x * cosA - shipCfg.localPoints.rightThrusterPos.y * sinA),
+                y: currentShip.pos.y + (shipCfg.localPoints.rightThrusterPos.x * sinA + shipCfg.localPoints.rightThrusterPos.y * cosA),
               };
               particlesRef.current.emitThruster(rightPos, currentShip.angle, planet.theme.thrusterCore, shipCfg.thrustMultiplier);
             }

@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 80 80">
+  <defs>
+    <!-- Matte Carbon RAM Composite Fuselage -->
+    <linearGradient id="spectre-hull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="25%" stop-color="#0f172a"/>
+      <stop offset="65%" stop-color="#090d16"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <!-- Flanking Sponsons & Heavy-Lift Wings -->
+    <linearGradient id="spectre-sponson-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#312e81"/>
+      <stop offset="35%" stop-color="#1e1b4b"/>
+      <stop offset="70%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <!-- Cargo Bay / Rear Loading Ramp Door -->
+    <linearGradient id="spectre-ramp-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <!-- 2D Heavy Vectoring Engine Nozzles -->
+    <linearGradient id="spectre-nozzle-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+
+    <!-- Command Bridge / Wide Flight Deck Canopy -->
+    <linearGradient id="spectre-bridge-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e9d5ff"/>
+      <stop offset="25%" stop-color="#c084fc"/>
+      <stop offset="65%" stop-color="#7e22ce"/>
+      <stop offset="100%" stop-color="#3b0764"/>
+    </linearGradient>
+
+    <!-- Luminescent Formation & Egress Strip Lighting -->
+    <linearGradient id="spectre-plasma-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#6b21a8"/>
+    </linearGradient>
+
+    <!-- Heavy Transport RAM Landing Skids -->
+    <linearGradient id="spectre-foot-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 1. HEAVY TRANSPORT LANDING GEAR (Articulated Sponson Struts + Wide Skids) -->
+  <g data-part="landing-gear" stroke-linecap="round">
+    <!-- Heavy Pneumatic Main Struts anchored to outer cargo sponsons -->
+    <line x1="-16" y1="12" x2="-25" y2="28" stroke="#334155" stroke-width="2.4"/>
+    <line x1="16" y1="12" x2="25" y2="28" stroke="#334155" stroke-width="2.4"/>
+    <!-- Scissor Anti-Torque Hinges -->
+    <line x1="-8" y1="16" x2="-25" y2="28" stroke="#475569" stroke-width="1.4"/>
+    <line x1="8" y1="16" x2="25" y2="28" stroke="#475569" stroke-width="1.4"/>
+    <!-- Heavy Hydraulic Piston Sliders -->
+    <line x1="-22" y1="22" x2="-25" y2="28" stroke="#cbd5e1" stroke-width="1.6"/>
+    <line x1="22" y1="22" x2="25" y2="28" stroke="#cbd5e1" stroke-width="1.6"/>
+  </g>
+
+  <!-- Left Transport Skid Footpad (y=28..31, center x=-25, y=29.5) -->
+  <g data-part="footpad">
+    <rect x="-31" y="28" width="12" height="3" rx="1.2" fill="url(#spectre-foot-grad)" stroke="#a855f7" stroke-width="0.8"/>
+    <rect x="-29" y="29.6" width="8" height="1.2" rx="0.5" fill="#020617"/>
+  </g>
+
+  <!-- Right Transport Skid Footpad (y=28..31, center x=25, y=29.5) -->
+  <g data-part="footpad">
+    <rect x="19" y="28" width="12" height="3" rx="1.2" fill="url(#spectre-foot-grad)" stroke="#a855f7" stroke-width="0.8"/>
+    <rect x="21" y="29.6" width="8" height="1.2" rx="0.5" fill="#020617"/>
+  </g>
+
+  <!-- 2. FLANKING HEAVY LIFT SPONSONS & WINGS (Transport Cabin Shoulders) -->
+  <g data-part="wing">
+    <!-- Port Heavy Sponson & Aerodynamic Chine -->
+    <path d="M-10 -12 L-33 6 L-33 14 L-25 15 L-22 18 L-10 18 L-9 6 Z" fill="url(#spectre-sponson-grad)" stroke="#1e1b4b" stroke-width="0.8"/>
+    <!-- Starboard Heavy Sponson & Aerodynamic Chine -->
+    <path d="M10 -12 L33 6 L33 14 L25 15 L22 18 L10 18 L9 6 Z" fill="url(#spectre-sponson-grad)" stroke="#1e1b4b" stroke-width="0.8"/>
+
+    <!-- Sponson Leading Edge Stealth Chamfer -->
+    <path d="M-10 -12 L-33 6 L-29 7 L-10 -9 Z" fill="#090d16" stroke="#475569" stroke-width="0.4"/>
+    <path d="M10 -12 L33 6 L29 7 L10 -9 Z" fill="#090d16" stroke="#475569" stroke-width="0.4"/>
+
+    <!-- Outer Sponson Cargo Egress Flanges & RCS Blocks -->
+    <rect x="-33.5" y="8" width="3.5" height="6" rx="0.8" fill="#0f172a" stroke="#a855f7" stroke-width="0.5"/>
+    <rect x="30" y="8" width="3.5" height="6" rx="0.8" fill="#0f172a" stroke="#a855f7" stroke-width="0.5"/>
+  </g>
+
+  <!-- 3. CENTRAL MAIN TRANSPORT FUSELAGE (Volumetric Cargo & Personnel Hold) -->
+  <g data-part="hull">
+    <!-- Wide Transport Hull Contour with Faceted Forward Nose -->
+    <path d="M0 -36 L6 -34 L11 -20 L13 2 L11 18 L0 20 L-11 18 L-13 2 L-11 -20 L-6 -34 Z" fill="url(#spectre-hull-grad)" stroke="#312e81" stroke-width="0.9"/>
+
+    <!-- Faceted Forward Nose Cap / Radar Radome -->
+    <path d="M0 -36 L6 -34 L7 -24 L-7 -24 L-6 -34 Z" fill="#020617" stroke="#334155" stroke-width="0.6"/>
+    <!-- Low-RCS Forward Pitot & Sensor Probe -->
+    <line x1="0" y1="-36" x2="0" y2="-39.2" stroke="#94a3b8" stroke-width="0.9" stroke-linecap="round"/>
+
+    <!-- Central Cargo Hold Spine & Structural Keel -->
+    <path d="M0 -36 L2 -22 L2.5 4 L0 18 L-2.5 4 L-2 -22 Z" fill="#1e1b4b" stroke="#a855f7" stroke-width="0.5"/>
+
+    <!-- Cargo Bay Rear Clamshell Loading Ramp (Distinct Transport Feature) -->
+    <path d="M-6 8 L6 8 L5 18 L-5 18 Z" fill="url(#spectre-ramp-grad)" stroke="#6b21a8" stroke-width="0.7"/>
+    <!-- Ramp Sawtooth Seal / Interlocking Hydraulic Latches -->
+    <polyline points="-5 12 -4 13 -2 12 0 13 2 12 4 13 5 12" fill="none" stroke="#a855f7" stroke-width="0.7"/>
+    <line x1="-5" y1="18" x2="5" y2="18" stroke="#cbd5e1" stroke-width="0.8"/>
+  </g>
+
+  <!-- 4. ENGINES (Twin Heavy-Lift 2D Vectoring Nacelles) -->
+  <!-- Port Heavy Lift Engine (exit at y=24, x=-13.5) -->
+  <g data-part="engine" data-engine="left">
+    <!-- Nacelle Shroud -->
+    <path d="M-18 6 L-9 6 L-8.5 18 L-18.5 18 Z" fill="url(#spectre-nozzle-grad)" stroke="#1e1b4b" stroke-width="0.8"/>
+    <!-- 2D Serrated Nozzle Bell Opening -->
+    <path d="M-17 18 L-10 18 L-9 24 L-18 24 Z" fill="#090d16" stroke="#475569" stroke-width="0.8"/>
+    <!-- Thermal Ceramic Flange -->
+    <rect x="-17.5" y="18" width="8" height="1.8" fill="#312e81"/>
+    <!-- Twin Plasma Discharge Aperture -->
+    <ellipse cx="-13.5" cy="23.5" rx="4" ry="1.0" fill="#1e1b4b"/>
+    <ellipse cx="-13.5" cy="23.5" rx="2" ry="0.6" fill="#a855f7"/>
+  </g>
+
+  <!-- Starboard Heavy Lift Engine (exit at y=24, x=13.5) -->
+  <g data-part="engine" data-engine="right">
+    <!-- Nacelle Shroud -->
+    <path d="M9 6 L18 6 L18.5 18 L8.5 18 Z" fill="url(#spectre-nozzle-grad)" stroke="#1e1b4b" stroke-width="0.8"/>
+    <!-- 2D Serrated Nozzle Bell Opening -->
+    <path d="M10 18 L17 18 L18 24 L9 24 Z" fill="#090d16" stroke="#475569" stroke-width="0.8"/>
+    <!-- Thermal Ceramic Flange -->
+    <rect x="9.5" y="18" width="8" height="1.8" fill="#312e81"/>
+    <!-- Twin Plasma Discharge Aperture -->
+    <ellipse cx="13.5" cy="23.5" rx="4" ry="1.0" fill="#1e1b4b"/>
+    <ellipse cx="13.5" cy="23.5" rx="2" ry="0.6" fill="#a855f7"/>
+  </g>
+
+  <!-- Beaver-Tail Aft Aerodynamic Fairing -->
+  <path d="M-3.5 18 L3.5 18 L2 21.5 L-2 21.5 Z" fill="#090d16" stroke="#312e81" stroke-width="0.6"/>
+
+  <!-- 5. COMMAND FLIGHT DECK (Wide Transport Multi-Pane Bridge Canopy) -->
+  <g data-part="canopy">
+    <!-- Armored Bridge Frame & Canopy Brow -->
+    <path d="M0 -27 L7 -23 L6.5 -14 L0 -12 L-6.5 -14 L-7 -23 Z" fill="#020617" stroke="#6b21a8" stroke-width="0.9"/>
+    <!-- Wide Multi-Pane Viewport Core (Flight Deck Crew & Mission Commander Stations) -->
+    <path d="M0 -26 L5.8 -22.5 L5.2 -15 L0 -13 L-5.2 -15 L-5.8 -22.5 Z" fill="url(#spectre-bridge-grad)" stroke="#c084fc" stroke-width="0.6"/>
+
+    <!-- Flight Deck Window Mullions (Split Commander / Pilot / Systems Deck) -->
+    <line x1="0" y1="-26" x2="0" y2="-13" stroke="#1e1b4b" stroke-width="0.8"/>
+    <line x1="-5.5" y1="-18.5" x2="5.5" y2="-18.5" stroke="#1e1b4b" stroke-width="0.8"/>
+
+    <!-- Specular Glare Reflection on Thick Cockpit Armor Glass -->
+    <ellipse cx="-2.5" cy="-21" rx="1.2" ry="3.5" transform="rotate(-15 -2.5 -21)" fill="#ffffff" opacity="0.6"/>
+  </g>
+
+  <!-- 6. TRANSPORT CABIN DETAILS (Cargo Doors, Airlocks, Observation Ports, Lighting) -->
+  <g data-part="detail">
+    <!-- Side Personnel Airlock / Crew Egress Door (Port & Starboard) -->
+    <rect x="-10.5" y="-5" width="2" height="6" rx="0.5" fill="#1e1b4b" stroke="#334155" stroke-width="0.4"/>
+    <circle cx="-9.5" cy="-2" r="0.4" fill="#a855f7"/>
+    <rect x="8.5" y="-5" width="2" height="6" rx="0.5" fill="#1e1b4b" stroke="#334155" stroke-width="0.4"/>
+    <circle cx="9.5" cy="-2" r="0.4" fill="#a855f7"/>
+
+    <!-- Passenger / Sensor Observation Window Ports (3 each side) -->
+    <g fill="#c084fc">
+      <rect x="-8.5" y="2" width="1.4" height="2.2" rx="0.4"/>
+      <rect x="-8.5" y="5.5" width="1.4" height="2.2" rx="0.4"/>
+      <rect x="7.1" y="2" width="1.4" height="2.2" rx="0.4"/>
+      <rect x="7.1" y="5.5" width="1.4" height="2.2" rx="0.4"/>
+    </g>
+
+    <!-- Luminescent Guidance Strips Along Transport Sponson Flanks -->
+    <path d="M-11 -2 L-29 9 L-29 11 L-11 0 Z" fill="url(#spectre-plasma-grad)"/>
+    <path d="M11 -2 L29 9 L29 11 L11 0 Z" fill="url(#spectre-plasma-grad)"/>
+    <line x1="-12" y1="2" x2="-27" y2="11" stroke="#e9d5ff" stroke-width="0.6" opacity="0.85"/>
+    <line x1="12" y1="2" x2="27" y2="11" stroke="#e9d5ff" stroke-width="0.6" opacity="0.85"/>
+
+    <!-- Cargo Bay Tie-Down Latches & Structural Ribs -->
+    <g stroke="#334155" stroke-width="0.5" fill="none">
+      <line x1="-5" y1="3" x2="5" y2="3"/>
+      <line x1="-5.5" y1="-7" x2="5.5" y2="-7"/>
+      <line x1="-10" y1="13" x2="-24" y2="13"/>
+      <line x1="10" y1="13" x2="24" y2="13"/>
+    </g>
+
+    <!-- High-Authority Quad RCS Blocks on Sponson Extremities -->
+    <g fill="#ca8a04">
+      <circle cx="-32.5" cy="9.5" r="0.6"/>
+      <circle cx="-32.5" cy="12.5" r="0.6"/>
+      <circle cx="32.5" cy="9.5" r="0.6"/>
+      <circle cx="32.5" cy="12.5" r="0.6"/>
+    </g>
+  </g>
+
+  <!-- 7. NAVIGATION LIGHTS -->
+  <g data-part="navlight">
+    <!-- Port / Starboard Wingtip Navigation Lights -->
+    <circle cx="-32.5" cy="14" r="0.8" fill="#ef4444"/>
+    <circle cx="32.5" cy="14" r="0.8" fill="#22c55e"/>
+    <!-- Dorsal / Tail Beacon for Heavy Craft Flight Safety -->
+    <circle cx="0" cy="19.5" r="0.8" fill="#c084fc"/>
+    <circle cx="0" cy="-34" r="0.6" fill="#38bdf8"/>
+  </g>
+</svg>

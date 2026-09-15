@@ -1,0 +1,402 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 80 80" width="100%" height="100%">
+  <defs>
+    <!-- Background / Shadow Gradients -->
+    <linearGradient id="clair-hull-base" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#474d57" />
+      <stop offset="35%" stop-color="#2d323b" />
+      <stop offset="70%" stop-color="#1f2329" />
+      <stop offset="100%" stop-color="#14171c" />
+    </linearGradient>
+
+    <linearGradient id="clair-cab-sand" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#ebe8e1" />
+      <stop offset="25%" stop-color="#dcd7cc" />
+      <stop offset="60%" stop-color="#c2bcb0" />
+      <stop offset="100%" stop-color="#938d81" />
+    </linearGradient>
+
+    <linearGradient id="clair-cab-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6b7280" />
+      <stop offset="50%" stop-color="#374151" />
+      <stop offset="100%" stop-color="#1f2937" />
+    </linearGradient>
+
+    <linearGradient id="clair-spine-cyl" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#64748b" />
+      <stop offset="20%" stop-color="#94a3b8" />
+      <stop offset="45%" stop-color="#475569" />
+      <stop offset="80%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <linearGradient id="clair-fin-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="40%" stop-color="#334155" />
+      <stop offset="80%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <linearGradient id="clair-vtol-bell" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="25%" stop-color="#64748b" />
+      <stop offset="50%" stop-color="#94a3b8" />
+      <stop offset="75%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+
+    <linearGradient id="clair-vtol-housing" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#64748b" />
+      <stop offset="40%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <linearGradient id="clair-canopy-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="30%" stop-color="#0284c7" />
+      <stop offset="70%" stop-color="#0369a1" />
+      <stop offset="100%" stop-color="#082f49" />
+    </linearGradient>
+
+    <linearGradient id="clair-piston-chrome" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="35%" stop-color="#ffffff" />
+      <stop offset="70%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#64748b" />
+    </linearGradient>
+
+    <linearGradient id="clair-footpad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#64748b" />
+      <stop offset="50%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. FAR-SIDE / BACKGROUND STRUCTURES -->
+  <g id="clairvoyant-farside">
+    <!-- Far-side canted vertical fin -->
+    <polygon points="21,-14 26,-30 31,-30 33,-13" fill="#1e242d" stroke="#0f172a" stroke-width="0.8" />
+    <line x1="26" y1="-30" x2="31" y2="-30" stroke="#eab308" stroke-width="1.2" />
+
+    <!-- Far-side VTOL nacelle pylon and bell (shadowed) -->
+    <polygon points="-16,7 -12,7 -10,13 -16,13" fill="#12161b" stroke="#080b0e" stroke-width="0.8" />
+    <path d="M -15,13 L -11,13 L -9.5,17 L -16.5,17 Z" fill="#181e25" stroke="#080b0e" stroke-width="0.8" />
+    <ellipse cx="-13" cy="17" rx="3.5" ry="1.0" fill="#080b0e" />
+
+    <polygon points="14,7 18,7 20,13 14,13" fill="#12161b" stroke="#080b0e" stroke-width="0.8" />
+    <path d="M 15,13 L 19,13 L 20.5,17 L 13.5,17 Z" fill="#181e25" stroke="#080b0e" stroke-width="0.8" />
+    <ellipse cx="17" cy="17" rx="3.5" ry="1.0" fill="#080b0e" />
+
+    <!-- Far-side low landing leg struts & pads (squat, close to ground) -->
+    <line x1="-24" y1="11" x2="-25.5" y2="18.5" stroke="#1f2937" stroke-width="2.2" stroke-linecap="round" />
+    <polygon points="-28,18.5 -22,18.5 -23,20 -29,20" fill="#111827" />
+
+    <line x1="21" y1="11" x2="20.5" y2="18.5" stroke="#1f2937" stroke-width="2.2" stroke-linecap="round" />
+    <polygon points="16.5,18.5 22.5,18.5 21.5,20 15.5,20" fill="#111827" />
+  </g>
+
+  <!-- 2. MAIN HULL & FUSELAGE -->
+  <g data-part="hull" id="clairvoyant-hull">
+    <!-- Main Aft & Mid Fuselage Shell -->
+    <path d="M -22,-14 L 12,-14 L 20,-11 L 34,-9 L 36,-3 L 36,5 L 32,10 L 18,13 L -4,14 L -16,14 L -22,10 Z"
+          fill="url(#clair-hull-base)" stroke="#0b0e12" stroke-width="1.2" />
+
+    <!-- Aft Tail Boom Extension & Rear Thruster Casing -->
+    <path d="M 28,-9 L 36,-9 L 37,-6 L 37,3 L 35,7 L 28,8 Z"
+          fill="#1e232a" stroke="#0f172a" stroke-width="1.0" />
+    <!-- Rear vectoring nozzle block -->
+    <rect x="36.5" y="-5.5" width="2" height="9" rx="0.5"
+          fill="#0f172a" stroke="#334155" stroke-width="0.8" />
+    <line x1="37" y1="-2.5" x2="38.5" y2="-2.5" stroke="#64748b" stroke-width="0.6" />
+    <line x1="37" y1="0.5" x2="38.5" y2="0.5" stroke="#64748b" stroke-width="0.6" />
+
+    <!-- Top Cylindrical Power / Reactor Spine -->
+    <rect x="-20" y="-17.5" width="34" height="5.5"
+          fill="url(#clair-spine-cyl)" stroke="#0f172a" stroke-width="1.0" />
+    <!-- Transverse Cooling Radiator Ribs -->
+    <line x1="-16" y1="-17.5" x2="-16" y2="-12" stroke="#0f172a" stroke-width="0.9" />
+    <line x1="-12" y1="-17.5" x2="-12" y2="-12" stroke="#0f172a" stroke-width="0.9" />
+    <line x1="-8" y1="-17.5" x2="-8" y2="-12" stroke="#0f172a" stroke-width="0.9" />
+    <line x1="-4" y1="-17.5" x2="-4" y2="-12" stroke="#0f172a" stroke-width="0.9" />
+    <line x1="0" y1="-17.5" x2="0" y2="-12" stroke="#0f172a" stroke-width="0.9" />
+    <line x1="4" y1="-17.5" x2="4" y2="-12" stroke="#0f172a" stroke-width="0.9" />
+    <line x1="8" y1="-17.5" x2="8" y2="-12" stroke="#0f172a" stroke-width="0.9" />
+    <line x1="12" y1="-17.5" x2="12" y2="-12" stroke="#0f172a" stroke-width="0.9" />
+    <!-- Specular Highlight Strip along Spine Cylinder -->
+    <line x1="-19" y1="-16" x2="13" y2="-16" stroke="#cbd5e1" stroke-width="0.6" opacity="0.8" />
+
+    <!-- Forward Dorsal Turret / Comms Housing Blister -->
+    <path d="M -17,-17.5 C -17,-20.5 -11,-20.5 -11,-17.5 Z"
+          fill="#334155" stroke="#0f172a" stroke-width="0.9" />
+    <circle cx="-14" cy="-18.2" r="1.1" fill="#64748b" />
+
+    <!-- Near-Side Canted Vertical Tail Fin -->
+    <polygon points="23,-11 27.5,-31 33.5,-31 35,-10"
+             fill="url(#clair-fin-grad)" stroke="#0b0e12" stroke-width="1.2" />
+    <!-- Rudder Trim Flap -->
+    <polygon points="32.5,-30.5 33.3,-30.5 34.7,-10 33.7,-10"
+             fill="#1e293b" stroke="#0f172a" stroke-width="0.5" />
+    <!-- Tactical Hazard Stripes on Fin -->
+    <polygon points="27.8,-30.5 32.8,-30.5 32.4,-28.5 28.2,-28.5" fill="#eab308" />
+    <polygon points="28.4,-27.2 33.1,-27.2 32.8,-25.5 28.8,-25.5" fill="#eab308" />
+    <!-- Quantum Origins Gold Crosshair Roundel Emblem -->
+    <circle cx="30.5" cy="-19" r="2.8" fill="none" stroke="#eab308" stroke-width="0.7" />
+    <line x1="30.5" y1="-22.5" x2="30.5" y2="-15.5" stroke="#eab308" stroke-width="0.5" />
+    <line x1="27" y1="-19" x2="34" y2="-19" stroke="#eab308" stroke-width="0.5" />
+    <circle cx="30.5" cy="-19" r="0.8" fill="#eab308" />
+
+    <!-- Mid-Fuselage Recessed Cargo/Troop Access Door -->
+    <rect x="-4" y="-7" width="14" height="17" rx="1.5"
+          fill="#1c2026" stroke="#0b0e12" stroke-width="1.0" />
+    <rect x="-2.5" y="-5.5" width="11" height="14" rx="0.8"
+          fill="#292e37" stroke="#374151" stroke-width="0.7" />
+    <!-- Door Structural Bracing H-frame -->
+    <line x1="0" y1="-4" x2="0" y2="6" stroke="#111827" stroke-width="1.2" />
+    <line x1="6" y1="-4" x2="6" y2="6" stroke="#111827" stroke-width="1.2" />
+    <line x1="0" y1="1" x2="6" y2="1" stroke="#111827" stroke-width="1.2" />
+    <!-- Emergency Door Egress Latch -->
+    <rect x="5" y="-3.5" width="1.8" height="1.0" fill="#eab308" />
+    <!-- Footstep Ladder Rungs below door -->
+    <line x1="-1" y1="8.5" x2="7" y2="8.5" stroke="#6b7280" stroke-width="0.8" />
+    <line x1="-1" y1="10.5" x2="7" y2="10.5" stroke="#6b7280" stroke-width="0.8" />
+
+    <!-- Thermal Heat Dissipation Louvers -->
+    <line x1="12" y1="-5" x2="19" y2="-5" stroke="#0f172a" stroke-width="0.8" />
+    <line x1="12" y1="-3" x2="19" y2="-3" stroke="#0f172a" stroke-width="0.8" />
+    <line x1="12" y1="-1" x2="19" y2="-1" stroke="#0f172a" stroke-width="0.8" />
+    <line x1="12" y1="1" x2="19" y2="1" stroke="#0f172a" stroke-width="0.8" />
+    <line x1="12" y1="3" x2="19" y2="3" stroke="#0f172a" stroke-width="0.8" />
+
+    <!-- Forward Ballistic Ceramic Armor Cabin (Light Sand/Beige) -->
+    <path d="M -22,-14 L -11,-14 L -8,-7 L -9,6 L -18,12 L -27,9 L -34,4 L -36,0 L -31,-7 Z"
+          fill="url(#clair-cab-sand)" stroke="#0b0e12" stroke-width="1.3" />
+
+    <!-- Forward Lower Chin Sensor Housing -->
+    <polygon points="-36,0 -37.5,3 -31,7 -27,9 -34,4"
+             fill="#78716c" stroke="#0f172a" stroke-width="0.8" />
+    <!-- Nose Pitot Tube / Forward Sensor Probe (Nudged to y=2.5, tip x=-39.2) -->
+    <line x1="-36.5" y1="2" x2="-39.2" y2="2.5" stroke="#0f172a" stroke-width="1.2" stroke-linecap="round" />
+    <line x1="-36.5" y1="2" x2="-39.2" y2="2.5" stroke="#cbd5e1" stroke-width="0.6" />
+    <circle cx="-35" cy="2" r="1.1" fill="#ef4444" />
+    <circle cx="-35" cy="2" r="0.5" fill="#fecaca" />
+
+    <!-- Circular Tactical Access Port on Cab -->
+    <circle cx="-15" cy="-2" r="2.6" fill="#78716c" stroke="#0f172a" stroke-width="0.8" />
+    <circle cx="-15" cy="-2" r="1.4" fill="#a8a29e" />
+    <circle cx="-15" cy="-2" r="0.5" fill="#0f172a" />
+
+    <!-- Ceramic Plate Structural Seam Lines -->
+    <line x1="-22" y1="-14" x2="-18" y2="12" stroke="#a8a29e" stroke-width="0.8" />
+    <line x1="-31" y1="-7" x2="-22" y2="3" stroke="#57534e" stroke-width="0.8" />
+  </g>
+
+  <!-- 3. FACETED COCKPIT & CANOPY -->
+  <g data-part="canopy" id="clairvoyant-canopy">
+    <!-- Canopy Structural Framing -->
+    <path d="M -31,-7 L -22,-14 L -17,-14 L -20,-7 L -26,-2 L -31,-3 Z"
+          fill="#0f172a" stroke="#0b0e12" stroke-width="1.4" />
+
+    <!-- Main Slanted Front Windshield Pane -->
+    <polygon points="-30.5,-6.5 -25,-12.5 -23.5,-12.5 -28,-6.2"
+             fill="url(#clair-canopy-glass)" stroke="#0369a1" stroke-width="0.5" />
+    <!-- Glare Specular Highlight -->
+    <polygon points="-29.8,-7.5 -25.2,-12.3 -24.2,-12.3 -28.5,-7.2"
+             fill="#e0f2fe" opacity="0.75" />
+
+    <!-- Upper Skylight Cockpit Pane -->
+    <polygon points="-23.5,-12.8 -18,-12.8 -19.5,-9.5 -24.5,-9.5"
+             fill="url(#clair-canopy-glass)" stroke="#0369a1" stroke-width="0.5" />
+    <polygon points="-22.8,-12.4 -18.6,-12.4 -19.7,-10.2 -23.6,-10.2"
+             fill="#e0f2fe" opacity="0.6" />
+
+    <!-- Side Quarter Triangular Pane -->
+    <polygon points="-27.5,-5.5 -23.5,-8.5 -20.5,-6.5 -25.5,-2.8"
+             fill="url(#clair-canopy-glass)" stroke="#0369a1" stroke-width="0.5" />
+    <polygon points="-26.5,-5.2 -23.5,-7.5 -21.8,-6.2 -25.2,-3.5"
+             fill="#38bdf8" opacity="0.5" />
+
+    <!-- Mullion Dividing Struts -->
+    <line x1="-24" y1="-13" x2="-28.5" y2="-6.2" stroke="#0f172a" stroke-width="1.2" />
+    <line x1="-24" y1="-9.5" x2="-20" y2="-7" stroke="#0f172a" stroke-width="1.0" />
+    <line x1="-27.5" y1="-5.5" x2="-20.5" y2="-6.5" stroke="#0f172a" stroke-width="1.0" />
+  </g>
+
+  <!-- 4. VTOL LIFT ENGINE NACELLES (MOUNTED BELOW HULL, LOW PROFILE) -->
+  <!-- Forward VTOL Engine (data-engine="left") -->
+  <g data-part="engine" data-engine="left" id="clairvoyant-vtol-left">
+    <!-- Mounting Pylon & Pivot Hub -->
+    <path d="M -17,9 L -11,9 L -10,13 L -18,13 Z"
+          fill="url(#clair-vtol-housing)" stroke="#0f172a" stroke-width="1.0" />
+    <!-- Rotational Gimbal Ring -->
+    <circle cx="-14" cy="11.5" r="2.0" fill="#475569" stroke="#0f172a" stroke-width="0.8" />
+    <circle cx="-14" cy="11.5" r="1.0" fill="#94a3b8" />
+
+    <!-- VTOL Nozzle Housing / Nacelle Bell Body (compact height) -->
+    <path d="M -17,13 L -11,13 L -9.5,17.5 L -18.5,17.5 Z"
+          fill="url(#clair-vtol-bell)" stroke="#0f172a" stroke-width="1.2" />
+    <!-- Cooling Flange Rings on Bell -->
+    <line x1="-16.5" y1="14.5" x2="-11.5" y2="14.5" stroke="#334155" stroke-width="0.8" />
+    <line x1="-17.5" y1="16.2" x2="-10.5" y2="16.2" stroke="#1e293b" stroke-width="0.8" />
+
+    <!-- Nozzle Throat Exit Plane (Flame fires here: exit edge max y = 18.5, center x = -14) -->
+    <polygon points="-18.5,17.5 -9.5,17.5 -10.2,18.5 -17.8,18.5"
+             fill="#090d12" stroke="#0f172a" stroke-width="0.8" />
+    <ellipse cx="-14" cy="18.5" rx="3.8" ry="0.9" fill="#0f172a" />
+    <!-- Subtle Amber Glow Inside Throat -->
+    <ellipse cx="-14" cy="18.3" rx="2.2" ry="0.5" fill="#f59e0b" opacity="0.85" />
+    <ellipse cx="-14" cy="18.3" rx="1.0" ry="0.3" fill="#fef08a" />
+  </g>
+
+  <!-- Aft VTOL Engine (data-engine="right") -->
+  <g data-part="engine" data-engine="right" id="clairvoyant-vtol-right">
+    <!-- Mounting Pylon & Pivot Hub -->
+    <path d="M 13,9 L 19,9 L 20,13 L 12,13 Z"
+          fill="url(#clair-vtol-housing)" stroke="#0f172a" stroke-width="1.0" />
+    <!-- Rotational Gimbal Ring -->
+    <circle cx="16" cy="11.5" r="2.0" fill="#475569" stroke="#0f172a" stroke-width="0.8" />
+    <circle cx="16" cy="11.5" r="1.0" fill="#94a3b8" />
+
+    <!-- VTOL Nozzle Housing / Nacelle Bell Body (compact height) -->
+    <path d="M 13,13 L 19,13 L 20.5,17.5 L 11.5,17.5 Z"
+          fill="url(#clair-vtol-bell)" stroke="#0f172a" stroke-width="1.2" />
+    <!-- Cooling Flange Rings on Bell -->
+    <line x1="13.5" y1="14.5" x2="18.5" y2="14.5" stroke="#334155" stroke-width="0.8" />
+    <line x1="12.5" y1="16.2" x2="19.5" y2="16.2" stroke="#1e293b" stroke-width="0.8" />
+
+    <!-- Nozzle Throat Exit Plane (Flame fires here: exit edge max y = 18.5, center x = +16) -->
+    <polygon points="11.5,17.5 20.5,17.5 19.8,18.5 12.2,18.5"
+             fill="#090d12" stroke="#0f172a" stroke-width="0.8" />
+    <ellipse cx="16" cy="18.5" rx="3.8" ry="0.9" fill="#0f172a" />
+    <!-- Subtle Amber Glow Inside Throat -->
+    <ellipse cx="16" cy="18.3" rx="2.2" ry="0.5" fill="#f59e0b" opacity="0.85" />
+    <ellipse cx="16" cy="18.3" rx="1.0" ry="0.3" fill="#fef08a" />
+  </g>
+
+  <!-- 5. NEAR-SIDE HEAVY LOW-SLUNG LANDING GEAR (CLOSE TO GROUND) -->
+  <g data-part="landing-gear" id="clairvoyant-gear">
+    <!-- FORWARD HEAVY SQUAT GEAR -->
+    <!-- Heavy Outrigger Sponson Shoulder -->
+    <path d="M -27,6 L -21,6 L -20,12 L -28,12 Z"
+          fill="#334155" stroke="#0f172a" stroke-width="1.2" />
+    <circle cx="-24" cy="9" r="1.8" fill="#475569" stroke="#0f172a" stroke-width="0.8" />
+
+    <!-- Short Armored Shock Strut Collar -->
+    <polygon points="-26,12 -22,12 -21.5,15.5 -26.5,15.5"
+             fill="#1e293b" stroke="#0f172a" stroke-width="1.0" />
+
+    <!-- Heavy Chrome Hydraulic Damper -->
+    <rect x="-24.8" y="15.5" width="1.6" height="2.5"
+          fill="url(#clair-piston-chrome)" stroke="#0f172a" stroke-width="0.6" />
+
+    <!-- Compact Scissor Torque Linkage -->
+    <polyline points="-24,13 -26.8,15.2 -24,17.5" fill="none" stroke="#64748b" stroke-width="1.3" />
+    <circle cx="-26.8" cy="15.2" r="0.8" fill="#cbd5e1" />
+
+    <!-- AFT HEAVY SQUAT GEAR -->
+    <!-- Heavy Outrigger Sponson Shoulder -->
+    <path d="M 19,6 L 25,6 L 26,12 L 18,12 Z"
+          fill="#334155" stroke="#0f172a" stroke-width="1.2" />
+    <circle cx="22" cy="9" r="1.8" fill="#475569" stroke="#0f172a" stroke-width="0.8" />
+
+    <!-- Short Armored Shock Strut Collar -->
+    <polygon points="20,12 24,12 24.5,15.5 19.5,15.5"
+             fill="#1e293b" stroke="#0f172a" stroke-width="1.0" />
+
+    <!-- Heavy Chrome Hydraulic Damper -->
+    <rect x="21.2" y="15.5" width="1.6" height="2.5"
+          fill="url(#clair-piston-chrome)" stroke="#0f172a" stroke-width="0.6" />
+
+    <!-- Compact Scissor Torque Linkage -->
+    <polyline points="22,13 19.2,15.2 22,17.5" fill="none" stroke="#64748b" stroke-width="1.3" />
+    <circle cx="19.2" cy="15.2" r="0.8" fill="#cbd5e1" />
+  </g>
+
+  <!-- Strictly Isolated Footpads (Low-slung Ground Contact at y = 20) -->
+  <!-- Forward Contact Footpad (data-part="footpad") -->
+  <g data-part="footpad" id="clairvoyant-footpad-forward">
+    <!-- Articulated Ankle Knuckle -->
+    <circle cx="-24" cy="17.5" r="1.4" fill="#475569" stroke="#0f172a" stroke-width="0.8" />
+    <!-- Broad Armored Footpad Skid Body -->
+    <polygon points="-29,18 -19,18 -18,20 -30,20"
+             fill="url(#clair-footpad-metal)" stroke="#0b0e12" stroke-width="1.2" />
+    <!-- High-Traction Ground Contact Friction Plate -->
+    <rect x="-30.5" y="20" width="13" height="1.6" rx="0.5"
+          fill="#0a0d12" stroke="#1e293b" stroke-width="0.6" />
+    <!-- Grip Cleat Rivets -->
+    <circle cx="-28" cy="20.7" r="0.4" fill="#94a3b8" />
+    <circle cx="-24" cy="20.7" r="0.4" fill="#94a3b8" />
+    <circle cx="-20" cy="20.7" r="0.4" fill="#94a3b8" />
+  </g>
+
+  <!-- Aft Contact Footpad (data-part="footpad") -->
+  <g data-part="footpad" id="clairvoyant-footpad-aft">
+    <!-- Articulated Ankle Knuckle -->
+    <circle cx="22" cy="17.5" r="1.4" fill="#475569" stroke="#0f172a" stroke-width="0.8" />
+    <!-- Broad Armored Footpad Skid Body -->
+    <polygon points="17,18 27,18 28,20 16,20"
+             fill="url(#clair-footpad-metal)" stroke="#0b0e12" stroke-width="1.2" />
+    <!-- High-Traction Ground Contact Friction Plate -->
+    <rect x="15.5" y="20" width="13" height="1.6" rx="0.5"
+          fill="#0a0d12" stroke="#1e293b" stroke-width="0.6" />
+    <!-- Grip Cleat Rivets -->
+    <circle cx="18" cy="20.7" r="0.4" fill="#94a3b8" />
+    <circle cx="22" cy="20.7" r="0.4" fill="#94a3b8" />
+    <circle cx="26" cy="20.7" r="0.4" fill="#94a3b8" />
+  </g>
+
+  <!-- 6. ULTRA-REALISTIC TACTICAL DETAILS, STENCILS & RIVETS -->
+  <g data-part="detail" id="clairvoyant-details">
+    <!-- Tactical Hazard Triangle on Forward Cab -->
+    <polygon points="-24,1 -20,8 -28,8" fill="#0f172a" stroke="#0f172a" stroke-width="1.0" />
+    <polygon points="-24,2 -20.8,7.3 -27.2,7.3" fill="#eab308" />
+    <circle cx="-24" cy="4" r="0.7" fill="#0f172a" />
+    <circle cx="-22.5" cy="6.2" r="0.7" fill="#0f172a" />
+    <circle cx="-25.5" cy="6.2" r="0.7" fill="#0f172a" />
+    <circle cx="-24" cy="5.2" r="0.4" fill="#eab308" />
+
+    <!-- Sponson Tip Warning Stripes -->
+    <rect x="-27" y="13.5" width="5" height="1.0" fill="#eab308" />
+    <rect x="20" y="13.5" width="5" height="1.0" fill="#eab308" />
+
+    <!-- Technical Stencil Markings -->
+    <rect x="23" y="-5" width="4" height="0.8" fill="#94a3b8" />
+    <rect x="23" y="-3.5" width="6" height="0.6" fill="#64748b" />
+    <rect x="-1" y="-9" width="3" height="1.2" fill="#ef4444" stroke="#0f172a" stroke-width="0.4" />
+    <rect x="2.5" y="-9" width="3" height="1.2" fill="#eab308" stroke="#0f172a" stroke-width="0.4" />
+
+    <!-- Panel Seam Lines -->
+    <line x1="-8" y1="-14" x2="-8" y2="-7" stroke="#1a1e24" stroke-width="0.7" />
+    <line x1="0" y1="-14" x2="0" y2="-7" stroke="#1a1e24" stroke-width="0.7" />
+    <line x1="8" y1="-14" x2="8" y2="-7" stroke="#1a1e24" stroke-width="0.7" />
+    <line x1="16" y1="-11" x2="16" y2="-5" stroke="#1a1e24" stroke-width="0.7" />
+    <line x1="22" y1="-9" x2="22" y2="4" stroke="#1a1e24" stroke-width="0.7" />
+    <line x1="28" y1="-8" x2="28" y2="5" stroke="#1a1e24" stroke-width="0.7" />
+
+    <!-- Specular Edge Highlights along dorsal spine and shoulder -->
+    <line x1="-8" y1="-13.5" x2="12" y2="-13.5" stroke="#4b5563" stroke-width="0.5" opacity="0.7" />
+    <line x1="12" y1="-13.5" x2="20" y2="-10.5" stroke="#4b5563" stroke-width="0.5" opacity="0.7" />
+    <line x1="20" y1="-10.5" x2="34" y2="-8.5" stroke="#4b5563" stroke-width="0.5" opacity="0.7" />
+
+    <!-- Structural Rivets -->
+    <circle cx="-19" cy="-12.5" r="0.5" fill="#94a3b8" />
+    <circle cx="-13" cy="-12.5" r="0.5" fill="#94a3b8" />
+    <circle cx="-5" cy="-12.5" r="0.5" fill="#94a3b8" />
+    <circle cx="3" cy="-12.5" r="0.5" fill="#94a3b8" />
+    <circle cx="11" cy="-12.5" r="0.5" fill="#94a3b8" />
+    <circle cx="17" cy="-9.8" r="0.5" fill="#94a3b8" />
+    <circle cx="23" cy="-7.8" r="0.5" fill="#94a3b8" />
+    <circle cx="29" cy="-7.8" r="0.5" fill="#94a3b8" />
+
+    <circle cx="-31" cy="-5" r="0.4" fill="#57534e" />
+    <circle cx="-28" cy="1" r="0.4" fill="#57534e" />
+    <circle cx="-21" cy="6" r="0.4" fill="#57534e" />
+    <circle cx="-13" cy="8" r="0.4" fill="#57534e" />
+
+    <!-- Nav Lights (Red Fore-Port, Cyan Dorsal, Amber Tail) -->
+    <circle cx="-32" cy="-6" r="0.9" fill="#ef4444" />
+    <circle cx="-32" cy="-6" r="0.4" fill="#fecaca" />
+    <circle cx="1" cy="-18" r="0.8" fill="#f8fafc" />
+    <circle cx="1" cy="-18" r="0.4" fill="#38bdf8" />
+    <circle cx="37" cy="-7" r="0.8" fill="#f59e0b" />
+    <circle cx="37" cy="-7" r="0.4" fill="#fef08a" />
+  </g>
+</svg>
