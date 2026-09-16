@@ -991,6 +991,49 @@ export const SHIPS: ShipModelConfig[] = [
       leftThrusterPos: { x: -17.4, y: 23.7 },
       rightThrusterPos: { x: 17.4, y: 23.7 },
     },
+    // Collision hull derived from drawEagle() geometry (raw draw coords x 1.58,
+    // physics applies rotation+translation with NO renderScale). Traced clockwise
+    // around the full silhouette: quad fusion engine block, tanks, dorsal truss,
+    // cargo pod, VTOL bells, outrigger RCS pods, landing gear, and beak cockpit.
+    collisionPolygon: [
+      { x: -112.2, y: 23.7 }, // aft engine block bottom-rear
+      { x: -112.2, y: -22.9 }, // aft engine block top-rear
+      { x: -80.6, y: -19.6 }, // propellant tank top
+      { x: -71.1, y: -24.5 }, // aft truss collar
+      { x: -37.9, y: -29.2 }, // raised bridge truss top (aft)
+      { x: 34.0, y: -29.2 }, // raised bridge truss top (fwd)
+      { x: 66.4, y: -24.5 }, // fwd truss collar top
+      { x: 70.3, y: -24.5 }, // collar outer-top
+      { x: 70.3, y: -11.1 }, // collar outer-bottom
+      { x: 71.9, y: -14.2 }, // beak top start
+      { x: 85.3, y: -14.2 }, // beak top
+      { x: 94.8, y: -14.2 }, // beak top curve
+      { x: 101.1, y: -9.2 }, // beak upper control
+      { x: 107.9, y: -0.9 }, // nose probe tip (top)
+      { x: 107.9, y: 1.0 }, // nose probe tip (bottom)
+      { x: 105.1, y: 1.6 }, // beak underside root
+      { x: 101.1, y: 8.5 }, // beak lower control
+      { x: 94.8, y: 12.5 }, // beak bottom
+      { x: 85.3, y: 12.5 }, // beak bottom mid
+      { x: 71.9, y: 12.5 }, // beak bottom start
+      { x: 67.9, y: 13.4 }, // service collar bottom
+      { x: 64.0, y: 38.9 }, // fwd footpad outer-bottom
+      { x: 43.5, y: 38.9 }, // fwd footpad inner-bottom
+      { x: 37.9, y: 12.5 }, // pod fwd chamfer
+      { x: 34.8, y: 15.0 }, // pod bottom fwd
+      { x: 25.1, y: 16.6 }, // fwd VTOL bell outer-top
+      { x: 25.1, y: 26.2 }, // fwd VTOL bell outer-bottom
+      { x: 8.9, y: 25.9 }, // fwd VTOL bell inner-bottom
+      { x: 13.8, y: 16.9 }, // fwd VTOL pylon inner
+      { x: -13.8, y: 16.9 }, // aft VTOL pylon inner
+      { x: -8.9, y: 25.9 }, // aft VTOL bell inner-bottom
+      { x: -25.1, y: 26.2 }, // aft VTOL bell outer-bottom
+      { x: -25.1, y: 16.6 }, // aft VTOL bell outer-top
+      { x: -34.8, y: 15.0 }, // pod bottom aft
+      { x: -37.9, y: 12.5 }, // pod aft chamfer
+      { x: -43.5, y: 38.9 }, // aft footpad inner-bottom
+      { x: -64.0, y: 38.9 }, // aft footpad outer-bottom
+    ],
     stats: {
       agility: 3,
       fuelTank: 5,
