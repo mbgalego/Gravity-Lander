@@ -915,6 +915,32 @@ export const SHIPS: ShipModelConfig[] = [
       leftThrusterPos: { x: -38.0, y: 34.0 },
       rightThrusterPos: { x: 40.0, y: 34.0 },
     },
+    // Collision hull derived from drawNutcracker() geometry. Physics applies
+    // transformPoint() (rotation + translation) with NO renderScale, while the
+    // renderer draws hull coords under ctx.scale(renderScale) — so these points
+    // are in renderScale-scaled units (raw draw coords x 1.70), matching
+    // localPoints (e.g. leftFoot.y 57.8 = footPadY 34 x 1.70).
+    // Vertices (clockwise from aft bottom-left) enclose the full silhouette:
+    // aft drill arm (rotated -0.24 rad about (-40,-21)), hull blocks, bridge,
+    // antenna beacon, searchlight projector, and both thruster bell lips.
+    collisionPolygon: [
+      { x: -71.4, y: 27.2 }, // aft hull bottom-left
+      { x: -74.8, y: -27.2 }, // drill bracket bottom-left
+      { x: -87.7, y: -51.9 }, // drill barrel far top-left
+      { x: -58.0, y: -59.2 }, // drill barrel top (highest aft point)
+      { x: -59.5, y: -34.0 }, // aft hull chamfer corner
+      { x: 40.8, y: -34.0 }, // hull top run (aft + fwd blocks)
+      { x: 51.0, y: -51.0 }, // bridge roof left transition
+      { x: 59.5, y: -74.0 }, // antenna beacon top
+      { x: 74.8, y: -61.2 }, // searchlight projector top-front
+      { x: 74.8, y: 27.2 }, // hull floor front corner
+      { x: 64.6, y: 40.8 }, // forward thruster lip outer
+      { x: 37.4, y: 40.8 }, // forward thruster lip inner
+      { x: 37.4, y: 27.2 }, // forward thruster inner top (belly start)
+      { x: -40.8, y: 27.2 }, // belly end (aft thruster top-right)
+      { x: -40.8, y: 40.8 }, // aft thruster lip inner
+      { x: -64.6, y: 40.8 }, // aft thruster lip outer
+    ],
     stats: {
       agility: 2,
       fuelTank: 5,
