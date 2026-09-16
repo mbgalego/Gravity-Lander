@@ -39,6 +39,13 @@ Step order that NEVER fails, plus the hard-won gotchas:
 - Disconnected symmetrical components (especially left and right landing gear footpads, knuckles, sensors, or twin thruster bells) MUST NEVER share an open subpath.
 - ALWAYS isolate them: either call `ctx.beginPath()` / `ctx.fill()` / `ctx.stroke()` per footpad, or explicitly `ctx.moveTo()` to the start of the next shape.
 - The `roundRect` helper in `shipDrawers.ts` is implemented with an explicit `moveTo(x + radius, y)` and `arcTo` to avoid browser-native connecting lines between consecutive rects.
+## Custom Map Storage (src/utils/customMapsStorage.ts)
+- `STORAGE_KEY = 'gravity_lander_custom_maps_v4'` (localStorage). Fresh installs seed it with `STARTER_TEMPLATES`; `syncOfficialMap` then merges every `OFFICIAL_*_MAP` (inserts if missing, replaces when `officialMap.updatedAt > saved.updatedAt`) — in-memory only, NOT persisted, but re-synced on every `getSavedCustomMaps()` call.
+- To make/update an official planet map, FOUR places must stay in sync (Hyperion is the model): (1) the `OFFICIAL_<NAME>_MAP` constant, (2) add it to `STARTER_TEMPLATES`, (3) add a `cleanId === '<planet>'` branch in `getSavedMapForPlanet` (BOTH the main fallback AND the catch fallback), (4) add `<planet>` to `isOfficialMap`'s list + a branch in `getOfficialDefaultMap`. Missing any of these = fresh players never see the map (it falls back to procedural terrain).
+- Launching an official planet that has a saved override goes through `handlePlayCustomMap` → `saveLastPlayedPlanetId('custom-official-<planet>')` (same as Hyperion). A stale `updatedAt` in an old constant is what lets new map versions auto-propagate to existing players.
+- Map editor exports are plain JSON with the same schema as `CustomMapData` (identical top-level keys). Converting JSON → TS constant: emit with single-quoted strings, compact one-line array elements for flat nodes, multi-line for `customTheme`/launch pads/polygon obstacles, trailing commas — then verify by transpiling with esbuild and deep-comparing in Node (regex JSON re-parse is NOT reliable).
+- `promethean_core (1).json` in repo root is the user's export that seeded the current `OFFICIAL_PROMETHEAN_MAP` (gravity 4.9, targetTime 500s, 27 obstacles, 10 fuel pickups, 5 cargo platforms).
+
 ## Build
 - npx tsc --noEmit
 - ALWAYS update both: shipDrawers.ts (in-game) AND ShipGraphic.tsx (menu SVG)
