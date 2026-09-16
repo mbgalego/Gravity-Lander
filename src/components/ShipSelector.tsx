@@ -48,26 +48,192 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
   const [activeIndex, setActiveIndex] = useState<number>(currentIndex);
   const [direction, setDirection] = useState<number>(1);
   const [showDescPopup, setShowDescPopup] = useState<boolean>(false);
+  const [viewDetailShip, setViewDetailShip] = useState<ShipModelConfig | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+  const wasSwipe = useRef(false);
 
   useEffect(() => {
     setActiveIndex(currentIndex);
   }, [currentIndex]);
 
-  // Modal ESC handler
+  // Modal ESC handler (skip while the craft detail popup is open on top)
   useEffect(() => {
     if (!isModal || !onClose) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
-        onClose();
+        if (viewDetailShip) {
+          setViewDetailShip(null);
+        } else {
+          onClose();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModal, onClose]);
+  }, [isModal, onClose, viewDetailShip]);
+
+  // Detail popup ESC handler
+  useEffect(() => {
+    if (!viewDetailShip) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setViewDetailShip(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [viewDetailShip]);
+
+  // Open / equip helpers for the craft detail popup
+  const openDetail = (ship: ShipModelConfig) => setViewDetailShip(ship);
+
+  const equipShip = (ship: ShipModelConfig) => {
+    onSelectModel(ship.id);
+    sound.playLandingChime();
+    setViewDetailShip(null);
+  };
+
+  // Big (catalogue-width) spacecraft close-up popup
+  const renderDetailPopup = () => {
+    if (!viewDetailShip) return null;
+    const s = viewDetailShip;
+    const stats = s.stats || { agility: 3, fuelTank: 3, stability: 3, thrust: 3, armor: 3 };
+    const statBars: { key: keyof typeof stats; label: string; title: string }[] = [
+      { key: 'agility', label: 'AGI', title: 'Agility' },
+      { key: 'thrust', label: 'THR', title: 'Thrust' },
+      { key: 'stability', label: 'STA', title: 'Stability' },
+      { key: 'fuelTank', label: 'FUEL', title: 'Fuel Tank' },
+      { key: 'armor', label: 'ARM', title: 'Armor' },
+    ];
+
+    return (
+      <div
+        className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+        onClick={(e) => {
+          e.stopPropagation();
+          setViewDetailShip(null);
+        }}
+      >
+        <div
+          className="w-full max-w-3xl bg-slate-950/90 border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] backdrop-blur-2xl text-slate-100 relative my-auto animate-in fade-in zoom-in-95 duration-200"
+          onClick={(e) => e.stopPropagation()}
+          id={`ship-detail-${s.id}`}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-white/10 bg-slate-900/40 shrink-0">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <div className="w-9 h-9 rounded-lg bg-slate-900/60 border border-white/10 flex items-center justify-center shrink-0">
+                <ShipGraphic ship={s} className="w-full h-full" showGlow={false} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-sm sm:text-lg font-mono font-black text-white tracking-wider truncate">
+                  {s.name}
+                  <span className="text-slate-400"> [{s.codename}]</span>
+                </h2>
+                <p className="text-[10px] sm:text-xs font-mono text-purple-300/90 truncate">
+                  {s.classType} • {s.tagline}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              {selectedModelId === s.id && (
+                <span className="flex items-center gap-1 text-[9px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-2 py-0.5 rounded-full shrink-0">
+                  <Check className="w-2.5 h-2.5" /> EQUIPPED
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => setViewDetailShip(null)}
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-100 hover:bg-slate-800/80 transition-colors cursor-pointer border border-transparent hover:border-slate-700"
+                title="Close [ESC]"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Big craft render */}
+          <div className="px-4 sm:px-6 pt-2 sm:pt-3 pb-1 shrink-0">
+            <div
+              className="w-full h-52 sm:h-64 md:h-72 lg:h-80 flex items-center justify-center relative rounded-2xl bg-slate-950/40 border border-white/10 overflow-hidden"
+              style={{
+                background:
+                  'radial-gradient(ellipse at center, rgba(30,41,59,0.65) 0%, rgba(2,6,23,0.4) 60%, rgba(2,6,23,0.9) 100%)',
+              }}
+            >
+              {/* hangar deck accent glow under the craft */}
+              <div
+                className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+                style={{ background: `linear-gradient(to bottom, transparent, ${s.accentColor}22)` }}
+              />
+              <ShipGraphic ship={s} className="w-full h-full max-h-full" showGlow showThrusters />
+            </div>
+          </div>
+
+          {/* Quick stats strip */}
+          <div className="px-4 sm:px-6 py-1.5 shrink-0 flex items-center gap-1.5 flex-wrap">
+            <span className="bg-slate-950/60 text-amber-300 px-2 py-0.5 rounded-full border border-white/5 text-[9px] font-mono">
+              {s.emptyMassTons}t DRY MASS
+            </span>
+            <span className="bg-slate-950/60 text-sky-300 px-2 py-0.5 rounded-full border border-white/5 text-[9px] font-mono">
+              {s.maxThrustKn} kN THRUST
+            </span>
+            <span className="bg-slate-950/60 text-teal-300 px-2 py-0.5 rounded-full border border-white/5 text-[9px] font-mono">
+              {s.maxFuel} L FUEL
+            </span>
+            {(s.canCarryVehicles || s.isHeavyVehicleCarrier) && (
+              <span className="bg-emerald-950/80 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/30 text-[9px] font-mono flex items-center gap-1">
+                <Truck className="w-2.5 h-2.5 text-emerald-400" /> ROVER CARRIER
+              </span>
+            )}
+            <div className="flex items-center gap-1 ml-auto" title="Performance ratings">
+              {statBars.map(({ key, label, title: t }) => (
+                <div key={key} className="flex flex-col items-center gap-0.5" title={`${t} ${stats[key]}/5`}>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((seg) => (
+                      <div
+                        key={seg}
+                        className="w-1.5 h-2.5 rounded-[2px]"
+                        style={{ backgroundColor: seg <= stats[key] ? s.accentColor : 'rgba(100,116,139,0.45)' }}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-[7px] font-mono text-slate-500 leading-none">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="px-4 sm:px-6 pb-1 shrink-0">
+            <p className="text-xs text-slate-300 leading-relaxed font-sans">{s.description}</p>
+          </div>
+
+          {/* Footer actions */}
+          <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 border-t border-white/10 bg-slate-900/30 shrink-0">
+            <span className="text-[9px] font-mono text-slate-500 flex items-center gap-1.5">
+              <Layers className="w-3 h-3 text-sky-400/80" />
+              {s.manufactureOrigin || 'Sol Aerospace'} • {s.codename}
+            </span>
+            <button
+              id={`btn-detail-equip-${s.id}`}
+              type="button"
+              onClick={() => equipShip(s)}
+              className="flex items-center gap-1.5 px-4 sm:px-5 py-1.5 rounded-full bg-purple-500/25 hover:bg-purple-500/40 border border-purple-400/60 text-purple-200 font-mono font-bold text-xs tracking-wider uppercase transition-all cursor-pointer active:scale-95"
+            >
+              <Check className="w-3.5 h-3.5" />
+              {selectedModelId === s.id ? 'EQUIPPED — DISMISS' : `Equip ${s.name}`}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // Filtered ships for modal view
   const filteredShips = useMemo(() => {
@@ -105,6 +271,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
   // =========================================================================
   if (isModal) {
     return (
+      <>
       <div
         id="ship-selector-modal"
         className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
@@ -240,14 +407,23 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                   const isSelected = selectedModelId === ship.id;
 
                   return (
-                    <button
+                    <div
                       key={ship.id}
                       id={`ship-card-${ship.id}`}
-                      type="button"
+                      role="button"
+                      tabIndex={0}
                       onClick={() => {
                         onSelectModel(ship.id);
                         sound.playLandingChime();
                         if (onClose) onClose();
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          onSelectModel(ship.id);
+                          sound.playLandingChime();
+                          if (onClose) onClose();
+                        }
                       }}
                       className={`group flex items-start gap-3.5 text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-200 text-slate-200 relative cursor-pointer backdrop-blur-xl ${
                         isSelected
@@ -255,8 +431,24 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                           : 'border-white/10 bg-slate-900/40 hover:bg-slate-900/70 hover:border-purple-400/40'
                       }`}
                     >
-                      {/* Realistic Craft Graphic Preview */}
-                      <div className="w-20 h-16 sm:w-24 sm:h-18 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shrink-0">
+                      {/* Realistic Craft Graphic Preview — tap/click opens big view */}
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openDetail(ship);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            openDetail(ship);
+                          }
+                        }}
+                        className="w-20 h-16 sm:w-24 sm:h-18 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shrink-0 cursor-pointer"
+                        title={`View ${ship.name} close-up`}
+                      >
                         <ShipGraphic ship={ship} className="w-full h-full max-h-16" showGlow={isSelected} />
                       </div>
 
@@ -270,11 +462,24 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                               {ship.codename}
                             </span>
                           </div>
-                          {isSelected && (
-                            <span className="flex items-center gap-1 text-[9px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-2 py-0.5 rounded-full shrink-0 ml-1">
-                              <Check className="w-2.5 h-2.5" /> EQUIPPED
-                            </span>
-                          )}
+                          <div className="flex items-center gap-1 ml-auto shrink-0">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openDetail(ship);
+                              }}
+                              className="flex items-center gap-1 text-[9px] font-mono text-purple-300 bg-slate-900/60 hover:bg-purple-500/25 hover:text-purple-200 border border-purple-400/40 hover:border-purple-400/70 px-1.5 py-0.5 rounded-full transition-all cursor-pointer"
+                              title={`View ${ship.name} close-up`}
+                            >
+                              <Maximize2 className="w-2.5 h-2.5" /> VIEW
+                            </button>
+                            {isSelected && (
+                              <span className="flex items-center gap-1 text-[9px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-2 py-0.5 rounded-full shrink-0">
+                                <Check className="w-2.5 h-2.5" /> EQUIPPED
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         <span className="text-[10px] font-mono text-purple-300/80 mb-1.5 truncate">
@@ -305,7 +510,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                           )}
                         </div>
                       </div>
-                    </button>
+                    </div>
                   );
                 })}
               </div>
@@ -313,7 +518,9 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
           </div>
         </div>
       </div>
-    );
+      {renderDetailPopup()}
+    </>
+  );
   }
 
   // =========================================================================
@@ -348,13 +555,24 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
       const diff = touchStartX.current - touchEndX.current;
       const minSwipeDistance = 35;
       if (diff > minSwipeDistance) {
+        wasSwipe.current = true;
         handleNext();
       } else if (diff < -minSwipeDistance) {
+        wasSwipe.current = true;
         handlePrev();
       }
     }
     touchStartX.current = null;
     touchEndX.current = null;
+  };
+
+  const handleDeckClick = () => {
+    if (wasSwipe.current) {
+      // the mouse/touch was a swipe between crafts, not a tap
+      wasSwipe.current = false;
+      return;
+    }
+    openDetail(currentShip);
   };
 
   const cardVariants: any = {
@@ -450,8 +668,20 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
               exit="exit"
               className="w-full flex flex-col items-center text-center"
             >
-              {/* Spacecraft Visual Render */}
-              <div className="w-48 h-32 sm:w-64 sm:h-44 md:w-72 md:h-48 flex items-center justify-center relative my-1 sm:my-2 transition-transform duration-200">
+              {/* Spacecraft Visual Render — tap/click opens big close-up */}
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={handleDeckClick}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openDetail(currentShip);
+                  }
+                }}
+                className="w-48 h-32 sm:w-64 sm:h-44 md:w-72 md:h-48 flex items-center justify-center relative my-1 sm:my-2 transition-transform duration-200 cursor-pointer"
+                title={`View ${currentShip.name} close-up`}
+              >
                 <ShipGraphic
                   ship={currentShip}
                   className="w-full h-full max-w-full max-h-full"
@@ -768,6 +998,8 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
           </div>
         )}
       </AnimatePresence>
+
+      {renderDetailPopup()}
     </div>
   );
 };
