@@ -395,9 +395,24 @@ export const MissionOverlays: React.FC<MissionOverlaysProps> = ({
               </span>
             )}
 
-            <h2 className="text-lg sm:text-xl font-bold font-mono text-slate-100 mb-4">
+            <h2 className="text-lg sm:text-xl font-bold font-mono text-slate-100 mb-2">
               Touchdown on {cleanPlanetTitle}
             </h2>
+
+            {ship.landingScore.craftRank && !isTestFlight && (
+              <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-[10px] font-bold tracking-wide mb-3 ${
+                ship.landingScore.craftRank === 1
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+                  : 'bg-sky-500/20 text-sky-300 border border-sky-500/40'
+              }`}>
+                <Trophy className="w-3 h-3" />
+                <span>
+                  {ship.landingScore.craftRank === 1
+                    ? `NEW #1 RECORD WITH ${ship.landingScore.craftName?.toUpperCase() || 'CRAFT'}`
+                    : `TOP 5 RECORD (#${ship.landingScore.craftRank}) WITH ${ship.landingScore.craftName?.toUpperCase() || 'CRAFT'}`}
+                </span>
+              </div>
+            )}
 
             {/* Score Breakdown with Unboxed Rows and Slot-Machine Rolling Tally */}
             <VictoryScoreCard

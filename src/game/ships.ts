@@ -310,51 +310,84 @@ export const SHIPS: ShipModelConfig[] = [
   {
     id: 'nebula',
     name: 'Nebula Starchaser',
-    codename: 'NX-Cosmos Delta',
-    tagline: 'Atmospheric Delta Cruiser',
-    classType: 'Medium Explorer',
-    description: 'Features swept aerodynamic carbon-nanotube wings and dual vectoring plasma exhausts. Glides smoothly through atmospheric drafts and high crosswinds.',
-    width: 87,
-    height: 86,
+    codename: 'NS-709 Starchaser',
+    tagline: 'Deep Space Science Cruiser & Heavy Interstellar Explorer',
+    classType: 'Heavy Explorer',
+    description: 'The iconic NS-709 Nebula Starchaser interstellar exploration cruiser. Designed in an elongated side-profile with deep metallic royal violet armor, illuminated mission nameplate with the orbital star emblem, dorsal communications and rotating sensor mast array, forward panoramic multi-pane bridge deck, dual ventral VTOL lift thruster pods, and a massive aft sub-light fusion drive with split aerodynamic cowlings. Configured purely for deep-space research without planetary rover bays.',
+    width: 192,
+    height: 78,
     renderScale: 1.5,
-    maxFuel: 180,
-    thrustMultiplier: 1.15,
-    torqueMultiplier: 1.2,
-    mass: 0.95,
-    armor: 0.20,
-    emptyMassTons: 8.4,
-    maxThrustKn: 120,
-    twr: 1.45,
-    rcsResponseMs: 25,
-    armorRatingMm: 45,
-    cargoHookCapacityKg: 550,
-    roverBayCapacity: 'None (Aero Wing Structure)',
-    propulsionType: 'Dual Aerospike Rocket Exhausts',
-    operationalCeiling: 'Dense Gas & Vapor Atmospheres',
-    manufactureOrigin: 'Cosmos Astroworks (Titan)',
-    primaryColor: '#f1f5f9',
-    accentColor: '#8b5cf6',
-    visorColor: '#7c3aed',
+    maxFuel: 280,
+    thrustMultiplier: 1.35,
+    torqueMultiplier: 0.95,
+    mass: 1.65,
+    armor: 0.55,
+    emptyMassTons: 22.0,
+    maxThrustKn: 340,
+    twr: 1.52,
+    rcsResponseMs: 35,
+    armorRatingMm: 140,
+    cargoHookCapacityKg: 2600,
+    roverBayCapacity: 'None (Dedicated Deep Space Science Suite)',
+    propulsionType: 'Sub-Light Fusion Drive + Dual Ventral VTOL Lift Thrusters',
+    operationalCeiling: 'Interstellar Space, Planetary Survey & Deep-Core Logistics',
+    manufactureOrigin: 'Starchaser Fleet Astroworks (Sol-Centauri Rim)',
+    primaryColor: '#6b46c1',
+    accentColor: '#00f0ff',
+    visorColor: '#38bdf8',
     footpadSpan: 72.0,
     canCarryVehicles: false,
     isHeavyVehicleCarrier: false,
     localPoints: {
-      nose: { x: 0, y: -37.5 },
-      leftShoulder: { x: -43.5, y: -21.0 },
-      rightShoulder: { x: 43.5, y: -21.0 },
-      leftHip: { x: -40.5, y: 34.5 },
-      rightHip: { x: 40.5, y: 34.5 },
-      leftFoot: { x: -36.0, y: 45.0 },
-      rightFoot: { x: 36.0, y: 45.0 },
-      leftThrusterPos: { x: -31.5, y: 33.0 },
-      rightThrusterPos: { x: 31.5, y: 33.0 },
+      nose: { x: 97.5, y: -0.75 },
+      leftShoulder: { x: -93.0, y: -14.25 },
+      rightShoulder: { x: 75.0, y: -12.0 },
+      leftHip: { x: -93.0, y: 14.25 },
+      rightHip: { x: 93.0, y: 9.75 },
+      leftFoot: { x: -34.5, y: 32.25 },
+      rightFoot: { x: 37.5, y: 32.25 },
+      leftThrusterPos: { x: -34.5, y: 31.5 },
+      rightThrusterPos: { x: 37.5, y: 31.5 },
     },
+    collisionPolygon: [
+      { x: 97.5, y: -0.75 },
+      { x: 91.5, y: -6.75 },
+      { x: 72.0, y: -12.0 },
+      { x: 49.5, y: -14.25 },
+      { x: 21.0, y: -15.0 },
+      { x: -6.0, y: -15.0 },
+      { x: -21.0, y: -21.0 },
+      { x: -33.0, y: -22.5 },
+      { x: -39.0, y: -37.5 },
+      { x: -42.0, y: -22.5 },
+      { x: -51.0, y: -25.5 },
+      { x: -54.0, y: -16.5 },
+      { x: -63.0, y: -15.0 },
+      { x: -93.0, y: -14.25 },
+      { x: -72.0, y: -9.0 },
+      { x: -72.0, y: 9.0 },
+      { x: -93.0, y: 14.25 },
+      { x: -63.0, y: 16.5 },
+      { x: -51.0, y: 21.0 },
+      { x: -42.0, y: 18.0 },
+      { x: -34.5, y: 32.25 },
+      { x: -27.0, y: 18.0 },
+      { x: -1.5, y: 18.0 },
+      { x: 6.0, y: 18.0 },
+      { x: 30.0, y: 18.0 },
+      { x: 37.5, y: 32.25 },
+      { x: 45.0, y: 18.0 },
+      { x: 57.0, y: 22.5 },
+      { x: 81.0, y: 16.5 },
+      { x: 93.0, y: 10.5 },
+      { x: 96.0, y: 6.0 },
+    ],
     stats: {
-      agility: 4,
-      fuelTank: 4,
+      agility: 3,
+      fuelTank: 5,
       stability: 4,
       thrust: 4,
-      armor: 3,
+      armor: 4,
     },
   },
   {
@@ -364,8 +397,8 @@ export const SHIPS: ShipModelConfig[] = [
     tagline: 'Multi-Stage Deep Core Explorer',
     classType: 'Medium Explorer',
     description: 'A towering, multi-module deep space cruiser wrapped in gold thermal foil with quad landing stabilizers and high-efficiency auxiliary booster tanks.',
-    width: 87,
-    height: 102,
+    width: 82,
+    height: 104,
     renderScale: 1.55,
     maxFuel: 220,
     thrustMultiplier: 1.25,
@@ -385,20 +418,43 @@ export const SHIPS: ShipModelConfig[] = [
     primaryColor: '#f8fafc',
     accentColor: '#eab308',
     visorColor: '#ca8a04',
-    footpadSpan: 86.8,
+    footpadSpan: 79.1,
     canCarryVehicles: false,
     isHeavyVehicleCarrier: false,
     localPoints: {
-      nose: { x: 0, y: -55.8 },
-      leftShoulder: { x: -27.9, y: 3.1 },
-      rightShoulder: { x: 27.9, y: 3.1 },
-      leftHip: { x: -27.9, y: 29.45 },
-      rightHip: { x: 27.9, y: 29.45 },
-      leftFoot: { x: -43.4, y: 43.4 },
-      rightFoot: { x: 43.4, y: 43.4 },
-      leftThrusterPos: { x: -19.38, y: 34.1 },
-      rightThrusterPos: { x: 19.38, y: 34.1 },
+      nose: { x: 0, y: -62.0 },
+      leftShoulder: { x: -22.6, y: -25.6 },
+      rightShoulder: { x: 22.6, y: -25.6 },
+      leftHip: { x: -28.7, y: 25.6 },
+      rightHip: { x: 28.7, y: 25.6 },
+      leftFoot: { x: -24.8, y: 47.3 },
+      rightFoot: { x: 24.8, y: 47.3 },
+      extraLeftFoot: { x: -39.5, y: 41.8 },
+      extraRightFoot: { x: 39.5, y: 41.8 },
+      leftThrusterPos: { x: -21.7, y: 38.4 },
+      rightThrusterPos: { x: 21.7, y: 38.4 },
     },
+    // Watertight collision hull derived from drawVanguard() geometry (scaled by renderScale 1.55)
+    collisionPolygon: [
+      { x: 0, y: -62.0 }, // probe tip
+      { x: 18.6, y: -52.7 }, // halo ring top-right
+      { x: 18.6, y: -46.5 }, // halo ring bottom-right
+      { x: 22.6, y: -25.6 }, // command sphere right edge & RCS
+      { x: 18.0, y: -7.0 }, // neck transition
+      { x: 20.2, y: 0.8 }, // descent stage upper-right chamfer
+      { x: 28.7, y: 25.6 }, // right sponson outer corner
+      { x: 27.0, y: 38.4 }, // right engine nozzle outer lip
+      { x: 16.4, y: 38.4 }, // right engine nozzle inner lip
+      { x: 0, y: 27.9 }, // center belly floor
+      { x: -16.4, y: 38.4 }, // left engine nozzle inner lip
+      { x: -27.0, y: 38.4 }, // left engine nozzle outer lip
+      { x: -28.7, y: 25.6 }, // left sponson outer corner
+      { x: -20.2, y: 0.8 }, // descent stage upper-left chamfer
+      { x: -18.0, y: -7.0 }, // neck transition
+      { x: -22.6, y: -25.6 }, // command sphere left edge & RCS
+      { x: -18.6, y: -46.5 }, // halo ring bottom-left
+      { x: -18.6, y: -52.7 }, // halo ring top-left
+    ],
     stats: {
       agility: 3,
       fuelTank: 5,
@@ -409,101 +465,152 @@ export const SHIPS: ShipModelConfig[] = [
   },
   {
     id: 'orion',
-    name: 'Orion Surveyor',
-    codename: 'OR-300 Deep Space Scout',
-    tagline: 'Twin-Boom Long-Range Science Vessel',
-    classType: 'Medium Explorer',
-    description: 'Equipped with twin sensor booms, high-output fuel reserves, and multi-spectral spectrometers. Delivers exceptional stability in complex magnetic cavern anomalies.',
-    width: 92,
-    height: 90,
-    renderScale: 1.52,
-    maxFuel: 210,
-    thrustMultiplier: 1.18,
-    torqueMultiplier: 1.10,
-    mass: 1.10,
-    armor: 0.32,
-    emptyMassTons: 10.5,
-    maxThrustKn: 145,
-    twr: 1.41,
-    rcsResponseMs: 28,
-    armorRatingMm: 65,
-    cargoHookCapacityKg: 700,
-    roverBayCapacity: 'Sample Recovery Locker Deck',
-    propulsionType: 'Magnetoplasmadynamic Vector Core',
-    operationalCeiling: 'Deep Planetary Interior Chasms',
-    manufactureOrigin: 'Orion Stellar Consortium (Vesta)',
-    primaryColor: '#0f172a',
+    name: 'Terra-Hopper',
+    codename: 'TH-01 Terrestrial Lander',
+    tagline: 'Lightweight Planetary Personnel Transport',
+    classType: 'Light Transport',
+    description: 'A physically large yet lightweight planetary shuttle engineered for atmospheric and low-gravity operations. Features a spacious 6-seat passenger cabin with tactical telemetry monitors, dual high-efficiency VTOL ion hover thrusters, and rear cryogenic propellant tanks. Does not transport vehicles.',
+    width: 144,
+    height: 58,
+    renderScale: 1.60,
+    maxFuel: 240,
+    thrustMultiplier: 1.28,
+    torqueMultiplier: 1.20,
+    mass: 0.95,
+    armor: 0.38,
+    emptyMassTons: 7.8,
+    maxThrustKn: 165,
+    twr: 1.65,
+    rcsResponseMs: 22,
+    armorRatingMm: 75,
+    cargoHookCapacityKg: 600,
+    roverBayCapacity: 'None (Dedicated 6-Seat Passenger Deck)',
+    propulsionType: 'Dual Ventral VTOL Ion/Plasma Hover Drives',
+    operationalCeiling: 'All Planetary Terrains & Low Orbit',
+    manufactureOrigin: 'Terra Aerospace & Orbital Works',
+    primaryColor: '#172554',
     accentColor: '#38bdf8',
-    visorColor: '#0369a1',
-    footpadSpan: 88.0,
+    visorColor: '#0284c7',
+    footpadSpan: 121.6,
     canCarryVehicles: false,
     isHeavyVehicleCarrier: false,
     localPoints: {
-      nose: { x: 0, y: -45.0 },
-      leftShoulder: { x: -44.0, y: -10.0 },
-      rightShoulder: { x: 44.0, y: -10.0 },
-      leftHip: { x: -32.0, y: 28.0 },
-      rightHip: { x: 32.0, y: 28.0 },
-      leftFoot: { x: -42.56, y: 45.6 },
-      rightFoot: { x: 42.56, y: 45.6 },
-      leftThrusterPos: { x: -24.0, y: 34.0 },
-      rightThrusterPos: { x: 24.0, y: 34.0 },
+      nose: { x: -84.8, y: -3.2 },
+      leftShoulder: { x: -38.4, y: -22.4 },
+      rightShoulder: { x: 38.4, y: -26.4 },
+      leftHip: { x: -67.2, y: 12.0 },
+      rightHip: { x: 70.4, y: 11.2 },
+      leftFoot: { x: -60.8, y: 31.2 },
+      rightFoot: { x: 60.8, y: 31.2 },
+      extraLeftFoot: { x: -32.0, y: 28.0 },
+      extraRightFoot: { x: 35.2, y: 28.0 },
+      leftThrusterPos: { x: -32.0, y: 28.0 },
+      rightThrusterPos: { x: 35.2, y: 28.0 },
     },
+    // Watertight collision polygon enclosing the elongated silhouette with wide landing gear skids
+    collisionPolygon: [
+      { x: -86.4, y: -3.2 },  // nose headlight/probe tip
+      { x: -60.8, y: -14.4 }, // cockpit fwd frame
+      { x: -38.4, y: -22.4 }, // cockpit roof peak
+      { x: -9.6, y: -26.4 },  // avionics bay fwd
+      { x: 38.4, y: -26.4 },  // dorsal roof aft
+      { x: 96.0, y: -24.0 },  // aft upper fin tip
+      { x: 73.6, y: -6.4 },   // aft upper fin trailing root
+      { x: 92.8, y: 22.4 },   // aft lower fin tip
+      { x: 70.4, y: 8.0 },    // aft lower fin trailing root
+      { x: 70.4, y: 11.2 },   // aft lower hull corner
+      { x: 68.0, y: 31.2 },   // aft landing footpad rear tip
+      { x: 53.6, y: 31.2 },   // aft landing footpad front tip
+      { x: 40.8, y: 27.2 },   // rear thruster right lip
+      { x: 28.8, y: 27.2 },   // rear thruster left lip
+      { x: 0.0, y: 19.2 },    // mid underbelly shield
+      { x: -25.6, y: 27.2 },  // front thruster right lip
+      { x: -38.4, y: 27.2 },  // front thruster left lip
+      { x: -45.0, y: 18.0 },  // underbelly shield behind front gear
+      { x: -53.6, y: 31.2 },  // forward landing footpad rear tip
+      { x: -68.0, y: 31.2 },  // forward landing footpad front tip
+      { x: -72.0, y: 12.0 },  // chin ramp lower plate
+      { x: -84.8, y: 9.6 },   // sensor chin turret bracket
+    ],
     stats: {
-      agility: 4,
+      agility: 5,
       fuelTank: 4,
       stability: 4,
       thrust: 4,
-      armor: 4,
+      armor: 3,
     },
   },
   {
     id: 'valkyrie',
     name: 'Valkyrie Tactical',
-    codename: 'VK-55 Armored Dropship',
-    tagline: 'Reinforced Combat Dropship',
-    classType: 'Medium Explorer',
-    description: 'Armored titanium hull plating with quad gimbal nozzles. Built to withstand high-velocity rock collisions and turbulent geothermal venting.',
-    width: 96,
-    height: 92,
-    renderScale: 1.54,
-    maxFuel: 200,
-    thrustMultiplier: 1.28,
+    codename: 'VK-01 Cargo Lifter',
+    tagline: 'Planetary Atmospheric Transport & Tactical VTOL Heavy Lifter',
+    classType: 'Tactical Transport',
+    description: 'The VK-01 Valkyrie Tactical heavy VTOL planetary atmospheric transport and cargo lifter. Engineered with reinforced crimson ballistic armor, forward aerodynamic cockpit canopy with pilot seat and FLIR targeting ball, mid-fuselage VTOL lift intake louvers, sealed side cargo bay ramp, dorsal docking hatch with hexagonal armor plating, flank sponson wing with nav lights, and a colossal aft vectoring main engine nozzle. Configured for high-payload planetary logistics and cargo transfer without vehicle transport.',
+    width: 168,
+    height: 64,
+    renderScale: 1.55,
+    maxFuel: 260,
+    thrustMultiplier: 1.32,
     torqueMultiplier: 1.05,
-    mass: 1.25,
-    armor: 0.52,
-    emptyMassTons: 12.0,
-    maxThrustKn: 175,
-    twr: 1.48,
-    rcsResponseMs: 34,
-    armorRatingMm: 110,
-    cargoHookCapacityKg: 800,
-    roverBayCapacity: 'Reinforced Tactical Pod Deck',
-    propulsionType: 'Quad Quad-Chamber Methalox Thrust Array',
-    operationalCeiling: 'Hostile Thermal & Debris Zones',
-    manufactureOrigin: 'Valhalla Defense Yards (Vespera)',
-    primaryColor: '#1e293b',
-    accentColor: '#ef4444',
-    visorColor: '#b91c1c',
-    footpadSpan: 89.3,
+    mass: 1.45,
+    armor: 0.55,
+    emptyMassTons: 16.5,
+    maxThrustKn: 290,
+    twr: 1.52,
+    rcsResponseMs: 36,
+    armorRatingMm: 130,
+    cargoHookCapacityKg: 2000,
+    roverBayCapacity: 'None (Dedicated Sealed Atmospheric Cargo Bay)',
+    propulsionType: 'High-Compression VTOL Turbofans + Aft Vectoring Turboramjet',
+    operationalCeiling: 'Planetary Atmospheric Logistics & High-G Drop Corridors',
+    manufactureOrigin: 'Valkyrie Aerospace Systems (Valhalla Forge Sector)',
+    primaryColor: '#991b1b',
+    accentColor: '#facc15',
+    visorColor: '#090d16',
+    footpadSpan: 86.8,
     canCarryVehicles: false,
     isHeavyVehicleCarrier: false,
     localPoints: {
-      nose: { x: 0, y: -45.0 },
-      leftShoulder: { x: -41.6, y: 3.0 },
-      rightShoulder: { x: 41.6, y: 3.0 },
-      leftHip: { x: -32.3, y: 26.2 },
-      rightHip: { x: 32.3, y: 26.2 },
-      leftFoot: { x: -44.66, y: 47.74 },
-      rightFoot: { x: 44.66, y: 47.74 },
-      leftThrusterPos: { x: -18.5, y: 33.9 },
-      rightThrusterPos: { x: 18.5, y: 33.9 },
+      nose: { x: 103.85, y: 9.3 },
+      leftShoulder: { x: -83.7, y: -15.5 },
+      rightShoulder: { x: 37.2, y: -24.8 },
+      leftHip: { x: -105.4, y: 7.75 },
+      rightHip: { x: 86.8, y: 15.5 },
+      leftFoot: { x: -49.6, y: 31.0 },
+      rightFoot: { x: 37.2, y: 31.0 },
+      leftThrusterPos: { x: -40.3, y: 27.9 },
+      rightThrusterPos: { x: 27.9, y: 27.9 },
     },
+    // Watertight collision polygon tracing the aerodynamic cargo lifter silhouette (scaled raw coords x 1.55)
+    collisionPolygon: [
+      { x: 103.85, y: 9.3 },    // Nose probe tip
+      { x: 89.9, y: 13.95 },    // Cockpit chin / FLIR ball
+      { x: 55.8, y: 19.38 },    // Lower forward fuselage under fuel receptacle
+      { x: 43.4, y: 31.0 },     // Forward landing pad front edge
+      { x: 31.0, y: 31.0 },     // Forward landing pad rear edge
+      { x: 15.5, y: 30.23 },    // Ventral pod skid bottom
+      { x: 6.2, y: 26.35 },     // Ventral pod rear transition
+      { x: -18.6, y: 24.8 },    // Cargo bay belly lower curve
+      { x: -40.3, y: 31.0 },    // Rear landing pad front edge
+      { x: -58.9, y: 31.0 },    // Rear landing pad rear edge
+      { x: -74.4, y: 15.5 },    // Aft lower belly curve
+      { x: -108.5, y: 8.53 },   // Aft nozzle lower lip
+      { x: -108.5, y: -14.73 }, // Aft nozzle upper lip
+      { x: -83.7, y: -16.28 },  // Aft upper empennage cowl
+      { x: -55.8, y: -27.13 },  // Dorsal spine aft slope
+      { x: -12.4, y: -27.13 },  // Dorsal spine mid (airlock / APU)
+      { x: 12.4, y: -29.45 },   // Dorsal intake scoop top
+      { x: 34.1, y: -26.35 },   // Cockpit roof peak
+      { x: 43.4, y: -22.48 },   // Canopy top fwd
+      { x: 68.2, y: -4.65 },    // Raked windshield
+      { x: 89.9, y: 5.43 },     // Forward nose slope
+    ],
     stats: {
       agility: 3,
       fuelTank: 4,
       stability: 4,
-      thrust: 5,
+      thrust: 4,
       armor: 5,
     },
   },

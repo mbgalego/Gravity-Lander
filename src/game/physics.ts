@@ -1737,7 +1737,8 @@ export function updatePhysics(
         isCrashed: false,
       });
 
-      const { isNewBestTime, isNewHighScore } = saveMissionScore(planet.id, {
+      const { isNewBestTime, isNewHighScore, craftRank, isNewCraftRecord } = saveMissionScore(planet.id, {
+        craftId: ship.modelId || config.id,
         timeSec: timeTaken,
         score: totalScore,
         cargoCollected: totalDeliveredCargo,
@@ -1782,6 +1783,9 @@ export function updatePhysics(
           total: totalScore,
           isNewBestTime,
           isNewHighScore,
+          craftRank,
+          isNewCraftRecord,
+          craftName: config.name,
         },
       };
     } else {

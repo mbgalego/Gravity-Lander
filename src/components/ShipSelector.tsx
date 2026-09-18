@@ -50,8 +50,13 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
   const [showDescPopup, setShowDescPopup] = useState<boolean>(false);
   const [viewDetailShip, setViewDetailShip] = useState<ShipModelConfig | null>(null);
   const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
-  const wasSwipe = useRef(false);
+  const touchEndY = useRef<number | null>(null);
+  const lastSwipeTimestamp = useRef<number>(0);
+  const lastTouchOpenTimestamp = useRef<number>(0);
+  const craftTouchRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const catalogTouchRef = useRef<{ x: number; y: number; time: number } | null>(null);
 
   useEffect(() => {
     setActiveIndex(currentIndex);
@@ -113,21 +118,21 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
 
     return (
       <div
-        className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+        className="fixed inset-0 z-[60] flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
         onClick={(e) => {
           e.stopPropagation();
           setViewDetailShip(null);
         }}
       >
         <div
-          className="w-full max-w-3xl bg-slate-950/90 border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] backdrop-blur-2xl text-slate-100 relative my-auto animate-in fade-in zoom-in-95 duration-200"
+          className="w-full max-w-3xl bg-slate-950/95 border border-white/10 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[94vh] sm:max-h-[90vh] backdrop-blur-2xl text-slate-100 relative my-auto animate-in fade-in zoom-in-95 duration-200"
           onClick={(e) => e.stopPropagation()}
           id={`ship-detail-${s.id}`}
         >
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-white/10 bg-slate-900/40 shrink-0">
+          {/* Header (sticky pinned at top) */}
+          <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 border-b border-white/10 bg-slate-900/80 backdrop-blur-md shrink-0 sticky top-0 z-10">
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
-              <div className="w-9 h-9 rounded-lg bg-slate-900/60 border border-white/10 flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-900/80 border border-white/10 flex items-center justify-center shrink-0">
                 <ShipGraphic ship={s} className="w-full h-full" showGlow={false} />
               </div>
               <div className="min-w-0 flex-1">
@@ -157,10 +162,11 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
             </div>
           </div>
 
-          {/* Big craft render */}
-          <div className="px-4 sm:px-6 pt-2 sm:pt-3 pb-1 shrink-0">
+          {/* Scrollable Body Content */}
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y px-4 sm:px-6 py-3 sm:py-4 space-y-3.5">
+            {/* Big craft render */}
             <div
-              className="w-full h-52 sm:h-64 md:h-72 lg:h-80 flex items-center justify-center relative rounded-2xl bg-slate-950/40 border border-white/10 overflow-hidden"
+              className="w-full h-44 xs:h-52 sm:h-64 md:h-72 lg:h-80 flex items-center justify-center relative rounded-xl sm:rounded-2xl bg-slate-950/40 border border-white/10 overflow-hidden shrink-0"
               style={{
                 background:
                   'radial-gradient(ellipse at center, rgba(30,41,59,0.65) 0%, rgba(2,6,23,0.4) 60%, rgba(2,6,23,0.9) 100%)',
@@ -171,60 +177,115 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                 className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
                 style={{ background: `linear-gradient(to bottom, transparent, ${s.accentColor}22)` }}
               />
-              <ShipGraphic ship={s} className="w-full h-full max-h-full" showGlow showThrusters />
+              <ShipGraphic ship={s} className="w-full h-full max-h-full" showGlow />
             </div>
-          </div>
 
-          {/* Quick stats strip */}
-          <div className="px-4 sm:px-6 py-1.5 shrink-0 flex items-center gap-1.5 flex-wrap">
-            <span className="bg-slate-950/60 text-amber-300 px-2 py-0.5 rounded-full border border-white/5 text-[9px] font-mono">
-              {s.emptyMassTons}t DRY MASS
-            </span>
-            <span className="bg-slate-950/60 text-sky-300 px-2 py-0.5 rounded-full border border-white/5 text-[9px] font-mono">
-              {s.maxThrustKn} kN THRUST
-            </span>
-            <span className="bg-slate-950/60 text-teal-300 px-2 py-0.5 rounded-full border border-white/5 text-[9px] font-mono">
-              {s.maxFuel} L FUEL
-            </span>
-            {(s.canCarryVehicles || s.isHeavyVehicleCarrier) && (
-              <span className="bg-emerald-950/80 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/30 text-[9px] font-mono flex items-center gap-1">
-                <Truck className="w-2.5 h-2.5 text-emerald-400" /> ROVER CARRIER
-              </span>
-            )}
-            <div className="flex items-center gap-1 ml-auto" title="Performance ratings">
-              {statBars.map(({ key, label, title: t }) => (
-                <div key={key} className="flex flex-col items-center gap-0.5" title={`${t} ${stats[key]}/5`}>
-                  <div className="flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((seg) => (
-                      <div
-                        key={seg}
-                        className="w-1.5 h-2.5 rounded-[2px]"
-                        style={{ backgroundColor: seg <= stats[key] ? s.accentColor : 'rgba(100,116,139,0.45)' }}
-                      />
-                    ))}
+            {/* Quick stats & performance ratings strip */}
+            <div className="p-3 rounded-xl bg-slate-900/50 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="bg-slate-950/80 text-amber-300 px-2.5 py-1 rounded-full border border-white/5 text-[10px] font-mono font-semibold">
+                  {s.emptyMassTons}t DRY MASS
+                </span>
+                <span className="bg-slate-950/80 text-sky-300 px-2.5 py-1 rounded-full border border-white/5 text-[10px] font-mono font-semibold">
+                  {s.maxThrustKn} kN THRUST
+                </span>
+                <span className="bg-slate-950/80 text-teal-300 px-2.5 py-1 rounded-full border border-white/5 text-[10px] font-mono font-semibold">
+                  {s.maxFuel} L FUEL
+                </span>
+                {(s.canCarryVehicles || s.isHeavyVehicleCarrier) ? (
+                  <span className="bg-emerald-950/80 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-500/30 text-[10px] font-mono font-semibold flex items-center gap-1">
+                    <Truck className="w-3 h-3 text-emerald-400" /> ROVER CARRIER
+                  </span>
+                ) : (
+                  <span className="bg-slate-950/60 text-slate-400 px-2.5 py-1 rounded-full border border-white/5 text-[10px] font-mono">
+                    LIGHT CARGO
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2 sm:gap-2.5 self-start sm:self-auto pt-0.5 sm:pt-0" title="Performance ratings">
+                {statBars.map(({ key, label, title: t }) => (
+                  <div key={key} className="flex flex-col items-center gap-1" title={`${t} ${stats[key]}/5`}>
+                    <div className="flex gap-0.5">
+                      {[1, 2, 3, 4, 5].map((seg) => (
+                        <div
+                          key={seg}
+                          className="w-1.5 sm:w-2 h-3 sm:h-3.5 rounded-[2px]"
+                          style={{ backgroundColor: seg <= stats[key] ? s.accentColor : 'rgba(100,116,139,0.35)' }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[8px] font-mono text-slate-400 font-bold leading-none">{label}</span>
                   </div>
-                  <span className="text-[7px] font-mono text-slate-500 leading-none">{label}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Technical Specifications Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+              {s.twr !== undefined && (
+                <div className="p-2.5 rounded-xl bg-slate-900/30 border border-white/5">
+                  <div className="text-[9px] text-slate-400 uppercase tracking-wider">Thrust / Wt</div>
+                  <div className="text-sm font-bold text-sky-300 mt-0.5">{s.twr.toFixed(2)} : 1</div>
                 </div>
-              ))}
+              )}
+              {s.armorRatingMm !== undefined && (
+                <div className="p-2.5 rounded-xl bg-slate-900/30 border border-white/5">
+                  <div className="text-[9px] text-slate-400 uppercase tracking-wider">Hull Plating</div>
+                  <div className="text-sm font-bold text-purple-300 mt-0.5">{s.armorRatingMm} mm</div>
+                </div>
+              )}
+              {s.rcsResponseMs !== undefined && (
+                <div className="p-2.5 rounded-xl bg-slate-900/30 border border-white/5">
+                  <div className="text-[9px] text-slate-400 uppercase tracking-wider">RCS Response</div>
+                  <div className="text-sm font-bold text-amber-300 mt-0.5">{s.rcsResponseMs} ms</div>
+                </div>
+              )}
+              {s.footpadSpan !== undefined && (
+                <div className="p-2.5 rounded-xl bg-slate-900/30 border border-white/5">
+                  <div className="text-[9px] text-slate-400 uppercase tracking-wider">Gear Stance</div>
+                  <div className="text-sm font-bold text-emerald-300 mt-0.5">{s.footpadSpan.toFixed(1)} m</div>
+                </div>
+              )}
+            </div>
+
+            {/* Operational Configuration Details */}
+            {(s.roverBayCapacity || s.operationalCeiling) && (
+              <div className="p-2.5 sm:p-3 rounded-xl bg-slate-900/30 border border-white/5 space-y-1.5 text-[11px] font-mono">
+                {s.operationalCeiling && (
+                  <div className="text-slate-400 flex items-center justify-between gap-2">
+                    <span className="shrink-0">Operational Scope:</span>
+                    <span className="text-white font-medium text-right">{s.operationalCeiling}</span>
+                  </div>
+                )}
+                {s.roverBayCapacity && (
+                  <div className="text-slate-400 flex items-center justify-between gap-2">
+                    <span className="shrink-0">Bay Configuration:</span>
+                    <span className="text-emerald-300 font-medium text-right">{s.roverBayCapacity}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Description & Lore */}
+            <div className="p-3 rounded-xl bg-slate-900/25 border border-white/5">
+              <div className="text-[9px] font-mono uppercase tracking-wider text-slate-400 mb-1.5 font-bold">
+                Flight Operations Profile
+              </div>
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">{s.description}</p>
             </div>
           </div>
 
-          {/* Description */}
-          <div className="px-4 sm:px-6 pb-1 shrink-0">
-            <p className="text-xs text-slate-300 leading-relaxed font-sans">{s.description}</p>
-          </div>
-
-          {/* Footer actions */}
-          <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 border-t border-white/10 bg-slate-900/30 shrink-0">
-            <span className="text-[9px] font-mono text-slate-500 flex items-center gap-1.5">
-              <Layers className="w-3 h-3 text-sky-400/80" />
-              {s.manufactureOrigin || 'Sol Aerospace'} • {s.codename}
+          {/* Footer actions (sticky pinned at bottom) */}
+          <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 border-t border-white/10 bg-slate-900/80 backdrop-blur-md shrink-0 sticky bottom-0 z-10">
+            <span className="text-[9px] sm:text-[10px] font-mono text-slate-400 flex items-center gap-1.5 truncate mr-2">
+              <Layers className="w-3 h-3 text-sky-400/80 shrink-0" />
+              <span className="truncate">{s.manufactureOrigin || 'Sol Aerospace'} • {s.codename}</span>
             </span>
             <button
               id={`btn-detail-equip-${s.id}`}
               type="button"
               onClick={() => equipShip(s)}
-              className="flex items-center gap-1.5 px-4 sm:px-5 py-1.5 rounded-full bg-purple-500/25 hover:bg-purple-500/40 border border-purple-400/60 text-purple-200 font-mono font-bold text-xs tracking-wider uppercase transition-all cursor-pointer active:scale-95"
+              className="flex items-center gap-1.5 px-4 sm:px-5 py-1.5 sm:py-2 rounded-full bg-purple-500/25 hover:bg-purple-500/40 border border-purple-400/60 text-purple-200 font-mono font-bold text-xs tracking-wider uppercase transition-all cursor-pointer active:scale-95 shrink-0"
             >
               <Check className="w-3.5 h-3.5" />
               {selectedModelId === s.id ? 'EQUIPPED — DISMISS' : `Equip ${s.name}`}
@@ -435,8 +496,26 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                       <div
                         role="button"
                         tabIndex={0}
+                        onTouchStart={(e) => {
+                          const t = e.touches[0];
+                          catalogTouchRef.current = { x: t.clientX, y: t.clientY, time: Date.now() };
+                        }}
+                        onTouchEnd={(e) => {
+                          if (!catalogTouchRef.current) return;
+                          const t = e.changedTouches[0];
+                          const dx = Math.abs(t.clientX - catalogTouchRef.current.x);
+                          const dy = Math.abs(t.clientY - catalogTouchRef.current.y);
+                          const dt = Date.now() - catalogTouchRef.current.time;
+                          catalogTouchRef.current = null;
+                          if (dx < 26 && dy < 26 && dt < 500) {
+                            e.stopPropagation();
+                            lastTouchOpenTimestamp.current = Date.now();
+                            openDetail(ship);
+                          }
+                        }}
                         onClick={(e) => {
                           e.stopPropagation();
+                          if (Date.now() - lastTouchOpenTimestamp.current < 600) return;
                           openDetail(ship);
                         }}
                         onKeyDown={(e) => {
@@ -446,8 +525,8 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                             openDetail(ship);
                           }
                         }}
-                        className="w-20 h-16 sm:w-24 sm:h-18 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shrink-0 cursor-pointer"
-                        title={`View ${ship.name} close-up`}
+                        className="w-20 h-16 sm:w-24 sm:h-18 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shrink-0 cursor-pointer touch-manipulation"
+                        aria-label={`View ${ship.name} close-up`}
                       >
                         <ShipGraphic ship={ship} className="w-full h-full max-h-16" showGlow={isSelected} />
                       </div>
@@ -470,7 +549,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                                 openDetail(ship);
                               }}
                               className="flex items-center gap-1 text-[9px] font-mono text-purple-300 bg-slate-900/60 hover:bg-purple-500/25 hover:text-purple-200 border border-purple-400/40 hover:border-purple-400/70 px-1.5 py-0.5 rounded-full transition-all cursor-pointer"
-                              title={`View ${ship.name} close-up`}
+                              aria-label={`View ${ship.name} close-up`}
                             >
                               <Maximize2 className="w-2.5 h-2.5" /> VIEW
                             </button>
@@ -542,34 +621,50 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
 
   const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
     touchStartX.current = clientX;
+    touchStartY.current = clientY;
+    touchEndX.current = clientX;
+    touchEndY.current = clientY;
   };
 
   const handleTouchMove = (e: React.TouchEvent | React.MouseEvent) => {
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
     touchEndX.current = clientX;
+    touchEndY.current = clientY;
   };
 
   const handleTouchEnd = () => {
-    if (touchStartX.current !== null && touchEndX.current !== null) {
-      const diff = touchStartX.current - touchEndX.current;
+    if (
+      touchStartX.current !== null &&
+      touchEndX.current !== null &&
+      touchStartY.current !== null &&
+      touchEndY.current !== null
+    ) {
+      const diffX = touchStartX.current - touchEndX.current;
+      const diffY = touchStartY.current - touchEndY.current;
       const minSwipeDistance = 35;
-      if (diff > minSwipeDistance) {
-        wasSwipe.current = true;
-        handleNext();
-      } else if (diff < -minSwipeDistance) {
-        wasSwipe.current = true;
-        handlePrev();
+      if (Math.abs(diffX) > minSwipeDistance && Math.abs(diffX) > Math.abs(diffY)) {
+        lastSwipeTimestamp.current = Date.now();
+        if (diffX > 0) {
+          handleNext();
+        } else {
+          handlePrev();
+        }
       }
     }
     touchStartX.current = null;
     touchEndX.current = null;
+    touchStartY.current = null;
+    touchEndY.current = null;
   };
 
   const handleDeckClick = () => {
-    if (wasSwipe.current) {
-      // the mouse/touch was a swipe between crafts, not a tap
-      wasSwipe.current = false;
+    if (Date.now() - lastSwipeTimestamp.current < 350) {
+      return;
+    }
+    if (Date.now() - lastTouchOpenTimestamp.current < 600) {
       return;
     }
     openDetail(currentShip);
@@ -636,7 +731,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
 
       {/* Main Single Ship Sliding Carousel Card */}
       <div
-        className="relative w-full max-w-lg flex items-center justify-between gap-1 sm:gap-2 px-1"
+        className="relative w-full max-w-lg flex items-center justify-between gap-1 sm:gap-2 px-1 touch-pan-y"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -672,22 +767,47 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
               <div
                 role="button"
                 tabIndex={0}
-                onClick={handleDeckClick}
+                onTouchStart={(e) => {
+                  const t = e.touches[0];
+                  craftTouchRef.current = { x: t.clientX, y: t.clientY, time: Date.now() };
+                }}
+                onTouchEnd={(e) => {
+                  if (!craftTouchRef.current) return;
+                  const t = e.changedTouches[0];
+                  const dx = Math.abs(t.clientX - craftTouchRef.current.x);
+                  const dy = Math.abs(t.clientY - craftTouchRef.current.y);
+                  const dt = Date.now() - craftTouchRef.current.time;
+                  craftTouchRef.current = null;
+
+                  // Clean tap on touch screen: responsive tap with generous tolerance
+                  if (dx < 26 && dy < 26 && dt < 500) {
+                    if (Date.now() - lastSwipeTimestamp.current < 350) return;
+                    e.stopPropagation();
+                    lastTouchOpenTimestamp.current = Date.now();
+                    openDetail(currentShip);
+                  }
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeckClick();
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     openDetail(currentShip);
                   }
                 }}
-                className="w-48 h-32 sm:w-64 sm:h-44 md:w-72 md:h-48 flex items-center justify-center relative my-1 sm:my-2 transition-transform duration-200 cursor-pointer"
-                title={`View ${currentShip.name} close-up`}
+                className="w-48 h-32 sm:w-64 sm:h-44 md:w-72 md:h-48 flex items-center justify-center relative my-1 sm:my-2 transition-transform duration-200 cursor-pointer select-none touch-manipulation group"
+                aria-label={`View ${currentShip.name} close-up`}
               >
                 <ShipGraphic
                   ship={currentShip}
                   className="w-full h-full max-w-full max-h-full"
                   showGlow={true}
-                  showThrusters={true}
                 />
+                <span className="absolute -bottom-1 sm:bottom-0 px-2.5 py-0.5 rounded-full bg-slate-950/85 border border-sky-400/40 text-[10px] font-mono text-sky-300 flex items-center gap-1 shadow-lg pointer-events-none opacity-85 group-hover:opacity-100 group-hover:border-sky-400 group-hover:text-white transition-all">
+                  <Maximize2 className="w-2.5 h-2.5" /> INSPECT
+                </span>
               </div>
 
               {/* World/Ship Full Name & Classification Badges */}

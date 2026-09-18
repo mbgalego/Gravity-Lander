@@ -1,3 +1,16 @@
+export interface PlanetScoreEntry {
+  timeSec: number; // in seconds
+  score: number;
+  craftId: string; // ship id e.g. 'viper', 'wasp', 'apollo'
+  date: string;    // ISO timestamp
+}
+
+export interface CraftTimeEntry {
+  timeSec: number; // in seconds
+  score: number;
+  date: string;    // ISO timestamp
+}
+
 export interface PlanetRecord {
   bestTime: number | null; // in seconds
   highScore: number | null;
@@ -8,6 +21,9 @@ export interface PlanetRecord {
   medalsEarned: Record<string, number>; // medalId -> count
   firstLandingDate: string | null;      // ISO string
   lastPlayedDate: string | null;
+  topRuns?: PlanetScoreEntry[];        // Single scoreboard: top 5 fastest runs overall
+  topScoreRuns?: PlanetScoreEntry[];   // Single scoreboard: top 5 highest score runs overall
+  craftBestTimes?: Record<string, CraftTimeEntry[]>; // legacy / backward compatibility
 }
 
 const STORAGE_KEY = 'gravity_lander_scores_v1';
@@ -57,21 +73,167 @@ function findRecord(scores: Record<string, PlanetRecord>, planetId: string): Pla
 }
 
 export function getPlanetRecord(planetId: string): PlanetRecord {
+  const canonical = canonicalPlanetId(planetId);
   const scores = getStoredScores();
-  const existing = findRecord(scores, planetId);
-  return existing || {
-    bestTime: null,
-    highScore: null,
-    completedCount: 0,
-    totalCargoCollected: 0,
-    totalRoversCollected: 0,
-    medalsEarned: {},
-    firstLandingDate: null,
-    lastPlayedDate: null,
-  };
+  const existing = findRecord(scores, canonical);
+  const rec: PlanetRecord = existing
+    ? { ...existing }
+    : {
+        bestTime: null,
+        highScore: null,
+        completedCount: 0,
+        totalCargoCollected: 0,
+        totalRoversCollected: 0,
+        medalsEarned: {},
+        firstLandingDate: null,
+        lastPlayedDate: null,
+        topRuns: [],
+        craftBestTimes: {},
+      };
+
+  let wasRepaired = false;
+
+  // 1. Gather all authentic runs from craftBestTimes (each craft has its own dedicated record list)
+  const authenticCraftRuns: PlanetScoreEntry[] = [];
+  if (rec.craftBestTimes) {
+    for (const [cId, entries] of Object.entries(rec.craftBestTimes)) {
+      if (Array.isArray(entries)) {
+        for (const e of entries) {
+          if (e && typeof e.timeSec === 'number') {
+            authenticCraftRuns.push({
+              timeSec: e.timeSec,
+              score: e.score || 0,
+              craftId: cId,
+              date: e.date || rec.lastPlayedDate || new Date().toISOString(),
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // 2. Build or repair topRuns and topScoreRuns
+  const combinedList: PlanetScoreEntry[] = [];
+
+  if (rec.topRuns && Array.isArray(rec.topRuns) && rec.topRuns.length > 0) {
+    for (const r of rec.topRuns) {
+      if (r && typeof r.timeSec === 'number') {
+        // Cross-reference with craftBestTimes to check if this time has a verified craft
+        const match = authenticCraftRuns.find(
+          a => Math.abs(a.timeSec - r.timeSec) < 0.05
+        );
+        const verifiedCraftId = match ? match.craftId : (r.craftId || 'apollo');
+        if (r.craftId !== verifiedCraftId) {
+          wasRepaired = true;
+        }
+        combinedList.push({
+          timeSec: r.timeSec,
+          score: r.score || 0,
+          craftId: verifiedCraftId,
+          date: r.date,
+        });
+      }
+    }
+  }
+
+  if (rec.topScoreRuns && Array.isArray(rec.topScoreRuns) && rec.topScoreRuns.length > 0) {
+    for (const r of rec.topScoreRuns) {
+      if (r && typeof r.score === 'number') {
+        const match = authenticCraftRuns.find(
+          a => Math.abs(a.timeSec - r.timeSec) < 0.05
+        );
+        const verifiedCraftId = match ? match.craftId : (r.craftId || 'apollo');
+        if (!combinedList.some(c => Math.abs(c.timeSec - r.timeSec) < 0.001 && c.craftId === verifiedCraftId)) {
+          combinedList.push({
+            timeSec: r.timeSec,
+            score: r.score,
+            craftId: verifiedCraftId,
+            date: r.date,
+          });
+        }
+      }
+    }
+  }
+
+  // 3. Merge in any authentic craft runs that might be missing from topRuns
+  for (const ac of authenticCraftRuns) {
+    if (!combinedList.some(c => Math.abs(c.timeSec - ac.timeSec) < 0.001 && c.craftId === ac.craftId)) {
+      combinedList.push(ac);
+      wasRepaired = true;
+    }
+  }
+
+  // 4. If still empty, but an overall bestTime or highScore was recorded from prior missions
+  if (combinedList.length === 0 && (rec.bestTime !== null || rec.highScore !== null)) {
+    combinedList.push({
+      timeSec: rec.bestTime || 0,
+      score: rec.highScore || 0,
+      craftId: 'apollo', // Stable default original lander, NEVER dynamic getLastSelectedShipId()!
+      date: rec.lastPlayedDate || rec.firstLandingDate || new Date().toISOString(),
+    });
+    wasRepaired = true;
+  }
+
+  // 5. Deduplicate and sort for Time (fastest timeSec ascending)
+  const timeSorted = [...combinedList].sort((a, b) => a.timeSec - b.timeSec);
+  const dedupedTime: PlanetScoreEntry[] = [];
+  for (const item of timeSorted) {
+    if (!dedupedTime.some(d => Math.abs(d.timeSec - item.timeSec) < 0.001 && d.craftId === item.craftId)) {
+      dedupedTime.push(item);
+    }
+  }
+  rec.topRuns = dedupedTime.slice(0, 5);
+
+  // 6. Deduplicate and sort for Score (highest score descending, tiebreaker fastest timeSec)
+  const scoreSorted = [...combinedList].sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return a.timeSec - b.timeSec;
+  });
+  const dedupedScore: PlanetScoreEntry[] = [];
+  for (const item of scoreSorted) {
+    if (!dedupedScore.some(d => d.score === item.score && Math.abs(d.timeSec - item.timeSec) < 0.001 && d.craftId === item.craftId)) {
+      dedupedScore.push(item);
+    }
+  }
+  rec.topScoreRuns = dedupedScore.slice(0, 5);
+
+  // Sync bestTime and highScore
+  if (rec.topRuns.length > 0 && (rec.bestTime === null || rec.topRuns[0].timeSec < rec.bestTime)) {
+    rec.bestTime = rec.topRuns[0].timeSec;
+    wasRepaired = true;
+  }
+  if (rec.topScoreRuns.length > 0 && (rec.highScore === null || rec.topScoreRuns[0].score > rec.highScore)) {
+    rec.highScore = rec.topScoreRuns[0].score;
+    wasRepaired = true;
+  }
+
+  // Ensure craftBestTimes contains the runs from topRuns
+  rec.craftBestTimes = rec.craftBestTimes || {};
+  for (const run of rec.topRuns) {
+    const list = rec.craftBestTimes[run.craftId] || [];
+    if (!list.some(e => Math.abs(e.timeSec - run.timeSec) < 0.001)) {
+      rec.craftBestTimes[run.craftId] = [...list, { timeSec: run.timeSec, score: run.score, date: run.date }]
+        .sort((a, b) => a.timeSec - b.timeSec)
+        .slice(0, 5);
+      wasRepaired = true;
+    }
+  }
+
+  // If repairs or backfills were made and we're in a browser environment, persist canonical record
+  if (wasRepaired && typeof window !== 'undefined' && window.localStorage) {
+    try {
+      scores[canonical] = rec;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+    } catch {
+      // Ignore quota or private-browsing errors
+    }
+  }
+
+  return rec;
 }
 
 export interface SaveScoreOptions {
+  craftId?: string;
   timeSec: number;
   score: number;
   cargoCollected?: number;
@@ -79,10 +241,17 @@ export interface SaveScoreOptions {
   medalsEarned?: string[]; // array of medal IDs
 }
 
+export interface SaveScoreResult {
+  isNewBestTime: boolean;
+  isNewHighScore: boolean;
+  craftRank?: number | null; // 1 to 5 if in top 5, or null
+  isNewCraftRecord?: boolean; // true if #1 for that craft
+}
+
 export function saveMissionScore(
   planetId: string,
   options: SaveScoreOptions
-): { isNewBestTime: boolean; isNewHighScore: boolean } {
+): SaveScoreResult {
   try {
     const canonical = canonicalPlanetId(planetId);
     const scores = getStoredScores();
@@ -103,23 +272,39 @@ export function saveMissionScore(
           current.medalsEarned = { ...(rec.medalsEarned || {}), ...(current.medalsEarned || {}) };
           current.firstLandingDate = current.firstLandingDate || rec.firstLandingDate;
           current.lastPlayedDate = current.lastPlayedDate || rec.lastPlayedDate;
+
+          // Merge topRuns across aliases
+          if (rec.topRuns) {
+            const combined = [...(current.topRuns || []), ...rec.topRuns];
+            combined.sort((a, b) => a.timeSec - b.timeSec);
+            current.topRuns = combined.slice(0, 5);
+          }
+
+          // Merge craftBestTimes across aliases
+          if (rec.craftBestTimes) {
+            current.craftBestTimes = current.craftBestTimes || {};
+            for (const [cId, entries] of Object.entries(rec.craftBestTimes)) {
+              const combined = [...(current.craftBestTimes[cId] || []), ...entries];
+              combined.sort((a, b) => a.timeSec - b.timeSec);
+              const deduped: CraftTimeEntry[] = [];
+              for (const e of combined) {
+                if (!deduped.some(d => Math.abs(d.timeSec - e.timeSec) < 0.001 && d.date === e.date)) {
+                  deduped.push(e);
+                }
+              }
+              current.craftBestTimes[cId] = deduped.slice(0, 5);
+            }
+          }
         }
       }
     }
-    const seed = current || {
-      bestTime: null,
-      highScore: null,
-      completedCount: 0,
-      totalCargoCollected: 0,
-      totalRoversCollected: 0,
-      medalsEarned: {},
-      firstLandingDate: null,
-      lastPlayedDate: null,
-    };
 
+    const seed = getPlanetRecord(canonical);
     const isNewBestTime = seed.bestTime === null || options.timeSec < seed.bestTime;
     const isNewHighScore = seed.highScore === null || options.score > seed.highScore;
     const now = new Date().toISOString();
+    // Use the explicitly provided craftId from the simulation, fallback to 'apollo' if missing
+    const craftId = options.craftId || 'apollo';
 
     // Update medal counts
     const updatedMedals = { ...(seed.medalsEarned || {}) };
@@ -128,6 +313,57 @@ export function saveMissionScore(
         updatedMedals[medalId] = (updatedMedals[medalId] || 0) + 1;
       }
     }
+
+    // New run entry for single scoreboard (max 5 lines)
+    const newRun: PlanetScoreEntry = {
+      timeSec: options.timeSec,
+      score: options.score,
+      craftId,
+      date: now,
+    };
+
+    const existingTopRuns = [...(seed.topRuns || [])];
+    const combinedRuns = [...existingTopRuns, newRun].sort((a, b) => a.timeSec - b.timeSec);
+    const dedupedTopRuns: PlanetScoreEntry[] = [];
+    for (const r of combinedRuns) {
+      if (!dedupedTopRuns.some(d => Math.abs(d.timeSec - r.timeSec) < 0.001 && d.date === r.date && d.craftId === r.craftId)) {
+        dedupedTopRuns.push(r);
+      }
+    }
+    const updatedTopRuns = dedupedTopRuns.slice(0, 5);
+
+    // Update topScoreRuns (by highest score)
+    const existingTopScoreRuns = [...(seed.topScoreRuns || [])];
+    const combinedScoreRuns = [...existingTopScoreRuns, newRun].sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return a.timeSec - b.timeSec;
+    });
+    const dedupedTopScoreRuns: PlanetScoreEntry[] = [];
+    for (const r of combinedScoreRuns) {
+      if (!dedupedTopScoreRuns.some(d => d.score === r.score && Math.abs(d.timeSec - r.timeSec) < 0.001 && d.date === r.date && d.craftId === r.craftId)) {
+        dedupedTopScoreRuns.push(r);
+      }
+    }
+    const updatedTopScoreRuns = dedupedTopScoreRuns.slice(0, 5);
+
+    // Determine rank in top 5 (1 to 5)
+    const rankIdx = updatedTopRuns.findIndex(
+      r => r === newRun || (Math.abs(r.timeSec - newRun.timeSec) < 0.001 && r.date === newRun.date && r.craftId === newRun.craftId)
+    );
+    const craftRank = rankIdx !== -1 ? rankIdx + 1 : null;
+    const isNewCraftRecord = craftRank === 1;
+
+    // Backward compatible craft best times
+    const updatedCraftBestTimes: Record<string, CraftTimeEntry[]> = {};
+    if (seed.craftBestTimes) {
+      for (const [cId, entries] of Object.entries(seed.craftBestTimes)) {
+        updatedCraftBestTimes[cId] = [...entries];
+      }
+    }
+    const existingCraftList = updatedCraftBestTimes[craftId] || [];
+    updatedCraftBestTimes[craftId] = [...existingCraftList, { timeSec: options.timeSec, score: options.score, date: now }]
+      .sort((a, b) => a.timeSec - b.timeSec)
+      .slice(0, 5);
 
     const updated: PlanetRecord = {
       bestTime: isNewBestTime ? options.timeSec : seed.bestTime,
@@ -138,6 +374,9 @@ export function saveMissionScore(
       medalsEarned: updatedMedals,
       firstLandingDate: seed.firstLandingDate || now,
       lastPlayedDate: now,
+      topRuns: updatedTopRuns,
+      topScoreRuns: updatedTopScoreRuns,
+      craftBestTimes: updatedCraftBestTimes,
     };
 
     // Remove stale aliased keys for this world, then store under canonical id.
@@ -149,10 +388,47 @@ export function saveMissionScore(
     scores[canonical] = updated;
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
-    return { isNewBestTime, isNewHighScore };
+    return { isNewBestTime, isNewHighScore, craftRank, isNewCraftRecord };
   } catch {
-    return { isNewBestTime: false, isNewHighScore: false };
+    return { isNewBestTime: false, isNewHighScore: false, craftRank: null, isNewCraftRecord: false };
   }
+}
+
+/** Get up to 5 best times overall for a planet (single scoreboard). */
+export function getPlanetTopRuns(planetId: string): PlanetScoreEntry[] {
+  const rec = getPlanetRecord(planetId);
+  return rec.topRuns || [];
+}
+
+/** Get up to 5 highest scores overall for a planet (single scoreboard). */
+export function getPlanetTopScoreRuns(planetId: string): PlanetScoreEntry[] {
+  const rec = getPlanetRecord(planetId);
+  return rec.topScoreRuns || [];
+}
+
+/** Get up to 5 best times for a specific craft on a planet. */
+export function getCraftTopTimes(planetId: string, craftId: string): CraftTimeEntry[] {
+  const rec = getPlanetRecord(planetId);
+  return rec.craftBestTimes?.[craftId] || [];
+}
+
+/** Returns the fastest craft recorded on a world, or null. */
+export function getPlanetFastestCraft(planetId: string): { craftId: string; bestTime: number } | null {
+  const rec = getPlanetRecord(planetId);
+  if (rec.topRuns && rec.topRuns.length > 0) {
+    return { craftId: rec.topRuns[0].craftId, bestTime: rec.topRuns[0].timeSec };
+  }
+  if (!rec.craftBestTimes) return null;
+  let fastest: { craftId: string; bestTime: number } | null = null;
+  for (const [cId, entries] of Object.entries(rec.craftBestTimes)) {
+    if (entries.length > 0) {
+      const top = entries[0];
+      if (!fastest || top.timeSec < fastest.bestTime) {
+        fastest = { craftId: cId, bestTime: top.timeSec };
+      }
+    }
+  }
+  return fastest;
 }
 
 // Global summary for Logbook "All Worlds" tab
@@ -166,6 +442,8 @@ export interface WorldSummary {
   favoritePlanet: { id: string; name: string; landings: number } | null;
   firstLandingOverall: { planetId: string; date: string } | null;
   bestOverallScore: { planetId: string; score: number } | null;
+  fastestCraftOverall?: { planetId: string; craftId: string; timeSec: number } | null;
+  totalCraftsFlown?: number;
 }
 
 export function getWorldSummary(planets: Array<{ id: string; name: string }>): WorldSummary {
@@ -179,10 +457,12 @@ export function getWorldSummary(planets: Array<{ id: string; name: string }>): W
   let favoritePlanet: { id: string; name: string; landings: number } | null = null;
   let firstLandingOverall: { planetId: string; date: string } | null = null;
   let bestOverallScore: { planetId: string; score: number } | null = null;
+  let fastestCraftOverall: { planetId: string; craftId: string; timeSec: number } | null = null;
+  const flownCraftIds = new Set<string>();
 
   for (const planet of planets) {
-    const record = findRecord(scores, planet.id);
-    if (!record) continue;
+    const record = getPlanetRecord(planet.id);
+    if (!record || (record.completedCount === 0 && (!record.topRuns || record.topRuns.length === 0))) continue;
 
     totalLandings += record.completedCount || 0;
     totalCargoCollected += record.totalCargoCollected || 0;
@@ -191,6 +471,29 @@ export function getWorldSummary(planets: Array<{ id: string; name: string }>): W
     for (const [medalId, count] of Object.entries(record.medalsEarned || {})) {
       medalIds.add(medalId);
       totalMedalsCount += count;
+    }
+
+    if (record.topRuns && record.topRuns.length > 0) {
+      for (const run of record.topRuns) {
+        if (run.craftId) {
+          flownCraftIds.add(run.craftId);
+          if (!fastestCraftOverall || run.timeSec < fastestCraftOverall.timeSec) {
+            fastestCraftOverall = { planetId: planet.id, craftId: run.craftId, timeSec: run.timeSec };
+          }
+        }
+      }
+    }
+
+    if (record.craftBestTimes) {
+      for (const [cId, entries] of Object.entries(record.craftBestTimes)) {
+        if (entries.length > 0) {
+          flownCraftIds.add(cId);
+          const top = entries[0];
+          if (!fastestCraftOverall || top.timeSec < fastestCraftOverall.timeSec) {
+            fastestCraftOverall = { planetId: planet.id, craftId: cId, timeSec: top.timeSec };
+          }
+        }
+      }
     }
 
     if (record.firstLandingDate) {
@@ -224,6 +527,8 @@ export function getWorldSummary(planets: Array<{ id: string; name: string }>): W
     favoritePlanet,
     firstLandingOverall,
     bestOverallScore,
+    fastestCraftOverall,
+    totalCraftsFlown: flownCraftIds.size,
   };
 }
 

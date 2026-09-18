@@ -1,12 +1,40 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { PlanetConfig } from '../types';
 import { PLANETS } from '../game/planets';
+import { SHIPS } from '../game/ships';
+import { ShipGraphic } from './ShipGraphic';
 import { convertCustomMapToPlanet } from '../game/customMapConverter';
 import { getSavedCustomMaps } from '../utils/customMapsStorage';
-import { getPlanetRecord, getWorldSummary, getStoredScores, canonicalPlanetId, WorldSummary, PlanetRecord } from '../utils/scoreStorage';
+import {
+  getPlanetRecord,
+  getWorldSummary,
+  getStoredScores,
+  canonicalPlanetId,
+  WorldSummary,
+  PlanetRecord,
+  PlanetScoreEntry,
+  getPlanetFastestCraft,
+  CraftTimeEntry,
+} from '../utils/scoreStorage';
 import { getAllMedals, getMedalColorClass, getMedalBadgeClass, Medal } from '../utils/medals';
 import { PlanetGraphic } from './PlanetGraphic';
-import { X, Award, Package, Truck, Clock, Star, Heart, Trophy, MapPin, Sparkles, BookOpen, Target } from 'lucide-react';
+import {
+  X,
+  Award,
+  Package,
+  Truck,
+  Clock,
+  Star,
+  Heart,
+  Trophy,
+  MapPin,
+  Sparkles,
+  BookOpen,
+  Target,
+  Zap,
+  Rocket,
+  Timer,
+} from 'lucide-react';
 
 interface LogbookModalProps { isOpen: boolean; onClose: () => void; selectedWorldIndex?: number; onSelectWorld?: (idx: number) => void; }
 
@@ -42,6 +70,7 @@ const rankColors: Record<string, string> = {
 
 export const LogbookModal: React.FC<LogbookModalProps> = ({ isOpen, onClose, selectedWorldIndex }) => {
   const [activeTab, setActiveTab] = useState<string>('all');
+  const [leaderboardMetric, setLeaderboardMetric] = useState<'time' | 'score'>('time');
   const allMedals = useMemo(() => getAllMedals(), []);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
@@ -142,7 +171,7 @@ export const LogbookModal: React.FC<LogbookModalProps> = ({ isOpen, onClose, sel
     const dx = touchEndX.current - touchStartX.current;
     const dy = touchEndY.current - touchStartY.current;
     // Horizontal swipe only (avoid clashing with vertical page scroll)
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 45) {
+    if (Math.abs(dx) > Math.abs(dy) * 1.6 && Math.abs(dx) > 60) {
       if (dx < 0) goToTab(1);   // swipe left -> next tab
       else goToTab(-1);         // swipe right -> previous tab
     }
@@ -182,7 +211,17 @@ export const LogbookModal: React.FC<LogbookModalProps> = ({ isOpen, onClose, sel
             <AllWorldsPanel summary={worldSummary} medals={allMedals} earnedMedalIds={earnedMedalIds} planetNameById={planetNameById} onMedalClick={(m) => setMedalPopup(m)} />
           ) : (() => {
             const w = worldEntries.find(r => r.planet.id === activeTab);
-            return w ? <PlanetPanel planet={w.planet} record={w.record} medals={allMedals} onRankClick={() => setShowRankPopup(true)} onMedalClick={(m) => setMedalPopup(m)} /> : null;
+            return w ? (
+              <PlanetPanel
+                planet={w.planet}
+                record={w.record}
+                medals={allMedals}
+                metric={leaderboardMetric}
+                onMetricChange={setLeaderboardMetric}
+                onRankClick={() => setShowRankPopup(true)}
+                onMedalClick={(m) => setMedalPopup(m)}
+              />
+            ) : null;
           })()}
         </div>
         <div className="p-3 border-t border-white/10 bg-slate-900/50 rounded-b-2xl">
@@ -250,6 +289,8 @@ function InfoPopup({ onClose, children }: { onClose: () => void; children: React
 }
 
 function AllWorldsPanel({ summary, medals, earnedMedalIds, planetNameById, onMedalClick }: { summary: WorldSummary; medals: Medal[]; earnedMedalIds: Set<string>; planetNameById: Map<string, string>; onMedalClick: (m: Medal) => void }) {
+  const shipById = useMemo(() => new Map<string, (typeof SHIPS)[0]>(SHIPS.map(s => [s.id, s])), []);
+
   return (
     <div className="space-y-6">
       {summary.totalLandings === 0 && (
@@ -257,18 +298,30 @@ function AllWorldsPanel({ summary, medals, earnedMedalIds, planetNameById, onMed
           No missions recorded yet — complete a soft landing on any world to log your stats, medals &amp; records here.
         </div>
       )}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard icon={Trophy} label="Total Landings" value={summary.totalLandings} color="amber" />
         <StatCard icon={Clock} label="Est. Flight Time" value={formatTime(summary.totalFlightTimeSec)} color="sky" />
+        <StatCard icon={Rocket} label="Crafts Raced" value={`${summary.totalCraftsFlown || 0}/${SHIPS.length}`} color="teal" />
+        <StatCard icon={Sparkles} label="Total Medals" value={summary.totalMedalsCount} color="rose" />
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <StatCard icon={Package} label="Cargo Collected" value={summary.totalCargoCollected} color="amber" />
         <StatCard icon={Truck} label="Rovers Collected" value={summary.totalRoversCollected} color="teal" />
         <StatCard icon={Star} label="Unique Medals" value={`${summary.uniqueMedalsCount}/${medals.length}`} color="purple" />
-        <StatCard icon={Sparkles} label="Total Medals" value={summary.totalMedalsCount} color="rose" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {summary.favoritePlanet && <HighlightCard icon={Heart} title="Favorite World" value={summary.favoritePlanet.name} subtitle={`${summary.favoritePlanet.landings} landings`} color="rose" />}
         {summary.firstLandingOverall && <HighlightCard icon={MapPin} title="First Touchdown" value={planetNameById.get(summary.firstLandingOverall.planetId) ?? summary.firstLandingOverall.planetId} subtitle={formatDate(summary.firstLandingOverall.date)} color="sky" />}
         {summary.bestOverallScore && <HighlightCard icon={Trophy} title="Best Score" value={summary.bestOverallScore.score.toLocaleString()} subtitle={`On ${planetNameById.get(summary.bestOverallScore.planetId) ?? summary.bestOverallScore.planetId}`} color="amber" />}
+        {summary.fastestCraftOverall && (
+          <HighlightCard
+            icon={Zap}
+            title="Fleet Speed Record"
+            value={`${summary.fastestCraftOverall.timeSec.toFixed(2)}s`}
+            subtitle={`${shipById.get(summary.fastestCraftOverall.craftId)?.name || summary.fastestCraftOverall.craftId} on ${planetNameById.get(summary.fastestCraftOverall.planetId) ?? summary.fastestCraftOverall.planetId}`}
+            color="emerald"
+          />
+        )}
       </div>
       <div>
         <h3 className="text-sm font-mono font-bold text-slate-300 mb-3 flex items-center gap-2"><Sparkles className="w-4 h-4 text-purple-400" /> MEDAL COLLECTION</h3>
@@ -280,9 +333,275 @@ function AllWorldsPanel({ summary, medals, earnedMedalIds, planetNameById, onMed
   );
 }
 
-function PlanetPanel({ planet, record, medals, onMedalClick, onRankClick }: { planet: PlanetConfig; record: ReturnType<typeof getPlanetRecord>; medals: Medal[]; onMedalClick: (m: Medal) => void; onRankClick: () => void }) {
+function PlanetScoreboardSection({
+  planet,
+  record,
+  metric,
+  onMetricChange,
+}: {
+  planet: PlanetConfig;
+  record: PlanetRecord;
+  metric: 'time' | 'score';
+  onMetricChange: (m: 'time' | 'score') => void;
+}) {
+  const timeRuns: PlanetScoreEntry[] = useMemo(() => {
+    if (record.topRuns && record.topRuns.length > 0) {
+      return record.topRuns.slice(0, 5);
+    }
+    return [];
+  }, [record]);
+
+  const scoreRuns: PlanetScoreEntry[] = useMemo(() => {
+    if (record.topScoreRuns && record.topScoreRuns.length > 0) {
+      return record.topScoreRuns.slice(0, 5);
+    }
+    // Fallback: derive by sorting topRuns by score descending
+    if (record.topRuns && record.topRuns.length > 0) {
+      return [...record.topRuns]
+        .sort((a, b) => {
+          if (b.score !== a.score) return b.score - a.score;
+          return a.timeSec - b.timeSec;
+        })
+        .slice(0, 5);
+    }
+    return [];
+  }, [record]);
+
+  const activeRuns = metric === 'time' ? timeRuns : scoreRuns;
+  const bestTime = timeRuns.length > 0 ? timeRuns[0].timeSec : (record.bestTime ?? null);
+  const bestScore = scoreRuns.length > 0 ? scoreRuns[0].score : (record.highScore ?? null);
+
+  return (
+    <div className="space-y-3">
+      {/* Section Header with Mode Switch */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2">
+          {metric === 'time' ? (
+            <Timer className="w-4 h-4 text-sky-400" />
+          ) : (
+            <Trophy className="w-4 h-4 text-amber-400" />
+          )}
+          <h3 className="text-sm font-mono font-bold text-slate-200 tracking-wide">
+            TOP 5 {metric === 'time' ? 'TIMES' : 'SCORES'}
+          </h3>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+            {activeRuns.length}/5 recorded
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between sm:justify-end gap-2.5">
+          {/* Best value pill */}
+          {metric === 'time' && bestTime !== null && (
+            <div className="text-xs font-mono text-sky-300 flex items-center gap-1.5 bg-sky-950/40 border border-sky-500/30 px-2.5 py-1 rounded-lg">
+              <Zap className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+              <span>
+                Best: <strong className="text-white font-extrabold">{bestTime.toFixed(2)}s</strong>
+              </span>
+            </div>
+          )}
+          {metric === 'score' && bestScore !== null && (
+            <div className="text-xs font-mono text-amber-300 flex items-center gap-1.5 bg-amber-950/40 border border-amber-500/30 px-2.5 py-1 rounded-lg">
+              <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>
+                Best: <strong className="text-white font-extrabold">{bestScore.toLocaleString()} pts</strong>
+              </span>
+            </div>
+          )}
+
+          {/* Switch: Time vs Score */}
+          <div className="inline-flex p-0.5 rounded-xl bg-slate-950 border border-white/10 shadow-inner">
+            <button
+              id="btn-scoreboard-metric-time"
+              type="button"
+              onClick={() => onMetricChange('time')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                metric === 'time'
+                  ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40 shadow-[0_0_10px_rgba(14,165,233,0.2)]'
+                  : 'text-slate-400 hover:text-slate-200 border border-transparent'
+              }`}
+              title="Show top 5 fastest flight times"
+            >
+              <Clock className="w-3.5 h-3.5" />
+              <span>Time</span>
+            </button>
+            <button
+              id="btn-scoreboard-metric-score"
+              type="button"
+              onClick={() => onMetricChange('score')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                metric === 'score'
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
+                  : 'text-slate-400 hover:text-slate-200 border border-transparent'
+              }`}
+              title="Show top 5 highest scores"
+            >
+              <Trophy className="w-3.5 h-3.5" />
+              <span>Score</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Unified Score Board List (Max 5 lines) */}
+      <div className="p-3 sm:p-4 bg-slate-900/50 border border-white/10 rounded-2xl space-y-2">
+        {activeRuns.length > 0 ? (
+          activeRuns.map((entry, idx) => {
+            const isFirst = idx === 0;
+            const ship = SHIPS.find(s => s.id === entry.craftId) || SHIPS[0];
+            const timeDelta = !isFirst && bestTime !== null ? entry.timeSec - bestTime : 0;
+            const scoreDelta = !isFirst && bestScore !== null ? bestScore - entry.score : 0;
+
+            return (
+              <div
+                key={`${metric}-${entry.craftId}-${entry.timeSec}-${entry.score}-${idx}`}
+                className={`flex items-center justify-between p-2.5 sm:p-3 rounded-xl border transition-all ${
+                  isFirst
+                    ? metric === 'time'
+                      ? 'bg-sky-950/30 border-sky-500/40 shadow-[0_0_15px_rgba(14,165,233,0.12)] text-sky-200'
+                      : 'bg-amber-950/30 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.12)] text-amber-200'
+                    : idx === 1
+                    ? 'bg-slate-900/80 border-slate-400/30 text-slate-200'
+                    : idx === 2
+                    ? 'bg-amber-950/15 border-amber-700/30 text-amber-100/90'
+                    : 'bg-slate-900/40 border-slate-800/80 text-slate-300'
+                }`}
+              >
+                {/* Left: Rank badge, Mini Ship graphic, Craft Name & Info */}
+                <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                  {/* Rank Badge */}
+                  <div
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs shrink-0 ${
+                      isFirst
+                        ? metric === 'time'
+                          ? 'bg-sky-400 text-slate-950 shadow-[0_0_8px_rgba(56,189,248,0.4)] font-black'
+                          : 'bg-amber-500 text-slate-950 shadow-[0_0_8px_rgba(245,158,11,0.4)] font-black'
+                        : idx === 1
+                        ? 'bg-slate-300 text-slate-950'
+                        : idx === 2
+                        ? 'bg-amber-700 text-white'
+                        : 'bg-slate-800 text-slate-400 border border-slate-700'
+                    }`}
+                  >
+                    #{idx + 1}
+                  </div>
+
+                  {/* Mini Ship Icon */}
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-center shrink-0 p-1">
+                    <ShipGraphic ship={ship} size={28} showGlow={isFirst} />
+                  </div>
+
+                  {/* Craft Name & Secondary Run Info */}
+                  <div className="min-w-0">
+                    <div className="font-mono font-bold text-xs sm:text-sm text-white truncate flex items-center gap-1.5">
+                      <span>{ship.name}</span>
+                      {isFirst && (
+                        <span
+                          className={`hidden xs:inline-block text-[9px] font-mono font-extrabold px-1.5 py-0.2 rounded border ${
+                            metric === 'time'
+                              ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+                              : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                          }`}
+                        >
+                          {metric === 'time' ? 'FASTEST' : 'RECORD'}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-400 truncate flex items-center gap-1.5">
+                      {metric === 'time' ? (
+                        <>
+                          <span className="text-slate-300 font-semibold">{entry.score.toLocaleString()} pts</span>
+                          <span className="text-slate-600">•</span>
+                          <span className="text-slate-500 text-[10px]">{formatDate(entry.date)}</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-sky-300 font-semibold">{entry.timeSec.toFixed(2)}s flight</span>
+                          <span className="text-slate-600">•</span>
+                          <span className="text-slate-500 text-[10px]">{formatDate(entry.date)}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Primary Metric & Delta */}
+                <div className="text-right font-mono shrink-0 pl-2 sm:pl-3">
+                  <div className="flex items-center justify-end gap-1.5">
+                    {metric === 'time' ? (
+                      <span
+                        className={`text-base sm:text-lg font-bold ${
+                          isFirst ? 'text-sky-300 font-extrabold' : 'text-white'
+                        }`}
+                      >
+                        {entry.timeSec.toFixed(2)}s
+                      </span>
+                    ) : (
+                      <span
+                        className={`text-base sm:text-lg font-bold ${
+                          isFirst ? 'text-amber-300 font-extrabold' : 'text-white'
+                        }`}
+                      >
+                        {entry.score.toLocaleString()}
+                        <span className="text-xs font-normal text-slate-400 ml-1">pts</span>
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[10px]">
+                    {isFirst ? (
+                      <span className="text-emerald-400 font-semibold">1st PLACE</span>
+                    ) : metric === 'time' ? (
+                      <span className="text-rose-300 font-medium">+{timeDelta.toFixed(2)}s</span>
+                    ) : (
+                      <span className="text-rose-300 font-medium">-{scoreDelta.toLocaleString()} pts</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="py-6 px-4 text-center rounded-xl border border-dashed border-white/10 bg-slate-950/40 font-mono">
+            <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-slate-900 border border-white/5 flex items-center justify-center text-slate-500">
+              {metric === 'time' ? (
+                <Timer className="w-5 h-5 text-slate-500" />
+              ) : (
+                <Trophy className="w-5 h-5 text-slate-500" />
+              )}
+            </div>
+            <div className="text-sm font-bold text-slate-300">
+              No Recorded {metric === 'time' ? 'Times' : 'Scores'} on {planet.name}
+            </div>
+            <div className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+              Touch down safely on {planet.name} to log your first flight on the {metric} scoreboard!
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function PlanetPanel({
+  planet,
+  record,
+  medals,
+  metric,
+  onMetricChange,
+  onMedalClick,
+  onRankClick,
+}: {
+  planet: PlanetConfig;
+  record: ReturnType<typeof getPlanetRecord>;
+  medals: Medal[];
+  metric: 'time' | 'score';
+  onMetricChange: (m: 'time' | 'score') => void;
+  onMedalClick: (m: Medal) => void;
+  onRankClick: () => void;
+}) {
   const rank = getRank(record.highScore, record.highScore);
   const earnedMedalIds = new Set(Object.keys(record.medalsEarned || {}));
+  const fastestCraft = useMemo(() => getPlanetFastestCraft(planet.id), [planet.id, record]);
+
   return (
     <div className="space-y-6">
       <div className="flex items-start gap-4 p-4 bg-slate-900/50 border border-white/5 rounded-xl">
@@ -307,8 +626,17 @@ function PlanetPanel({ planet, record, medals, onMedalClick, onRankClick }: { pl
         {record.firstLandingDate && <StatCard icon={MapPin} label="First Landing" value={formatDate(record.firstLandingDate)} color="sky" />}
         {record.lastPlayedDate && <StatCard icon={Clock} label="Last Played" value={formatDate(record.lastPlayedDate)} color="slate" />}
       </div>
+
+      {/* SINGLE SCOREBOARD (TOP 5 RUNS WITH SWITCH FOR TIME / SCORE & MINI SHIP) */}
+      <PlanetScoreboardSection
+        planet={planet}
+        record={record}
+        metric={metric}
+        onMetricChange={onMetricChange}
+      />
+
       <div><h3 className="text-sm font-mono font-bold text-slate-300 mb-3 flex items-center gap-2"><Award className="w-4 h-4 text-amber-400" /> MEDALS EARNED</h3><div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">{medals.map(m => <MedalBadge key={m.id} medal={m} earned={earnedMedalIds.has(m.id)} count={record.medalsEarned?.[m.id] || 0} onClick={() => onMedalClick(m)} />)}</div></div>
-      <div><h3 className="text-sm font-mono font-bold text-slate-300 mb-3 flex items-center gap-2"><Target className="w-4 h-4 text-sky-400" /> PERSONAL BESTS</h3><div className="grid grid-cols-2 sm:grid-cols-4 gap-3"><PersonalBestCard label="Min Fuel Used" value="—" /><PersonalBestCard label="Min Time" value={record.bestTime ? `${record.bestTime.toFixed(1)}s` : '—'} /><PersonalBestCard label="Max Cargo" value="—" /><PersonalBestCard label="Max Rovers" value="—" /></div></div>
+      <div><h3 className="text-sm font-mono font-bold text-slate-300 mb-3 flex items-center gap-2"><Target className="w-4 h-4 text-sky-400" /> PERSONAL BESTS</h3><div className="grid grid-cols-2 sm:grid-cols-4 gap-3"><PersonalBestCard label="Fastest Lander" value={fastestCraft ? `${SHIPS.find(s => s.id === fastestCraft.craftId)?.name || fastestCraft.craftId} (${fastestCraft.bestTime.toFixed(1)}s)` : '—'} /><PersonalBestCard label="Min Time" value={record.bestTime ? `${record.bestTime.toFixed(1)}s` : '—'} /><PersonalBestCard label="Max Cargo" value="—" /><PersonalBestCard label="Max Rovers" value="—" /></div></div>
     </div>
   );
 }
