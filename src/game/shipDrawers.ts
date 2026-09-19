@@ -6918,7 +6918,7 @@ export function drawBehemoth(
     ctx.shadowBlur = 0;
 
     // Angular interpolation: folds out from stowed angle to ground
-    const angleClosed = -Math.PI * 0.5; // folded up vertically against hull (-90° / 270°)
+    const angleClosed = 0; // folded horizontal along hull bottom edge
     const angleOpen = Math.atan2(footPadY - rampHingeY, -64 - rampHingeX); // touches ground at x=-64
     const currentRampAngle = angleClosed + (angleOpen - angleClosed) * rampProg;
 
