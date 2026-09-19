@@ -118,22 +118,23 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
 
     return (
       <div
-        className="fixed inset-0 z-[60] flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+        className="fixed inset-0 z-[60] overflow-y-auto overscroll-contain bg-black/85 backdrop-blur-md p-2 sm:p-4 flex flex-col justify-start sm:justify-center items-center"
+        style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
         onClick={(e) => {
           e.stopPropagation();
           setViewDetailShip(null);
         }}
       >
         <div
-          className="w-full max-w-3xl bg-slate-950/95 border border-white/10 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[94vh] sm:max-h-[90vh] backdrop-blur-2xl text-slate-100 relative my-auto animate-in fade-in zoom-in-95 duration-200"
+          className="w-full max-w-3xl bg-slate-950/95 border border-white/10 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92dvh] sm:max-h-[88vh] backdrop-blur-2xl text-slate-100 relative my-auto shrink-0 animate-in fade-in zoom-in-95 duration-200"
           onClick={(e) => e.stopPropagation()}
           id={`ship-detail-${s.id}`}
         >
           {/* Header (sticky pinned at top) */}
-          <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 border-b border-white/10 bg-slate-900/80 backdrop-blur-md shrink-0 sticky top-0 z-10">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 border-b border-white/10 bg-slate-900/90 backdrop-blur-md shrink-0 sticky top-0 z-10">
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-900/80 border border-white/10 flex items-center justify-center shrink-0">
-                <ShipGraphic ship={s} className="w-full h-full" showGlow={false} />
+                <ShipGraphic ship={s} className="w-full h-full pointer-events-none" showGlow={false} />
               </div>
               <div className="min-w-0 flex-1">
                 <h2 className="text-sm sm:text-lg font-mono font-black text-white tracking-wider truncate">
@@ -163,10 +164,13 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
           </div>
 
           {/* Scrollable Body Content */}
-          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y px-4 sm:px-6 py-3 sm:py-4 space-y-3.5">
+          <div
+            className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y px-4 sm:px-6 py-3 sm:py-4 space-y-3.5"
+            style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+          >
             {/* Big craft render */}
             <div
-              className="w-full h-44 xs:h-52 sm:h-64 md:h-72 lg:h-80 flex items-center justify-center relative rounded-xl sm:rounded-2xl bg-slate-950/40 border border-white/10 overflow-hidden shrink-0"
+              className="w-full h-36 xs:h-44 sm:h-60 md:h-72 lg:h-80 max-h-[35vh] flex items-center justify-center relative rounded-xl sm:rounded-2xl bg-slate-950/40 border border-white/10 overflow-hidden shrink-0 pointer-events-none select-none"
               style={{
                 background:
                   'radial-gradient(ellipse at center, rgba(30,41,59,0.65) 0%, rgba(2,6,23,0.4) 60%, rgba(2,6,23,0.9) 100%)',
@@ -177,7 +181,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                 className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
                 style={{ background: `linear-gradient(to bottom, transparent, ${s.accentColor}22)` }}
               />
-              <ShipGraphic ship={s} className="w-full h-full max-h-full" showGlow />
+              <ShipGraphic ship={s} className="w-full h-full max-h-full pointer-events-none" showGlow />
             </div>
 
             {/* Quick stats & performance ratings strip */}
@@ -967,21 +971,23 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
       <AnimatePresence>
         {showDescPopup && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto overscroll-contain"
+            style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
             onClick={() => setShowDescPopup(false)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-slate-950/95 border border-purple-400/40 rounded-3xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4 text-left max-h-[85vh] overflow-y-auto backdrop-blur-2xl"
+              className="bg-slate-950/95 border border-purple-400/40 rounded-3xl p-4 sm:p-6 max-w-md w-full shadow-2xl space-y-4 text-left max-h-[85dvh] sm:max-h-[85vh] overflow-y-auto overscroll-contain backdrop-blur-2xl my-auto"
+              style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-16 h-14 sm:w-20 sm:h-16 flex items-center justify-center relative shrink-0">
-                    <ShipGraphic ship={currentShip} className="w-full h-full max-h-16" showGlow={true} />
+                  <div className="w-16 h-14 sm:w-20 sm:h-16 flex items-center justify-center relative shrink-0 pointer-events-none">
+                    <ShipGraphic ship={currentShip} className="w-full h-full max-h-16 pointer-events-none" showGlow={true} />
                   </div>
                   <div>
                     <h3 className="font-mono text-base font-bold text-slate-100 flex items-center gap-2">

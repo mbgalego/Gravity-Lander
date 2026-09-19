@@ -24,6 +24,17 @@ export function transformPoint(pt: Vector2D, center: Vector2D, angle: number): V
   };
 }
 
+export function transformPointInverse(pt: Vector2D, center: Vector2D, angle: number): Vector2D {
+  const dx = pt.x - center.x;
+  const dy = pt.y - center.y;
+  const cos = Math.cos(-angle);
+  const sin = Math.sin(-angle);
+  return {
+    x: dx * cos - dy * sin,
+    y: dx * sin + dy * cos,
+  };
+}
+
 export function isPointInPolygon(pt: Vector2D, poly: Vector2D[]): boolean {
   let inside = false;
   for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
@@ -423,6 +434,8 @@ export function updatePhysics(
       hasWon: nextProgress >= 1.0,
       baseDistance: 0,
       approachBaseFactor: 1.0,
+      cargoBaseDistance: ship.cargoBaseDistance || 0,
+      cargoApproachFactor: ship.cargoApproachFactor || 0,
     };
 
     return nextShip;
@@ -590,6 +603,26 @@ export function updatePhysics(
   }
   const approachBaseFactor = Math.max(0, Math.min(1.0, (340 - minBaseDist) / 220));
 
+  // Proximity to ANY cargo platform or cargo container for automated crane deployment
+  let minCargoDist = 99999;
+  if (world.cargoPlatforms) {
+    for (const cp of world.cargoPlatforms) {
+      const cX = cp.center?.x ?? ((cp.x1 !== undefined && cp.x2 !== undefined) ? (cp.x1 + cp.x2) / 2 : (cp.pos?.x ?? 0));
+      const cY = cp.center?.y ?? (cp.y ?? cp.pos?.y ?? 0);
+      const d = Math.hypot(newPosX - cX, newPosY - cY);
+      if (d < minCargoDist) minCargoDist = d;
+    }
+  }
+  if (world.cargoItems) {
+    for (const item of world.cargoItems) {
+      if (!item.isDelivered && !item.isDetonated) {
+        const d = Math.hypot(newPosX - item.pos.x, newPosY - item.pos.y);
+        if (d < minCargoDist) minCargoDist = d;
+      }
+    }
+  }
+  const cargoApproachFactor = Math.max(0, Math.min(1.0, (280 - minCargoDist) / 160));
+
   let updatedShip: ShipState = {
     ...ship,
     pos: { x: newPosX, y: newPosY },
@@ -607,6 +640,8 @@ export function updatePhysics(
     isRepairing,
     baseDistance: minBaseDist,
     approachBaseFactor,
+    cargoBaseDistance: minCargoDist,
+    cargoApproachFactor,
   };
 
   // Perimeter Solid Cliff Wall Collisions
@@ -765,9 +800,33 @@ export function updatePhysics(
 
         // 1. Rock Collision with Craft
         const rockShipDist = Math.hypot(updatedShip.pos.x - rock.x, updatedShip.pos.y - rock.y) || 1;
-        const craftRadius = config.width * 0.42;
+        let isRockHit = false;
 
-        if (rockShipDist < rock.size + craftRadius && !updatedShip.isCrashed) {
+        if (config.collisionPolygon && config.collisionPolygon.length >= 3) {
+          const rockLocal = transformPointInverse(
+            { x: rock.x, y: rock.y },
+            updatedShip.pos,
+            updatedShip.angle
+          );
+          if (isPointInPolygon(rockLocal, config.collisionPolygon)) {
+            isRockHit = true;
+          } else {
+            for (let i = 0; i < config.collisionPolygon.length; i++) {
+              const p1 = config.collisionPolygon[i];
+              const p2 = config.collisionPolygon[(i + 1) % config.collisionPolygon.length];
+              const { dist } = distanceToSegment(rockLocal, p1, p2);
+              if (dist < rock.size + 1.5) {
+                isRockHit = true;
+                break;
+              }
+            }
+          }
+        } else {
+          const craftRadius = Math.min(config.width * 0.42, Math.max(config.width, config.height) * 0.42);
+          isRockHit = rockShipDist < rock.size + craftRadius;
+        }
+
+        if (isRockHit && !updatedShip.isCrashed) {
           rock.active = false;
           const rockDmg = (14 + rock.size * 2.2) * (1 - config.armor);
           const newHull = Math.max(0, updatedShip.hull - rockDmg);

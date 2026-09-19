@@ -344,6 +344,8 @@ export interface ShipState {
   altitude?: number;
   baseDistance?: number;
   approachBaseFactor?: number;
+  cargoBaseDistance?: number;
+  cargoApproachFactor?: number;
   isLanded?: boolean;
   isCrashed?: boolean;
   crashReason?: string;

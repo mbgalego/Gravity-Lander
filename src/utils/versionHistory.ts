@@ -12,15 +12,177 @@ export interface VersionRelease {
   }[];
 }
 
-export const CURRENT_GAME_VERSION = 'v1.7.0';
+export const CURRENT_GAME_VERSION = 'v1.9.5';
 
 export const GAME_VERSION_HISTORY: VersionRelease[] = [
+  {
+    version: 'v1.9.5',
+    releaseDate: 'September 19, 2026',
+    title: 'Behemoth-IX Ramp Logic: Flush Locked Hatch & Vehicle-Only Articulation',
+    tag: 'LATEST',
+    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    summary:
+      'Refined the Behemoth-IX vehicle ramp door system so the ramp stays cleanly sealed and locked shut during normal flight and landing, opening exclusively during active vehicle loading and unloading sequences at depot platforms.',
+    categories: [
+      {
+        name: 'Behemoth-IX Ramp System',
+        iconType: 'physics',
+        items: [
+          'Sealed Hatch in Flight: During standard flight, transit, and non-vehicle landing, the vehicle bay entrance is now sealed by a flush armored ramp hatch with rubber pressure gaskets, heavy hinge knuckles, hydraulic latch pins, and dual green status LEDs indicating "RAMP LOCKED".',
+          'Vehicle-Only Articulation: The ramp door now smoothly unlocks and unfolds downward to ground level solely when an active vehicle loading or unloading sequence is triggered (such as at a vehicle depot platform), with ground crew technicians descending upon touchdown.',
+          'Hangar Deck Sync: Updated the hangar / fleet catalogue SVG view in ShipGraphic to display the clean, flush locked hatch state.',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.9.4',
+    releaseDate: 'September 19, 2026',
+    title: 'Behemoth-IX Overhaul: Image Replica, Articulated Ramp, Cargo Crane & Calibrated Hitbox',
+    tag: 'MAJOR',
+    tagColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
+    summary:
+      'Completely redesigned the Behemoth-IX into an extra-detailed clone of the reference concept: a massive asymmetric industrial dreadnought hauler with an offset starboard command bridge tower, portside Warren-truss gantry, articulated vehicle loading ramp that descends with descending ground crew, proximity-activated sliding cargo bay door with telescoping asymmetric crane, pulsating fusion reactor louvers, twin aft rocket torch bells, and an exact 23-vertex watertight collision polygon calibrated for rock-solid clearance.',
+    categories: [
+      {
+        name: 'Behemoth-IX Design & Mechanics',
+        iconType: 'physics',
+        items: [
+          'High-Fidelity Clone: Meticulously replicated every detail from the reference blueprint: pale titanium composite hull plating, forward-raked cyan cockpit visor with mullions, offset starboard TYT control tower, rotating microwave radar dish, and aft rocket torch propulsion array.',
+          'Articulated Vehicle Ramp & Ground Crew: Hydraulic ramp unfolds to ground level when loading/unloading vehicles, featuring high-traction ribbed bed, side safety hazard chevrons, and 3 ground crew technicians in orange hazard suits with white helmets, reflective vests, and flashing marshaling wand descending the ramp.',
+          'Automated Side Cargo Crane: When approaching any cargo base or floating cargo, the armored side cargo door slides upward to reveal the illuminated interior hold; an asymmetric telescoping heavy vehicle crane traverses along the overhead ceiling track, tilting its box-girder boom and lowering a forged alloy hook with work spotlight.',
+          'Watertight Hitbox & Rock Penetration Fix: Replaced oversized collision boundaries with a precise 23-vertex watertight polygon enclosing only solid craft structures; upgraded physics engine with polygon-accurate volcanic rock collision to prevent premature mid-air explosions.',
+          'Visual Polish: Shifted fuselage stencil BEHEMOTH-IX to the right (x = 9.5) clear of thruster bells, added high-visibility flashing LED strobe to the top antenna mast, and ensured zero unwanted ground shadow artifacts.',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.9.3',
+    releaseDate: 'September 19, 2026',
+    title: 'Goliath Carrier Polish: Hitbox Calibration, Shadow Removal & Fuselage Visibility',
+    tag: 'MAJOR',
+    tagColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
+    summary:
+      'Addressed flight dynamics and visual presentation for the Goliath Carrier (CT-950 Colossus Hauler): recalibrated the watertight 15-vertex collision polygon to eliminate premature rock impacts, removed the artificial ground shadow, removed the ramp vehicle while retaining the descending ground crew, added high-visibility flashing beacons to the dorsal communications mast, and shifted the fuselage nameplate to the right so it remains completely visible clear of the aft thruster pod.',
+    categories: [
+      {
+        name: 'Goliath Carrier: Collision & Visual Refinements',
+        iconType: 'physics',
+        items: [
+          'Precision Hitbox Recalibration: Replaced the oversized bounding polygon with an exact 15-vertex watertight contour strictly bounded to the craft silhouette (x: -116.1 to 122.55, y: -35.48 to 43.0), eliminating premature terrain and rock obstacle explosions.',
+          'Ground Shadow Removal: Removed the artificial ground shadow ellipse and ramp toe shadow to ensure clean planetary surface clearance and realistic lighting.',
+          'Ramp Detail & Ground Crew: Removed the orange transport vehicle from the ramp while retaining and enhancing the ground crew technicians in orange hazard suits descending the ramp.',
+          'Dorsal Antenna Blinking Beacons: Added rhythmic, high-intensity red and cyan flashing beacon strobes with glowing halos to the dorsal communications mast tips.',
+          'Shifted Fuselage Nameplate: Repositioned the GOLIATH CARRIER red-bordered placard to the right (centered at x = 15) so the title is completely uncovered and legible against the aft thruster cowl.',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.9.2',
+    releaseDate: 'September 19, 2026',
+    title: 'Goliath Carrier Refinement: Diagonal Descending Ramp, Belly-Flush Thrusters & Multi-Tone Livery',
+    tag: 'MAJOR',
+    tagColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
+    summary:
+      'Fine-tuned the Goliath Carrier (CT-950 Colossus Hauler) to accurately reflect every structural detail from the reference concept: repositioned the rear vehicle loading door to sit diagonally along the aft hull so it lowers seamlessly as a descending ramp, shortened the side-mounted thruster pods so their exhaust bell lips match the craft belly line, shifted the rear thruster further aft, and enriched the fuselage with multiple tones of grey plating, bold diagonal red armor stripes, and updated collision polygons.',
+    categories: [
+      {
+        name: 'Goliath Carrier: Geometric & Visual Refinements',
+        iconType: 'physics',
+        items: [
+          'Diagonal Rear Loading Door & Ramp: The aft cargo door is positioned diagonally along the aft hull silhouette and descends smoothly around its cargo floor hinge to the terrain surface when loading vehicles or landed, with folding toe section, hazard chevrons, and telescoping dual hydraulic rams.',
+          'Belly-Flush Thruster Pods: Shortened the side-mounted VTOL thruster pods so their flared copper exhaust nozzle bells terminate at y = 11.0, aligning directly with the craft belly line and creating realistic lift thrust dynamics.',
+          'Rear Thruster Aft Relocation: Moved the rear thruster pod further aft (centered at x = -24) to balance the craft silhouette and provide wide, stable landing pad separation (footpadSpan 137.6).',
+          'Rich Multi-Tone Fuselage Plating: Enriched the hull with multiple tones of grey ceramic panels, structural frame dividers, three diagonal red armor bands, crew quarters observation slit, and red-bordered GOLIATH CARRIER nameplate.',
+          'Watertight Collision Polygon & Physics Anchors: Updated the rigid-body collision polygon and localPoints in ships.ts to trace the new aft diagonal door, belly-flush nozzle lips, and aft thruster position.',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.9.1',
+    releaseDate: 'September 19, 2026',
+    title: 'Goliath Carrier Diagram Clone: Descending Vehicle Ramp & Port VTOL Thruster Pods',
+    tag: 'MAJOR',
+    tagColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
+    summary:
+      'Re-engineered the Goliath Carrier (CT-950 Colossus Hauler) as an authentic clone of the technical side-profile diagram. Features a dynamic rear-descending vehicle ramp on the left that lowers smoothly to the terrain when loading vehicles, dual port-side VTOL thruster pods with copper cowls, illuminated vehicle hold with a parked tracked combat rover, an orange 6-wheeled vehicle rolling down the ramp, ground crew technicians, stenciled GOLIATH CARRIER banner, and heavy articulated ski landing gear.',
+    categories: [
+      {
+        name: 'Goliath Carrier: Technical Diagram Clone',
+        iconType: 'physics',
+        items: [
+          'Authentic Side-Profile Livery: Battleship slate gunmetal hull with crimson-red armor accent bands, yellow/black hazard chevrons, crew quarters with observation slit, and twin copper comms masts with blinking red strobe.',
+          'Descending Left Ramp: When landed or loading vehicles, the rear vehicle ramp smoothly descends from the cargo floor sill down to the surface, accompanied by extending dual hydraulic pistons with shiny chrome rods and a folding toe section flat on the ground.',
+          'Illuminated Vehicle Hold & Cargo: The cavernous interior features structural bulkhead ribs, warm halogen work lights, an active telemetry control console, a parked green combat rover, and an orange 6-wheeled transport rolling down the ramp.',
+          'Port-Side VTOL Pods & Heavy Ski Gear: Dual light silver thruster pods with copper intake lips, flared exhaust nozzle bells with radiant cyan throat glow, aerodynamic winglets, and articulated hydraulic landing struts with curved ski footpads.',
+          'Cockpit & Bridge: Forward-raked bridge deck with polarized cyan visor, pilot silhouettes, roof swivel sensor turret, under-nose sensor cannon, and ventral stabilizing fins.',
+          'Watertight 17-Vertex Collision Hull: Derived directly from the exact diagram silhouette and raw coordinates multiplied by renderScale (2.15) for rock-solid ground contact and terrain collision.',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.9.0',
+    releaseDate: 'September 19, 2026',
+    title: 'Goliath Carrier Blueprint Redesign, Dual Deployable Ramps & +40% Vehicle Scaling',
+    tag: 'MAJOR',
+    tagColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
+    summary:
+      'Re-engineered the CT-950 Goliath Carrier from the ground up based on the multi-view technical blueprint. Features an authentic white ceramic armor livery, dual deployable vehicle ramps (Bay A & Bay B) with telescopic hydraulic actuators that lower to the surface for vehicle embarkation, +40% super-heavy scaling (renderScale 2.35) matching planetary rover proportions, heavy crawler track landing gear, and a 28-vertex watertight collision hull.',
+    categories: [
+      {
+        name: 'Craft Overhaul: Goliath Carrier',
+        iconType: 'physics',
+        items: [
+          'Blueprint Architecture: redesigned the CT-950 Colossus Hauler to match the multi-view technical diagram with elevated flight control bridge, panoramic cyan visor, comms lattice mast, dual radar dishes, and rear tri-stacked rocket array.',
+          'Interactive Dual Loading Ramps: Bay A and Bay B feature downward-opening hydraulic ramps with telescopic actuator arms, ribbed traction beds, and side hazard chevrons that lower when loading vehicles or landed.',
+          'Interior Vehicle Holds: Bay A houses a heavy mining dump truck [CT-MT1] and Bay B houses an exploration half-track rover, with ceiling halogen floodlights and runway guide strips.',
+          'Livery Synchronization: unified the crisp white ceramic armor finish across in-game physics flight and hangar deck catalogue SVG preview.',
+          'Scale & Ground Stability: enlarged craft by 40% (renderScale 2.35, width 178, height 182, footpadSpan 162.15) so planetary rovers and trucks fit proportionally.',
+          'Watertight Collision Polygon: derived 28-vertex precision hull covering crawler tracks, engine array, and tower sensors to prevent terrain clipping.',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.8.0',
+    releaseDate: 'September 18, 2026',
+    title: 'Titan Behemoth Super-Heavy Transport, Scaled Vehicle Bay & White Livery',
+    tag: 'MAJOR',
+    tagColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
+    summary:
+      'Introduced the monumental Titan Behemoth (TB-01 HATV) super-heavy atmospheric transport with an articulated downward-opening deployment bay ramp, rotating landing hazard beacons, +40% expanded hull scaling for heavy planetary rovers, and unified white ceramic armor livery.',
+    categories: [
+      {
+        name: 'New Craft: Titan Behemoth',
+        iconType: 'physics',
+        items: [
+          'Added the TB-01 Titan Behemoth, an ultra-heavy atmospheric transport vehicle with quad VTOL lift engines and massive cargo payload capacity.',
+          'Interactive Deployable Ramp: when landed, the central vehicle bay door unfolds downward facing the player, revealing an armored APC, tracked tank, and cargo hoist.',
+          'Rotating Internal Bay Beacons: amber emergency beacons sweep light across the vehicle deck upon touchdown.',
+          'Livery Synchronization: unified the pristine white titanium-aluminum composite armor across both in-game flight and hangar menu inspection.',
+          'Super-Heavy Vehicle Scaling: increased craft scale by 40% (renderScale 2.17) to dwarf planetary trucks and rovers.',
+          'Watertight 22-vertex collision hull matching the expanded dimensions and heavy landing skids.',
+        ],
+      },
+      {
+        name: 'User Experience & Mobile',
+        iconType: 'system',
+        items: [
+          'Scrollable Craft Inspection Modal: made the craft detail popup vertically scrollable on smaller screens and mobile devices so all specs and lore remain visible.',
+        ],
+      },
+    ],
+  },
   {
     version: 'v1.7.0',
     releaseDate: 'September 5, 2026',
     title: 'Medal & Rank Info Popups, Promethean Core World & New Hazard Medals',
-    tag: 'LATEST',
-    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    tag: 'MAJOR',
+    tagColor: 'bg-blue-500/20 text-blue-300 border-blue-400/40',
     summary:
       'Click any medal to read its full description and click a rank badge to see what each rank means, in the Mission Logbook. Added the colossal Promethean Core world, four new hazard medals, and polished the Logbook quick-stats bar and All Worlds overview.',
     categories: [
