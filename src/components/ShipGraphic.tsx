@@ -4977,14 +4977,8 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         {/* ========================================================= */}
         {modelId === 'juggernaut' && (
           <g>
-            {/* Front ramp, shown partially deployed (mid-animation) */}
-            <polygon points="-58,12 -73,11 -72,17 -56,17" fill="#40423E" stroke="#20251F" strokeWidth="1.3" />
-            <line x1="-58" y1="12" x2="-73" y2="11" stroke="#F0D256" strokeWidth="1" />
-            <line x1="-56" y1="17" x2="-72" y2="17" stroke="#F0D256" strokeWidth="1" />
-            <line x1="-68" y1="15" x2="-64" y2="13" stroke="#20251F" strokeWidth="0.8" />
-            <line x1="-63" y1="13" x2="-59" y2="15" stroke="#20251F" strokeWidth="0.8" />
-            <line x1="-58" y1="11" x2="-60" y2="16" stroke="#A09D8F" strokeWidth="1.2" />
-            <line x1="-57" y1="11" x2="-59" y2="16" stroke="#80691F" strokeWidth="2.2" />
+            {/* Front ramp - NOT VISIBLE in flight mode (stowed inside hull) */}
+            {/* Ramp only appears when deployed at base: slides left then rotates down */}
 
             {/* Bow thrusters (outer port/inner port at y=28) - animated pulse */}
             <ellipse cx="-62" cy="28" rx="4.5" ry="4" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
@@ -5005,10 +4999,6 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <rect x="54" y="12" width="4" height="3" fill="#D5B43D" />
 
             {/* Stern thrusters at bottom of main engine (y≈16) - animated pulse sync with engine */}
-            <ellipse cx="67" cy="16" rx="3.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
-            <ellipse cx="67" cy="15.5" rx="2.5" ry="1.2" fill="#D5B43D" opacity="0.8">
-              <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
-            </ellipse>
             <ellipse cx="79" cy="16" rx="3.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
             <ellipse cx="79" cy="15.5" rx="2.5" ry="1.2" fill="#D5B43D" opacity="0.8">
               <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />

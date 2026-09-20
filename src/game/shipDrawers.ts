@@ -12560,13 +12560,12 @@ export function drawJuggernaut(
     ctx.globalAlpha = 1.0;
   };
 
-  // Thruster positions: 5 total — 2 outer at bow, center main, 2 outer at stern.
+  // Thruster positions: 4 total — 2 at bow, 2 at stern (outer edges only).
   // They all pulse with exhaustPulse.
   // Bow thrusters at lower hull (y≈28), stern thrusters at bottom of main engine (y≈16)
   drawThruster(-62, 28, true, exhaustPulse);  // Outer port (bow side)
-  drawThruster(-48, 28, false, exhaustPulse); // Inner port (bow side)
-  drawThruster(67, 16, false, exhaustPulse);  // Center main (bottom of main engine)
-  drawThruster(79, 16, false, exhaustPulse);  // Inner starboard (right edge of main engine)
+  drawThruster(-48, 28, true, exhaustPulse);  // Inner port (bow side) - both are outer type
+  drawThruster(79, 16, true, exhaustPulse);   // Inner starboard (right edge of main engine) - outer type
   drawThruster(85, 16, true, exhaustPulse);   // Outer starboard (just outside engine housing)
 
   // Now draw the main circular engine housing OVER the center thruster.
@@ -13075,42 +13074,14 @@ export function drawJuggernaut(
   ctx.restore();
 
   // 14. Front ramp door — 2-phase slide-out-then-descend animation
-  // Phase 1 (rampProg 0-0.5): door slides horizontally out of the hull
-  // Phase 2 (rampProg 0.5-1.0): door rotates down to ground
+  // Flight mode (rampProg < 0.01): ramp is NOT VISIBLE (fully stowed inside hull)
+  // Phase 1 (rampProg 0.01-0.5): ramp slides horizontally LEFT out of the hull
+  // Phase 2 (rampProg 0.5-1.0): ramp rotates DOWN to ground
   ctx.save();
 
-  // Draw the stowed ramp door flush in the hull when closed (rampProg < 0.01)
-  // or show it sliding out during phase 1
   if (rampProg < 0.01) {
-    // Fully stowed - draw as flush panel in the hull front
-    ctx.fillStyle = '#40423E';
-    ctx.strokeStyle = line;
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(-58, 8);
-    ctx.lineTo(-38, 8);
-    ctx.lineTo(-38, 14);
-    ctx.lineTo(-58, 14);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    // Gold trim on edges
-    ctx.strokeStyle = gold;
-    ctx.lineWidth = 1.0;
-    ctx.beginPath();
-    ctx.moveTo(-58, 8); ctx.lineTo(-38, 8);
-    ctx.moveTo(-58, 14); ctx.lineTo(-38, 14);
-    ctx.stroke();
-    // Seam lines
-    ctx.strokeStyle = '#252B24';
-    ctx.lineWidth = 0.6;
-    for (let i = 0.2; i < 1.0; i += 0.25) {
-      const cx = -58 + 20 * i;
-      ctx.beginPath();
-      ctx.moveTo(cx, 8);
-      ctx.lineTo(cx, 14);
-      ctx.stroke();
-    }
+    // Flight mode - ramp is completely invisible (stowed inside hull)
+    // Nothing to draw
   } else {
     // Ramp is deployed - draw the sliding/rotating plate
     ctx.fillStyle = '#40423E';
@@ -13148,48 +13119,7 @@ export function drawJuggernaut(
       ctx.lineTo(cx + sx, cy + sy);
       ctx.stroke();
     }
-
-    // Hydraulic actuator arms - extend with slide phase, then follow rotation
-    ctx.strokeStyle = metalHi;
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    // Upper arm attaches to hull at ~(-54, 13)
-    const arm1BaseX = -54;
-    const arm1BaseY = 13;
-    // Lower arm attaches to hull at ~(-48, 14)
-    const arm2BaseX = -48;
-    const arm2BaseY = 14;
-
-    // Arm endpoints follow the ramp hinge during slide, then ramp middle during rotate
-    let arm1EndX, arm1EndY, arm2EndX, arm2EndY;
-    if (rampRotatePhase === 0) {
-      // Pure slide phase - arms extend with the hinge
-      arm1EndX = hingeX - 8;
-      arm1EndY = hingeY + 4;
-      arm2EndX = hingeX - 5;
-      arm2EndY = hingeY + 5;
-    } else {
-      // Rotate phase - arms pivot to follow ramp
-      const midRampX = hingeX + Math.cos(rampAngle) * (rampLength * 0.4);
-      const midRampY = hingeY + Math.sin(rampAngle) * (rampLength * 0.4);
-      arm1EndX = midRampX - 8;
-      arm1EndY = midRampY + 2;
-      arm2EndX = midRampX - 5;
-      arm2EndY = midRampY + 4;
-    }
-    ctx.moveTo(arm1BaseX, arm1BaseY); ctx.lineTo(arm1EndX, arm1EndY);
-    ctx.moveTo(arm2BaseX, arm2BaseY); ctx.lineTo(arm2EndX, arm2EndY);
-    ctx.stroke();
-
-    // Gold piston rods inside hydraulic arms
-    ctx.strokeStyle = goldDark;
-    ctx.lineWidth = 2.0;
-    ctx.beginPath();
-    ctx.moveTo(arm1BaseX, arm1BaseY); ctx.lineTo(arm1EndX, arm1EndY);
-    ctx.moveTo(arm2BaseX, arm2BaseY); ctx.lineTo(arm2EndX, arm2EndY);
-    ctx.stroke();
   }
-
 
   ctx.restore();
   ctx.restore();
