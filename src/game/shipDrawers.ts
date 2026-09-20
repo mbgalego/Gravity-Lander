@@ -6918,8 +6918,10 @@ export function drawBehemoth(
     ctx.shadowBlur = 0;
 
     // Angular interpolation: folds out from stowed angle to ground
-    const angleClosed = Math.PI * 0.58; // folded up inside threshold
-    const angleOpen = Math.atan2(footPadY - rampHingeY, -64 - rampHingeX); // touches ground at x=-64
+    // Closed: ramp door sealed against left gantry structure at x=-38, y≈7.6
+    // Open: ramp touches ground at x=-64
+    const angleClosed = Math.atan2(7.6 - rampHingeY, -38 - rampHingeX) + 2 * Math.PI; // ~185° (up-left, meeting gantry)
+    const angleOpen = Math.atan2(footPadY - rampHingeY, -64 - rampHingeX); // ~163° (down-left, ground contact)
     const currentRampAngle = angleClosed + (angleOpen - angleClosed) * rampProg;
 
     const rampTipX = rampHingeX + Math.cos(currentRampAngle) * rampLen;
