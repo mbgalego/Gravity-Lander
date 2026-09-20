@@ -941,47 +941,66 @@ export const SHIPS: ShipModelConfig[] = [
   {
     id: 'mammoth',
     name: 'Mammoth Rig',
-    codename: 'MR-700 Excavator Carrier',
-    tagline: 'Heavy Logistics Mobile Base Carrier',
-    classType: 'Rover Transporter',
-    description: 'A formidable deep-mining transport equipped with a portside hydraulic crane boom, offset starboard fuel refinery columns, and an ultra-wide planetary crawler ramp bay.',
-    width: 127,
-    height: 119,
-    renderScale: 1.68,
-    maxFuel: 360,
-    thrustMultiplier: 1.48,
-    torqueMultiplier: 0.74,
-    mass: 1.80,
-    armor: 0.68,
-    emptyMassTons: 26.8,
-    maxThrustKn: 390,
-    twr: 1.46,
-    rcsResponseMs: 56,
-    armorRatingMm: 180,
-    cargoHookCapacityKg: 2800,
-    roverBayCapacity: 'Heavy Mobile Base Ramp & Crane Bay',
-    propulsionType: 'Refinery Fed Thermal Rocket Array',
-    operationalCeiling: 'Deep Volcanic & Mining Rifts',
-    manufactureOrigin: 'Mammoth Core Engineering (Tartarus)',
-    primaryColor: '#334155',
-    accentColor: '#eab308',
-    visorColor: '#e11d48',
-    footpadSpan: 127.68,
+    codename: 'C-95 Mammoth Rig',
+    tagline: 'Heavy Lift Cargo Transport',
+    classType: 'Heavy Cargo Hauler',
+    description: 'The C-95 Mammoth Rig heavy-lift cargo spacecraft. Features a blunt armored bow with dual HID searchlight banks, elevated command bridge with cyan RF/IR sensor suite and panoramic trapezoidal viewport, upper deck personnel quarters, central systems conduit hub, modular cargo holds (Main Cargo Hold A: 3000-ton capacity + Lower Deck Cargo Hold B), four heavy-duty articulated landing gear with hydraulic cylinders and hazard-striped footpads, twin primary vectored thruster pods with yellow-gold collars, main propulsion nozzle assembly, red rotating beacon on bridge mast, and duranium alloy hull plating with yellow hazard striping and MAMMOTH RIG identification stencils.',
+    width: 140,
+    height: 130,
+    renderScale: 1.6,
+    maxFuel: 400,
+    thrustMultiplier: 1.55,
+    torqueMultiplier: 0.70,
+    mass: 1.95,
+    armor: 0.72,
+    emptyMassTons: 30.0,
+    maxThrustKn: 440,
+    twr: 1.50,
+    rcsResponseMs: 60,
+    armorRatingMm: 200,
+    cargoHookCapacityKg: 3000,
+    roverBayCapacity: 'Dual Cargo Holds (Main 3000t + Lower Deck) + Side Loading Ramps',
+    propulsionType: 'Twin Primary Vectored Thruster Pods + Main Propulsion Nozzle',
+    operationalCeiling: 'Heavy Gravity Industrial & Mining Worlds',
+    manufactureOrigin: 'C-95 Fleet Yards (Industrial Sector)',
+    primaryColor: '#59686A',
+    accentColor: '#D4A62B',
+    visorColor: '#39CBD0',
+    footpadSpan: 140.0,
     canCarryVehicles: true,
     isHeavyVehicleCarrier: true,
     localPoints: {
-      nose: { x: 57.12, y: -57.12 },
-      leftShoulder: { x: -63.84, y: -47.04 },
-      rightShoulder: { x: 63.84, y: -57.12 },
-      leftHip: { x: -63.84, y: 26.88 },
-      rightHip: { x: 63.84, y: 26.88 },
-      leftFoot: { x: -63.84, y: 57.12 },
-      rightFoot: { x: 63.84, y: 57.12 },
-      extraLeftFoot: { x: -25.2, y: 57.12 },
-      extraRightFoot: { x: 25.2, y: 57.12 },
-      leftThrusterPos: { x: -40.32, y: 32.76 },
-      rightThrusterPos: { x: 45.36, y: 32.76 },
+      nose: { x: 63, y: -52 },
+      leftShoulder: { x: -70, y: -45 },
+      rightShoulder: { x: 70, y: -45 },
+      leftHip: { x: -70, y: 30 },
+      rightHip: { x: 70, y: 30 },
+      leftFoot: { x: -70, y: 62 },
+      rightFoot: { x: 70, y: 62 },
+      extraLeftFoot: { x: -35, y: 62 },
+      extraRightFoot: { x: 35, y: 62 },
+      leftThrusterPos: { x: -55, y: 28 },
+      rightThrusterPos: { x: 55, y: 28 },
     },
+    collisionPolygon: [
+      { x: 63, y: -52 },       // Bow tip
+      { x: 55, y: -55 },       // Bow upper chamfer
+      { x: 45, y: -58 },       // Bow upper deck edge
+      { x: -65, y: -58 },      // Bridge rear top
+      { x: -70, y: -45 },      // Left shoulder
+      { x: -70, y: 30 },       // Left hip
+      { x: -65, y: 40 },       // Lower hull rear
+      { x: -55, y: 45 },       // Engine pod top
+      { x: -55, y: 62 },       // Left foot
+      { x: -35, y: 62 },       // Extra left foot
+      { x: 0, y: 58 },         // Center keel
+      { x: 35, y: 62 },        // Extra right foot
+      { x: 55, y: 62 },        // Right foot
+      { x: 55, y: 45 },        // Engine pod top
+      { x: 65, y: 40 },        // Lower hull rear
+      { x: 70, y: 30 },        // Right hip
+      { x: 70, y: -45 },       // Right shoulder
+    ],
     stats: {
       agility: 2,
       fuelTank: 5,
@@ -994,46 +1013,62 @@ export const SHIPS: ShipModelConfig[] = [
     id: 'juggernaut',
     name: 'Juggernaut Lifter',
     codename: 'JG-1200 Planetary Heavy Lifter',
-    tagline: 'Quad-Engine Super-Heavy Rover Carrier',
-    classType: 'Rover Transporter',
-    description: 'The pinnacle of heavy surface logistics: equipped with quad gimballed rocket thrusters, reinforced tungsten landing outriggers, and dual drive-through hydraulic vehicle ramps.',
-    width: 144,
-    height: 140,
-    renderScale: 1.76,
-    maxFuel: 420,
-    thrustMultiplier: 1.62,
-    torqueMultiplier: 0.68,
-    mass: 2.05,
-    armor: 0.75,
-    emptyMassTons: 32.0,
-    maxThrustKn: 480,
-    twr: 1.52,
-    rcsResponseMs: 62,
-    armorRatingMm: 220,
-    cargoHookCapacityKg: 3500,
-    roverBayCapacity: 'Dual Drive-Through Heavy Rover Ramp Hold',
-    propulsionType: 'Quad Heavy Fusion Torch Combustion Array',
-    operationalCeiling: 'Supermassive Gravity Worlds & Citadels',
+    tagline: 'Quad-Engine Super-Heavy Cargo Transport',
+    classType: 'Heavy Cargo Hauler',
+    description: 'The JG-1200 Juggernaut Lifter heavy-lift cargo spacecraft. Features a sharply angled wedge-shaped bow with forward sensor arrays, elevated command bridge with dark horizontal window bands and panoramic lower observation deck, central multi-deck cargo hold (exposed interior with tracked vehicle capacity), three massive vertical lift-engine bells with white exhaust bloom, single massive circular main propulsion assembly at stern, quad tracked landing bogies with articulated suspension, broad front loading ramp with hinge at lower front aperture, dorsal antenna mast with blinking telemetry beacon, olive-green duranium hull with yellow-gold reinforcement bands and JUGGERNAUT LIFTER side markings.',
+    width: 160,
+    height: 150,
+    renderScale: 1.8,
+    maxFuel: 450,
+    thrustMultiplier: 1.7,
+    torqueMultiplier: 0.65,
+    mass: 2.2,
+    armor: 0.78,
+    emptyMassTons: 35.0,
+    maxThrustKn: 520,
+    twr: 1.55,
+    rcsResponseMs: 65,
+    armorRatingMm: 240,
+    cargoHookCapacityKg: 3800,
+    roverBayCapacity: 'Multi-Deck Open Cargo Hold + Front Loading Ramp',
+    propulsionType: 'Triple Vertical Lift Engines + Single Main Propulsion + Auxiliary Lift Array',
+    operationalCeiling: 'Supermassive Gravity Industrial Worlds',
     manufactureOrigin: 'Juggernaut Fleet Yards (Omega Prime)',
-    primaryColor: '#0f172a',
-    accentColor: '#10b981',
-    visorColor: '#059669',
-    footpadSpan: 142.0,
+    primaryColor: '#6D8558',
+    accentColor: '#D5B43D',
+    visorColor: '#303A39',
+    footpadSpan: 160.0,
     canCarryVehicles: true,
     isHeavyVehicleCarrier: true,
     localPoints: {
-      nose: { x: 0, y: -74.0 },
-      leftShoulder: { x: -68.0, y: -45.0 },
-      rightShoulder: { x: 68.0, y: -45.0 },
-      leftHip: { x: -68.0, y: 28.0 },
-      rightHip: { x: 68.0, y: 28.0 },
-      leftFoot: { x: -79.2, y: 66.88 },
-      rightFoot: { x: 79.2, y: 66.88 },
-      extraLeftFoot: { x: -31.68, y: 66.88 },
-      extraRightFoot: { x: 31.68, y: 66.88 },
-      leftThrusterPos: { x: -46.0, y: 35.0 },
-      rightThrusterPos: { x: 46.0, y: 35.0 },
+      nose: { x: 60, y: -50 },
+      leftShoulder: { x: -80, y: -40 },
+      rightShoulder: { x: 80, y: -40 },
+      leftHip: { x: -80, y: 35 },
+      rightHip: { x: 80, y: 35 },
+      leftFoot: { x: -85, y: 72 },
+      rightFoot: { x: 85, y: 72 },
+      extraLeftFoot: { x: -45, y: 72 },
+      extraRightFoot: { x: 45, y: 72 },
+      leftThrusterPos: { x: -50, y: 30 },
+      rightThrusterPos: { x: 50, y: 30 },
     },
+    collisionPolygon: [
+      { x: 60, y: -50 },       // Bow tip (wedge nose)
+      { x: 45, y: -58 },       // Bow upper slope
+      { x: 30, y: -62 },       // Bridge forward top
+      { x: -5, y: -62 },       // Bridge rear top
+      { x: -50, y: -55 },      // Crew section rear
+      { x: -80, y: -40 },      // Left shoulder
+      { x: -80, y: 35 },       // Left hip
+      { x: -85, y: 72 },       // Left foot
+      { x: -45, y: 72 },       // Extra left foot
+      { x: 0, y: 68 },         // Center keel
+      { x: 45, y: 72 },        // Extra right foot
+      { x: 85, y: 72 },        // Right foot
+      { x: 80, y: 35 },        // Right hip
+      { x: 80, y: -40 },       // Right shoulder
+    ],
     stats: {
       agility: 1,
       fuelTank: 5,

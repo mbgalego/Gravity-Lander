@@ -17,20 +17,24 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
   showGlow = true,
 }) => {
   const modelId = ship.id;
-  const isLongCraft = modelId === 'eagle' || modelId === 'vulcan' || modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath' || modelId === 'behemoth';
+  const isLongCraft = modelId === 'eagle' || modelId === 'vulcan' || modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath' || modelId === 'behemoth' || modelId === 'mammoth' || modelId === 'juggernaut';
   const isEagle = modelId === 'eagle';
   const viewBox = (modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath')
     ? '-72 -26 144 54'
     : (modelId === 'behemoth'
       ? '-75 -42 150 68'
-      : (isLongCraft ? '-72 -24 144 52' : '-40 -40 80 80'));
+      : (modelId === 'mammoth'
+        ? '-68 -56 140 98'
+        : (modelId === 'juggernaut'
+          ? '-96 -78 174 122'
+          : (isLongCraft ? '-72 -24 144 52' : '-40 -40 80 80'))));
 
   const effectiveSize = size === undefined && !className ? 56 : size;
   const sizeStyle = effectiveSize
     ? {
         width: effectiveSize,
         height: isLongCraft
-          ? Math.round(effectiveSize * (modelId === 'behemoth' ? 68 / 150 : ((modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath') ? 54 / 144 : 52 / 144)))
+          ? Math.round(effectiveSize * (modelId === 'behemoth' ? 68 / 150 : (modelId === 'mammoth' ? 98 / 140 : (modelId === 'juggernaut' ? 122 / 174 : ((modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath') ? 54 / 144 : 52 / 144)))))
           : effectiveSize,
       }
     : undefined;
@@ -775,10 +779,10 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
           </pattern>
 
           <linearGradient id="juggernaut-hull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#334155" />
-            <stop offset="30%" stopColor="#1e293b" />
-            <stop offset="70%" stopColor="#0f172a" />
-            <stop offset="100%" stopColor="#090d16" />
+            <stop offset="0%" stopColor="#91A878" />
+            <stop offset="30%" stopColor="#6D8558" />
+            <stop offset="70%" stopColor="#4C633F" />
+            <stop offset="100%" stopColor="#344735" />
           </linearGradient>
 
           <linearGradient id="juggernaut-armor-facet" x1="0%" y1="0%" x2="100%" y2="50%">
@@ -2469,7 +2473,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
                 {/* Twin Vertical Copper Antenna Masts */}
                 <line x1="-32" y1="-16" x2="-32" y2="-22.5" stroke="#d97706" strokeWidth="1.0" strokeLinecap="round" />
                 <line x1="-30" y1="-16" x2="-30" y2="-21.5" stroke="#d97706" strokeWidth="0.9" strokeLinecap="round" />
-                
+
                 {/* High-Intensity Blinking Red Beacon Light on Top Antenna Mast */}
                 <circle cx="-32" cy="-22.5" r="0.8" fill="#ef4444" />
                 <circle cx="-32" cy="-22.5" r="2.2" fill="#ef4444" opacity="0.6">
@@ -3108,363 +3112,158 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         {/* ========================================================= */}
         {modelId === 'mammoth' && (
           <g>
-            {/* 0. Downward Volumetric Halogen Floodlight Cones (Background Layer) */}
-            <polygon
-              points="18,-33 6,38 30,38"
-              fill="url(#mammoth-floodlight-beam)"
-              pointerEvents="none"
-            />
-            <polygon
-              points="30,-33 18,38 42,38"
-              fill="url(#mammoth-floodlight-beam)"
-              pointerEvents="none"
-            />
+            {/* 1. Bow Searchlight Beams (background light cones) */}
+            <polygon points="58,-12 95,8 95,40 58,-2" fill="url(#mammoth-floodlight-beam)" pointerEvents="none" />
+            <polygon points="60,-4 98,18 98,44 60,6" fill="url(#mammoth-floodlight-beam)" pointerEvents="none" />
 
-            {/* 1. Heavy Asymmetric Propulsion Array (Underchassis) */}
-            {/* Port Dual Vectoring Rocket Thrusters */}
+            {/* 2. Main Propulsion Nozzle Assembly (stern center) */}
             <g>
-              {/* Port Outer Thruster */}
-              <path
-                d="M -31 16 L -27 16 L -25 24 L -33 24 Z"
-                fill="#1e293b"
-                stroke="#64748b"
-                strokeWidth="1.0"
-              />
-              <ellipse cx="-29" cy="24" rx="4" ry="1.4" fill="#0f172a" stroke="#475569" strokeWidth="0.8" />
-              <ellipse cx="-29" cy="23.5" rx="2.5" ry="0.8" fill="#06b6d4" opacity="0.6" />
-
-              {/* Port Inner Thruster */}
-              <path
-                d="M -21 16 L -17 16 L -15 24 L -23 24 Z"
-                fill="#1e293b"
-                stroke="#64748b"
-                strokeWidth="1.0"
-              />
-              <ellipse cx="-19" cy="24" rx="4" ry="1.4" fill="#0f172a" stroke="#475569" strokeWidth="0.8" />
-              <ellipse cx="-19" cy="23.5" rx="2.5" ry="0.8" fill="#06b6d4" opacity="0.6" />
+              <rect x="-48" y="8" width="22" height="22" rx="3" fill="#394447" stroke="#172125" strokeWidth="1.2" />
+              <rect x="-50" y="8" width="5" height="22" rx="2.5" fill="#D4A62B" stroke="#172125" strokeWidth="1.0" />
+              <rect x="-46" y="12" width="12" height="14" rx="2" fill="#1B2528" stroke="#172125" strokeWidth="1.0" />
+              <rect x="-45" y="13" width="9" height="12" rx="2" fill="#F2C96A" opacity="0.5" />
             </g>
 
-            {/* Starboard Heavy Thermal Primary Thruster Bell */}
+            {/* 3. Twin Primary Vectored Thruster Pods (lower rear) */}
             <g>
-              <path
-                d="M 23 16 L 33 16 L 36 25 L 20 25 Z"
-                fill="#0f172a"
-                stroke="#64748b"
-                strokeWidth="1.2"
-              />
-              {/* Cooling Rib Channels */}
-              <line x1="24.5" y1="17" x2="23" y2="24" stroke="#94a3b8" strokeWidth="0.8" />
-              <line x1="28" y1="17" x2="28" y2="24.5" stroke="#94a3b8" strokeWidth="0.8" />
-              <line x1="31.5" y1="17" x2="33" y2="24" stroke="#94a3b8" strokeWidth="0.8" />
-              <ellipse cx="28" cy="25" rx="8" ry="2.2" fill="#020617" stroke="#94a3b8" strokeWidth="1.0" />
-              <ellipse cx="28" cy="24.5" rx="5.5" ry="1.4" fill="#f59e0b" opacity="0.65" />
+              <rect x="-38" y="-6" width="20" height="13" rx="2.5" fill="#394447" stroke="#172125" strokeWidth="1.1" />
+              <rect x="-40" y="-6" width="4" height="13" rx="2" fill="#D4A62B" />
+              <rect x="-37" y="-4" width="11" height="9" rx="2" fill="#1B2528" />
+              <rect x="-36" y="-3" width="8" height="7" rx="2" fill="#F2C96A" opacity="0.5" />
+              <rect x="-38" y="10" width="20" height="13" rx="2.5" fill="#394447" stroke="#172125" strokeWidth="1.1" />
+              <rect x="-40" y="10" width="4" height="13" rx="2" fill="#D4A62B" />
+              <rect x="-37" y="12" width="11" height="9" rx="2" fill="#1B2528" />
+              <rect x="-36" y="13" width="8" height="7" rx="2" fill="#F2C96A" opacity="0.5" />
             </g>
 
-            {/* 2. Heavy Articulated Mining Outriggers & Suspension (Strictly Isolated Symmetrical Footpads) */}
-            {/* Left Outrigger Leg Assembly */}
+            {/* 4. Landing Gear (4 articulated legs) */}
             <g>
-              {/* Main Knuckle Bracket */}
-              <circle cx="-32" cy="12" r="3.2" fill="#ca8a04" stroke="#713f12" strokeWidth="1.2" />
-              <circle cx="-32" cy="12" r="1.2" fill="#1e293b" />
-              {/* Armored Strut */}
-              <line x1="-32" y1="13" x2="-38" y2="34" stroke="#eab308" strokeWidth="2.8" strokeLinecap="round" />
-              {/* Inner Chrome Hydraulic Cylinder & Spring */}
-              <line x1="-22" y1="17" x2="-38" y2="34" stroke="#cbd5e1" strokeWidth="2.0" />
-              <line x1="-22" y1="17" x2="-38" y2="34" stroke="#ca8a04" strokeWidth="1.2" strokeDasharray="2.5 2" />
-              {/* Scissor Torque Bracket */}
-              <polygon points="-35,22 -38,26 -33,26" fill="#334155" />
+              <line x1="-34" y1="21" x2="-52" y2="34" stroke="#59686A" strokeWidth="3.0" />
+              <line x1="-34" y1="23" x2="-58" y2="30" stroke="#D4A62B" strokeWidth="1.6" />
+              <line x1="-58" y1="30" x2="-52" y2="34" stroke="#DDE4DF" strokeWidth="1.0" />
+              <rect x="-60" y="35" width="16" height="5" rx="2" fill="#252E32" stroke="#172125" strokeWidth="1.0" />
+              <rect x="-60" y="35" width="16" height="5" rx="2" fill="url(#mammoth-hazard)" />
 
-              {/* Left Ground Footpad with Regolith Traction Cleats */}
-              <ellipse cx="-38" cy="34" rx="8.5" ry="3.2" fill="#ca8a04" stroke="#713f12" strokeWidth="1.4" />
-              <ellipse cx="-38" cy="33.5" rx="6.5" ry="1.8" fill="#eab308" />
-              <circle cx="-38" cy="33.5" r="1.2" fill="#451a03" />
-              {/* Carbide Traction Teeth */}
-              <polygon points="-43,36 -41,38 -40,36" fill="#475569" />
-              <polygon points="-39,36 -38,38.5 -37,36" fill="#475569" />
-              <polygon points="-36,36 -35,38 -33,36" fill="#475569" />
+              <line x1="-10" y1="21" x2="-24" y2="34" stroke="#59686A" strokeWidth="3.0" />
+              <line x1="-10" y1="23" x2="-30" y2="30" stroke="#D4A62B" strokeWidth="1.6" />
+              <line x1="-30" y1="30" x2="-24" y2="34" stroke="#DDE4DF" strokeWidth="1.0" />
+              <rect x="-32" y="35" width="16" height="5" rx="2" fill="#252E32" stroke="#172125" strokeWidth="1.0" />
+              <rect x="-32" y="35" width="16" height="5" rx="2" fill="url(#mammoth-hazard)" />
+
+              <line x1="20" y1="21" x2="6" y2="34" stroke="#59686A" strokeWidth="3.0" />
+              <line x1="20" y1="23" x2="0" y2="30" stroke="#D4A62B" strokeWidth="1.6" />
+              <line x1="0" y1="30" x2="6" y2="34" stroke="#DDE4DF" strokeWidth="1.0" />
+              <rect x="-2" y="35" width="16" height="5" rx="2" fill="#252E32" stroke="#172125" strokeWidth="1.0" />
+              <rect x="-2" y="35" width="16" height="5" rx="2" fill="url(#mammoth-hazard)" />
+
+              <line x1="48" y1="21" x2="34" y2="34" stroke="#59686A" strokeWidth="3.0" />
+              <line x1="48" y1="23" x2="28" y2="30" stroke="#D4A62B" strokeWidth="1.6" />
+              <line x1="28" y1="30" x2="34" y2="34" stroke="#DDE4DF" strokeWidth="1.0" />
+              <rect x="26" y="35" width="16" height="5" rx="2" fill="#252E32" stroke="#172125" strokeWidth="1.0" />
+              <rect x="26" y="35" width="16" height="5" rx="2" fill="url(#mammoth-hazard)" />
             </g>
 
-            {/* Right Outrigger Leg Assembly */}
+            {/* 5. Lower Hull / Cargo Deck Skirt */}
+            <polygon points="-60,10 60,10 62,22 -62,22" fill="#252E32" stroke="#172125" strokeWidth="1.4" />
+            <line x1="-62" y1="16" x2="62" y2="16" stroke="#303A3E" strokeWidth="1.2" />
+            <line x1="-62" y1="19" x2="62" y2="19" stroke="#303A3E" strokeWidth="1.2" />
+            <rect x="-54" y="12" width="4" height="3" rx="1" fill="#E86F42" />
+            <rect x="-36" y="12" width="4" height="3" rx="1" fill="#E86F42" />
+            <rect x="-18" y="12" width="4" height="3" rx="1" fill="#E86F42" />
+            <rect x="0" y="12" width="4" height="3" rx="1" fill="#E86F42" />
+            <rect x="18" y="12" width="4" height="3" rx="1" fill="#E86F42" />
+            <rect x="36" y="12" width="4" height="3" rx="1" fill="#E86F42" />
+            <rect x="54" y="12" width="4" height="3" rx="1" fill="#E86F42" />
+
+            {/* 6. Main Cargo Hold A (forward lower deck) */}
             <g>
-              {/* Main Knuckle Bracket */}
-              <circle cx="32" cy="12" r="3.2" fill="#ca8a04" stroke="#713f12" strokeWidth="1.2" />
-              <circle cx="32" cy="12" r="1.2" fill="#1e293b" />
-              {/* Armored Strut */}
-              <line x1="32" y1="13" x2="38" y2="34" stroke="#eab308" strokeWidth="2.8" strokeLinecap="round" />
-              {/* Inner Chrome Hydraulic Cylinder & Spring */}
-              <line x1="22" y1="17" x2="38" y2="34" stroke="#cbd5e1" strokeWidth="2.0" />
-              <line x1="22" y1="17" x2="38" y2="34" stroke="#ca8a04" strokeWidth="1.2" strokeDasharray="2.5 2" />
-              {/* Scissor Torque Bracket */}
-              <polygon points="35,22 38,26 33,26" fill="#334155" />
-
-              {/* Right Ground Footpad with Regolith Traction Cleats */}
-              <ellipse cx="38" cy="34" rx="8.5" ry="3.2" fill="#ca8a04" stroke="#713f12" strokeWidth="1.4" />
-              <ellipse cx="38" cy="33.5" rx="6.5" ry="1.8" fill="#eab308" />
-              <circle cx="38" cy="33.5" r="1.2" fill="#451a03" />
-              {/* Carbide Traction Teeth */}
-              <polygon points="33,36 35,38 36,36" fill="#475569" />
-              <polygon points="37,36 38,38.5 39,36" fill="#475569" />
-              <polygon points="40,36 41,38 43,36" fill="#475569" />
+              <rect x="8" y="-6" width="50" height="18" rx="2" fill="#252E32" stroke="#172125" strokeWidth="1.2" />
+              <line x1="12" y1="-5" x2="12" y2="11" stroke="#303A3E" strokeWidth="0.8" />
+              <line x1="18" y1="-5" x2="18" y2="11" stroke="#303A3E" strokeWidth="0.8" />
+              <line x1="24" y1="-5" x2="24" y2="11" stroke="#303A3E" strokeWidth="0.8" />
+              <line x1="30" y1="-5" x2="30" y2="11" stroke="#303A3E" strokeWidth="0.8" />
+              <line x1="36" y1="-5" x2="36" y2="11" stroke="#303A3E" strokeWidth="0.8" />
+              <line x1="42" y1="-5" x2="42" y2="11" stroke="#303A3E" strokeWidth="0.8" />
+              <line x1="48" y1="-5" x2="48" y2="11" stroke="#303A3E" strokeWidth="0.8" />
+              <line x1="54" y1="-5" x2="54" y2="11" stroke="#303A3E" strokeWidth="0.8" />
+              <rect x="8" y="-6" width="50" height="18" rx="2" fill="none" stroke="#D4A62B" strokeWidth="1.2" />
+              <text x="33" y="1" fill="#E0B33A" fontSize="4" fontFamily="monospace" fontWeight="bold" textAnchor="middle">MAMMOTH</text>
+              <text x="33" y="6" fill="#E0B33A" fontSize="4" fontFamily="monospace" fontWeight="bold" textAnchor="middle">RIG</text>
+              <text x="33" y="-3" fill="#DDE4DF" fontSize="2.6" fontFamily="monospace" fontWeight="bold" textAnchor="middle">CARGO</text>
+              <rect x="10" y="-4" width="46" height="14" rx="1.5" fill="#1B2528" />
+              <rect x="14" y="2" width="6" height="6" rx="1" fill="#B08D57" stroke="#7A5C34" strokeWidth="0.8" />
+              <circle cx="17" cy="5" r="2.2" fill="#5A4526" />
+              <rect x="23" y="2" width="6" height="6" rx="1" fill="#B08D57" stroke="#7A5C34" strokeWidth="0.8" />
+              <circle cx="26" cy="5" r="2.2" fill="#5A4526" />
+              <rect x="32" y="2" width="6" height="6" rx="1" fill="#B08D57" stroke="#7A5C34" strokeWidth="0.8" />
+              <circle cx="35" cy="5" r="2.2" fill="#5A4526" />
+              <rect x="41" y="2" width="6" height="6" rx="1" fill="#B08D57" stroke="#7A5C34" strokeWidth="0.8" />
+              <circle cx="44" cy="5" r="2.2" fill="#5A4526" />
+              <rect x="50" y="2" width="6" height="6" rx="1" fill="#B08D57" stroke="#7A5C34" strokeWidth="0.8" />
+              <circle cx="53" cy="5" r="2.2" fill="#5A4526" />
             </g>
 
-            {/* 3. Portside Heavy Machinery Housing & Crane Base (x: -38 to -14) */}
-            <rect
-              x="-38"
-              y="-14"
-              width="24"
-              height="30"
-              rx="2.5"
-              fill="#1e293b"
-              stroke="#ca8a04"
-              strokeWidth="1.6"
-            />
-            {/* Armored Inspection Access Panel */}
-            <rect x="-35" y="-10" width="18" height="18" rx="1.5" fill="#0f172a" stroke="#475569" strokeWidth="1.0" />
-            <line x1="-33" y1="-5" x2="-28" y2="-5" stroke="#64748b" strokeWidth="1.0" />
-            <line x1="-33" y1="-1" x2="-28" y2="-1" stroke="#64748b" strokeWidth="1.0" />
-            <line x1="-33" y1="3" x2="-28" y2="3" stroke="#64748b" strokeWidth="1.0" />
-            {/* Equipment Safety Hazard Chevron Band */}
-            <rect
-              x="-38"
-              y="10"
-              width="24"
-              height="5"
-              fill="url(#mammoth-hazard)"
-              stroke="#eab308"
-              strokeWidth="0.8"
-            />
-            {/* Turntable Slew Ring Turret */}
-            <ellipse cx="-28" cy="-14" rx="6" ry="2.2" fill="#334155" stroke="#eab308" strokeWidth="1.2" />
-            <circle cx="-28" cy="-14" r="1.6" fill="#facc15" />
+            {/* 7. Central Hull & Engineering Deck */}
+            <polygon points="-60,-8 60,-8 62,10 -62,10" fill="#647477" stroke="#172125" strokeWidth="1.6" />
+            <line x1="-30" y1="-8" x2="-30" y2="10" stroke="#394447" strokeWidth="1.0" />
+            <line x1="0" y1="-8" x2="0" y2="10" stroke="#394447" strokeWidth="1.0" />
+            <line x1="30" y1="-8" x2="30" y2="10" stroke="#394447" strokeWidth="1.0" />
+            <line x1="-62" y1="4" x2="62" y2="4" stroke="#394447" strokeWidth="1.0" />
+            <rect x="-55" y="-18" width="30" height="12" rx="2" fill="#394447" stroke="#172125" strokeWidth="1.1" />
+            <line x1="-55" y1="-12" x2="-25" y2="-12" stroke="#D4A62B" strokeWidth="1.4" />
+            <line x1="-55" y1="-7" x2="-25" y2="-7" stroke="#D4A62B" strokeWidth="1.4" />
 
-            {/* 4. Articulated Lattice Box-Girder Crane Boom & Hydraulic Lift Rams */}
-            {/* Hydraulic Lift Cylinder (Lower) */}
-            <line x1="-24" y1="-13" x2="-32" y2="-22" stroke="#eab308" strokeWidth="3.2" strokeLinecap="round" />
-            <line x1="-24" y1="-13" x2="-32" y2="-22" stroke="#f8fafc" strokeWidth="1.4" strokeLinecap="round" />
-            {/* Main Upper and Lower Boom Chords */}
-            <line x1="-28" y1="-14" x2="-37" y2="-34" stroke="#eab308" strokeWidth="2.8" strokeLinecap="round" />
-            <line x1="-23" y1="-12" x2="-35" y2="-32" stroke="#eab308" strokeWidth="2.0" strokeLinecap="round" />
-            {/* Diagonal Lattice Bracing */}
-            <g stroke="#ca8a04" strokeWidth="1.2">
-              <line x1="-27" y1="-16" x2="-24" y2="-14" />
-              <line x1="-24" y1="-14" x2="-29" y2="-21" />
-              <line x1="-29" y1="-21" x2="-26" y2="-18" />
-              <line x1="-26" y1="-18" x2="-32" y2="-26" />
-              <line x1="-32" y1="-26" x2="-29" y2="-24" />
-              <line x1="-29" y1="-24" x2="-35" y2="-31" />
-            </g>
-            {/* Boom Tip Sheave Pulley Wheels */}
-            <circle cx="-37" cy="-34" r="2.8" fill="#ca8a04" stroke="#713f12" strokeWidth="1.0" />
-            <circle cx="-37" cy="-34" r="1.2" fill="#facc15" />
+            {/* 8. Upper Deck Personnel Quarters */}
+            <polygon points="-45,-8 -45,-32 -10,-32 -5,-8" fill="#647477" stroke="#172125" strokeWidth="1.4" />
+            <line x1="-45" y1="-20" x2="-8" y2="-20" stroke="#394447" strokeWidth="0.8" />
+            <line x1="-26" y1="-32" x2="-26" y2="-8" stroke="#394447" strokeWidth="0.8" />
+            <rect x="-38" y="-30" width="8" height="4" rx="1" fill="#394447" stroke="#172125" strokeWidth="0.8" />
+            <rect x="-20" y="-30" width="8" height="4" rx="1" fill="#394447" stroke="#172125" strokeWidth="0.8" />
+            <line x1="-30" y1="-16" x2="-12" y2="-16" stroke="#303A3E" strokeWidth="0.8" />
+            <line x1="-30" y1="-13" x2="-12" y2="-13" stroke="#303A3E" strokeWidth="0.8" />
 
-            {/* 5. Hanging Steel Hoist Cable & Magnetic Core Grabber / Ore Extractor (ORIGINAL FEATURE) */}
-            {/* Braided Steel Hoist Cable */}
-            <line x1="-37" y1="-34" x2="-36" y2="-18" stroke="#cbd5e1" strokeWidth="1.2" strokeDasharray="3 1" />
-            {/* Cable Guide Shackle */}
-            <circle cx="-36" cy="-18" r="1.4" fill="#ca8a04" stroke="#713f12" strokeWidth="0.8" />
-            {/* Magnetic Core Extractor Housing */}
+            {/* 9. Command Bridge & Sensor Suite (forward upper) */}
             <g>
-              <rect x="-39.5" y="-17" width="7" height="6.5" rx="1.2" fill="#0f172a" stroke="#eab308" strokeWidth="1.2" />
-              {/* Glowing Subsurface Core Sensor (Amber) */}
-              <circle cx="-36" cy="-13.8" r="2.0" fill="#f59e0b" />
-              <circle cx="-36" cy="-13.8" r="1.0" fill="#fef08a" />
-              {/* Articulated Tungsten Grabber Claws */}
-              <path
-                d="M -39.5 -12.5 L -42 -9 L -41 -7"
-                fill="none"
-                stroke="#cbd5e1"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M -32.5 -12.5 L -30 -9 L -31 -7"
-                fill="none"
-                stroke="#cbd5e1"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M -37 -10.5 L -37.5 -7"
-                fill="none"
-                stroke="#94a3b8"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-              />
-              <path
-                d="M -35 -10.5 L -34.5 -7"
-                fill="none"
-                stroke="#94a3b8"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-              />
+              <polygon points="5,-8 8,-40 42,-40 46,-8" fill="#647477" stroke="#172125" strokeWidth="1.4" />
+              <line x1="14" y1="-40" x2="14" y2="-8" stroke="#394447" strokeWidth="0.8" />
+              <line x1="30" y1="-40" x2="30" y2="-8" stroke="#394447" strokeWidth="0.8" />
+              <polygon points="12,-36 36,-36 40,-20 9,-20" fill="#39CBD0" stroke="#0F1B1E" strokeWidth="1.0" />
+              <polygon points="14,-33 32,-33 34,-27 13,-27" fill="#55E0E2" opacity="0.5" />
+              <rect x="16" y="-38" width="6" height="3" rx="1" fill="#394447" stroke="#172125" strokeWidth="0.7" />
+              <rect x="26" y="-38" width="6" height="3" rx="1" fill="#394447" stroke="#172125" strokeWidth="0.7" />
+              <rect x="44" y="-30" width="6" height="6" rx="1.5" fill="#39CBD0" stroke="#172125" strokeWidth="0.8" />
+              <circle cx="46" cy="-27" r="2" fill="#55E0E2" opacity="0.5" />
             </g>
 
-            {/* 6. Center Ultra-Wide Mining Vehicle Cargo Bay (x: -14 to +14) */}
-            {/* Bay Interior Recess */}
-            <rect
-              x="-14"
-              y="-10"
-              width="28"
-              height="25"
-              rx="1.5"
-              fill="#090d16"
-              stroke="#ca8a04"
-              strokeWidth="1.4"
-            />
-            {/* Overhead Heavy Gantry Monorail & Trolley Hoist */}
-            <rect x="-13" y="-9" width="26" height="2.5" fill="#eab308" stroke="#854d0e" strokeWidth="0.6" />
-            <rect x="-3" y="-8" width="6" height="2" rx="0.5" fill="#334155" />
-            <circle cx="0" cy="-6" r="0.8" fill="#facc15" />
+            {/* 10. Masts, Antennas & Red Beacon */}
+            <line x1="20" y1="-40" x2="20" y2="-52" stroke="#394447" strokeWidth="1.4" />
+            <circle cx="20" cy="-54" r="2.2" fill="#E84942" />
+            <line x1="36" y1="-40" x2="36" y2="-49" stroke="#394447" strokeWidth="1.2" />
+            <circle cx="36" cy="-50" r="1.2" fill="#252E32" />
 
-            {/* Onboard 6-Wheeled Deep-Core Exploration Crawler */}
+            {/* 11. Blunt Armored Bow with HID Searchlight Banks */}
             <g>
-              {/* Rover Armored Chassis */}
-              <rect x="-10" y="3" width="20" height="7.5" rx="1.8" fill="#1e293b" stroke="#eab308" strokeWidth="1.0" />
-              {/* Rover Angled Cab & Amber Cockpit */}
-              <polygon points="1,3 7,3 9,0 3,0" fill="#f59e0b" stroke="#ca8a04" strokeWidth="0.8" />
-              <polygon points="2,2.5 6,2.5 7.5,0.8 3.5,0.8" fill="#fef08a" opacity="0.8" />
-              {/* Dual Illuminated Forward Headlights */}
-              <circle cx="8" cy="5" r="1.2" fill="#ffffff" />
-              <ellipse cx="10" cy="5" rx="2" ry="1.2" fill="#fef08a" opacity="0.6" />
-              {/* Roof Comms Beacon */}
-              <circle cx="4" cy="-1.5" r="1.0" fill="#ef4444" />
-              {/* 6 Heavy All-Terrain Crawler Wheels with Rims */}
-              <circle cx="-7.5" cy="11.5" r="2.8" fill="#0f172a" stroke="#475569" strokeWidth="1.0" />
-              <circle cx="-7.5" cy="11.5" r="1.2" fill="#ca8a04" />
-              <circle cx="0" cy="11.5" r="2.8" fill="#0f172a" stroke="#475569" strokeWidth="1.0" />
-              <circle cx="0" cy="11.5" r="1.2" fill="#ca8a04" />
-              <circle cx="7.5" cy="11.5" r="2.8" fill="#0f172a" stroke="#475569" strokeWidth="1.0" />
-              <circle cx="7.5" cy="11.5" r="1.2" fill="#ca8a04" />
+              <polygon points="46,-8 56,-20 62,-20 66,-12 66,4 58,8 46,10" fill="#647477" stroke="#172125" strokeWidth="1.6" />
+              <rect x="56" y="-14" width="8" height="4" rx="1" fill="#252E32" stroke="#172125" strokeWidth="0.8" />
+              <rect x="57" y="-13" width="6" height="2.4" rx="0.8" fill="#FFF0C9" />
+              <rect x="57.5" y="-13" width="5" height="2.4" rx="0.8" fill="#F2C96A" opacity="0.6" />
+              <rect x="56" y="-8" width="8" height="4" rx="1" fill="#252E32" stroke="#172125" strokeWidth="0.8" />
+              <rect x="57" y="-7" width="6" height="2.4" rx="0.8" fill="#FFF0C9" />
+              <rect x="57.5" y="-7" width="5" height="2.4" rx="0.8" fill="#F2C96A" opacity="0.6" />
             </g>
 
-            {/* 7. Drop-Down Hydraulic Mining Ramp Threshold with Hazard Chevron Band */}
-            <rect
-              x="-14"
-              y="13"
-              width="28"
-              height="3.5"
-              fill="url(#mammoth-hazard)"
-              stroke="#eab308"
-              strokeWidth="0.8"
-            />
-            {/* Hydraulic Ramp Lift Actuators */}
-            <line x1="-13" y1="13" x2="-23" y2="22" stroke="#ca8a04" strokeWidth="2.8" strokeLinecap="round" />
-            <line x1="-13" y1="13" x2="-23" y2="22" stroke="#f8fafc" strokeWidth="1.2" strokeLinecap="round" />
-            <circle cx="-23" cy="22" r="1.8" fill="#facc15" />
+            {/* 12. Fuselage Stencil: MAMMOTH RIG */}
+            <text x="-8" y="-1" fill="#E0B33A" fontSize="3.4" fontFamily="sans-serif" fontWeight="900" textAnchor="middle">MAMMOTH RIG</text>
+            <text x="-8" y="4" fill="#DDE4DF" fontSize="2.2" fontFamily="monospace" fontWeight="bold" textAnchor="middle">C-95 HEAVY LIFT CARGO</text>
+            <polygon points="-30,-18 -26,-13 -34,-13" fill="#DDE4DF" />
+            <line x1="-30" y1="-17" x2="-28" y2="-13.6" stroke="#394447" strokeWidth="0.6" />
 
-            {/* 8. Starboard Catalytic Refinery Columns & Sight-Glass (x: 14 to 38) */}
-            {/* Main Primary High-Pressure Cracking Cylinder */}
-            <rect
-              x="17"
-              y="-18"
-              width="11"
-              height="33"
-              rx="2.5"
-              fill="url(#mammoth-refinery-column)"
-              stroke="#64748b"
-              strokeWidth="1.2"
-            />
-            {/* Secondary Fractionating Column */}
-            <rect
-              x="28"
-              y="-14"
-              width="9"
-              height="29"
-              rx="2.0"
-              fill="url(#mammoth-refinery-column)"
-              stroke="#64748b"
-              strokeWidth="1.0"
-            />
-            {/* Structural Reinforcing Band Collars */}
-            <line x1="17" y1="-8" x2="37" y2="-8" stroke="#ca8a04" strokeWidth="1.4" />
-            <line x1="17" y1="0" x2="37" y2="0" stroke="#ca8a04" strokeWidth="1.4" />
-            <line x1="17" y1="8" x2="37" y2="8" stroke="#ca8a04" strokeWidth="1.4" />
-
-            {/* Illuminated Catalytic Fluid Sight-Glass (ORIGINAL FEATURE) */}
-            <g>
-              {/* Sight-Glass Protective Metal Outer Bezel */}
-              <rect x="20.5" y="-12" width="4" height="21" rx="1.5" fill="#0f172a" stroke="#ca8a04" strokeWidth="0.8" />
-              {/* Glowing Bio-Catalyst Fluid Tube */}
-              <rect x="21.5" y="-11" width="2" height="19" rx="1.0" fill="url(#mammoth-sight-tube)" />
-              {/* Volumetric Calibration Graduation Ticks */}
-              <line x1="20.8" y1="-7" x2="22" y2="-7" stroke="#ffffff" strokeWidth="0.6" opacity="0.8" />
-              <line x1="20.8" y1="-3" x2="22.4" y2="-3" stroke="#ffffff" strokeWidth="0.8" opacity="0.9" />
-              <line x1="20.8" y1="1" x2="22" y2="1" stroke="#ffffff" strokeWidth="0.6" opacity="0.8" />
-              <line x1="20.8" y1="5" x2="22.4" y2="5" stroke="#ffffff" strokeWidth="0.8" opacity="0.9" />
-              {/* Fluid Meniscus Highlight */}
-              <ellipse cx="22.5" cy="-9" rx="1.0" ry="0.6" fill="#a7f3d0" />
-            </g>
-
-            {/* High-Pressure Interconnecting Manifold & Valve Handwheel */}
-            <path
-              d="M 28 -4 L 32 -4 L 32 4 L 28 4"
-              fill="none"
-              stroke="#d97706"
-              strokeWidth="1.4"
-              strokeLinejoin="round"
-            />
-            {/* Brass Valve Handwheel */}
-            <circle cx="32" cy="0" r="1.8" fill="#ca8a04" stroke="#713f12" strokeWidth="0.6" />
-            <circle cx="32" cy="0" r="0.6" fill="#facc15" />
-
-            {/* Top Scrubber & Titanium Heat-Tint Exhaust Cowl */}
-            <g>
-              {/* Radiator Cooling Fin Array */}
-              <rect x="21" y="-21" width="14" height="3" rx="0.8" fill="#475569" stroke="#94a3b8" strokeWidth="0.8" />
-              <line x1="24" y1="-21" x2="24" y2="-18" stroke="#1e293b" strokeWidth="0.8" />
-              <line x1="28" y1="-21" x2="28" y2="-18" stroke="#1e293b" strokeWidth="0.8" />
-              <line x1="32" y1="-21" x2="32" y2="-18" stroke="#1e293b" strokeWidth="0.8" />
-              {/* Heat-Treated Titanium Exhaust Stack */}
-              <rect x="24" y="-24" width="7" height="3.5" rx="1.0" fill="url(#mammoth-titanium-heat)" stroke="#334155" strokeWidth="0.8" />
-              <ellipse cx="27.5" cy="-24" rx="2.5" ry="0.8" fill="#0f172a" />
-            </g>
-
-            {/* 9. Starboard Elevated Heavy Equipment Operator Bridge (x: 15 to 35, y: -34 to -21) */}
-            <polygon
-              points="15,-34 31,-34 35,-21 15,-21"
-              fill="#0f172a"
-              stroke="#ca8a04"
-              strokeWidth="1.6"
-            />
-            {/* Multi-Pane Crimson Visor */}
-            <polygon
-              points="16.5,-31 29.5,-31 32.5,-23 16.5,-23"
-              fill="url(#visor-grad-mammoth)"
-              stroke="#fda4af"
-              strokeWidth="1.0"
-            />
-            {/* Specular Glare Reflection */}
-            <polygon points="18,-30 24,-30 22,-24 17.5,-24" fill="#ffffff" opacity="0.85" />
-
-            {/* Heavy Equipment ROPS (Roll-Over Protective Structure) Safety Cage (ORIGINAL FEATURE) */}
-            <g stroke="#eab308" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none">
-              {/* Upper Roof Safety Frame */}
-              <line x1="14.5" y1="-34.5" x2="31.5" y2="-34.5" />
-              {/* Angled A-Pillar Protective Bar */}
-              <line x1="31.5" y1="-34.5" x2="35.5" y2="-21" />
-              {/* Cab Corner Pillar */}
-              <line x1="14.5" y1="-34.5" x2="14.5" y2="-21" />
-              {/* Center Reinforcement Bar */}
-              <line x1="23" y1="-34.5" x2="23" y2="-21" strokeWidth="1.0" stroke="#ca8a04" />
-            </g>
-
-            {/* 10. Dual Roof-Mounted Heavy Halogen Work Floodlights (ORIGINAL FEATURE) */}
-            {/* Left Floodlight Pod */}
-            <rect x="16.5" y="-36" width="3.5" height="3" rx="0.8" fill="#475569" stroke="#cbd5e1" strokeWidth="0.8" />
-            <ellipse cx="18.2" cy="-33" rx="1.6" ry="0.8" fill="#ffffff" stroke="#fef08a" strokeWidth="0.6" />
-            {/* Right Floodlight Pod */}
-            <rect x="28.5" y="-36" width="3.5" height="3" rx="0.8" fill="#475569" stroke="#cbd5e1" strokeWidth="0.8" />
-            <ellipse cx="30.2" cy="-33" rx="1.6" ry="0.8" fill="#ffffff" stroke="#fef08a" strokeWidth="0.6" />
-
-            {/* Starboard Comms Antenna & High-Intensity Amber Safety Strobe Beacon */}
-            <line x1="33" y1="-34" x2="33" y2="-40" stroke="#94a3b8" strokeWidth="1.0" />
-            <circle cx="33" cy="-40" r="2.8" fill="#f59e0b" opacity="0.4" />
-            <circle cx="33" cy="-40" r="1.8" fill="#f59e0b" />
-            <circle cx="33" cy="-40" r="0.8" fill="#ffffff" />
+            {/* 13. Hazard Stripes Along Lower Hull Edge */}
+            <rect x="-62" y="22" width="124" height="4" fill="url(#mammoth-hazard)" stroke="#D4A62B" strokeWidth="0.8" />
           </g>
         )}
+
+
 
         {/* ========================================================= */}
         {/* MODEL: VANGUARD EXOSHIP (VB-Exo Crusader)                 */}
@@ -5178,235 +4977,139 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         {/* ========================================================= */}
         {modelId === 'juggernaut' && (
           <g>
-            {/* 0. Downward Docking & Landing Floodlight Cones */}
-            <polygon points="-38,-10 -46,38 -28,38 -34,-10" fill="url(#juggernaut-docking-beam)" />
-            <polygon points="38,-10 28,38 46,38 34,-10" fill="url(#juggernaut-docking-beam)" />
+            {/* Front ramp, shown partially deployed (mid-animation) */}
+            <polygon points="-58,12 -73,11 -72,17 -56,17" fill="#40423E" stroke="#20251F" strokeWidth="1.3" />
+            <line x1="-58" y1="12" x2="-73" y2="11" stroke="#F0D256" strokeWidth="1" />
+            <line x1="-56" y1="17" x2="-72" y2="17" stroke="#F0D256" strokeWidth="1" />
+            <line x1="-68" y1="15" x2="-64" y2="13" stroke="#20251F" strokeWidth="0.8" />
+            <line x1="-63" y1="13" x2="-59" y2="15" stroke="#20251F" strokeWidth="0.8" />
+            <line x1="-58" y1="11" x2="-60" y2="16" stroke="#A09D8F" strokeWidth="1.2" />
+            <line x1="-57" y1="11" x2="-59" y2="16" stroke="#80691F" strokeWidth="2.2" />
 
-            {/* 1. Heavy Quad Fusion Exhaust Thruster Nozzles (Underchassis Array) */}
-            {/* Outer Port Thruster (x: -33) */}
-            <polygon points="-38,24 -28,24 -26,33 -40,33" fill="url(#juggernaut-thruster-bell)" stroke="#475569" strokeWidth="1.2" />
-            <rect x="-37" y="23" width="8" height="2" rx="0.6" fill="#10b981" />
-            <line x1="-39" y1="24" x2="-39" y2="30" stroke="#94a3b8" strokeWidth="1.0" />
-            <ellipse cx="-33" cy="32.5" rx="5.5" ry="1.8" fill="url(#juggernaut-plasma-core)" />
-            <ellipse cx="-33" cy="32.5" rx="2.5" ry="0.9" fill="#ffffff" opacity="0.95" />
+            {/* Bow thrusters (outer port/inner port at y=28) - animated pulse */}
+            <ellipse cx="-62" cy="28" rx="4.5" ry="4" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="-62" cy="27" rx="3" ry="1.5" fill="#D5B43D" opacity="0.8">
+              <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
+            </ellipse>
+            <ellipse cx="-48" cy="28" rx="3.5" ry="4" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="-48" cy="27" rx="2.5" ry="1.5" fill="#D5B43D" opacity="0.8">
+              <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
+            </ellipse>
 
-            {/* Inner Port Thruster (x: -17) */}
-            <polygon points="-21,24 -13,24 -12,32 -22,32" fill="url(#juggernaut-thruster-bell)" stroke="#475569" strokeWidth="1.2" />
-            <rect x="-20" y="23" width="6" height="2" rx="0.6" fill="#10b981" />
-            <line x1="-21.5" y1="24" x2="-21.5" y2="29" stroke="#94a3b8" strokeWidth="0.9" />
-            <ellipse cx="-17" cy="31.5" rx="4.2" ry="1.5" fill="url(#juggernaut-plasma-core)" />
-            <ellipse cx="-17" cy="31.5" rx="1.8" ry="0.7" fill="#ffffff" opacity="0.9" />
+            {/* Main circular rear propulsion assembly */}
+            <ellipse cx="67" cy="-1" rx="12" ry="17" fill="#67665E" stroke="#20251F" strokeWidth="1.5" />
+            <ellipse cx="67" cy="-1" rx="10" ry="15" fill="none" stroke="#A09D8F" strokeWidth="1" />
+            <ellipse cx="67" cy="-1" rx="8" ry="14" fill="none" stroke="#A09D8F" strokeWidth="0.8" />
+            <ellipse cx="67" cy="-1" rx="5" ry="12" fill="#40423E" stroke="#20251F" strokeWidth="1" />
+            <rect x="54" y="-15" width="4" height="3" fill="#D5B43D" />
+            <rect x="54" y="12" width="4" height="3" fill="#D5B43D" />
 
-            {/* Inner Starboard Thruster (x: 17) */}
-            <polygon points="13,24 21,24 22,32 12,32" fill="url(#juggernaut-thruster-bell)" stroke="#475569" strokeWidth="1.2" />
-            <rect x="14" y="23" width="6" height="2" rx="0.6" fill="#10b981" />
-            <line x1="21.5" y1="24" x2="21.5" y2="29" stroke="#94a3b8" strokeWidth="0.9" />
-            <ellipse cx="17" cy="31.5" rx="4.2" ry="1.5" fill="url(#juggernaut-plasma-core)" />
-            <ellipse cx="17" cy="31.5" rx="1.8" ry="0.7" fill="#ffffff" opacity="0.9" />
+            {/* Stern thrusters at bottom of main engine (y≈16) - animated pulse sync with engine */}
+            <ellipse cx="67" cy="16" rx="3.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="67" cy="15.5" rx="2.5" ry="1.2" fill="#D5B43D" opacity="0.8">
+              <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
+            </ellipse>
+            <ellipse cx="79" cy="16" rx="3.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="79" cy="15.5" rx="2.5" ry="1.2" fill="#D5B43D" opacity="0.8">
+              <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
+            </ellipse>
+            <ellipse cx="85" cy="16" rx="4.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="85" cy="15.5" rx="3" ry="1.2" fill="#D5B43D" opacity="0.8">
+              <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
+            </ellipse>
 
-            {/* Outer Starboard Thruster (x: 33) */}
-            <polygon points="28,24 38,24 40,33 26,33" fill="url(#juggernaut-thruster-bell)" stroke="#475569" strokeWidth="1.2" />
-            <rect x="29" y="23" width="8" height="2" rx="0.6" fill="#10b981" />
-            <line x1="39" y1="24" x2="39" y2="30" stroke="#94a3b8" strokeWidth="1.0" />
-            <ellipse cx="33" cy="32.5" rx="5.5" ry="1.8" fill="url(#juggernaut-plasma-core)" />
-            <ellipse cx="33" cy="32.5" rx="2.5" ry="0.9" fill="#ffffff" opacity="0.95" />
-
-            {/* 2. Quad Reinforced Tungsten Outrigger Landing Gear (Strictly Isolated Subpaths) */}
-            {/* Outer Port Outrigger Assembly (x: -46) */}
-            <circle cx="-35" cy="14" r="3.2" fill="#334155" stroke="#1e293b" strokeWidth="1.2" />
-            <line x1="-35" y1="14" x2="-46" y2="34" stroke="#475569" strokeWidth="3.2" strokeLinecap="round" />
-            <line x1="-42" y1="27" x2="-46" y2="34" stroke="#f8fafc" strokeWidth="1.8" strokeLinecap="round" />
-            <line x1="-24" y1="20" x2="-43" y2="32" stroke="#334155" strokeWidth="1.6" />
-            <circle cx="-46" cy="34" r="2.0" fill="#1e293b" stroke="#10b981" strokeWidth="1.0" />
-            <rect x="-52" y="33.5" width="12" height="4" rx="1.5" fill="#0f172a" stroke="#10b981" strokeWidth="1.4" />
-            <line x1="-50" y1="37.5" x2="-50" y2="39.5" stroke="#475569" strokeWidth="1.4" />
-            <line x1="-46" y1="37.5" x2="-46" y2="39.5" stroke="#475569" strokeWidth="1.4" />
-            <line x1="-42" y1="37.5" x2="-42" y2="39.5" stroke="#475569" strokeWidth="1.4" />
-
-            {/* Inner Port Stabilizer Outrigger (x: -18) */}
-            <circle cx="-18" cy="22" r="2.4" fill="#334155" stroke="#1e293b" strokeWidth="1.0" />
-            <line x1="-18" y1="23" x2="-18" y2="34" stroke="#94a3b8" strokeWidth="2.2" strokeLinecap="round" />
-            <line x1="-18" y1="28" x2="-18" y2="34" stroke="#f8fafc" strokeWidth="1.4" />
-            <rect x="-22" y="34" width="8" height="3.5" rx="1.2" fill="#0f172a" stroke="#10b981" strokeWidth="1.2" />
-            <line x1="-20" y1="37.5" x2="-20" y2="39" stroke="#475569" strokeWidth="1.2" />
-            <line x1="-16" y1="37.5" x2="-16" y2="39" stroke="#475569" strokeWidth="1.2" />
-
-            {/* Inner Starboard Stabilizer Outrigger (x: 18) */}
-            <circle cx="18" cy="22" r="2.4" fill="#334155" stroke="#1e293b" strokeWidth="1.0" />
-            <line x1="18" y1="23" x2="18" y2="34" stroke="#94a3b8" strokeWidth="2.2" strokeLinecap="round" />
-            <line x1="18" y1="28" x2="18" y2="34" stroke="#f8fafc" strokeWidth="1.4" />
-            <rect x="14" y="34" width="8" height="3.5" rx="1.2" fill="#0f172a" stroke="#10b981" strokeWidth="1.2" />
-            <line x1="16" y1="37.5" x2="16" y2="39" stroke="#475569" strokeWidth="1.2" />
-            <line x1="20" y1="37.5" x2="20" y2="39" stroke="#475569" strokeWidth="1.2" />
-
-            {/* Outer Starboard Outrigger Assembly (x: 46) */}
-            <circle cx="35" cy="14" r="3.2" fill="#334155" stroke="#1e293b" strokeWidth="1.2" />
-            <line x1="35" y1="14" x2="46" y2="34" stroke="#475569" strokeWidth="3.2" strokeLinecap="round" />
-            <line x1="42" y1="27" x2="46" y2="34" stroke="#f8fafc" strokeWidth="1.8" strokeLinecap="round" />
-            <line x1="24" y1="20" x2="43" y2="32" stroke="#334155" strokeWidth="1.6" />
-            <circle cx="46" cy="34" r="2.0" fill="#1e293b" stroke="#10b981" strokeWidth="1.0" />
-            <rect x="40" y="33.5" width="12" height="4" rx="1.5" fill="#0f172a" stroke="#10b981" strokeWidth="1.4" />
-            <line x1="42" y1="37.5" x2="42" y2="39.5" stroke="#475569" strokeWidth="1.4" />
-            <line x1="46" y1="37.5" x2="46" y2="39.5" stroke="#475569" strokeWidth="1.4" />
-            <line x1="50" y1="37.5" x2="50" y2="39.5" stroke="#475569" strokeWidth="1.4" />
-
-            {/* 3. Colossal Armored Fuselage & Heavy Sponsons */}
-            {/* Main Keel & Sponson Hull Polygon */}
-            <polygon
-              points="0,-44 18,-30 44,-20 46,24 24,25 -24,25 -46,24 -44,-20 -18,-30"
-              fill="url(#juggernaut-hull-grad)"
-              stroke="#10b981"
-              strokeWidth="2.0"
-            />
-
-            {/* Sponson Armor Facet Overlays */}
-            <polygon
-              points="-18,-29 -43,-19 -45,23 -24,24 -21,-8"
-              fill="url(#juggernaut-armor-facet)"
-              stroke="#334155"
-              strokeWidth="1.2"
-            />
-            <polygon
-              points="18,-29 43,-19 45,23 24,24 21,-8"
-              fill="url(#juggernaut-armor-facet)"
-              stroke="#334155"
-              strokeWidth="1.2"
-            />
-
-            {/* Sponson Armor Chine Accent Seams */}
-            <line x1="-43" y1="-19" x2="-23" y2="10" stroke="#10b981" strokeWidth="0.9" />
-            <line x1="43" y1="-19" x2="23" y2="10" stroke="#10b981" strokeWidth="0.9" />
-
-            {/* APU Radiator Cooling Louvers */}
-            <rect x="-37" y="-5" width="10" height="6" rx="1" fill="#090d16" stroke="#475569" strokeWidth="0.8" />
-            <line x1="-35" y1="-3" x2="-29" y2="-3" stroke="#64748b" strokeWidth="0.8" />
-            <line x1="-35" y1="-1" x2="-29" y2="-1" stroke="#64748b" strokeWidth="0.8" />
-
-            <rect x="27" y="-5" width="10" height="6" rx="1" fill="#090d16" stroke="#475569" strokeWidth="0.8" />
-            <line x1="29" y1="-3" x2="35" y2="-3" stroke="#64748b" strokeWidth="0.8" />
-            <line x1="29" y1="-1" x2="35" y2="-1" stroke="#64748b" strokeWidth="0.8" />
-
-            {/* Forged Titanium Crane Lifting Lugs (3500kg Heavy Cargo Anchor Points) */}
-            <rect x="-43" y="-14" width="4" height="6" rx="1" fill="#475569" stroke="#94a3b8" strokeWidth="0.8" />
-            <circle cx="-41" cy="-11" r="1.1" fill="#0f172a" />
-            <rect x="39" y="-14" width="4" height="6" rx="1" fill="#475569" stroke="#94a3b8" strokeWidth="0.8" />
-            <circle cx="41" cy="-11" r="1.1" fill="#0f172a" />
-
-            {/* Sponson Reaction Control Thruster (RCS) Quads */}
-            <rect x="-45.5" y="-22" width="2.5" height="4" fill="#1e293b" stroke="#334155" strokeWidth="0.6" />
-            <circle cx="-45.5" cy="-21" r="0.7" fill="#d97706" />
-            <circle cx="-45.5" cy="-19" r="0.7" fill="#d97706" />
-
-            <rect x="43" y="-22" width="2.5" height="4" fill="#1e293b" stroke="#334155" strokeWidth="0.6" />
-            <circle cx="45.5" cy="-21" r="0.7" fill="#d97706" />
-            <circle cx="45.5" cy="-19" r="0.7" fill="#d97706" />
-
-            {/* Structural Bulkhead Armor Micro-Rivets */}
-            {[-12, -4, 4, 12, 20].map((ry) => (
-              <g key={`sponson-rivet-${ry}`}>
-                <circle cx="-43.5" cy={ry} r="0.7" fill="#6ee7b7" opacity="0.8" />
-                <circle cx="43.5" cy={ry} r="0.7" fill="#6ee7b7" opacity="0.8" />
-              </g>
-            ))}
-
-            {/* Wingtip Tactical Formation Nav Lights */}
-            <circle cx="-45" cy="22" r="1.4" fill="#ef4444" />
-            <circle cx="45" cy="22" r="1.4" fill="#10b981" />
-
-            {/* 4. Drive-Through Heavy Vehicle Ramp Hold (Central Bay) */}
-            {/* Interior Vehicle Hold Cavity */}
-            <rect x="-19" y="-6" width="38" height="30" rx="2" fill="#040810" stroke="#059669" strokeWidth="1.4" />
-
-            {/* Overhead Gantry Crane Monorail Track */}
-            <line x1="-17" y1="-3" x2="17" y2="-3" stroke="#475569" strokeWidth="1.6" />
-            <rect x="-4" y="-4.5" width="8" height="3" rx="0.5" fill="#f59e0b" stroke="#b45309" strokeWidth="0.6" />
-
-            {/* Onboard Planetary Exploration Rover (Heavy All-Terrain Transporter inside Bay) */}
-            <g id="juggernaut-onboard-rover">
-              {/* Rover Tires (Left and Right Axles) */}
-              <rect x="-17" y="14" width="4" height="8" rx="1.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.8" />
-              <rect x="-17" y="7" width="4" height="7" rx="1.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.8" />
-              <rect x="13" y="14" width="4" height="8" rx="1.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.8" />
-              <rect x="13" y="7" width="4" height="7" rx="1.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.8" />
-
-              {/* Rover Chassis Body */}
-              <polygon points="-13,19 13,19 12,9 -12,9" fill="#10b981" stroke="#047857" strokeWidth="1.0" />
-              <line x1="-12" y1="14" x2="12" y2="14" stroke="#064e3b" strokeWidth="1.0" />
-
-              {/* Rover Armored Cabin & Emerald Visor */}
-              <polygon points="-8,13 8,13 6,8 -6,8" fill="#064e3b" stroke="#34d399" strokeWidth="0.8" />
-              <line x1="0" y1="8" x2="0" y2="13" stroke="#022c22" strokeWidth="0.7" />
-              <ellipse cx="-2.5" cy="10" rx="1.8" ry="0.8" fill="#ffffff" opacity="0.85" />
-
-              {/* Rover High-Intensity Forward Headlights */}
-              <circle cx="-9" cy="16.5" r="1.4" fill="#fef08a" />
-              <circle cx="9" cy="16.5" r="1.4" fill="#fef08a" />
-              <circle cx="-9" cy="16.5" r="0.6" fill="#ffffff" />
-              <circle cx="9" cy="16.5" r="0.6" fill="#ffffff" />
-
-              {/* Rover Comms Dish on Roof */}
-              <line x1="4" y1="8" x2="4" y2="5" stroke="#94a3b8" strokeWidth="0.8" />
-              <ellipse cx="4" cy="5" rx="2.5" ry="1.2" fill="#475569" stroke="#94a3b8" strokeWidth="0.6" />
+            {/* Three downward lift-engine bells with exhaust */}
+            <g fill="#78776D" stroke="#20251F" strokeWidth="1">
+              <rect x="-34" y="14" width="8" height="7" rx="1" />
+              <polygon points="-35,20 -25,20 -23,31 -37,31" />
+              <rect x="-4" y="14" width="8" height="7" rx="1" />
+              <polygon points="-5,20 5,20 7,31 -7,31" />
+              <rect x="26" y="14" width="8" height="7" rx="1" />
+              <polygon points="25,20 35,20 37,31 23,31" />
+            </g>
+            <g stroke="#A09D8F" strokeWidth="0.7">
+              <line x1="-35" y1="23" x2="-25" y2="23" /><line x1="-35" y1="26" x2="-25" y2="26" /><line x1="-35" y1="29" x2="-25" y2="29" />
+              <line x1="-5" y1="23" x2="5" y2="23" /><line x1="-5" y1="26" x2="5" y2="26" /><line x1="-5" y1="29" x2="5" y2="29" />
+              <line x1="25" y1="23" x2="35" y2="23" /><line x1="25" y1="26" x2="35" y2="26" /><line x1="25" y1="29" x2="35" y2="29" />
+            </g>
+            <g fill="#FFF1A8" opacity="0.65">
+              <ellipse cx="-30" cy="32" rx="6" ry="3" /><ellipse cx="0" cy="32" rx="6" ry="3" /><ellipse cx="30" cy="32" rx="6" ry="3" />
             </g>
 
-            {/* Heavy Hydraulic Vehicle Ramp Threshold & Chevrons */}
-            <rect x="-19" y="21" width="38" height="4" fill="url(#juggernaut-hazard)" stroke="#f59e0b" strokeWidth="1.0" />
-            <line x1="-19" y1="21" x2="19" y2="21" stroke="#10b981" strokeWidth="1.2" />
+            {/* Tracked landing bogies and suspension */}
+            <g fill="#3E4D39" stroke="#20251F" strokeWidth="1.1">
+              <rect x="-67" y="35" width="24" height="5" rx="2" /><rect x="-24" y="35" width="24" height="5" rx="2" /><rect x="30" y="35" width="24" height="5" rx="2" />
+            </g>
+            <g fill="#242D25">
+              <circle cx="-63" cy="37.5" r="2" /><circle cx="-58" cy="37.5" r="2" /><circle cx="-53" cy="37.5" r="2" /><circle cx="-20" cy="37.5" r="2" /><circle cx="-15" cy="37.5" r="2" /><circle cx="-10" cy="37.5" r="2" /><circle cx="34" cy="37.5" r="2" /><circle cx="39" cy="37.5" r="2" /><circle cx="44" cy="37.5" r="2" />
+            </g>
+            <g stroke="#344735" strokeWidth="4"><line x1="-50" y1="18" x2="-56" y2="35" /><line x1="-18" y1="18" x2="-20" y2="35" /><line x1="38" y1="18" x2="42" y2="35" /><line x1="58" y1="18" x2="58" y2="35" /></g>
+            <g stroke="#A09D8F" strokeWidth="1"><line x1="-50" y1="20" x2="-56" y2="34" /><line x1="-18" y1="20" x2="-20" y2="34" /><line x1="38" y1="20" x2="42" y2="34" /><line x1="58" y1="20" x2="58" y2="34" /></g>
 
-            {/* Ramp Hydraulic Actuators & Hinge Knuckles */}
-            <rect x="-18" y="19" width="3" height="5" rx="0.8" fill="#334155" stroke="#94a3b8" strokeWidth="0.6" />
-            <line x1="-16.5" y1="16" x2="-16.5" y2="22" stroke="#f8fafc" strokeWidth="1.2" />
-            <rect x="15" y="19" width="3" height="5" rx="0.8" fill="#334155" stroke="#94a3b8" strokeWidth="0.6" />
-            <line x1="16.5" y1="16" x2="16.5" y2="22" stroke="#f8fafc" strokeWidth="1.2" />
+            {/* Open-sided multi-deck cargo bay */}
+            <rect x="-22" y="-1" width="58" height="23" rx="1.5" fill="#40423E" stroke="#20251F" strokeWidth="1.4" />
+            <g stroke="#9A988B" strokeWidth="0.8"><line x1="-20" y1="5" x2="34" y2="5" /><line x1="-20" y1="12" x2="34" y2="12" /><line x1="-20" y1="19" x2="34" y2="19" /><line x1="-16" y1="1" x2="-16" y2="22" /><line x1="-2" y1="1" x2="-2" y2="22" /><line x1="12" y1="1" x2="12" y2="22" /><line x1="26" y1="1" x2="26" y2="22" /></g>
+            <g fill="#4E6845" stroke="#20251F" strokeWidth="0.5">
+              <rect x="-18" y="0" width="8" height="2.5" rx="0.6" /><rect x="8" y="0" width="8" height="2.5" rx="0.6" /><rect x="-8" y="7" width="8" height="2.5" rx="0.6" /><rect x="18" y="7" width="8" height="2.5" rx="0.6" /><rect x="-18" y="14" width="8" height="2.5" rx="0.6" /><rect x="6" y="14" width="8" height="2.5" rx="0.6" />
+            </g>
 
-            {/* 5. Emerald Command Bridge Citadel & Sensor Spire */}
-            {/* Command Superstructure Citadel */}
-            <polygon
-              points="0,-45 16,-28 16,-8 -16,-8 -16,-28"
-              fill="#1e293b"
-              stroke="#10b981"
-              strokeWidth="1.8"
-            />
-            {/* Facet armor plates on bridge */}
-            <polygon points="0,-45 16,-28 0,-24" fill="#334155" opacity="0.6" />
-            <polygon points="0,-45 -16,-28 0,-24" fill="#0f172a" opacity="0.5" />
+            {/* Lower armored hull */}
+            <path d="M-67 8 L56 8 L58 22 L39 25 L-42 24 L-65 20 Z" fill="#344735" stroke="#20251F" strokeWidth="1.8" />
 
-            {/* Panoramic Emerald Command Visor */}
-            <ellipse
-              cx="0"
-              cy="-28"
-              rx="8.5"
-              ry="6"
-              fill="url(#visor-grad-juggernaut)"
-              stroke="#6ee7b7"
-              strokeWidth="1.3"
-            />
+            {/* Main wedge-shaped fuselage, left-facing bow */}
+            <path d="M-70 -25 L-55 -42 L-30 -48 L44 -42 L57 -30 L58 9 L38 14 L-48 13 L-68 5 Z" fill="url(#juggernaut-hull-grad)" stroke="#20251F" strokeWidth="1.8" />
+            <path d="M-66 -24 L-48 -38 L-30 -8 L-40 12 L-64 7 Z" fill="#4C633F" stroke="#20251F" strokeWidth="1.1" />
+            <path d="M38 -37 L52 -28 L54 -9 L38 -6 Z" fill="#829968" stroke="#20251F" strokeWidth="1.1" />
+            <g stroke="#344735" strokeWidth="0.9" fill="none"><line x1="-40" y1="-40" x2="-40" y2="8" /><line x1="-10" y1="-45" x2="-10" y2="7" /><line x1="22" y1="-44" x2="22" y2="8" /><line x1="39" y1="-36" x2="39" y2="7" /><line x1="-53" y1="-12" x2="-35" y2="-12" /><line x1="5" y1="-35" x2="32" y2="-35" /></g>
+            <g fill="#344735" stroke="#20251F" strokeWidth="0.6"><rect x="-62" y="-3" width="8" height="5" /><rect x="-50" y="3" width="8" height="3" /><rect x="-26" y="-38" width="12" height="4" /><rect x="27" y="-29" width="9" height="4" /><rect x="44" y="0" width="8" height="4" /></g>
+            <g stroke="#20251F" strokeWidth="1.1"><line x1="0" y1="-38" x2="3" y2="-33" /><line x1="4" y1="-38" x2="7" y2="-33" /><line x1="8" y1="-37" x2="11" y2="-32" /></g>
 
-            {/* Visor Armored Window Mullions */}
-            <line x1="0" y1="-34" x2="0" y2="-22" stroke="#0f172a" strokeWidth="1.1" />
-            <line x1="-7.5" y1="-28" x2="7.5" y2="-28" stroke="#0f172a" strokeWidth="0.9" />
+            {/* Gold reinforcement bands */}
+            <g fill="#D5B43D" stroke="#20251F" strokeWidth="1.1"><path d="M-17 -43 L-11 -43 L-9 10 L-18 10 Z" /><path d="M19 -43 L25 -43 L27 10 L18 10 Z" /></g>
+            <g stroke="#80691F" strokeWidth="0.75"><line x1="-16" y1="-38" x2="-11" y2="-38" /><line x1="-16" y1="-33" x2="-11" y2="-33" /><line x1="-16" y1="-28" x2="-11" y2="-28" /><line x1="-16" y1="-23" x2="-11" y2="-23" /><line x1="-16" y1="-18" x2="-11" y2="-18" /><line x1="-16" y1="-13" x2="-11" y2="-13" /><line x1="-16" y1="-8" x2="-11" y2="-8" /><line x1="20" y1="-38" x2="25" y2="-38" /><line x1="20" y1="-33" x2="25" y2="-33" /><line x1="20" y1="-28" x2="25" y2="-28" /><line x1="20" y1="-23" x2="25" y2="-23" /><line x1="20" y1="-18" x2="25" y2="-18" /><line x1="20" y1="-13" x2="25" y2="-13" /><line x1="20" y1="-8" x2="25" y2="-8" /></g>
 
-            {/* Visor Perimeter Micro-Rivets */}
-            {[-6, -3, 0, 3, 6].map((vx) => (
-              <circle key={`v-rivet-${vx}`} cx={vx} cy="-33" r="0.5" fill="#e0f2fe" />
-            ))}
+            {/* Octagonal front service hatch */}
+            <path d="M-54 -20 L-47 -26 L-38 -26 L-34 -20 L-34 4 L-40 9 L-50 7 L-55 0 Z" fill="#40423E" stroke="#20251F" strokeWidth="1.4" />
+            <path d="M-37 -25 L-34 -20 L-34 4 L-40 9" fill="none" stroke="#D5B43D" strokeWidth="1.4" />
+            <g stroke="#344735" strokeWidth="0.8"><line x1="-48" y1="-22" x2="-40" y2="-22" /><line x1="-48" y1="-17" x2="-39" y2="-17" /><line x1="-48" y1="3" x2="-39" y2="3" /></g>
 
-            {/* Visor Specular Glass Arc Highlight */}
-            <ellipse cx="-2.8" cy="-30.5" rx="3.5" ry="1.6" fill="#ffffff" opacity="0.85" />
+            {/* Bow face, observation band, paired sensor arrays */}
+            <path d="M-70 -25 L-73 -15 L-70 5 L-62 8 L-59 -27 Z" fill="#6D8558" stroke="#20251F" strokeWidth="1.5" />
+            <rect x="-68" y="-18" width="3" height="10" fill="#D5B43D" /><rect x="-67" y="-2" width="3" height="8" fill="#D5B43D" />
+            <path d="M-65 -18 L-47 -20 L-42 -15 L-46 -11 L-66 -11 Z" fill="#303A39" stroke="#20251F" strokeWidth="1.1" />
+            <g stroke="#9BA79A" strokeWidth="0.8"><line x1="-62" y1="-16" x2="-53" y2="-17" /><line x1="-50" y1="-17" x2="-46" y2="-16" /></g>
+            <g fill="#78776D" stroke="#20251F" strokeWidth="0.9"><ellipse cx="-70" cy="-9" rx="4" ry="2.2" /><ellipse cx="-70" cy="-1" rx="4" ry="2.2" /></g>
+            <g stroke="#262B25" strokeWidth="0.8"><line x1="-73" y1="-10" x2="-84" y2="-15" /><line x1="-73" y1="-9" x2="-85" y2="-9" /><line x1="-73" y1="-8" x2="-83" y2="-3" /><line x1="-73" y1="-2" x2="-84" y2="-7" /><line x1="-73" y1="-1" x2="-85" y2="-1" /><line x1="-73" y1="0" x2="-83" y2="5" /></g>
 
-            {/* Dorsal Sensor Radome Blister */}
-            <ellipse cx="0" cy="-44" rx="4" ry="2" fill="#0f172a" stroke="#10b981" strokeWidth="1.0" />
+            {/* Bridge and crew quarters */}
+            <path d="M-52 -42 L-45 -53 L-22 -56 L-14 -45 L-17 -35 L-48 -34 Z" fill="#829968" stroke="#20251F" strokeWidth="1.5" />
+            <path d="M-48 -43 L-27 -46 L-20 -41 L-24 -36 L-49 -36 Z" fill="#303A39" stroke="#20251F" strokeWidth="1.1" />
+            <g stroke="#9BA79A" strokeWidth="0.8"><line x1="-44" y1="-41" x2="-36" y2="-42" /><line x1="-33" y1="-43" x2="-26" y2="-42" /></g>
+            <path d="M-39 -54 L-35 -59 L-21 -59 L-17 -54 Z" fill="#91A878" stroke="#20251F" strokeWidth="1.2" />
+            <rect x="-34" y="-57" width="12" height="3" rx="0.8" fill="#303A39" stroke="#20251F" strokeWidth="0.8" />
+            <rect x="-48" y="-49" width="6" height="3" fill="#D5B43D" /><rect x="-18" y="-48" width="5" height="3" fill="#D5B43D" />
 
-            {/* Dual Whip Comms Antennas & Flashing Telemetry Beacons */}
-            <line x1="-7" y1="-42" x2="-7" y2="-51" stroke="#94a3b8" strokeWidth="1.0" />
-            <line x1="-9" y1="-51" x2="-5" y2="-51" stroke="#34d399" strokeWidth="0.8" />
-            <circle cx="-7" cy="-51" r="1.3" fill="#10b981" />
+            {/* Dorsal antenna and animated lights */}
+            <line x1="-27" y1="-59" x2="-27" y2="-72" stroke="#20251F" strokeWidth="1.1" />
+            <line x1="-36" y1="-58" x2="-36" y2="-65" stroke="#20251F" strokeWidth="1.1" />
+            <line x1="-18" y1="-55" x2="-18" y2="-63" stroke="#20251F" strokeWidth="1.1" />
+            <circle cx="-27" cy="-73" r="1.8" fill="#F5DD70"><animate attributeName="opacity" values="0.25;1;0.25" dur="0.7s" repeatCount="indefinite" /></circle>
+            <circle cx="-36" cy="-66" r="1.2" fill="#E84942"><animate attributeName="opacity" values="1;0.2;1" dur="1.15s" repeatCount="indefinite" /></circle>
 
-            <line x1="7" y1="-42" x2="7" y2="-51" stroke="#94a3b8" strokeWidth="1.0" />
-            <line x1="5" y1="-51" x2="9" y2="-51" stroke="#34d399" strokeWidth="0.8" />
-            <circle cx="7" cy="-51" r="1.3" fill="#34d399" />
+            {/* Illuminated JUGGERNAUT LIFTER side plaque */}
+            <rect x="-2" y="-18" width="31" height="13" rx="2" fill="#3C4B36" stroke="#80691F" strokeWidth="1.4" />
+            <rect x="-1" y="-17" width="29" height="11" rx="1.7" fill="none" stroke="#F0D256" strokeWidth="1.4" />
+            <text x="13.5" y="-13" fill="#F4F0D7" fontSize="4.1" fontFamily="sans-serif" fontWeight="bold" textAnchor="middle">JUGGERNAUT</text>
+            <text x="13.5" y="-8" fill="#F4F0D7" fontSize="4.1" fontFamily="sans-serif" fontWeight="bold" textAnchor="middle">LIFTER</text>
+
+            {/* Rear RCS rods and machinery */}
+            <g stroke="#20251F" strokeWidth="0.9"><line x1="45" y1="-35" x2="57" y2="-42" /><line x1="48" y1="-33" x2="62" y2="-38" /><line x1="51" y1="-31" x2="65" y2="-31" /><line x1="52" y1="8" x2="63" y2="14" /><line x1="54" y1="6" x2="66" y2="10" /></g>
+            <rect x="30" y="-25" width="10" height="7" rx="1" fill="#78776D" stroke="#20251F" strokeWidth="0.8" />
+            <g stroke="#D5B43D" strokeWidth="0.8"><line x1="33" y1="-23" x2="38" y2="-23" /><line x1="33" y1="-20" x2="38" y2="-20" /></g>
           </g>
         )}
+
+
 
         {/* ========================================================= */}
         {/* MODEL: NUTCRACKER MINER (EX-920 Heavy Excavator Carrier)  */}

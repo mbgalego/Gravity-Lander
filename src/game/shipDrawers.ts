@@ -8080,7 +8080,11 @@ export function drawLeviathan(
 }
 
 // =====================================================================
-// 10. MAMMOTH RIG (MR-700 Excavator Mobile Base Carrier)
+// =====================================================================
+// 10. MAMMOTH RIG (C-95 Heavy Lift Cargo Transport)
+//     Faithful clone of the C-95 "MAMMOTH RIG" technical schematic.
+//     Bow faces RIGHT. Primary blue-gray duranium hull, yellow-gold
+//     accent collars & hazard stripes, cyan bridge glazing, red beacon.
 // =====================================================================
 export function drawMammoth(
   ctx: CanvasRenderingContext2D,
@@ -8089,999 +8093,538 @@ export function drawMammoth(
   ship: ShipState,
   time: number = 0
 ) {
-  const footPadY = 34 + gearSpringOffset;
+  const footPadY = 38 + gearSpringOffset;
+  const isFlying = !ship?.isLanded && !ship?.isCrashed;
+  const flash = Math.sin(time * 6.0) > 0.2;
 
-  // ---------------------------------------------------------
-  // 0. Downward Volumetric Halogen Floodlight Cones (Background)
-  // ---------------------------------------------------------
-  ctx.save();
-  const shimmer = 0.22 + Math.sin(time * 5.0) * 0.03;
-  const floodGrad = ctx.createLinearGradient(0, -33, 0, 42);
-  floodGrad.addColorStop(0, `rgba(254, 240, 138, ${shimmer})`);
-  floodGrad.addColorStop(0.4, `rgba(254, 240, 138, ${shimmer * 0.4})`);
-  floodGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+  const hullBase = '#647477';
+  const hullDark = '#59686A';
+  const hullDarker = '#394447';
+  const hullHighlight = '#879597';
+  const hullLight = '#9AA5A3';
+  const outline = '#172125';
+  const yellow = '#D4A62B';
+  const yellowLight = '#E0B33A';
+  const cyan = '#39CBD0';
+  const cyanHi = '#55E0E2';
+  const cream = '#FFF0C9';
+  const creamGlow = '#F2C96A';
+  const red = '#E84942';
+  const orange = '#E86F42';
 
-  ctx.fillStyle = floodGrad;
-  // Left Floodlight Beam
-  ctx.beginPath();
-  ctx.moveTo(18, -33);
-  ctx.lineTo(6, 40);
-  ctx.lineTo(30, 40);
-  ctx.closePath();
-  ctx.fill();
+  const hullGrad = ctx.createLinearGradient(0, -58, 0, 22);
+  hullGrad.addColorStop(0, hullLight);
+  hullGrad.addColorStop(0.25, hullBase);
+  hullGrad.addColorStop(0.6, hullDark);
+  hullGrad.addColorStop(1, hullDarker);
 
-  // Right Floodlight Beam
-  ctx.beginPath();
-  ctx.moveTo(30, -33);
-  ctx.lineTo(18, 40);
-  ctx.lineTo(42, 40);
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore();
+  const keelGrad = ctx.createLinearGradient(0, 8, 0, 30);
+  keelGrad.addColorStop(0, hullDarker);
+  keelGrad.addColorStop(1, '#252E32');
 
-  // ---------------------------------------------------------
-  // 1. Heavy Asymmetric Propulsion Array (Underchassis)
-  // ---------------------------------------------------------
-  ctx.save();
-  // Port Dual Vectoring Rocket Thrusters
-  // Outer Port Thruster
-  ctx.fillStyle = '#1e293b';
-  ctx.strokeStyle = '#64748b';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.moveTo(-31, 16);
-  ctx.lineTo(-27, 16);
-  ctx.lineTo(-25, 24);
-  ctx.lineTo(-33, 24);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#0f172a';
-  ctx.beginPath();
-  ctx.ellipse(-29, 24, 4, 1.4, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#06b6d4';
-  ctx.globalAlpha = 0.6;
-  ctx.beginPath();
-  ctx.ellipse(-29, 23.5, 2.5, 0.8, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1.0;
-
-  // Inner Port Thruster
-  ctx.fillStyle = '#1e293b';
-  ctx.strokeStyle = '#64748b';
-  ctx.beginPath();
-  ctx.moveTo(-21, 16);
-  ctx.lineTo(-17, 16);
-  ctx.lineTo(-15, 24);
-  ctx.lineTo(-23, 24);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#0f172a';
-  ctx.beginPath();
-  ctx.ellipse(-19, 24, 4, 1.4, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#06b6d4';
-  ctx.globalAlpha = 0.6;
-  ctx.beginPath();
-  ctx.ellipse(-19, 23.5, 2.5, 0.8, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1.0;
-
-  // Starboard Heavy Thermal Primary Thruster Bell
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#64748b';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.moveTo(23, 16);
-  ctx.lineTo(33, 16);
-  ctx.lineTo(36, 25);
-  ctx.lineTo(20, 25);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  // Thruster Cooling Ribs
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  ctx.moveTo(24.5, 17);
-  ctx.lineTo(23, 24);
-  ctx.moveTo(28, 17);
-  ctx.lineTo(28, 24.5);
-  ctx.moveTo(31.5, 17);
-  ctx.lineTo(33, 24);
-  ctx.stroke();
-
-  ctx.fillStyle = '#020617';
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.ellipse(28, 25, 8, 2.2, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#f59e0b';
-  ctx.globalAlpha = 0.65;
-  ctx.beginPath();
-  ctx.ellipse(28, 24.5, 5.5, 1.4, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1.0;
-  ctx.restore();
-
-  // ---------------------------------------------------------
-  // 2. Heavy Articulated Mining Outriggers & Suspension
-  // (CRITICAL RULE: STRICTLY ISOLATED SUBPATHS PER FOOTPAD)
-  // ---------------------------------------------------------
-  ctx.save();
-  // Left Outrigger Leg Assembly
-  // Knuckle Bracket
-  ctx.fillStyle = '#ca8a04';
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.arc(-32, 12, 3.2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#1e293b';
-  ctx.beginPath();
-  ctx.arc(-32, 12, 1.2, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Armored Yellow Main Strut
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 2.8;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(-32, 13);
-  ctx.lineTo(-38, footPadY);
-  ctx.stroke();
-
-  // Inner Hydraulic Chrome Piston & Damper Spring
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 2.0;
-  ctx.beginPath();
-  ctx.moveTo(-22, 17);
-  ctx.lineTo(-38, footPadY);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#ca8a04';
-  ctx.lineWidth = 1.2;
-  ctx.setLineDash([2.5, 2]);
-  ctx.beginPath();
-  ctx.moveTo(-22, 17);
-  ctx.lineTo(-38, footPadY);
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Scissor Torque Linkage
-  ctx.fillStyle = '#334155';
-  ctx.beginPath();
-  ctx.moveTo(-35, 22);
-  ctx.lineTo(-38, 26);
-  ctx.lineTo(-33, 26);
-  ctx.closePath();
-  ctx.fill();
-
-  // Left Ground Footpad with Regolith Traction Cleats (STRICTLY ISOLATED)
-  ctx.fillStyle = '#ca8a04';
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.ellipse(-38, footPadY, 8.5, 3.2, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#eab308';
-  ctx.beginPath();
-  ctx.ellipse(-38, footPadY - 0.5, 6.5, 1.8, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = '#451a03';
-  ctx.beginPath();
-  ctx.arc(-38, footPadY - 0.5, 1.2, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Carbide Traction Teeth
-  ctx.fillStyle = '#475569';
-  ctx.beginPath();
-  ctx.moveTo(-43, footPadY + 2);
-  ctx.lineTo(-41, footPadY + 4);
-  ctx.lineTo(-40, footPadY + 2);
-  ctx.moveTo(-39, footPadY + 2);
-  ctx.lineTo(-38, footPadY + 4.5);
-  ctx.lineTo(-37, footPadY + 2);
-  ctx.moveTo(-36, footPadY + 2);
-  ctx.lineTo(-35, footPadY + 4);
-  ctx.lineTo(-33, footPadY + 2);
-  ctx.closePath();
-  ctx.fill();
-
-  // Right Outrigger Leg Assembly
-  // Knuckle Bracket
-  ctx.fillStyle = '#ca8a04';
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.arc(32, 12, 3.2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#1e293b';
-  ctx.beginPath();
-  ctx.arc(32, 12, 1.2, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Armored Yellow Main Strut
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 2.8;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(32, 13);
-  ctx.lineTo(38, footPadY);
-  ctx.stroke();
-
-  // Inner Hydraulic Chrome Piston & Damper Spring
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 2.0;
-  ctx.beginPath();
-  ctx.moveTo(22, 17);
-  ctx.lineTo(38, footPadY);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#ca8a04';
-  ctx.lineWidth = 1.2;
-  ctx.setLineDash([2.5, 2]);
-  ctx.beginPath();
-  ctx.moveTo(22, 17);
-  ctx.lineTo(38, footPadY);
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Scissor Torque Linkage
-  ctx.fillStyle = '#334155';
-  ctx.beginPath();
-  ctx.moveTo(35, 22);
-  ctx.lineTo(38, 26);
-  ctx.lineTo(33, 26);
-  ctx.closePath();
-  ctx.fill();
-
-  // Right Ground Footpad with Regolith Traction Cleats (STRICTLY ISOLATED)
-  ctx.fillStyle = '#ca8a04';
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.ellipse(38, footPadY, 8.5, 3.2, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#eab308';
-  ctx.beginPath();
-  ctx.ellipse(38, footPadY - 0.5, 6.5, 1.8, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = '#451a03';
-  ctx.beginPath();
-  ctx.arc(38, footPadY - 0.5, 1.2, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Carbide Traction Teeth
-  ctx.fillStyle = '#475569';
-  ctx.beginPath();
-  ctx.moveTo(33, footPadY + 2);
-  ctx.lineTo(35, footPadY + 4);
-  ctx.lineTo(36, footPadY + 2);
-  ctx.moveTo(37, footPadY + 2);
-  ctx.lineTo(38, footPadY + 4.5);
-  ctx.lineTo(39, footPadY + 2);
-  ctx.moveTo(40, footPadY + 2);
-  ctx.lineTo(41, footPadY + 4);
-  ctx.lineTo(43, footPadY + 2);
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore();
-
-  // ---------------------------------------------------------
-  // 3. Portside Heavy Machinery Housing & Crane Base (x: -38 to -14)
-  // ---------------------------------------------------------
-  ctx.save();
-  ctx.fillStyle = '#1e293b';
-  ctx.strokeStyle = '#ca8a04';
-  ctx.lineWidth = 1.6;
-  ctx.beginPath();
-  roundRect(ctx, -38, -14, 24, 30, 2.5);
-  ctx.fill();
-  ctx.stroke();
-
-  // Armored Inspection Access Panel & Louvers
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  roundRect(ctx, -35, -10, 18, 18, 1.5);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = '#64748b';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.moveTo(-33, -5);
-  ctx.lineTo(-28, -5);
-  ctx.moveTo(-33, -1);
-  ctx.lineTo(-28, -1);
-  ctx.moveTo(-33, 3);
-  ctx.lineTo(-28, 3);
-  ctx.stroke();
-
-  // Equipment Safety Hazard Chevron Striping along Lower Skirt
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(-38, 10, 24, 5);
-  ctx.clip();
-  ctx.fillStyle = '#0f172a';
-  ctx.fillRect(-38, 10, 24, 5);
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 3.2;
-  for (let sx = -45; sx < -10; sx += 6) {
-    ctx.beginPath();
-    ctx.moveTo(sx, 16);
-    ctx.lineTo(sx + 6, 9);
-    ctx.stroke();
-  }
-  ctx.restore();
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 0.8;
-  ctx.strokeRect(-38, 10, 24, 5);
-
-  // Turntable Slew Ring Turret
-  ctx.fillStyle = '#334155';
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.ellipse(-28, -14, 6, 2.2, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#facc15';
-  ctx.beginPath();
-  ctx.arc(-28, -14, 1.6, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-
-  // ---------------------------------------------------------
-  // 4. Articulated Lattice Box-Girder Crane Boom & Hydraulic Lift Rams
-  // ---------------------------------------------------------
-  ctx.save();
-  // Hydraulic Lift Cylinder (Lower)
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 3.2;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(-24, -13);
-  ctx.lineTo(-32, -22);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#f8fafc';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.moveTo(-24, -13);
-  ctx.lineTo(-32, -22);
-  ctx.stroke();
-
-  // Main Upper and Lower Boom Chords
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 2.8;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(-28, -14);
-  ctx.lineTo(-37, -34);
-  ctx.stroke();
-
-  ctx.lineWidth = 2.0;
-  ctx.beginPath();
-  ctx.moveTo(-23, -12);
-  ctx.lineTo(-35, -32);
-  ctx.stroke();
-
-  // Diagonal Lattice Bracing
-  ctx.strokeStyle = '#ca8a04';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.moveTo(-27, -16);
-  ctx.lineTo(-24, -14);
-  ctx.lineTo(-29, -21);
-  ctx.lineTo(-26, -18);
-  ctx.lineTo(-32, -26);
-  ctx.lineTo(-29, -24);
-  ctx.lineTo(-35, -31);
-  ctx.stroke();
-
-  // Boom Tip Sheave Pulley Wheels
-  ctx.fillStyle = '#ca8a04';
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.arc(-37, -34, 2.8, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#facc15';
-  ctx.beginPath();
-  ctx.arc(-37, -34, 1.2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-
-  // ---------------------------------------------------------
-  // 5. Hanging Steel Hoist Cable & Magnetic Core Grabber (ORIGINAL FEATURE)
-  // ---------------------------------------------------------
-  ctx.save();
-  const cableSway = Math.sin(time * 2.5) * 1.5;
-  const tipX = -37;
-  const tipY = -34;
-  const grabberX = -36 + cableSway;
-  const grabberY = -17;
-
-  // Braided Steel Hoist Cable
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 1.2;
-  ctx.setLineDash([3, 1]);
-  ctx.beginPath();
-  ctx.moveTo(tipX, tipY);
-  ctx.lineTo(grabberX, grabberY - 1);
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Cable Guide Shackle
-  ctx.fillStyle = '#ca8a04';
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  ctx.arc(grabberX, grabberY - 1, 1.4, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  // Magnetic Core Grabber Housing
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  roundRect(ctx, grabberX - 3.5, grabberY, 7, 6.5, 1.2);
-  ctx.fill();
-  ctx.stroke();
-
-  // Glowing Subsurface Core Sensor (Pulsing Amber)
-  const pulseSensor = 0.7 + Math.sin(time * 4.0) * 0.3;
-  ctx.fillStyle = '#f59e0b';
-  ctx.globalAlpha = pulseSensor;
-  ctx.beginPath();
-  ctx.arc(grabberX, grabberY + 3.2, 2.0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = '#fef08a';
-  ctx.globalAlpha = 1.0;
-  ctx.beginPath();
-  ctx.arc(grabberX, grabberY + 3.2, 1.0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Articulated Tungsten Grabber Claws
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 1.2;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.beginPath();
-  // Outer Left Claw
-  ctx.moveTo(grabberX - 3.5, grabberY + 4.5);
-  ctx.lineTo(grabberX - 6.0, grabberY + 8.0);
-  ctx.lineTo(grabberX - 5.0, grabberY + 10.0);
-  // Outer Right Claw
-  ctx.moveTo(grabberX + 3.5, grabberY + 4.5);
-  ctx.lineTo(grabberX + 6.0, grabberY + 8.0);
-  ctx.lineTo(grabberX + 5.0, grabberY + 10.0);
-  ctx.stroke();
 
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 1.2;
+  // 1. BOW SEARCHLIGHT BEAMS (background light cones)
+  const beamPulse = 0.35 + Math.sin(time * 4.0) * 0.08;
+  ctx.save();
+  const beamGrad = ctx.createLinearGradient(58, -8, 95, 30);
+  beamGrad.addColorStop(0, `rgba(255,240,201,${beamPulse})`);
+  beamGrad.addColorStop(1, 'rgba(255,240,201,0)');
+  ctx.fillStyle = beamGrad;
   ctx.beginPath();
-  // Inner Claws
-  ctx.moveTo(grabberX - 1.0, grabberY + 6.5);
-  ctx.lineTo(grabberX - 1.5, grabberY + 10.0);
-  ctx.moveTo(grabberX + 1.0, grabberY + 6.5);
-  ctx.lineTo(grabberX + 1.5, grabberY + 10.0);
-  ctx.stroke();
+  ctx.moveTo(58, -12);
+  ctx.lineTo(95, 8);
+  ctx.lineTo(95, 40);
+  ctx.lineTo(58, -2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(60, -4);
+  ctx.lineTo(98, 18);
+  ctx.lineTo(98, 44);
+  ctx.lineTo(60, 6);
+  ctx.closePath();
+  ctx.fill();
   ctx.restore();
 
-  // ---------------------------------------------------------
-  // 6. Center Ultra-Wide Mining Vehicle Cargo Bay (x: -14 to +14)
-  // ---------------------------------------------------------
-  const mHoldX = -14;
-  const mHoldY = -10;
-  const mHoldW = 28;
-  const mHoldH = 25;
-
+  // 2. MAIN PROPULSION NOZZLE ASSEMBLY (stern center)
+  const glow = isFlying ? 0.9 : 0.35;
   ctx.save();
-  ctx.fillStyle = '#090d16';
-  ctx.strokeStyle = '#ca8a04';
-  ctx.lineWidth = 1.4;
+  ctx.fillStyle = hullDarker;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 1.2;
   ctx.beginPath();
-  roundRect(ctx, mHoldX, mHoldY, mHoldW, mHoldH, 1.5);
+  ctx.roundRect(-48, 8, 22, 22, 3);
   ctx.fill();
   ctx.stroke();
-
-  // Overhead Heavy Gantry Monorail & Trolley Hoist
-  ctx.fillStyle = '#eab308';
-  ctx.strokeStyle = '#854d0e';
-  ctx.lineWidth = 0.6;
+  ctx.fillStyle = yellow;
   ctx.beginPath();
-  ctx.rect(-13, -9, 26, 2.5);
+  ctx.roundRect(-50, 8, 5, 22, 2.5);
   ctx.fill();
   ctx.stroke();
-
-  ctx.fillStyle = '#334155';
+  ctx.fillStyle = '#1B2528';
   ctx.beginPath();
-  roundRect(ctx, -3, -8, 6, 2, 0.5);
+  ctx.roundRect(-46, 12, 12, 14, 2);
   ctx.fill();
-
-  ctx.fillStyle = '#facc15';
+  ctx.stroke();
+  ctx.fillStyle = `rgba(242,201,106,${glow})`;
   ctx.beginPath();
-  ctx.arc(0, -6, 0.8, 0, Math.PI * 2);
+  ctx.roundRect(-45, 13, 9, 12, 2);
   ctx.fill();
+  ctx.restore();
 
-  // Render Onboard 6-Wheeled Deep-Core Exploration Crawler if loaded or in hold
-  if ((ship.loadedTrucksCount || 0) > 0) {
+  // 3. TWIN PRIMARY VECTORED THRUSTER PODS (lower rear)
+  for (const py of [-6, 10]) {
     ctx.save();
-    // Rover Armored Chassis
-    ctx.fillStyle = '#1e293b';
-    ctx.strokeStyle = '#eab308';
+    ctx.fillStyle = hullDarker;
+    ctx.strokeStyle = outline;
+    ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.roundRect(-38, py, 20, 13, 2.5);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = yellow;
+    ctx.beginPath();
+    ctx.roundRect(-40, py, 4, 13, 2);
+    ctx.fill();
+    ctx.fillStyle = '#1B2528';
+    ctx.beginPath();
+    ctx.roundRect(-37, py + 2, 11, 9, 2);
+    ctx.fill();
+    ctx.fillStyle = `rgba(242,201,106,${glow})`;
+    ctx.beginPath();
+    ctx.roundRect(-36, py + 3, 8, 7, 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // 4. LANDING GEAR (4 heavy articulated legs, isolated subpaths)
+  const gearDefs = [
+    { mountX: -34, footX: -52 },
+    { mountX: -10, footX: -24 },
+    { mountX: 20, footX: 6 },
+    { mountX: 48, footX: 34 },
+  ];
+  for (const leg of gearDefs) {
+    ctx.save();
+    ctx.fillStyle = hullDarker;
+    ctx.strokeStyle = outline;
     ctx.lineWidth = 1.0;
     ctx.beginPath();
-    roundRect(ctx, -10, 3, 20, 7.5, 1.8);
+    ctx.arc(leg.mountX, 20, 3.4, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-
-    // Rover Angled Cab & Amber Cockpit
-    ctx.fillStyle = '#f59e0b';
-    ctx.strokeStyle = '#ca8a04';
-    ctx.lineWidth = 0.8;
+    ctx.strokeStyle = hullDark;
+    ctx.lineWidth = 3.0;
     ctx.beginPath();
-    ctx.moveTo(1, 3);
-    ctx.lineTo(7, 3);
-    ctx.lineTo(9, 0);
-    ctx.lineTo(3, 0);
-    ctx.closePath();
+    ctx.moveTo(leg.mountX, 21);
+    ctx.lineTo(leg.footX, footPadY - 4);
+    ctx.stroke();
+    ctx.strokeStyle = yellow;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(leg.mountX, 23);
+    ctx.lineTo(leg.footX - 6, footPadY - 8);
+    ctx.stroke();
+    ctx.strokeStyle = '#DDE4DF';
+    ctx.lineWidth = 1.0;
+    ctx.beginPath();
+    ctx.moveTo(leg.footX - 6, footPadY - 8);
+    ctx.lineTo(leg.footX, footPadY - 4);
+    ctx.stroke();
+    ctx.fillStyle = '#252E32';
+    ctx.strokeStyle = outline;
+    ctx.lineWidth = 1.0;
+    ctx.beginPath();
+    ctx.roundRect(leg.footX - 8, footPadY - 3, 16, 5, 2);
     ctx.fill();
     ctx.stroke();
-
-    ctx.fillStyle = '#fef08a';
-    ctx.globalAlpha = 0.8;
+    ctx.save();
     ctx.beginPath();
-    ctx.moveTo(2, 2.5);
-    ctx.lineTo(6, 2.5);
-    ctx.lineTo(7.5, 0.8);
-    ctx.lineTo(3.5, 0.8);
-    ctx.closePath();
-    ctx.fill();
-    ctx.globalAlpha = 1.0;
-
-    // Dual Forward Headlights
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(8, 5, 1.2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#fef08a';
-    ctx.globalAlpha = 0.6;
-    ctx.beginPath();
-    ctx.ellipse(10, 5, 2, 1.2, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1.0;
-
-    // Roof Beacon
-    ctx.fillStyle = '#ef4444';
-    ctx.beginPath();
-    ctx.arc(4, -1.5, 1.0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 6 Heavy All-Terrain Crawler Wheels with Rims
-    const wheelPositions = [-7.5, 0, 7.5];
-    for (const wx of wheelPositions) {
-      ctx.fillStyle = '#0f172a';
-      ctx.strokeStyle = '#475569';
-      ctx.lineWidth = 1.0;
+    ctx.roundRect(leg.footX - 8, footPadY - 3, 16, 5, 2);
+    ctx.clip();
+    ctx.fillStyle = yellow;
+    ctx.fillRect(leg.footX - 8, footPadY - 3, 16, 5);
+    ctx.strokeStyle = '#292D2D';
+    ctx.lineWidth = 2.6;
+    for (let hx = leg.footX - 10; hx < leg.footX + 12; hx += 5) {
       ctx.beginPath();
-      ctx.arc(wx, 11.5, 2.8, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.moveTo(hx, footPadY + 2);
+      ctx.lineTo(hx + 5, footPadY - 3);
       ctx.stroke();
-
-      ctx.fillStyle = '#ca8a04';
-      ctx.beginPath();
-      ctx.arc(wx, 11.5, 1.2, 0, Math.PI * 2);
-      ctx.fill();
     }
     ctx.restore();
-  }
-
-  // ---------------------------------------------------------
-  // 7. Drop-Down Hydraulic Mining Ramp
-  // ---------------------------------------------------------
-  const mRampProgress = ship.rampProgress || 0;
-  const mHingeX = mHoldX;
-  const mHingeY = mHoldY + mHoldH - 2;
-
-  // Ramp Threshold Hazard Striping Band
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(-14, 13, 28, 3.5);
-  ctx.clip();
-  ctx.fillStyle = '#0f172a';
-  ctx.fillRect(-14, 13, 28, 3.5);
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 2.8;
-  for (let rx = -20; rx < 18; rx += 5) {
-    ctx.beginPath();
-    ctx.moveTo(rx, 17);
-    ctx.lineTo(rx + 5, 12);
-    ctx.stroke();
-  }
-  ctx.restore();
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 0.8;
-  ctx.strokeRect(-14, 13, 28, 3.5);
-
-  if (mRampProgress > 0.01) {
-    ctx.save();
-    const rampLength = 36;
-    const closedAngle = -Math.PI * 0.5;
-    const openAngle = Math.PI * 0.12;
-    const currentAngle = closedAngle + (openAngle - closedAngle) * mRampProgress;
-    const rampEndX = mHingeX - Math.cos(currentAngle) * rampLength;
-    const rampEndY = mHingeY + Math.sin(currentAngle) * rampLength;
-
-    // Heavy ramp structural door
-    ctx.strokeStyle = '#854d0e';
-    ctx.lineWidth = 5.0;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(mHingeX, mHingeY);
-    ctx.lineTo(rampEndX, rampEndY);
-    ctx.stroke();
-
-    ctx.strokeStyle = '#eab308';
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(mHingeX, mHingeY);
-    ctx.lineTo(rampEndX, rampEndY);
-    ctx.stroke();
-
-    // Chrome hydraulic actuator piston
-    const midX = (mHingeX + rampEndX) * 0.5;
-    const midY = (mHingeY + rampEndY) * 0.5;
-    ctx.strokeStyle = '#cbd5e1';
-    ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.moveTo(mHingeX + 3, mHingeY - 4);
-    ctx.lineTo(midX, midY);
-    ctx.stroke();
-
-    ctx.fillStyle = '#facc15';
-    ctx.beginPath();
-    ctx.arc(rampEndX, rampEndY, 2.2, 0, Math.PI * 2);
-    ctx.fill();
     ctx.restore();
-  } else {
-    // Closed position hydraulic ram markers matching SVG
-    ctx.strokeStyle = '#ca8a04';
-    ctx.lineWidth = 2.8;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(-13, 13);
-    ctx.lineTo(-23, 22);
-    ctx.stroke();
-
-    ctx.strokeStyle = '#f8fafc';
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(-13, 13);
-    ctx.lineTo(-23, 22);
-    ctx.stroke();
-
-    ctx.fillStyle = '#facc15';
-    ctx.beginPath();
-    ctx.arc(-23, 22, 1.8, 0, Math.PI * 2);
-    ctx.fill();
   }
-  ctx.restore();
 
-  // ---------------------------------------------------------
-  // 8. Starboard Catalytic Refinery Columns & Sight-Glass (x: 14 to 38)
-  // ---------------------------------------------------------
+  // 5. LOWER HULL / CARGO DECK SKIRT
   ctx.save();
-  // Primary High-Pressure Cracking Column
-  const refGrad1 = ctx.createLinearGradient(17, 0, 28, 0);
-  refGrad1.addColorStop(0, '#1e293b');
-  refGrad1.addColorStop(0.25, '#475569');
-  refGrad1.addColorStop(0.6, '#334155');
-  refGrad1.addColorStop(1, '#0f172a');
-
-  ctx.fillStyle = refGrad1;
-  ctx.strokeStyle = '#64748b';
+  ctx.fillStyle = keelGrad;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(-60, 10);
+  ctx.lineTo(60, 10);
+  ctx.lineTo(62, 22);
+  ctx.lineTo(-62, 22);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = '#303A3E';
   ctx.lineWidth = 1.2;
   ctx.beginPath();
-  roundRect(ctx, 17, -18, 11, 33, 2.5);
-  ctx.fill();
+  ctx.moveTo(-62, 16);
+  ctx.lineTo(62, 16);
+  ctx.moveTo(-62, 19);
+  ctx.lineTo(62, 19);
   ctx.stroke();
-
-  // Secondary Fractionating Column
-  const refGrad2 = ctx.createLinearGradient(28, 0, 37, 0);
-  refGrad2.addColorStop(0, '#1e293b');
-  refGrad2.addColorStop(0.3, '#475569');
-  refGrad2.addColorStop(0.7, '#334155');
-  refGrad2.addColorStop(1, '#0f172a');
-
-  ctx.fillStyle = refGrad2;
-  ctx.strokeStyle = '#64748b';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  roundRect(ctx, 28, -14, 9, 29, 2.0);
-  ctx.fill();
-  ctx.stroke();
-
-  // Structural Reinforcing Band Collars
-  ctx.strokeStyle = '#ca8a04';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.moveTo(17, -8);
-  ctx.lineTo(37, -8);
-  ctx.moveTo(17, 0);
-  ctx.lineTo(37, 0);
-  ctx.moveTo(17, 8);
-  ctx.lineTo(37, 8);
-  ctx.stroke();
-
-  // Illuminated Catalytic Fluid Sight-Glass (ORIGINAL FEATURE)
-  // Protective Metal Outer Bezel
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#ca8a04';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  roundRect(ctx, 20.5, -12, 4, 21, 1.5);
-  ctx.fill();
-  ctx.stroke();
-
-  // Glowing Bio-Catalyst Fluid Tube (with dynamic luminescence pulse)
-  const fluidGrad = ctx.createLinearGradient(21, 0, 24, 0);
-  fluidGrad.addColorStop(0, '#064e3b');
-  fluidGrad.addColorStop(0.35, '#10b981');
-  fluidGrad.addColorStop(0.7, '#34d399');
-  fluidGrad.addColorStop(1, '#047857');
-
-  ctx.fillStyle = fluidGrad;
-  ctx.beginPath();
-  roundRect(ctx, 21.5, -11, 2, 19, 1.0);
-  ctx.fill();
-
-  // Calibration Graduation Ticks
-  ctx.strokeStyle = '#ffffff';
-  ctx.globalAlpha = 0.85;
-  ctx.lineWidth = 0.6;
-  ctx.beginPath();
-  ctx.moveTo(20.8, -7);
-  ctx.lineTo(22, -7);
-  ctx.moveTo(20.8, -3);
-  ctx.lineTo(22.4, -3);
-  ctx.moveTo(20.8, 1);
-  ctx.lineTo(22, 1);
-  ctx.moveTo(20.8, 5);
-  ctx.lineTo(22.4, 5);
-  ctx.stroke();
-
-  // Meniscus Fluid Shimmer
-  const meniscusY = -9 + Math.sin(time * 3.0) * 0.5;
-  ctx.fillStyle = '#a7f3d0';
-  ctx.beginPath();
-  ctx.ellipse(22.5, meniscusY, 1.0, 0.6, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1.0;
-
-  // High-Pressure Interconnecting Manifold Piping & Valve
-  ctx.strokeStyle = '#d97706';
-  ctx.lineWidth = 1.4;
-  ctx.lineJoin = 'round';
-  ctx.beginPath();
-  ctx.moveTo(28, -4);
-  ctx.lineTo(32, -4);
-  ctx.lineTo(32, 4);
-  ctx.lineTo(28, 4);
-  ctx.stroke();
-
-  // Brass Valve Handwheel
-  ctx.fillStyle = '#ca8a04';
-  ctx.strokeStyle = '#713f12';
-  ctx.lineWidth = 0.6;
-  ctx.beginPath();
-  ctx.arc(32, 0, 1.8, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#facc15';
-  ctx.beginPath();
-  ctx.arc(32, 0, 0.6, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Top Scrubber & Titanium Heat-Tint Exhaust Cowl
-  // Radiator Cooling Fin Array
-  ctx.fillStyle = '#475569';
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  roundRect(ctx, 21, -21, 14, 3, 0.8);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  ctx.moveTo(24, -21);
-  ctx.lineTo(24, -18);
-  ctx.moveTo(28, -21);
-  ctx.lineTo(28, -18);
-  ctx.moveTo(32, -21);
-  ctx.lineTo(32, -18);
-  ctx.stroke();
-
-  // Heat-Treated Titanium Exhaust Stack (Blue/Purple/Gold Anodized Heat Tint)
-  const heatGrad = ctx.createLinearGradient(24, 0, 31, 0);
-  heatGrad.addColorStop(0, '#334155');
-  heatGrad.addColorStop(0.25, '#3b82f6');
-  heatGrad.addColorStop(0.5, '#8b5cf6');
-  heatGrad.addColorStop(0.75, '#d97706');
-  heatGrad.addColorStop(1, '#1e293b');
-
-  ctx.fillStyle = heatGrad;
-  ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  roundRect(ctx, 24, -24, 7, 3.5, 1.0);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#0f172a';
-  ctx.beginPath();
-  ctx.ellipse(27.5, -24, 2.5, 0.8, 0, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fillStyle = orange;
+  for (let px = -54; px <= 54; px += 18) {
+    ctx.beginPath();
+    ctx.roundRect(px, 12, 4, 3, 1);
+    ctx.fill();
+  }
   ctx.restore();
 
-  // ---------------------------------------------------------
-  // 9. Starboard Elevated Heavy Equipment Operator Bridge (x: 15 to 35)
-  // ---------------------------------------------------------
+  // 6. MAIN CARGO HOLD A (forward lower deck)
   ctx.save();
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#ca8a04';
+  ctx.fillStyle = '#252E32';
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.roundRect(8, -6, 50, 18, 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = '#303A3E';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  for (let rx = 12; rx <= 54; rx += 6) {
+    ctx.moveTo(rx, -5);
+    ctx.lineTo(rx, 11);
+  }
+  ctx.stroke();
+  ctx.strokeStyle = yellow;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.roundRect(8, -6, 50, 18, 2);
+  ctx.stroke();
+  ctx.fillStyle = yellowLight;
+  ctx.font = 'bold 4px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('MAMMOTH', 33, 0.5);
+  ctx.fillText('RIG', 33, 5.5);
+  ctx.fillStyle = '#DDE4DF';
+  ctx.font = 'bold 2.6px monospace';
+  ctx.fillText('CARGO', 33, -3.2);
+  ctx.fillStyle = '#1B2528';
+  ctx.beginPath();
+  ctx.roundRect(10, -4, 46, 14, 1.5);
+  ctx.fill();
+  const drumColor = '#B08D57';
+  for (let dx = 14; dx <= 50; dx += 9) {
+    ctx.fillStyle = drumColor;
+    ctx.strokeStyle = '#7A5C34';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.roundRect(dx, 2, 6, 6, 1);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#5A4526';
+    ctx.beginPath();
+    ctx.arc(dx + 3, 5, 2.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // 7. CENTRAL HULL & ENGINEERING DECK
+  ctx.save();
+  ctx.fillStyle = hullGrad;
+  ctx.strokeStyle = outline;
   ctx.lineWidth = 1.6;
   ctx.beginPath();
-  ctx.moveTo(15, -34);
-  ctx.lineTo(31, -34);
-  ctx.lineTo(35, -21);
-  ctx.lineTo(15, -21);
+  ctx.moveTo(-60, -8);
+  ctx.lineTo(60, -8);
+  ctx.lineTo(62, 10);
+  ctx.lineTo(-62, 10);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
-
-  // Multi-Pane Crimson Visor
-  ctx.fillStyle = createVisorGrad(ctx, 23, -27, 8, config.accentColor, config.visorColor);
-  ctx.strokeStyle = '#fda4af';
+  ctx.strokeStyle = '#394447';
   ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.moveTo(16.5, -31);
-  ctx.lineTo(29.5, -31);
-  ctx.lineTo(32.5, -23);
-  ctx.lineTo(16.5, -23);
+  ctx.moveTo(-30, -8);
+  ctx.lineTo(-30, 10);
+  ctx.moveTo(0, -8);
+  ctx.lineTo(0, 10);
+  ctx.moveTo(30, -8);
+  ctx.lineTo(30, 10);
+  ctx.moveTo(-62, 4);
+  ctx.lineTo(62, 4);
+  ctx.stroke();
+  ctx.fillStyle = '#394447';
+  for (let rx = -56; rx <= 56; rx += 14) {
+    for (let ry = -5; ry <= 6; ry += 9) {
+      ctx.beginPath();
+      ctx.arc(rx, ry, 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.fillStyle = hullDarker;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 1.1;
+  ctx.beginPath();
+  ctx.roundRect(-55, -18, 30, 12, 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = yellow;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(-55, -12);
+  ctx.lineTo(-25, -12);
+  ctx.moveTo(-55, -7);
+  ctx.lineTo(-25, -7);
+  ctx.stroke();
+  ctx.restore();
+
+  // 8. UPPER DECK PERSONNEL QUARTERS
+  ctx.save();
+  ctx.fillStyle = hullBase;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(-45, -8);
+  ctx.lineTo(-45, -32);
+  ctx.lineTo(-10, -32);
+  ctx.lineTo(-5, -8);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
-
-  // Specular Glare Reflection
-  ctx.fillStyle = '#ffffff';
-  ctx.globalAlpha = 0.85;
+  ctx.strokeStyle = '#394447';
+  ctx.lineWidth = 0.8;
   ctx.beginPath();
-  ctx.moveTo(18, -30);
-  ctx.lineTo(24, -30);
-  ctx.lineTo(22, -24);
-  ctx.lineTo(17.5, -24);
+  ctx.moveTo(-45, -20);
+  ctx.lineTo(-8, -20);
+  ctx.moveTo(-26, -32);
+  ctx.lineTo(-26, -8);
+  ctx.stroke();
+  ctx.fillStyle = hullDarker;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.roundRect(-38, -30, 8, 4, 1);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.roundRect(-20, -30, 8, 4, 1);
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = '#303A3E';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  for (let vy = -16; vy <= -11; vy += 3) {
+    ctx.moveTo(-30, vy);
+    ctx.lineTo(-12, vy);
+  }
+  ctx.stroke();
+  ctx.restore();
+
+  // 9. COMMAND BRIDGE & SENSOR SUITE (forward upper)
+  ctx.save();
+  ctx.fillStyle = hullBase;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(5, -8);
+  ctx.lineTo(8, -40);
+  ctx.lineTo(42, -40);
+  ctx.lineTo(46, -8);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = '#394447';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(14, -40);
+  ctx.lineTo(14, -8);
+  ctx.moveTo(30, -40);
+  ctx.lineTo(30, -8);
+  ctx.stroke();
+  ctx.fillStyle = cyan;
+  ctx.strokeStyle = '#0F1B1E';
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.moveTo(12, -36);
+  ctx.lineTo(36, -36);
+  ctx.lineTo(40, -20);
+  ctx.lineTo(9, -20);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = cyanHi;
+  ctx.globalAlpha = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(14, -33);
+  ctx.lineTo(32, -33);
+  ctx.lineTo(34, -27);
+  ctx.lineTo(13, -27);
   ctx.closePath();
   ctx.fill();
   ctx.globalAlpha = 1.0;
-
-  // Heavy Equipment ROPS (Roll-Over Protective Structure) Safety Cage (ORIGINAL FEATURE)
-  ctx.strokeStyle = '#eab308';
-  ctx.lineWidth = 1.6;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
+  ctx.fillStyle = hullDarker;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 0.7;
   ctx.beginPath();
-  // Roof Frame
-  ctx.moveTo(14.5, -34.5);
-  ctx.lineTo(31.5, -34.5);
-  // Angled A-Pillar Protective Bar
-  ctx.lineTo(35.5, -21);
-  // Cab Corner Pillar
-  ctx.moveTo(14.5, -34.5);
-  ctx.lineTo(14.5, -21);
+  ctx.roundRect(16, -38, 6, 3, 1);
+  ctx.fill();
   ctx.stroke();
-
-  ctx.strokeStyle = '#ca8a04';
-  ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.moveTo(23, -34.5);
-  ctx.lineTo(23, -21);
+  ctx.roundRect(26, -38, 6, 3, 1);
+  ctx.fill();
   ctx.stroke();
-
-  // ---------------------------------------------------------
-  // 10. Dual Roof-Mounted Heavy Halogen Floodlights (ORIGINAL FEATURE)
-  // ---------------------------------------------------------
-  // Left Floodlight Pod
-  ctx.fillStyle = '#475569';
-  ctx.strokeStyle = '#cbd5e1';
+  ctx.fillStyle = cyan;
+  ctx.strokeStyle = outline;
   ctx.lineWidth = 0.8;
   ctx.beginPath();
-  roundRect(ctx, 16.5, -36, 3.5, 3, 0.8);
+  ctx.roundRect(44, -30, 6, 6, 1.5);
   ctx.fill();
   ctx.stroke();
-
-  ctx.fillStyle = '#ffffff';
-  ctx.strokeStyle = '#fef08a';
-  ctx.lineWidth = 0.6;
+  ctx.fillStyle = cyanHi;
+  ctx.globalAlpha = 0.5;
   ctx.beginPath();
-  ctx.ellipse(18.2, -33, 1.6, 0.8, 0, 0, Math.PI * 2);
+  ctx.arc(46, -27, 2, 0, Math.PI * 2);
   ctx.fill();
+  ctx.globalAlpha = 1.0;
+  ctx.restore();
+
+  // 10. MASTS, ANTENNAS & RED BEACON
+  ctx.save();
+  ctx.strokeStyle = hullDarker;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(20, -40);
+  ctx.lineTo(20, -52);
   ctx.stroke();
-
-  // Right Floodlight Pod
-  ctx.fillStyle = '#475569';
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 0.8;
+  if (flash) {
+    const halo = ctx.createRadialGradient(20, -54, 0, 20, -54, 5);
+    halo.addColorStop(0, 'rgba(232,73,66,0.9)');
+    halo.addColorStop(1, 'rgba(232,73,66,0)');
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(20, -54, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath();
+    ctx.arc(20, -54, 1.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.fillStyle = red;
   ctx.beginPath();
-  roundRect(ctx, 28.5, -36, 3.5, 3, 0.8);
+  ctx.arc(20, -54, 1.8, 0, Math.PI * 2);
   ctx.fill();
+  ctx.strokeStyle = hullDarker;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(36, -40);
+  ctx.lineTo(36, -49);
   ctx.stroke();
-
-  ctx.fillStyle = '#ffffff';
-  ctx.strokeStyle = '#fef08a';
-  ctx.lineWidth = 0.6;
+  ctx.fillStyle = '#252E32';
   ctx.beginPath();
-  ctx.ellipse(30.2, -33, 1.6, 0.8, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  // Starboard Comms Antenna & High-Intensity Amber Safety Strobe Beacon
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.moveTo(33, -34);
-  ctx.lineTo(33, -40);
-  ctx.stroke();
-
-  // Dynamic Strobe Beacon
-  const strobePulse = Math.sin(time * 8.0) > 0.4 ? 1.0 : 0.25;
-  ctx.fillStyle = '#f59e0b';
-  ctx.globalAlpha = strobePulse * 0.45;
-  ctx.beginPath();
-  ctx.arc(33, -40, 2.8, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.globalAlpha = strobePulse;
-  ctx.beginPath();
-  ctx.arc(33, -40, 1.8, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = '#ffffff';
-  ctx.beginPath();
-  ctx.arc(33, -40, 0.8, 0, Math.PI * 2);
+  ctx.arc(36, -50, 1.2, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
+
+  // 11. BLUNT ARMORED BOW WITH HID SEARCHLIGHT BANKS
+  ctx.save();
+  ctx.fillStyle = hullBase;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(46, -8);
+  ctx.lineTo(56, -20);
+  ctx.lineTo(62, -20);
+  ctx.lineTo(66, -12);
+  ctx.lineTo(66, 4);
+  ctx.lineTo(58, 8);
+  ctx.lineTo(46, 10);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = hullHighlight;
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.moveTo(56, -18);
+  ctx.lineTo(63, -16);
+  ctx.stroke();
+  for (const sy of [-14, -8]) {
+    ctx.fillStyle = '#252E32';
+    ctx.strokeStyle = outline;
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.roundRect(56, sy, 8, 4, 1);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = cream;
+    ctx.beginPath();
+    ctx.roundRect(57, sy + 1, 6, 2.4, 0.8);
+    ctx.fill();
+    ctx.fillStyle = creamGlow;
+    ctx.globalAlpha = 0.6;
+    ctx.beginPath();
+    ctx.roundRect(57.5, sy + 1, 5, 2.4, 0.8);
+    ctx.fill();
+    ctx.globalAlpha = 1.0;
+  }
+  ctx.restore();
+
+  // 12. FUSELAGE STENCIL: MAMMOTH RIG
+  ctx.save();
+  ctx.fillStyle = yellowLight;
+  ctx.font = '900 3.4px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('MAMMOTH RIG', -8, -2);
+  ctx.fillStyle = '#DDE4DF';
+  ctx.font = 'bold 2.2px monospace';
+  ctx.fillText('C-95 HEAVY LIFT CARGO', -8, 3.2);
+  ctx.fillStyle = '#DDE4DF';
+  ctx.beginPath();
+  ctx.moveTo(-30, -18);
+  ctx.lineTo(-26, -13);
+  ctx.lineTo(-34, -13);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#394447';
+  ctx.lineWidth = 0.6;
+  ctx.beginPath();
+  ctx.moveTo(-30, -17);
+  ctx.lineTo(-28, -13.6);
+  ctx.stroke();
+  ctx.restore();
+
+  // 13. HAZARD STRIPES ALONG LOWER HULL EDGE
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(-62, 22, 124, 4);
+  ctx.clip();
+  ctx.fillStyle = yellow;
+  ctx.fillRect(-62, 22, 124, 4);
+  ctx.strokeStyle = '#292D2D';
+  ctx.lineWidth = 2.6;
+  for (let hx = -64; hx < 64; hx += 6) {
+    ctx.beginPath();
+    ctx.moveTo(hx, 27);
+    ctx.lineTo(hx + 6, 21);
+    ctx.stroke();
+  }
+  ctx.restore();
+  ctx.strokeStyle = yellow;
+  ctx.lineWidth = 0.8;
+  ctx.strokeRect(-62, 22, 124, 4);
 }
+
+
 
 // =====================================================================
 // 11. WASP SCOUT (WS-2 Stinger - Dual-Pod Micro Recon Lander)
@@ -12856,770 +12399,803 @@ export function drawValkyrie(
 
 
 // =====================================================================
-// 16. JUGGERNAUT LIFTER (JG-1200 Planetary Heavy Lifter & Rover Carrier)
+// =====================================================================
+// 16. JUGGERNAUT LIFTER (JG-1200 Heavy Transport Craft)
+//     Faithful side-profile clone of the supplied concept diagram.
+//     Front/bow is LEFT; main propulsion is the circular stern at RIGHT.
 // =====================================================================
 export function drawJuggernaut(
   ctx: CanvasRenderingContext2D,
   config: ShipModelConfig,
   gearSpringOffset: number,
   ship: ShipState,
-  time?: number
+  time: number = 0
 ) {
-  const footPadY = 38 + gearSpringOffset;
+  const t = time > 10000 ? time / 1000 : time;
+  const rampProg = Math.max(0, Math.min(1, ship.rampProgress ?? 0));
+  const blink = Math.sin(t * 6.5) > 0;
+  const beaconPulse = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t * 5.0));
+  const exhaustPulse = 0.82 + 0.18 * Math.sin(t * 4.0);
+  const footY = 40 + gearSpringOffset;
 
-  // Strobe & Timing Engine for beacons, plasma breath, and telemetry
-  const t = time !== undefined ? (time > 10000 ? time / 1000 : time) : performance.now() / 1000;
-  const beaconPulse = 0.4 + 0.6 * Math.pow(Math.max(0, Math.sin(t * 4.2)), 3);
-  const antennaBlink = Math.sin(t * 6.5) > 0;
-  const thrusterBreath = 0.5 + 0.35 * Math.sin(t * 3.8);
+  const olive = '#6D8558';
+  const oliveLight = '#829968';
+  const oliveHi = '#91A878';
+  const oliveDark = '#4C633F';
+  const oliveDeep = '#344735';
+  const line = '#20251F';
+  const windowDark = '#303A39';
+  const windowHi = '#9BA79A';
+  const gold = '#D5B43D';
+  const goldHi = '#F0D256';
+  const goldDark = '#80691F';
+  const metal = '#78776D';
+  const metalHi = '#A09D8F';
+  const cargoDark = '#40423E';
+  const cream = '#F4F0D7';
 
-  // -------------------------------------------------------------------
-  // 0. Downward Volumetric Docking & Surface Illumination Cones
-  // -------------------------------------------------------------------
+  const hullGrad = ctx.createLinearGradient(0, -42, 0, 28);
+  hullGrad.addColorStop(0, oliveHi);
+  hullGrad.addColorStop(0.27, olive);
+  hullGrad.addColorStop(0.7, oliveDark);
+  hullGrad.addColorStop(1, oliveDeep);
+  const lowerGrad = ctx.createLinearGradient(0, 12, 0, 45);
+  lowerGrad.addColorStop(0, oliveDark);
+  lowerGrad.addColorStop(1, '#29372B');
+
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  // 1. Undervessel exhaust glow (three vertical lift engines + auxiliary).
   ctx.save();
-  const floodGradLeft = ctx.createLinearGradient(-36, -10, -36, footPadY + 8);
-  floodGradLeft.addColorStop(0, 'rgba(52, 211, 153, 0.28)');
-  floodGradLeft.addColorStop(0.4, 'rgba(52, 211, 153, 0.10)');
-  floodGradLeft.addColorStop(1, 'rgba(52, 211, 153, 0.0)');
-  ctx.fillStyle = floodGradLeft;
+  const exhaustGrad = ctx.createLinearGradient(0, 18, 0, 50);
+  exhaustGrad.addColorStop(0, `rgba(255,253,242,${0.26 * exhaustPulse})`);
+  exhaustGrad.addColorStop(0.35, `rgba(255,241,168,${0.18 * exhaustPulse})`);
+  exhaustGrad.addColorStop(1, 'rgba(230,198,91,0)');
+  ctx.fillStyle = exhaustGrad;
+  for (const x of [-30, 0, 30]) {
+    ctx.beginPath();
+    ctx.moveTo(x - 5, 19);
+    ctx.lineTo(x - 11, 55);
+    ctx.lineTo(x + 11, 55);
+    ctx.lineTo(x + 5, 19);
+    ctx.closePath();
+    ctx.fill();
+  }
+  // Auxiliary lift engine glow.
   ctx.beginPath();
-  ctx.moveTo(-34, -10);
-  ctx.lineTo(-28, footPadY + 8);
-  ctx.lineTo(-46, footPadY + 8);
-  ctx.lineTo(-38, -10);
+  ctx.moveTo(50, 20);
+  ctx.lineTo(53, 55);
+  ctx.lineTo(60, 55);
+  ctx.lineTo(57, 20);
   ctx.closePath();
   ctx.fill();
+  ctx.restore
 
-  const floodGradRight = ctx.createLinearGradient(36, -10, 36, footPadY + 8);
-  floodGradRight.addColorStop(0, 'rgba(52, 211, 153, 0.28)');
-  floodGradRight.addColorStop(0.4, 'rgba(52, 211, 153, 0.10)');
-  floodGradRight.addColorStop(1, 'rgba(52, 211, 153, 0.0)');
-  ctx.fillStyle = floodGradRight;
-  ctx.beginPath();
-  ctx.moveTo(34, -10);
-  ctx.lineTo(28, footPadY + 8);
-  ctx.lineTo(46, footPadY + 8);
-  ctx.lineTo(38, -10);
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore();
+  // Ramp door animation: 2-phase slide-out-then-descend
+  // Phase 0.0-0.5: slide horizontally out of the hull
+  // Phase 0.5-1.0: rotate down to ground
+  const rampSlidePhase = Math.min(rampProg * 2, 1);
+  const rampRotatePhase = Math.max((rampProg - 0.5) * 2, 0);
 
-  // -------------------------------------------------------------------
-  // 1. Heavy Quad Fusion Vector Thruster Nozzles (Underchassis Array)
-  // Outer nozzles at x: -33, 33; Inner nozzles at x: -17, 17
-  // -------------------------------------------------------------------
-  const thrusterPositions = [
-    { x: -33, outer: true },
-    { x: -17, outer: false },
-    { x: 17, outer: false },
-    { x: 33, outer: true },
-  ];
+  // Ramp stowed inside the hull at x ≈ -58 to -38, y ≈ 8 to 14
+  const rampStowedLeft = -58;
+  const rampStowedRight = -38;
+  const rampStowedTop = 8;
+  const rampStowedBottom = 14;
+  const rampWidth = 3.2; // thickness
+  const rampLength = 35; // full extension length
 
-  for (const th of thrusterPositions) {
-    const tx = th.x;
-    const halfWTop = th.outer ? 5.5 : 4.2;
-    const halfWBot = th.outer ? 7.2 : 5.4;
-    const topY = 24;
-    const botY = th.outer ? 33 : 32;
+  // Slide-out: moves from stowed position to protruding forward (15 units out)
+  const slideX = -15 * rampSlidePhase; // slides left by ~15 units
+  const hingeX = rampStowedLeft + slideX;
+  const hingeY = (rampStowedTop + rampStowedBottom) / 2; // ~11
 
-    // Divergent Rocket Bell with metallic refractory gradient
-    const bellGrad = ctx.createLinearGradient(tx - halfWBot, topY, tx + halfWBot, topY);
+  // Rotation: from horizontal (0) to downward (-90 deg = -PI/2)
+  const angleStart = 0;
+  const angleEnd = -Math.PI / 2;
+  const rampAngle = angleStart + (angleEnd - angleStart) * rampRotatePhase;
+
+  // Ramp tip position
+  const tipX = hingeX + Math.cos(rampAngle) * rampLength;
+  const tipY = hingeY + Math.sin(rampAngle) * rampLength;
+
+  // Side offset for thickness
+  const sideX = Math.cos(rampAngle + Math.PI / 2) * rampWidth;
+  const sideY = Math.sin(rampAngle + Math.PI / 2) * rampWidth;
+
+  // 2. Main circular stern propulsion assembly (center), with OUTER thrusters at edges.
+  // Draw thrusters first (behind the main engine), then main engine on top.
+  const drawThruster = (cx: number, cy: number, isOuter: boolean, pulse: number) => {
+    const halfWTop = isOuter ? 4.5 : 3.5;
+    const halfWBot = isOuter ? 6.0 : 4.8;
+    const topY = cy - 2;
+    const botY = cy + 5;
+    // Bell.
+    const bellGrad = ctx.createLinearGradient(cx - halfWBot, topY, cx + halfWBot, topY);
     bellGrad.addColorStop(0, '#1e293b');
     bellGrad.addColorStop(0.35, '#475569');
     bellGrad.addColorStop(0.7, '#334155');
     bellGrad.addColorStop(1, '#0f172a');
     ctx.fillStyle = bellGrad;
-    ctx.strokeStyle = '#475569';
+    ctx.strokeStyle = line;
     ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.moveTo(tx - halfWTop, topY);
-    ctx.lineTo(tx + halfWTop, topY);
-    ctx.lineTo(tx + halfWBot, botY);
-    ctx.lineTo(tx - halfWBot, botY);
+    ctx.moveTo(cx - halfWTop, topY);
+    ctx.lineTo(cx + halfWTop, topY);
+    ctx.lineTo(cx + halfWBot, botY);
+    ctx.lineTo(cx - halfWBot, botY);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-
-    // Engine Cowl Armor Ring with Emerald Thermal Trim
-    ctx.fillStyle = '#10b981';
-    ctx.fillRect(tx - halfWTop + 0.8, topY - 1, (halfWTop - 0.8) * 2, 2.2);
-
-    // Chrome Gimbal Steering Actuator Struts
-    ctx.strokeStyle = '#94a3b8';
+    // Thermal trim.
+    ctx.fillStyle = gold;
+    ctx.fillRect(cx - halfWTop + 0.6, topY - 1.5, (halfWTop - 0.6) * 2, 2);
+    // Gimbal struts.
+    ctx.strokeStyle = metalHi;
     ctx.lineWidth = 1.0;
     ctx.beginPath();
-    ctx.moveTo(tx - halfWTop - 1, topY);
-    ctx.lineTo(tx - halfWTop - 1, topY + 6);
-    ctx.moveTo(tx + halfWTop + 1, topY);
-    ctx.lineTo(tx + halfWTop + 1, topY + 6);
+    ctx.moveTo(cx - halfWTop - 1, topY);
+    ctx.lineTo(cx - halfWTop - 1, topY + 5);
+    ctx.moveTo(cx + halfWTop + 1, topY);
+    ctx.lineTo(cx + halfWTop + 1, topY + 5);
     ctx.stroke();
-
-    // Radiant Cyan/Emerald Fusion Plasma Throat Core
-    const plasmaRadiusX = th.outer ? 5.2 : 4.0;
-    const plasmaRadiusY = th.outer ? 1.8 : 1.4;
-    const plasmaGrad = ctx.createRadialGradient(tx, botY - 0.5, 0, tx, botY - 0.5, plasmaRadiusX);
+    // Plasma core.
+    const plasmaR = isOuter ? 4.5 : 3.5;
+    const plasmaGrad = ctx.createRadialGradient(cx, botY - 0.5, 0, cx, botY - 0.5, plasmaR);
     plasmaGrad.addColorStop(0, '#ffffff');
-    plasmaGrad.addColorStop(0.35, '#34d399');
-    plasmaGrad.addColorStop(0.75, '#059669');
-    plasmaGrad.addColorStop(1, '#064e3b');
+    plasmaGrad.addColorStop(0.35, `rgba(213,180,61,${pulse})`);
+    plasmaGrad.addColorStop(0.75, '#D5B43D');
+    plasmaGrad.addColorStop(1, '#80691F');
     ctx.fillStyle = plasmaGrad;
     ctx.beginPath();
-    ctx.ellipse(tx, botY - 0.5, plasmaRadiusX, plasmaRadiusY, 0, 0, Math.PI * 2);
+    ctx.ellipse(cx, botY - 0.5, plasmaR, 1.6, 0, 0, Math.PI * 2);
     ctx.fill();
-
-    // Pulsing Hot-White Throat Core
-    ctx.fillStyle = '#ffffff';
-    ctx.globalAlpha = Math.min(1.0, 0.75 + thrusterBreath * 0.25);
+    // Hot core pulse.
+    ctx.fillStyle = '#fffef2';
+    ctx.globalAlpha = Math.min(1.0, 0.75 + pulse * 0.25);
     ctx.beginPath();
-    ctx.ellipse(tx, botY - 0.5, plasmaRadiusX * 0.45, plasmaRadiusY * 0.55, 0, 0, Math.PI * 2);
+    ctx.ellipse(cx, botY - 0.5, plasmaR * 0.4, 0.9, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = 1.0;
-  }
+  };
 
-  // -------------------------------------------------------------------
-  // 2. Quad Reinforced Tungsten Outrigger Landing Gear
-  // (CRITICAL RULE: Strictly isolated subpaths per footpad to NEVER connect)
-  // -------------------------------------------------------------------
-  // Outer Port Outrigger Assembly (x: -46)
-  // Heavy Knuckle Socket
-  ctx.fillStyle = '#334155';
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 1.2;
+  // Thruster positions: 5 total — 2 outer at bow, center main, 2 outer at stern.
+  // They all pulse with exhaustPulse.
+  // Bow thrusters at lower hull (y≈28), stern thrusters at bottom of main engine (y≈16)
+  drawThruster(-62, 28, true, exhaustPulse);  // Outer port (bow side)
+  drawThruster(-48, 28, false, exhaustPulse); // Inner port (bow side)
+  drawThruster(67, 16, false, exhaustPulse);  // Center main (bottom of main engine)
+  drawThruster(79, 16, false, exhaustPulse);  // Inner starboard (right edge of main engine)
+  drawThruster(85, 16, true, exhaustPulse);   // Outer starboard (just outside engine housing)
+
+  // Now draw the main circular engine housing OVER the center thruster.
+  ctx.save();
+  ctx.fillStyle = '#67665E';
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.arc(-35, 14, 3.4, 0, Math.PI * 2);
+  ctx.ellipse(67, -1, 12, 17, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
-
-  // Primary Heavy Tungsten Box Strut
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 3.2;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(-35, 14);
-  ctx.lineTo(-46, footPadY - 2);
-  ctx.stroke();
-
-  // Telescopic Chrome Piston
-  ctx.strokeStyle = '#f8fafc';
-  ctx.lineWidth = 1.8;
-  ctx.beginPath();
-  ctx.moveTo(-42, footPadY - 9);
-  ctx.lineTo(-46, footPadY - 2);
-  ctx.stroke();
-
-  // Diagonal Scissor Linkage Brace
-  ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 1.6;
-  ctx.beginPath();
-  ctx.moveTo(-24, 20);
-  ctx.lineTo(-43, footPadY - 4);
-  ctx.stroke();
-
-  // Lower Knuckle Joint
-  ctx.fillStyle = '#1e293b';
-  ctx.strokeStyle = '#10b981';
+  ctx.strokeStyle = '#A09D8F';
   ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.arc(-46, footPadY - 2, 2.0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  // Heavy Tungsten Footpads
-  ctx.fillStyle = '#10b981';
-  ctx.strokeStyle = '#047857';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  roundRect(ctx, -49, footPadY - 4.5, 13, 4.5, 2);
-  roundRect(ctx, 36, footPadY - 4.5, 13, 4.5, 2);
-  roundRect(ctx, -22, footPadY - 3.5, 8, 3.5, 1.5);
-  roundRect(ctx, 14, footPadY - 3.5, 8, 3.5, 1.5);
-  ctx.fill();
-  ctx.stroke();
-
-  // Outer Port Heavy Cast Tungsten Footpad (Strictly Isolated Subpath)
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  roundRect(ctx, -53, footPadY - 3.8, 14, 4.0, 1.5);
-  ctx.fill();
-  ctx.stroke();
-
-  // Outer Port Carbide Ground Traction Cleats
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.moveTo(-50, footPadY); ctx.lineTo(-50, footPadY + 2.5);
-  ctx.moveTo(-46, footPadY); ctx.lineTo(-46, footPadY + 2.5);
-  ctx.moveTo(-42, footPadY); ctx.lineTo(-42, footPadY + 2.5);
-  ctx.stroke();
-
-  // Inner Port Stabilizer Outrigger (x: -18)
-  ctx.fillStyle = '#334155';
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.arc(-18, 22, 2.5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 2.2;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(-18, 23);
-  ctx.lineTo(-18, footPadY - 2);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#f8fafc';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.moveTo(-18, footPadY - 7);
-  ctx.lineTo(-18, footPadY - 2);
-  ctx.stroke();
-
-  // Inner Port Footpad (Strictly Isolated Subpath)
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  roundRect(ctx, -22, footPadY - 3.4, 8, 3.4, 1.2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.moveTo(-20, footPadY); ctx.lineTo(-20, footPadY + 2.0);
-  ctx.moveTo(-16, footPadY); ctx.lineTo(-16, footPadY + 2.0);
-  ctx.stroke();
-
-  // Inner Starboard Stabilizer Outrigger (x: 18)
-  ctx.fillStyle = '#334155';
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.arc(18, 22, 2.5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 2.2;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(18, 23);
-  ctx.lineTo(18, footPadY - 2);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#f8fafc';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.moveTo(18, footPadY - 7);
-  ctx.lineTo(18, footPadY - 2);
-  ctx.stroke();
-
-  // Inner Starboard Footpad (Strictly Isolated Subpath)
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  roundRect(ctx, 14, footPadY - 3.4, 8, 3.4, 1.2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.moveTo(16, footPadY); ctx.lineTo(16, footPadY + 2.0);
-  ctx.moveTo(20, footPadY); ctx.lineTo(20, footPadY + 2.0);
-  ctx.stroke();
-
-  // Outer Starboard Outrigger Assembly (x: 46)
-  ctx.fillStyle = '#334155';
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.arc(35, 14, 3.4, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 3.2;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(35, 14);
-  ctx.lineTo(46, footPadY - 2);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#f8fafc';
-  ctx.lineWidth = 1.8;
-  ctx.beginPath();
-  ctx.moveTo(42, footPadY - 9);
-  ctx.lineTo(46, footPadY - 2);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 1.6;
-  ctx.beginPath();
-  ctx.moveTo(24, 20);
-  ctx.lineTo(43, footPadY - 4);
-  ctx.stroke();
-
-  ctx.fillStyle = '#1e293b';
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.arc(46, footPadY - 2, 2.0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  // Outer Starboard Footpad (Strictly Isolated Subpath)
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  roundRect(ctx, 39, footPadY - 3.8, 14, 4.0, 1.5);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.moveTo(42, footPadY); ctx.lineTo(42, footPadY + 2.5);
-  ctx.moveTo(46, footPadY); ctx.lineTo(46, footPadY + 2.5);
-  ctx.moveTo(50, footPadY); ctx.lineTo(50, footPadY + 2.5);
-  ctx.stroke();
-
-  // -------------------------------------------------------------------
-  // 3. Colossal Armored Fuselage & Heavy Sponsons (220mm Armor Rating)
-  // -------------------------------------------------------------------
-  const mainHullGrad = ctx.createLinearGradient(0, -46, 0, 25);
-  mainHullGrad.addColorStop(0, '#334155');
-  mainHullGrad.addColorStop(0.28, '#1e293b');
-  mainHullGrad.addColorStop(0.7, '#0f172a');
-  mainHullGrad.addColorStop(1, '#090d16');
-  ctx.fillStyle = mainHullGrad;
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 2.0;
-  ctx.beginPath();
-  ctx.moveTo(0, -46);
-  ctx.lineTo(18, -32);
-  ctx.lineTo(44, -22);
-  ctx.lineTo(46, 24);
-  ctx.lineTo(24, 25);
-  ctx.lineTo(-24, 25);
-  ctx.lineTo(-46, 24);
-  ctx.lineTo(-44, -22);
-  ctx.lineTo(-18, -32);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  // Port & Starboard Sponson Armor Facet Plates
-  const sponsonGradPort = ctx.createLinearGradient(-44, -22, -21, 24);
-  sponsonGradPort.addColorStop(0, '#475569');
-  sponsonGradPort.addColorStop(0.45, '#1e293b');
-  sponsonGradPort.addColorStop(1, '#0f172a');
-  ctx.fillStyle = sponsonGradPort;
-  ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.moveTo(-18, -31);
-  ctx.lineTo(-43, -21);
-  ctx.lineTo(-45, 23);
-  ctx.lineTo(-24, 24);
-  ctx.lineTo(-21, -8);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  const sponsonGradStbd = ctx.createLinearGradient(44, -22, 21, 24);
-  sponsonGradStbd.addColorStop(0, '#475569');
-  sponsonGradStbd.addColorStop(0.45, '#1e293b');
-  sponsonGradStbd.addColorStop(1, '#0f172a');
-  ctx.fillStyle = sponsonGradStbd;
-  ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.moveTo(18, -31);
-  ctx.lineTo(43, -21);
-  ctx.lineTo(45, 23);
-  ctx.lineTo(24, 24);
-  ctx.lineTo(21, -8);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  // Sponson Armor Chine Accent Seams
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 0.9;
-  ctx.beginPath();
-  ctx.moveTo(-43, -21); ctx.lineTo(-23, 10);
-  ctx.moveTo(43, -21); ctx.lineTo(23, 10);
-  ctx.stroke();
-
-  // APU Radiator Cooling Louvers on Sponsons
-  ctx.fillStyle = '#090d16';
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 0.8;
-  ctx.strokeRect(-38, -6, 11, 7);
-  ctx.fillRect(-38, -6, 11, 7);
-  ctx.strokeRect(27, -6, 11, 7);
-  ctx.fillRect(27, -6, 11, 7);
-
-  ctx.strokeStyle = '#64748b';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  ctx.moveTo(-36, -4); ctx.lineTo(-29, -4);
-  ctx.moveTo(-36, -2); ctx.lineTo(-29, -2);
-  ctx.moveTo(-36, 0); ctx.lineTo(-29, 0);
-  ctx.moveTo(29, -4); ctx.lineTo(36, -4);
-  ctx.moveTo(29, -2); ctx.lineTo(36, -2);
-  ctx.moveTo(29, 0); ctx.lineTo(36, 0);
-  ctx.stroke();
-
-  // Forged Titanium Crane Lifting Lugs (3500kg Cargo Capacity Rating)
-  ctx.fillStyle = '#475569';
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 0.8;
-  roundRect(ctx, -43, -15, 4.2, 6, 1);
-  ctx.fill(); ctx.stroke();
-  roundRect(ctx, 39, -15, 4.2, 6, 1);
-  ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#0f172a';
-  ctx.beginPath();
-  ctx.arc(-41, -12, 1.2, 0, Math.PI * 2);
-  ctx.arc(41, -12, 1.2, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Sponson RCS Quad Thruster Clusters
-  ctx.fillStyle = '#1e293b';
-  ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 0.6;
-  ctx.fillRect(-46, -23, 2.5, 4.5);
-  ctx.strokeRect(-46, -23, 2.5, 4.5);
-  ctx.fillRect(43.5, -23, 2.5, 4.5);
-  ctx.strokeRect(43.5, -23, 2.5, 4.5);
-  ctx.fillStyle = '#d97706';
-  ctx.beginPath();
-  ctx.arc(-46, -22, 0.7, 0, Math.PI * 2);
-  ctx.arc(-46, -20, 0.7, 0, Math.PI * 2);
-  ctx.arc(46, -22, 0.7, 0, Math.PI * 2);
-  ctx.arc(46, -20, 0.7, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Bulkhead Armor Micro-Rivets
-  ctx.fillStyle = '#6ee7b7';
-  for (const ry of [-13, -5, 3, 11, 19]) {
+  for (const rx of [-8, -4, 0, 4, 8]) {
     ctx.beginPath();
-    ctx.arc(-44, ry, 0.65, 0, Math.PI * 2);
-    ctx.arc(44, ry, 0.65, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.ellipse(67 + rx * 0.35, -1, 11 - Math.abs(rx) * 0.18, 15, 0, 0, Math.PI * 2);
+    ctx.stroke();
   }
-
-  // Wingtip Tactical Formation Nav Lights (Port Red, Starboard Green)
-  ctx.fillStyle = '#ef4444';
+  ctx.fillStyle = '#40423E';
+  ctx.strokeStyle = line;
   ctx.beginPath();
-  ctx.arc(-45.5, 23, 1.5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#10b981';
-  ctx.beginPath();
-  ctx.arc(45.5, 23, 1.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // -------------------------------------------------------------------
-  // 4. Drive-Through Heavy Vehicle Ramp Hold (Central Bay)
-  // -------------------------------------------------------------------
-  const rampOpenProg = ship.rampProgress !== undefined ? ship.rampProgress : 0.0;
-  const rampDropY = 25 + rampOpenProg * 15;
-
-  // Cavernous Interior Vehicle Bay Cavity
-  ctx.fillStyle = '#040810';
-  ctx.strokeStyle = '#059669';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  roundRect(ctx, -19, -6, 38, 30, 2);
+  ctx.ellipse(67, -1, 5, 12, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
+  ctx.fillStyle = gold;
+  ctx.fillRect(54, -15, 4, 3);
+  ctx.fillRect(54, 12, 4, 3);
+  ctx.restore();
 
-  // Bay Overhead Monorail Gantry Track
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 1.6;
-  ctx.beginPath();
-  ctx.moveTo(-17, -3); ctx.lineTo(17, -3);
-  ctx.stroke();
-  ctx.fillStyle = '#f59e0b';
-  ctx.strokeStyle = '#b45309';
-  ctx.lineWidth = 0.6;
-  roundRect(ctx, -4, -4.5, 8, 3, 0.5);
-  ctx.fill(); ctx.stroke();
-
-  // Render Onboard Heavy Planetary Exploration Rover
-  // Displayed when vehicles are loaded or ready for deployment in carrier mode
-  const isRoverLoaded = (ship.loadedTrucksCount || 0) > 0 || config.isHeavyVehicleCarrier;
-  if (isRoverLoaded) {
+  // 3. Underside lift-engine bells (three large visible vertical engines).
+  for (const x of [-30, 0, 30]) {
     ctx.save();
-    // Rover Tires (Dual Tandem Axles Left & Right)
-    ctx.fillStyle = '#1e293b';
-    ctx.strokeStyle = '#0f172a';
-    ctx.lineWidth = 0.8;
-    roundRect(ctx, -17, 13.5, 4.2, 8.5, 1.5);
-    ctx.fill(); ctx.stroke();
-    roundRect(ctx, -17, 6.5, 4.2, 7.5, 1.5);
-    ctx.fill(); ctx.stroke();
-    roundRect(ctx, 13, 13.5, 4.2, 8.5, 1.5);
-    ctx.fill(); ctx.stroke();
-    roundRect(ctx, 13, 6.5, 4.2, 7.5, 1.5);
-    ctx.fill(); ctx.stroke();
-
-    // Rover Chassis Body
-    ctx.fillStyle = '#10b981';
-    ctx.strokeStyle = '#047857';
+    ctx.fillStyle = metal;
+    ctx.strokeStyle = line;
     ctx.lineWidth = 1.0;
     ctx.beginPath();
-    ctx.moveTo(-13, 19);
-    ctx.lineTo(13, 19);
-    ctx.lineTo(12, 9);
-    ctx.lineTo(-12, 9);
+    roundRect(ctx, x - 4, 14, 8, 7, 1.2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#56564F';
+    ctx.beginPath();
+    ctx.moveTo(x - 5, 20);
+    ctx.lineTo(x + 5, 20);
+    ctx.lineTo(x + 7, 31);
+    ctx.lineTo(x - 7, 31);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-
-    ctx.strokeStyle = '#064e3b';
-    ctx.lineWidth = 1.0;
-    ctx.beginPath();
-    ctx.moveTo(-12, 14); ctx.lineTo(12, 14);
-    ctx.stroke();
-
-    // Rover Armored Crew Cabin & Visor
-    ctx.fillStyle = '#064e3b';
-    ctx.strokeStyle = '#34d399';
-    ctx.lineWidth = 0.8;
-    ctx.beginPath();
-    ctx.moveTo(-8, 13);
-    ctx.lineTo(8, 13);
-    ctx.lineTo(6, 8);
-    ctx.lineTo(-6, 8);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-
-    // Visor Divider & Specular Glint
-    ctx.strokeStyle = '#022c22';
+    ctx.strokeStyle = metalHi;
     ctx.lineWidth = 0.7;
+    for (let ry = 22; ry < 30; ry += 3) {
+      ctx.beginPath();
+      ctx.moveTo(x - 5.5, ry);
+      ctx.lineTo(x + 5.5, ry);
+      ctx.stroke();
+    }
+    const core = ctx.createRadialGradient(x, 32, 0, x, 32, 6);
+    core.addColorStop(0, '#FFFDF2');
+    core.addColorStop(0.35, `rgba(255,241,168,${exhaustPulse})`);
+    core.addColorStop(1, 'rgba(230,198,91,0)');
+    ctx.fillStyle = core;
     ctx.beginPath();
-    ctx.moveTo(0, 8); ctx.lineTo(0, 13);
-    ctx.stroke();
-    ctx.fillStyle = '#ffffff';
-    ctx.globalAlpha = 0.85;
-    ctx.beginPath();
-    ctx.ellipse(-2.5, 10, 1.8, 0.8, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, 32, 6, 3, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.globalAlpha = 1.0;
-
-    // High-Intensity Forward Exploration Headlamps
-    ctx.fillStyle = '#fef08a';
-    ctx.beginPath();
-    ctx.arc(-9, 16.5, 1.4, 0, Math.PI * 2);
-    ctx.arc(9, 16.5, 1.4, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(-9, 16.5, 0.6, 0, Math.PI * 2);
-    ctx.arc(9, 16.5, 0.6, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Rover Comms Dish on Cabin Roof
-    ctx.strokeStyle = '#94a3b8';
-    ctx.lineWidth = 0.8;
-    ctx.beginPath();
-    ctx.moveTo(4, 8); ctx.lineTo(4, 5);
-    ctx.stroke();
-    ctx.fillStyle = '#475569';
-    ctx.beginPath();
-    ctx.ellipse(4, 5, 2.5, 1.2, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
     ctx.restore();
   }
 
-  // Safety Hazard Chevron Warning Stripe Band on Bay Threshold
+  // Rear auxiliary lift bell.
   ctx.save();
+  ctx.fillStyle = metal;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1;
   ctx.beginPath();
-  roundRect(ctx, -19, 21, 38, 4, 0.5);
-  ctx.clip();
-  ctx.fillStyle = '#0f172a';
-  ctx.fillRect(-19, 21, 38, 4);
-  ctx.strokeStyle = '#f59e0b';
-  ctx.lineWidth = 2.4;
-  for (let hx = -30; hx <= 30; hx += 7) {
+  roundRect(ctx, 51, 17, 8, 6, 1);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(50, 22);
+  ctx.lineTo(60, 22);
+  ctx.lineTo(61, 31);
+  ctx.lineTo(49, 31);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255,241,168,0.65)';
+  ctx.beginPath();
+  ctx.ellipse(55, 32, 5, 2.5, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // 4. Tracked landing bogies and forward articulated support.
+  const bogies = [-55, -12, 42];
+  for (const x of bogies) {
+    ctx.save();
+    ctx.fillStyle = '#3E4D39';
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.moveTo(hx, 25);
-    ctx.lineTo(hx + 5, 21);
+    roundRect(ctx, x - 12, footY - 5, 24, 5, 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#242D25';
+    for (let wx = x - 8; wx <= x + 8; wx += 5) {
+      ctx.beginPath();
+      ctx.arc(wx, footY - 2.5, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.strokeStyle = metalHi;
+    ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(x - 10, footY - 6);
+    ctx.lineTo(x + 10, footY - 6);
+    ctx.stroke();
+    ctx.restore();
+  }
+  for (const [mount, foot] of [[-50, -56], [-18, -20], [38, 42], [58, 58]]) {
+    ctx.save();
+    ctx.strokeStyle = oliveDeep;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(mount, 18);
+    ctx.lineTo(foot, footY - 5);
+    ctx.stroke();
+    ctx.strokeStyle = metalHi;
+    ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.moveTo(mount, 20);
+    ctx.lineTo(foot, footY - 6);
+    ctx.stroke();
+    ctx.fillStyle = goldDark;
+    ctx.beginPath();
+    ctx.arc(mount, 18, 2.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // 5. Open-sided multi-deck cargo hold, behind the outer hull framing.
+  ctx.save();
+  ctx.fillStyle = cargoDark;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  roundRect(ctx, -22, -1, 58, 23, 1.5);
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = '#9A988B';
+  ctx.lineWidth = 0.8;
+  for (const y of [5, 12, 19]) {
+    ctx.beginPath();
+    ctx.moveTo(-20, y);
+    ctx.lineTo(34, y);
+    ctx.stroke();
+  }
+  for (const x of [-16, -2, 12, 26]) {
+    ctx.beginPath();
+    ctx.moveTo(x, 1);
+    ctx.lineTo(x, 22);
+    ctx.stroke();
+  }
+  // Six small tracked cargo vehicles in the cutaway.
+  for (const [x, y] of [[-14, 2], [12, 2], [-4, 9], [22, 9], [-14, 16], [10, 16]]) {
+    ctx.fillStyle = '#4E6845';
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 0.55;
+    ctx.beginPath();
+    roundRect(ctx, x - 4, y - 1.5, 8, 2.5, 0.7);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#242D25';
+    ctx.beginPath();
+    ctx.ellipse(x, y + 1, 4.5, 1, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#6D8558';
+    ctx.beginPath();
+    roundRect(ctx, x - 1.8, y - 3, 3.6, 2, 0.6);
+    ctx.fill();
     ctx.stroke();
   }
   ctx.restore();
 
-  // Bay Sill Upper Trim Line
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.2;
+  // 6. Lower hull and main olive armored body.
+  ctx.save();
+  ctx.fillStyle = lowerGrad;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.8;
   ctx.beginPath();
-  ctx.moveTo(-19, 21); ctx.lineTo(19, 21);
-  ctx.stroke();
-
-  // Articulated Hydraulic Drive-Through Ramp Door
-  ctx.fillStyle = '#1e293b';
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.6;
-  ctx.beginPath();
-  ctx.moveTo(-19, 24);
-  ctx.lineTo(-19, rampDropY);
-  ctx.lineTo(19, rampDropY);
-  ctx.lineTo(19, 24);
+  ctx.moveTo(-67, 8);
+  ctx.lineTo(56, 8);
+  ctx.lineTo(58, 22);
+  ctx.lineTo(39, 25);
+  ctx.lineTo(-42, 24);
+  ctx.lineTo(-65, 20);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
+  ctx.restore();
 
-  // Hydraulic Ramp Actuators & Chrome Cylinder Rods
-  ctx.fillStyle = '#334155';
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 0.8;
-  roundRect(ctx, -18, 19, 3.2, 5.5, 0.8);
-  ctx.fill(); ctx.stroke();
-  roundRect(ctx, 15, 19, 3.2, 5.5, 0.8);
-  ctx.fill(); ctx.stroke();
-
-  ctx.strokeStyle = '#f8fafc';
-  ctx.lineWidth = 1.4;
+  // Main fuselage: wedge bow LEFT, long armored spine, stern RIGHT.
+  ctx.save();
+  ctx.fillStyle = hullGrad;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.8;
   ctx.beginPath();
-  ctx.moveTo(-16.4, 16); ctx.lineTo(-16.4, 23);
-  ctx.moveTo(16.4, 16); ctx.lineTo(16.4, 23);
+  ctx.moveTo(-70, -25);
+  ctx.lineTo(-55, -42);
+  ctx.lineTo(-30, -48);
+  ctx.lineTo(44, -42);
+  ctx.lineTo(57, -30);
+  ctx.lineTo(58, 9);
+  ctx.lineTo(38, 14);
+  ctx.lineTo(-48, 13);
+  ctx.lineTo(-68, 5);
+  ctx.closePath();
+  ctx.fill();
   ctx.stroke();
+  // Large diagonal forward cheek armor.
+  ctx.fillStyle = oliveDark;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.1;
+  ctx.beginPath();
+  ctx.moveTo(-66, -24);
+  ctx.lineTo(-48, -38);
+  ctx.lineTo(-30, -8);
+  ctx.lineTo(-40, 12);
+  ctx.lineTo(-64, 7);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Rear raised engineering fairing.
+  ctx.fillStyle = oliveLight;
+  ctx.beginPath();
+  ctx.moveTo(38, -37);
+  ctx.lineTo(52, -28);
+  ctx.lineTo(54, -9);
+  ctx.lineTo(38, -6);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Panel seams, access hatches, and vents.
+  ctx.strokeStyle = oliveDeep;
+  ctx.lineWidth = 0.9;
+  ctx.beginPath();
+  ctx.moveTo(-40, -40); ctx.lineTo(-40, 8);
+  ctx.moveTo(-10, -45); ctx.lineTo(-10, 7);
+  ctx.moveTo(22, -44); ctx.lineTo(22, 8);
+  ctx.moveTo(39, -36); ctx.lineTo(39, 7);
+  ctx.moveTo(-53, -12); ctx.lineTo(-35, -12);
+  ctx.moveTo(5, -35); ctx.lineTo(32, -35);
+  ctx.stroke();
+  ctx.fillStyle = oliveDeep;
+  for (const [x, y, w, h] of [[-62,-3,8,5],[-50,3,8,3],[-26,-38,12,4],[27,-29,9,4],[44,0,8,4]]) {
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeStyle = line;
+    ctx.strokeRect(x, y, w, h);
+  }
+  // Three ventilation slots on upper spine.
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.1;
+  ctx.beginPath();
+  ctx.moveTo(0, -38); ctx.lineTo(3, -33);
+  ctx.moveTo(4, -38); ctx.lineTo(7, -33);
+  ctx.moveTo(8, -37); ctx.lineTo(11, -32);
+  ctx.stroke();
+  ctx.restore();
 
-  // Diagonal Safety Hazard Lines on Ramp Face
-  if (rampOpenProg > 0.05) {
+  // 7. Gold reinforcement bands wrapping the central hull.
+  for (const x of [-14, 22]) {
     ctx.save();
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 2.0;
-    for (let rx = -15; rx <= 15; rx += 8) {
+    ctx.fillStyle = gold;
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.moveTo(x - 3, -43);
+    ctx.lineTo(x + 3, -43);
+    ctx.lineTo(x + 5, 10);
+    ctx.lineTo(x - 4, 10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.strokeStyle = goldDark;
+    ctx.lineWidth = 0.75;
+    for (let y = -38; y < 7; y += 5) {
       ctx.beginPath();
-      ctx.moveTo(rx, 24);
-      ctx.lineTo(rx + 4, rampDropY);
+      ctx.moveTo(x - 2.5, y);
+      ctx.lineTo(x + 3.2, y);
       ctx.stroke();
     }
     ctx.restore();
   }
 
-  // -------------------------------------------------------------------
-  // 5. Emerald Command Bridge Citadel & Sensor Spire
-  // -------------------------------------------------------------------
-  const bridgeGrad = ctx.createLinearGradient(0, -46, 0, -8);
-  bridgeGrad.addColorStop(0, '#334155');
-  bridgeGrad.addColorStop(0.35, '#1e293b');
-  bridgeGrad.addColorStop(1, '#0f172a');
-  ctx.fillStyle = bridgeGrad;
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.8;
+  // 8. Large octagonal front service hatch and loading aperture.
+  ctx.save();
+  ctx.fillStyle = '#40423E';
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.4;
   ctx.beginPath();
-  ctx.moveTo(0, -46);
-  ctx.lineTo(16, -28);
-  ctx.lineTo(16, -8);
-  ctx.lineTo(-16, -8);
-  ctx.lineTo(-16, -28);
+  ctx.moveTo(-54, -20);
+  ctx.lineTo(-47, -26);
+  ctx.lineTo(-38, -26);
+  ctx.lineTo(-34, -20);
+  ctx.lineTo(-34, 4);
+  ctx.lineTo(-40, 9);
+  ctx.lineTo(-50, 7);
+  ctx.lineTo(-55, 0);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
-
-  // Bridge Armor Facet Shading
-  ctx.fillStyle = 'rgba(71, 85, 105, 0.45)';
+  ctx.strokeStyle = gold;
+  ctx.lineWidth = 1.4;
   ctx.beginPath();
-  ctx.moveTo(0, -46);
-  ctx.lineTo(16, -28);
-  ctx.lineTo(0, -24);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
-  ctx.beginPath();
-  ctx.moveTo(0, -46);
-  ctx.lineTo(-16, -28);
-  ctx.lineTo(0, -24);
-  ctx.closePath();
-  ctx.fill();
-
-  // Panoramic Emerald Command Visor
-  ctx.fillStyle = createVisorGrad(ctx, 0, -28, 8.5, config.accentColor, config.visorColor);
-  ctx.beginPath();
-  ctx.ellipse(0, -28, 8.5, 6.0, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = '#6ee7b7';
-  ctx.lineWidth = 1.3;
+  ctx.moveTo(-37, -25); ctx.lineTo(-34, -20); ctx.lineTo(-34, 4); ctx.lineTo(-40, 9);
   ctx.stroke();
-
-  // Visor Armored Window Mullions
-  ctx.strokeStyle = '#0f172a';
-  ctx.lineWidth = 1.1;
-  ctx.beginPath();
-  ctx.moveTo(0, -34); ctx.lineTo(0, -22);
-  ctx.moveTo(-7.5, -28); ctx.lineTo(7.5, -28);
-  ctx.stroke();
-
-  // Visor Frame Perimeter Micro-Rivets
-  ctx.fillStyle = '#e0f2fe';
-  for (const vx of [-6, -3, 0, 3, 6]) {
-    ctx.beginPath();
-    ctx.arc(vx, -33, 0.55, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // Specular Visor Glass Arc Glint
-  ctx.fillStyle = '#ffffff';
-  ctx.globalAlpha = 0.85;
-  ctx.beginPath();
-  ctx.ellipse(-2.8, -30.5, 3.5, 1.6, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1.0;
-
-  // Dorsal Sensor Radome Blister
-  ctx.fillStyle = '#0f172a';
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.ellipse(0, -44, 4.0, 2.0, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  // Dual Whip Communications Aerials & Flashing Telemetry Beacons
-  ctx.strokeStyle = '#94a3b8';
-  ctx.lineWidth = 1.0;
-  ctx.beginPath();
-  ctx.moveTo(-7, -42); ctx.lineTo(-7, -52);
-  ctx.moveTo(7, -42); ctx.lineTo(7, -52);
-  ctx.stroke();
-
-  // Antenna Tip Cross-Spikes
-  ctx.strokeStyle = '#34d399';
+  ctx.strokeStyle = oliveDeep;
   ctx.lineWidth = 0.8;
   ctx.beginPath();
-  ctx.moveTo(-9, -52); ctx.lineTo(-5, -52);
-  ctx.moveTo(5, -52); ctx.lineTo(9, -52);
+  ctx.moveTo(-48, -22); ctx.lineTo(-40, -22); ctx.lineTo(-36, -17);
+  ctx.moveTo(-48, -17); ctx.lineTo(-39, -17);
+  ctx.moveTo(-48, 3); ctx.lineTo(-39, 3);
   ctx.stroke();
+  ctx.restore();
 
-  // Port Blinking Telemetry Beacon (Emerald)
-  ctx.fillStyle = '#10b981';
-  ctx.globalAlpha = antennaBlink ? 1.0 : 0.35;
+  // 9. Forward armor face and sensor arrays.
+  ctx.save();
+  ctx.fillStyle = olive;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.arc(-7, -52, 1.3, 0, Math.PI * 2);
+  ctx.moveTo(-70, -25);
+  ctx.lineTo(-73, -15);
+  ctx.lineTo(-70, 5);
+  ctx.lineTo(-62, 8);
+  ctx.lineTo(-59, -27);
+  ctx.closePath();
   ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = gold;
+  ctx.fillRect(-68, -18, 3, 10);
+  ctx.fillRect(-67, -2, 3, 8);
+  // Lower forward observation window band.
+  ctx.fillStyle = windowDark;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.1;
+  ctx.beginPath();
+  ctx.moveTo(-65, -18);
+  ctx.lineTo(-47, -20);
+  ctx.lineTo(-42, -15);
+  ctx.lineTo(-46, -11);
+  ctx.lineTo(-66, -11);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = windowHi;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(-62, -16); ctx.lineTo(-53, -17);
+  ctx.moveTo(-50, -17); ctx.lineTo(-46, -16);
+  ctx.stroke();
+  // Twin forward sensor barrels with fine rods.
+  for (const y of [-9, -1]) {
+    ctx.fillStyle = metal;
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 0.9;
+    ctx.beginPath();
+    ctx.ellipse(-70, y, 4, 2.2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.strokeStyle = '#262B25';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(-73, y - 1);
+    ctx.lineTo(-84, y - 6);
+    ctx.moveTo(-73, y);
+    ctx.lineTo(-85, y);
+    ctx.moveTo(-73, y + 1);
+    ctx.lineTo(-83, y + 6);
+    ctx.stroke();
+  }
+  ctx.restore();
 
-  // Starboard Pulsing Navigation Beacon (Bright Amber / Emerald)
-  ctx.fillStyle = '#34d399';
-  ctx.globalAlpha = beaconPulse;
+  // 10. Command bridge and crew quarters.
+  ctx.save();
+  ctx.fillStyle = oliveLight;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.arc(7, -52, 1.4, 0, Math.PI * 2);
+  ctx.moveTo(-52, -42);
+  ctx.lineTo(-45, -53);
+  ctx.lineTo(-22, -56);
+  ctx.lineTo(-14, -45);
+  ctx.lineTo(-17, -35);
+  ctx.lineTo(-48, -34);
+  ctx.closePath();
   ctx.fill();
-  ctx.globalAlpha = 1.0;
+  ctx.stroke();
+  // Main horizontal bridge window strip.
+  ctx.fillStyle = windowDark;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.1;
+  ctx.beginPath();
+  ctx.moveTo(-48, -43);
+  ctx.lineTo(-27, -46);
+  ctx.lineTo(-20, -41);
+  ctx.lineTo(-24, -36);
+  ctx.lineTo(-49, -36);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = windowHi;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(-44, -41); ctx.lineTo(-36, -42);
+  ctx.moveTo(-33, -43); ctx.lineTo(-26, -42);
+  ctx.stroke();
+  // Primary bridge turret on top.
+  ctx.fillStyle = oliveHi;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(-39, -54);
+  ctx.lineTo(-35, -59);
+  ctx.lineTo(-21, -59);
+  ctx.lineTo(-17, -54);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = windowDark;
+  ctx.strokeStyle = line;
+  ctx.beginPath();
+  roundRect(ctx, -34, -57, 12, 3, 0.8);
+  ctx.fill();
+  ctx.stroke();
+  // Yellow bridge markers.
+  ctx.fillStyle = gold;
+  ctx.fillRect(-48, -49, 6, 3);
+  ctx.fillRect(-18, -48, 5, 3);
+  ctx.restore();
+
+  // 11. Dorsal antenna masts with independently blinking top lights.
+  ctx.save();
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.1;
+  ctx.beginPath();
+  ctx.moveTo(-27, -59); ctx.lineTo(-27, -72);
+  ctx.moveTo(-36, -58); ctx.lineTo(-36, -65);
+  ctx.moveTo(-18, -55); ctx.lineTo(-18, -63);
+  ctx.stroke();
+  ctx.fillStyle = blink ? '#F5DD70' : '#80691F';
+  ctx.globalAlpha = blink ? 1 : 0.45;
+  ctx.beginPath();
+  ctx.arc(-27, -73, 1.8, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#E84942';
+  ctx.globalAlpha = blink ? 0.95 : 0.25;
+  ctx.beginPath();
+  ctx.arc(-36, -66, 1.2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.restore();
+
+  // 12. JUGGERNAUT LIFTER illuminated side plaque.
+  ctx.save();
+  ctx.fillStyle = '#3C4B36';
+  ctx.strokeStyle = goldDark;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  roundRect(ctx, -2, -18, 31, 13, 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = goldHi;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  roundRect(ctx, -1, -17, 29, 11, 1.7);
+  ctx.stroke();
+  ctx.fillStyle = cream;
+  ctx.font = 'bold 4.1px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('JUGGERNAUT', 13.5, -13);
+  ctx.fillText('LIFTER', 13.5, -8);
+  ctx.restore();
+
+  // 13. Rear reaction-control rods and side machinery.
+  ctx.save();
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 0.9;
+  ctx.beginPath();
+  ctx.moveTo(45, -35); ctx.lineTo(57, -42);
+  ctx.moveTo(48, -33); ctx.lineTo(62, -38);
+  ctx.moveTo(51, -31); ctx.lineTo(65, -31);
+  ctx.moveTo(52, 8); ctx.lineTo(63, 14);
+  ctx.moveTo(54, 6); ctx.lineTo(66, 10);
+  ctx.stroke();
+  ctx.fillStyle = metal;
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  roundRect(ctx, 30, -25, 10, 7, 1);
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = gold;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(33, -23); ctx.lineTo(38, -23);
+  ctx.moveTo(33, -20); ctx.lineTo(38, -20);
+  ctx.stroke();
+  ctx.restore();
+
+  // 14. Front ramp door — 2-phase slide-out-then-descend animation
+  // Phase 1 (rampProg 0-0.5): door slides horizontally out of the hull
+  // Phase 2 (rampProg 0.5-1.0): door rotates down to ground
+  ctx.save();
+
+  // Draw the stowed ramp door flush in the hull when closed (rampProg < 0.01)
+  // or show it sliding out during phase 1
+  if (rampProg < 0.01) {
+    // Fully stowed - draw as flush panel in the hull front
+    ctx.fillStyle = '#40423E';
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(-58, 8);
+    ctx.lineTo(-38, 8);
+    ctx.lineTo(-38, 14);
+    ctx.lineTo(-58, 14);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    // Gold trim on edges
+    ctx.strokeStyle = gold;
+    ctx.lineWidth = 1.0;
+    ctx.beginPath();
+    ctx.moveTo(-58, 8); ctx.lineTo(-38, 8);
+    ctx.moveTo(-58, 14); ctx.lineTo(-38, 14);
+    ctx.stroke();
+    // Seam lines
+    ctx.strokeStyle = '#252B24';
+    ctx.lineWidth = 0.6;
+    for (let i = 0.2; i < 1.0; i += 0.25) {
+      const cx = -58 + 20 * i;
+      ctx.beginPath();
+      ctx.moveTo(cx, 8);
+      ctx.lineTo(cx, 14);
+      ctx.stroke();
+    }
+  } else {
+    // Ramp is deployed - draw the sliding/rotating plate
+    ctx.fillStyle = '#40423E';
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.moveTo(hingeX + sideX, hingeY + sideY);
+    ctx.lineTo(tipX + sideX, tipY + sideY);
+    ctx.lineTo(tipX - sideX, tipY - sideY);
+    ctx.lineTo(hingeX - sideX, hingeY - sideY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Gold trim edges
+    ctx.strokeStyle = gold;
+    ctx.lineWidth = 1.0;
+    ctx.beginPath();
+    ctx.moveTo(hingeX + sideX, hingeY + sideY);
+    ctx.lineTo(tipX + sideX, tipY + sideY);
+    ctx.moveTo(hingeX - sideX, hingeY - sideY);
+    ctx.lineTo(tipX - sideX, tipY - sideY);
+    ctx.stroke();
+
+    // Diagonal seam lines on ramp face
+    ctx.strokeStyle = '#252B24';
+    ctx.lineWidth = 0.7;
+    for (let i = 0.15; i < 0.95; i += 0.2) {
+      const cx = hingeX + (tipX - hingeX) * i;
+      const cy = hingeY + (tipY - hingeY) * i;
+      const sx = Math.cos(rampAngle + Math.PI / 2) * rampWidth * 0.8;
+      const sy = Math.sin(rampAngle + Math.PI / 2) * rampWidth * 0.8;
+      ctx.beginPath();
+      ctx.moveTo(cx - sx, cy - sy);
+      ctx.lineTo(cx + sx, cy + sy);
+      ctx.stroke();
+    }
+
+    // Hydraulic actuator arms - extend with slide phase, then follow rotation
+    ctx.strokeStyle = metalHi;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    // Upper arm attaches to hull at ~(-54, 13)
+    const arm1BaseX = -54;
+    const arm1BaseY = 13;
+    // Lower arm attaches to hull at ~(-48, 14)
+    const arm2BaseX = -48;
+    const arm2BaseY = 14;
+
+    // Arm endpoints follow the ramp hinge during slide, then ramp middle during rotate
+    let arm1EndX, arm1EndY, arm2EndX, arm2EndY;
+    if (rampRotatePhase === 0) {
+      // Pure slide phase - arms extend with the hinge
+      arm1EndX = hingeX - 8;
+      arm1EndY = hingeY + 4;
+      arm2EndX = hingeX - 5;
+      arm2EndY = hingeY + 5;
+    } else {
+      // Rotate phase - arms pivot to follow ramp
+      const midRampX = hingeX + Math.cos(rampAngle) * (rampLength * 0.4);
+      const midRampY = hingeY + Math.sin(rampAngle) * (rampLength * 0.4);
+      arm1EndX = midRampX - 8;
+      arm1EndY = midRampY + 2;
+      arm2EndX = midRampX - 5;
+      arm2EndY = midRampY + 4;
+    }
+    ctx.moveTo(arm1BaseX, arm1BaseY); ctx.lineTo(arm1EndX, arm1EndY);
+    ctx.moveTo(arm2BaseX, arm2BaseY); ctx.lineTo(arm2EndX, arm2EndY);
+    ctx.stroke();
+
+    // Gold piston rods inside hydraulic arms
+    ctx.strokeStyle = goldDark;
+    ctx.lineWidth = 2.0;
+    ctx.beginPath();
+    ctx.moveTo(arm1BaseX, arm1BaseY); ctx.lineTo(arm1EndX, arm1EndY);
+    ctx.moveTo(arm2BaseX, arm2BaseY); ctx.lineTo(arm2EndX, arm2EndY);
+    ctx.stroke();
+  }
+
+
+  ctx.restore();
+  ctx.restore();
 }
+
+
 
 // =====================================================================
 // 17. NUTCRACKER (Heavy Desert-Planet Crawler Carrier & Drill Miner)

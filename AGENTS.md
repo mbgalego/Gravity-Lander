@@ -59,3 +59,19 @@ Step order that NEVER fails, plus the hard-won gotchas:
 ## Build
 - npx tsc --noEmit
 - ALWAYS update both: shipDrawers.ts (in-game) AND ShipGraphic.tsx (menu SVG)
+
+## Mammoth Rig (C-95)
+- Replaced the old MR-700 excavator/crane design with a faithful clone of the C-95 "MAMMOTH RIG" HEAVY LIFT CARGO schematic.
+- Bow faces RIGHT, engines at LEFT (stern). renderScale 1.6, width 140, height 130.
+- Hull palette: blue-gray duranium (#59686A/#647477/#718083/#9AA5A3), dark undersides (#252E32/#394447), yellow-gold accents (#D4A62B/#E0B33A), cyan bridge glazing (#39CBD0/#55E0E2), cream HID searchlights (#FFF0C9/#F2C96A), red beacon (#E84942), orange ports (#E86F42), near-black outline (#172125).
+- Key features: blunt armored bow w/ dual HID searchlight banks, command bridge w/ cyan trapezoidal viewport + forward RF/IR sensor panel, upper-deck personnel quarters, central systems conduit hub, Main Cargo Hold A (3000t, "MAMMOTH RIG"/"CARGO" stencils), 4 articulated landing gear w/ yellow-gold hydraulic pistons + hazard-striped footpads, twin vectored thruster pods + main propulsion nozzle, red rotating beacon on bridge mast, "MAMMOTH RIG" + "C-95 HEAVY LIFT CARGO" fuselage stencils, hazard stripe along lower hull.
+- ShipGraphic.tsx viewBox for mammoth: '-68 -56 140 98', aspect ratio 98/140.
+
+## Juggernaut Lifter (JG-1200)
+- Replaced the old symmetric navy/emerald carrier with a left-facing side-profile clone of the supplied olive-green concept diagram.
+- Bow/front is LEFT, circular main propulsion assembly is RIGHT. renderScale 1.8, config width 160, height 150; SVG viewBox '-96 -78 174 122'.
+- Palette: olive hull (#6D8558/#829968/#91A878), dark armor (#4C633F/#344735), gold bands/trim (#D5B43D/#F0D256), charcoal windows (#303A39), warm gray machinery (#78776D/#A09D8F), cream lettering (#F4F0D7).
+- Key features: wedge bow with twin forward sensor arrays, stacked observation windows, raised command bridge/crew quarters, two gold reinforcement bands, open multi-deck cargo hold with six tracked vehicles, three downward lift-engine bells plus aft auxiliary bell, large circular stern engine, tracked bogies, octagonal service hatch, JUGGERNAUT/LIFTER plaque, rear RCS rods.
+- **Ramp animation (2-phase):** Phase 1 (rampProgress 0–0.5): door slides horizontally out of the forward hull aperture. Phase 2 (rampProgress 0.5–1.0): door rotates downward to ground level. Hydraulic actuator arms extend with the slide phase, then pivot to follow the ramp rotation. When fully stowed (rampProgress < 0.01), the door is invisible (flush with hull).
+- **Outer thrusters:** Two additional thruster pairs at the bow (-62, 28) and stern (+96, 28) edges light up in sync with the main engine's exhaustPulse, giving the impression of enhanced maneuverability.
+- Dorsal antenna tip lights blink using the renderer time parameter; the SVG menu includes looping opacity animations.
