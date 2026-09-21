@@ -17,7 +17,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
   showGlow = true,
 }) => {
   const modelId = ship.id;
-  const isLongCraft = modelId === 'eagle' || modelId === 'vulcan' || modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath' || modelId === 'behemoth' || modelId === 'mammoth' || modelId === 'juggernaut';
+  const isLongCraft = modelId === 'eagle' || modelId === 'vulcan' || modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath' || modelId === 'behemoth' || modelId === 'mammoth' || modelId === 'juggernaut' || modelId === 'leviathan';
   const isEagle = modelId === 'eagle';
   const viewBox = (modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath')
     ? '-72 -26 144 54'
@@ -27,14 +27,16 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         ? '-68 -56 140 98'
         : (modelId === 'juggernaut'
           ? '-96 -78 174 122'
-          : (isLongCraft ? '-72 -24 144 52' : '-40 -40 80 80'))));
+          : (modelId === 'leviathan'
+            ? '-76 -20 152 54'
+            : (isLongCraft ? '-72 -24 144 52' : '-40 -40 80 80')))));
 
   const effectiveSize = size === undefined && !className ? 56 : size;
   const sizeStyle = effectiveSize
     ? {
         width: effectiveSize,
         height: isLongCraft
-          ? Math.round(effectiveSize * (modelId === 'behemoth' ? 68 / 150 : (modelId === 'mammoth' ? 98 / 140 : (modelId === 'juggernaut' ? 122 / 174 : ((modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath') ? 54 / 144 : 52 / 144)))))
+          ? Math.round(effectiveSize * (modelId === 'behemoth' ? 68 / 150 : (modelId === 'mammoth' ? 98 / 140 : (modelId === 'juggernaut' ? 122 / 174 : (modelId === 'leviathan' ? 54 / 152 : ((modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath') ? 54 / 144 : 52 / 144))))))
           : effectiveSize,
       }
     : undefined;
@@ -572,12 +574,22 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <stop offset="100%" stopColor="#94a3b8" />
           </linearGradient>
 
-          {/* Leviathan Ventral Approach Spotlight Beam */}
-          <linearGradient id="leviathan-spotlight-beam" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.75" />
-            <stop offset="25%" stopColor="#bae6fd" stopOpacity="0.45" />
-            <stop offset="70%" stopColor="#06b6d4" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.0" />
+          {/* Leviathan Hull / Gunmetal / Tank Gradients (matches drawLeviathan) */}
+          <linearGradient id="leviathan-hull" gradientUnits="userSpaceOnUse" x1="0" y1="-17" x2="0" y2="18">
+            <stop offset="0" stopColor="#A9B0B6" />
+            <stop offset="0.35" stopColor="#8A9298" />
+            <stop offset="0.8" stopColor="#6E767C" />
+            <stop offset="1" stopColor="#565E64" />
+          </linearGradient>
+          <linearGradient id="leviathan-gunmetal" gradientUnits="userSpaceOnUse" x1="0" y1="-17" x2="0" y2="18">
+            <stop offset="0" stopColor="#4A5259" />
+            <stop offset="0.5" stopColor="#394046" />
+            <stop offset="1" stopColor="#262C31" />
+          </linearGradient>
+          <linearGradient id="leviathan-tank" gradientUnits="userSpaceOnUse" x1="0" y1="-14" x2="0" y2="-5">
+            <stop offset="0" stopColor="#C2C8CD" />
+            <stop offset="0.4" stopColor="#8A9298" />
+            <stop offset="1" stopColor="#6E767C" />
           </linearGradient>
 
           {/* Nutcracker Miner Shaders */}
@@ -2945,167 +2957,212 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             </g>
           </g>
         )}
+
+<linearGradient id="leviathan-hull" x1="0" y1="-17" x2="0" y2="18">
+  <stop offset="0" stopColor="#A9B0B6"/>
+  <stop offset="0.35" stopColor="#8A9298"/>
+  <stop offset="0.8" stopColor="#6E767C"/>
+  <stop offset="1" stopColor="#565E64"/>
+</linearGradient>
+<linearGradient id="leviathan-gunmetal" x1="0" y1="-17" x2="0" y2="18">
+  <stop offset="0" stopColor="#4A5259"/>
+  <stop offset="0.5" stopColor="#394046"/>
+  <stop offset="1" stopColor="#262C31"/>
+</linearGradient>
+<linearGradient id="leviathan-tank" x1="0" y1="-14" x2="0" y2="-5">
+  <stop offset="0" stopColor="#C2C8CD"/>
+  <stop offset="0.4" stopColor="#8A9298"/>
+  <stop offset="1" stopColor="#6E767C"/>
+</linearGradient>
+
 {modelId === 'leviathan' && (
-          <g>
-            {/* 0. Downward Landing Spotlight Beam */}
-            <polygon
-              points="-3,16 -24,46 30,46 3,16"
-              fill="url(#leviathan-spotlight-beam)"
-            />
-            <ellipse cx="3" cy="46" rx="27" ry="4.5" fill="#06b6d4" opacity="0.25" />
-            <ellipse cx="3" cy="46" rx="15" ry="2.5" fill="none" stroke="#22d3ee" strokeWidth="0.8" opacity="0.6" />
-
-            {/* 1. Catamaran Outrigger Landing Gear (Strictly Isolated Subpaths) */}
-            {/* Port Strut Assembly */}
-            <line x1="-34" y1="12" x2="-38" y2="22" stroke="#1e293b" strokeWidth="4.2" strokeLinecap="round" />
-            <line x1="-38" y1="22" x2="-42" y2="34" stroke="url(#leviathan-piston)" strokeWidth="2.4" strokeLinecap="round" />
-            <path d="M-26 16 L-33 24 L-42 34" fill="none" stroke="#0891b2" strokeWidth="1.8" />
-            {/* Port Nitrogen Canister */}
-            <rect x="-32" y="16" width="4" height="9" rx="1.5" fill="#0284c7" stroke="#082f49" strokeWidth="1.0" />
-            {/* Port Knuckle & Footpad */}
-            <circle cx="-42" cy="29.5" r="2.2" fill="#0f172a" stroke="#06b6d4" strokeWidth="1.2" />
-            <ellipse cx="-42" cy="34" rx="9" ry="3.2" fill="#0891b2" stroke="#164e63" strokeWidth="1.5" />
-            <line x1="-45" y1="32" x2="-43" y2="36" stroke="#0f172a" strokeWidth="1.2" />
-            <line x1="-41" y1="32" x2="-39" y2="36" stroke="#0f172a" strokeWidth="1.2" />
-
-            {/* Starboard Strut Assembly */}
-            <line x1="34" y1="12" x2="38" y2="22" stroke="#1e293b" strokeWidth="4.2" strokeLinecap="round" />
-            <line x1="38" y1="22" x2="42" y2="34" stroke="url(#leviathan-piston)" strokeWidth="2.4" strokeLinecap="round" />
-            <path d="M26 16 L33 24 L42 34" fill="none" stroke="#0891b2" strokeWidth="1.8" />
-            {/* Starboard Nitrogen Canister */}
-            <rect x="28" y="16" width="4" height="9" rx="1.5" fill="#0284c7" stroke="#082f49" strokeWidth="1.0" />
-            {/* Starboard Knuckle & Footpad */}
-            <circle cx="42" cy="29.5" r="2.2" fill="#0f172a" stroke="#06b6d4" strokeWidth="1.2" />
-            <ellipse cx="42" cy="34" rx="9" ry="3.2" fill="#0891b2" stroke="#164e63" strokeWidth="1.5" />
-            <line x1="39" y1="32" x2="41" y2="36" stroke="#0f172a" strokeWidth="1.2" />
-            <line x1="43" y1="32" x2="45" y2="36" stroke="#0f172a" strokeWidth="1.2" />
-
-            {/* 2. Massive Port Armored Vehicle Hangar Sponson (x: -40 to -10, y: -28 to +16) */}
-            <polygon
-              points="-40,-18 -34,-28 -10,-28 -10,16 -40,16"
-              fill="#0f172a"
-              stroke="#06b6d4"
-              strokeWidth="2.0"
-            />
-            <rect x="-36" y="-14" width="24" height="28" rx="2" fill="url(#titanium-plate)" stroke="#67e8f9" strokeWidth="1.0" />
-            {/* Port Armor Plate Rivets */}
-            <circle cx="-34" cy="-9" r="0.7" fill="#64748b" />
-            <circle cx="-34" cy="0" r="0.7" fill="#64748b" />
-            <circle cx="-34" cy="9" r="0.7" fill="#64748b" />
-            <circle cx="-14" cy="-9" r="0.7" fill="#64748b" />
-            <circle cx="-14" cy="0" r="0.7" fill="#64748b" />
-            <circle cx="-14" cy="9" r="0.7" fill="#64748b" />
-            {/* Stenciled Fleet Marking */}
-            <text x="-24" y="5" fill="#22d3ee" fontSize="2.8" fontFamily="monospace" fontWeight="bold" textAnchor="middle">LV-880</text>
-            {/* Radiator Vents */}
-            <rect x="-35" y="-24" width="8" height="6" fill="#082f49" stroke="#06b6d4" strokeWidth="0.8" />
-            <line x1="-35" y1="-22" x2="-27" y2="-22" stroke="#06b6d4" strokeWidth="0.8" />
-            <line x1="-35" y1="-20" x2="-27" y2="-20" stroke="#06b6d4" strokeWidth="0.8" />
-
-            {/* Port Sponson Glacial Visor Observation Dome */}
-            <ellipse cx="-22" cy="-22" rx="6.5" ry="3.8" fill="url(#visor-grad-leviathan)" stroke="#a5f3fc" strokeWidth="1.2" />
-            <line x1="-25" y1="-22" x2="-19" y2="-22" stroke="#38bdf8" strokeWidth="0.6" opacity="0.7" />
-            <line x1="-22" y1="-24" x2="-22" y2="-20" stroke="#38bdf8" strokeWidth="0.6" opacity="0.7" />
-            <ellipse cx="-24" cy="-23.2" rx="2.5" ry="1.2" fill="#ffffff" opacity="0.85" />
-            {/* Port Navigation Strobe */}
-            <circle cx="-39" cy="-18" r="1.3" fill="#ef4444" />
-
-            {/* 3. Center Pass-Through Hold & Overhead Box-Girder Bridge (x: -10 to +16) */}
-            <rect x="-10" y="-16" width="26" height="7" rx="1.5" fill="#1e293b" stroke="#0891b2" strokeWidth="1.4" />
-            {/* Girder Triangular Cutouts */}
-            <polygon points="-7,-15 -3,-15 -5,-10" fill="#0f172a" />
-            <polygon points="-1,-15 3,-15 1,-10" fill="#0f172a" />
-            <polygon points="5,-15 9,-15 7,-10" fill="#0f172a" />
-            <polygon points="11,-15 15,-15 13,-10" fill="#0f172a" />
-            {/* Industrial Hazard Warning Striping */}
-            <rect x="-10" y="-9" width="26" height="2" fill="#eab308" />
-            <line x1="-8" y1="-9" x2="-6" y2="-7" stroke="#0f172a" strokeWidth="1.0" />
-            <line x1="-2" y1="-9" x2="0" y2="-7" stroke="#0f172a" strokeWidth="1.0" />
-            <line x1="4" y1="-9" x2="6" y2="-7" stroke="#0f172a" strokeWidth="1.0" />
-            <line x1="10" y1="-9" x2="12" y2="-7" stroke="#0f172a" strokeWidth="1.0" />
-
-            {/* Recessed Interior Vehicle Hold */}
-            <rect x="-10" y="-7" width="26" height="23" fill="#020617" stroke="#155e75" strokeWidth="1.2" />
-            {/* Overhead Deck Lamps */}
-            <circle cx="-4" cy="-5.5" r="1.2" fill="#fef08a" />
-            <circle cx="4" cy="-5.5" r="1.2" fill="#fef08a" />
-            <circle cx="10" cy="-5.5" r="1.2" fill="#fef08a" />
-            {/* Deck Rails */}
-            <line x1="-8" y1="14.5" x2="14" y2="14.5" stroke="#38bdf8" strokeWidth="0.8" />
-
-            {/* Onboard Planetary Rover */}
-            <g transform="translate(3, 7)">
-              <rect x="-10" y="-5" width="20" height="9" fill="#1e293b" stroke="#06b6d4" strokeWidth="1.0" />
-              <rect x="3" y="-7.5" width="6.5" height="4.5" rx="1" fill="#38bdf8" stroke="#bae6fd" strokeWidth="0.6" />
-              <rect x="-9" y="-7" width="5" height="3" fill="#ea580c" stroke="#fdba74" strokeWidth="0.6" />
-              {/* All-Terrain Wheels */}
-              <circle cx="-7.5" cy="4.8" r="2.0" fill="#0f172a" stroke="#475569" strokeWidth="0.8" />
-              <circle cx="-7.5" cy="4.8" r="0.8" fill="#06b6d4" />
-              <circle cx="-2.5" cy="4.8" r="2.0" fill="#0f172a" stroke="#475569" strokeWidth="0.8" />
-              <circle cx="-2.5" cy="4.8" r="0.8" fill="#06b6d4" />
-              <circle cx="2.5" cy="4.8" r="2.0" fill="#0f172a" stroke="#475569" strokeWidth="0.8" />
-              <circle cx="2.5" cy="4.8" r="0.8" fill="#06b6d4" />
-              <circle cx="7.5" cy="4.8" r="2.0" fill="#0f172a" stroke="#475569" strokeWidth="0.8" />
-              <circle cx="7.5" cy="4.8" r="0.8" fill="#06b6d4" />
-            </g>
-
-            {/* 4. Closed Hydraulic Ramp Door */}
-            <line x1="-10" y1="14" x2="-22" y2="23" stroke="#06b6d4" strokeWidth="2.8" strokeLinecap="round" />
-            <circle cx="-22" cy="23" r="2.0" fill="#22d3ee" />
-
-            {/* 5. Starboard Slender Sensor Spire & Tokamak Spine (x: +16 to +38, y: -42 to +16) */}
-            <polygon
-              points="16,-38 28,-38 38,-16 38,16 16,16"
-              fill="#020617"
-              stroke="#06b6d4"
-              strokeWidth="1.8"
-            />
-            {/* Starboard Navigation Strobe */}
-            <circle cx="37" cy="-16" r="1.3" fill="#22c55e" />
-            {/* Communications Sensor Mast */}
-            <line x1="22" y1="-38" x2="22" y2="-45" stroke="#a5f3fc" strokeWidth="2.0" />
-            <line x1="18" y1="-42" x2="26" y2="-42" stroke="#67e8f9" strokeWidth="1.2" />
-            <path d="M17 -43 Q22 -41 27 -43" stroke="#22d3ee" strokeWidth="2.0" fill="none" />
-            <circle cx="22" cy="-45.5" r="1.4" fill="#ef4444" />
-
-            {/* Tokamak Fusion Reactor Spine with Luminescent Plasma Rings */}
-            <rect x="18" y="-16" width="18" height="28" fill="#082f49" stroke="#0891b2" strokeWidth="1.0" />
-            <rect x="20" y="-12" width="14" height="4" rx="1" fill="#06b6d4" />
-            <rect x="23" y="-10.8" width="8" height="1.6" rx="0.5" fill="#ffffff" />
-            <rect x="20" y="-4" width="14" height="4" rx="1" fill="#06b6d4" />
-            <rect x="23" y="-2.8" width="8" height="1.6" rx="0.5" fill="#ffffff" />
-            <rect x="20" y="4" width="14" height="4" rx="1" fill="#06b6d4" />
-            <rect x="23" y="5.2" width="8" height="1.6" rx="0.5" fill="#ffffff" />
-            <rect x="20" y="11" width="14" height="4" rx="1" fill="#06b6d4" />
-            <rect x="23" y="12.2" width="8" height="1.6" rx="0.5" fill="#ffffff" />
-
-            {/* 6. Spotlight Gimbal Projector Assembly at Keel (x: 3, y: 16) */}
-            <g transform="translate(3, 16)">
-              <rect x="-4.5" y="-3" width="9" height="4" rx="1" fill="#334155" stroke="#06b6d4" strokeWidth="1.0" />
-              <polygon points="-4,0 -3,3.5 3,3.5 4,0" fill="#1e293b" stroke="#22d3ee" strokeWidth="1.0" />
-              <ellipse cx="0" cy="3.2" rx="3.2" ry="1.2" fill="#f1f5f9" />
-              <circle cx="0" cy="2.8" r="1.3" fill="#ffffff" />
-              <circle cx="-2.6" cy="1.2" r="0.7" fill="#22c55e" />
-              {/* Starburst Flare */}
-              <line x1="-5" y1="2.8" x2="5" y2="2.8" stroke="#ffffff" strokeWidth="0.8" opacity="0.9" />
-              <line x1="0" y1="-2.2" x2="0" y2="7.8" stroke="#ffffff" strokeWidth="0.8" opacity="0.9" />
-            </g>
-
-            {/* 7. Heavy Asymmetric Rocket Propulsion Array */}
-            {/* Port Dual Main Bells */}
-            <polygon points="-35,16 -25,16 -23,24 -37,24" fill="#1e293b" stroke="#06b6d4" strokeWidth="1.2" />
-            <line x1="-37" y1="24" x2="-23" y2="24" stroke="#ea580c" strokeWidth="1.8" />
-            <polygon points="-23,16 -13,16 -11,24 -25,24" fill="#1e293b" stroke="#06b6d4" strokeWidth="1.2" />
-            <line x1="-25" y1="24" x2="-11" y2="24" stroke="#ea580c" strokeWidth="1.8" />
-            {/* Starboard High-Thrust Bell */}
-            <polygon points="21,16 35,16 37,25 19,25" fill="#1e293b" stroke="#06b6d4" strokeWidth="1.4" />
-            <line x1="19" y1="25" x2="37" y2="25" stroke="#f97316" strokeWidth="2.0" />
-            {/* Throat Idle Glow */}
-            <ellipse cx="-30" cy="22.5" rx="4.5" ry="1.6" fill="#06b6d4" opacity="0.5" />
-            <ellipse cx="-18" cy="22.5" rx="4.5" ry="1.6" fill="#06b6d4" opacity="0.5" />
-            <ellipse cx="28" cy="23.5" rx="6.5" ry="1.8" fill="#06b6d4" opacity="0.5" />
-          </g>
-        )}
+  <g>
+    <rect x="-48.5" y="17" width="5" height="3" fill="#262C31"/>
+    <line x1="-46" y1="19" x2="-46" y2="28" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
+    <circle cx="-46" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
+    <ellipse cx="-46" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
+    <ellipse cx="-41.8" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
+    <rect x="-20.5" y="17" width="5" height="3" fill="#262C31"/>
+    <line x1="-18" y1="19" x2="-18" y2="28" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
+    <circle cx="-18" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
+    <ellipse cx="-18" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
+    <ellipse cx="-13.8" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
+    <rect x="19.5" y="17" width="5" height="3" fill="#262C31"/>
+    <line x1="22" y1="19" x2="22" y2="28" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
+    <circle cx="22" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
+    <ellipse cx="22" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
+    <ellipse cx="26.2" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
+    <rect x="45.5" y="17" width="5" height="3" fill="#262C31"/>
+    <line x1="48" y1="19" x2="48" y2="28" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
+    <circle cx="48" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
+    <ellipse cx="48" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
+    <ellipse cx="52.2" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
+    <polygon points="-44,6 -44,18 -16,18 -16,6" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.2"/>
+    <polygon points="-43,6 -41,2 -19,2 -17,6" fill="url(#leviathan-hull)" stroke="#565E64" strokeWidth="1.1"/>
+    <circle cx="-30.0" cy="3.6" r="3.0" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <circle cx="-30.0" cy="3.6" r="1.9" fill="none" stroke="#565E64" strokeWidth="0.8"/>
+    <rect x="-41" y="3.4" width="3.2" height="1.4" fill="#EA580C"/>
+    <rect x="-21" y="3.4" width="3.2" height="1.4" fill="#EA580C"/>
+    <line x1="-41.5" y1="9" x2="-36.5" y2="9" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="-23.5" y1="9" x2="-18.5" y2="9" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="-41.5" y1="12.5" x2="-36.5" y2="12.5" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="-23.5" y1="12.5" x2="-18.5" y2="12.5" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="-41.5" y1="16" x2="-36.5" y2="16" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="-23.5" y1="16" x2="-18.5" y2="16" stroke="#1D2226" strokeWidth="1.6"/>
+    <rect x="-42.6" y="18" width="3.2" height="2.5" fill="#262C31"/>
+    <polygon points="-44,20.5 -38,20.5 -36.6,25 -45.4,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="-45.4" y1="25" x2="-36.6" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="-41" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
+    <rect x="-36.300000000000004" y="18" width="3.2" height="2.5" fill="#262C31"/>
+    <polygon points="-37.7,20.5 -31.700000000000003,20.5 -30.300000000000004,25 -39.1,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="-39.1" y1="25" x2="-30.300000000000004" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="-34.7" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
+    <rect x="-30.0" y="18" width="3.2" height="2.5" fill="#262C31"/>
+    <polygon points="-31.4,20.5 -25.4,20.5 -24.0,25 -32.8,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="-32.8" y1="25" x2="-24.0" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="-28.4" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
+    <rect x="-20.6" y="18" width="3.2" height="2.5" fill="#262C31"/>
+    <polygon points="-22,20.5 -16,20.5 -14.6,25 -23.4,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="-23.4" y1="25" x2="-14.6" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="-19" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
+    <line x1="-34" y1="6" x2="-34" y2="18" stroke="#EA580C" strokeWidth="0.9"/>
+    <line x1="-26" y1="6" x2="-26" y2="18" stroke="#EA580C" strokeWidth="0.9"/>
+    <polygon points="14,6 14,18 42,18 42,6" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.2"/>
+    <polygon points="15,6 17,2 39,2 41,6" fill="url(#leviathan-hull)" stroke="#565E64" strokeWidth="1.1"/>
+    <circle cx="28.0" cy="3.6" r="3.0" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <circle cx="28.0" cy="3.6" r="1.9" fill="none" stroke="#565E64" strokeWidth="0.8"/>
+    <rect x="17" y="3.4" width="3.2" height="1.4" fill="#EA580C"/>
+    <rect x="37" y="3.4" width="3.2" height="1.4" fill="#EA580C"/>
+    <line x1="16.5" y1="9" x2="21.5" y2="9" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="34.5" y1="9" x2="39.5" y2="9" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="16.5" y1="12.5" x2="21.5" y2="12.5" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="34.5" y1="12.5" x2="39.5" y2="12.5" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="16.5" y1="16" x2="21.5" y2="16" stroke="#1D2226" strokeWidth="1.6"/>
+    <line x1="34.5" y1="16" x2="39.5" y2="16" stroke="#1D2226" strokeWidth="1.6"/>
+    <rect x="15.4" y="18" width="3.2" height="2.5" fill="#262C31"/>
+    <polygon points="14,20.5 20,20.5 21.4,25 12.6,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="12.6" y1="25" x2="21.4" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="17" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
+    <rect x="21.7" y="18" width="3.2" height="2.5" fill="#262C31"/>
+    <polygon points="20.3,20.5 26.3,20.5 27.700000000000003,25 18.9,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="18.9" y1="25" x2="27.700000000000003" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="23.3" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
+    <rect x="28.0" y="18" width="3.2" height="2.5" fill="#262C31"/>
+    <polygon points="26.6,20.5 32.6,20.5 34.0,25 25.200000000000003,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="25.200000000000003" y1="25" x2="34.0" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="29.6" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
+    <rect x="37.4" y="18" width="3.2" height="2.5" fill="#262C31"/>
+    <polygon points="36,20.5 42,20.5 43.4,25 34.6,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="34.6" y1="25" x2="43.4" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="39" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
+    <line x1="24" y1="6" x2="24" y2="18" stroke="#EA580C" strokeWidth="0.9"/>
+    <line x1="32" y1="6" x2="32" y2="18" stroke="#EA580C" strokeWidth="0.9"/>
+    <polygon points="-46,-8 48,-8 58,-6 64,-4 70,-1 72,1 68,5 60,7 50,9 -40,9 -46,5" fill="url(#leviathan-hull)" stroke="#16191C" strokeWidth="1.8"/>
+    <line x1="-44" y1="-6" x2="46" y2="-6" stroke="#6E767C" strokeWidth="0.8"/>
+    <polygon points="46,-4 60,-3 68,3 60,7 48,7 44,1" fill="#6E767C" stroke="#16191C" strokeWidth="1.0"/>
+    <polygon points="36,-8 50,-7.2 56,-5.4 54,-2.6 47,-3.2 36,-4" fill="#4C5C68" stroke="#16191C" strokeWidth="1.2"/>
+    <line x1="42" y1="-7.7" x2="42" y2="-3.5" stroke="#262C31" strokeWidth="1.5"/>
+    <line x1="48" y1="-7.3" x2="48" y2="-3.0" stroke="#262C31" strokeWidth="1.5"/>
+    <line x1="37.5" y1="-7.2" x2="49" y2="-6.6" stroke="#8FA0AD" strokeWidth="0.9"/>
+    <circle cx="36" cy="-4.9" r="0.5" fill="#C2C8CD"/>
+    <circle cx="38" cy="-4.9" r="0.5" fill="#C2C8CD"/>
+    <circle cx="40" cy="-4.9" r="0.5" fill="#C2C8CD"/>
+    <circle cx="44" cy="-4.9" r="0.5" fill="#C2C8CD"/>
+    <circle cx="46" cy="-4.9" r="0.5" fill="#C2C8CD"/>
+    <circle cx="50" cy="-4.9" r="0.5" fill="#C2C8CD"/>
+    <text x="46" y="4.4" fill="#F4F4F5" fontSize="4.2" fontFamily="monospace" fontWeight="bold" textAnchor="middle" dominantBaseline="middle">325</text>
+    <line x1="36" y1="7.6" x2="56" y2="7.6" stroke="#F4F4F5" strokeWidth="0.6" opacity="0.5"/>
+    <polygon points="24,-5.5 33,-5.5 33,4 24,4" fill="#1D2226" stroke="#16191C" strokeWidth="1.1"/>
+    <polygon points="26,-4 31,-4 31,2.5 26,2.5" fill="none" stroke="#394046" strokeWidth="1.0"/>
+    <line x1="27.5" y1="-2" x2="29.5" y2="-2" stroke="#EA580C" strokeWidth="1.1"/>
+    <line x1="27.5" y1="0.5" x2="29.5" y2="0.5" stroke="#EA580C" strokeWidth="1.1"/>
+    <rect x="23.6" y="-4.5" width="1" height="1.6" fill="#4A5259"/>
+    <rect x="23.6" y="1" width="1" height="1.6" fill="#4A5259"/>
+    <rect x="17" y="-9" width="3" height="3" fill="#394046"/>
+    <line x1="18" y1="-6" x2="18" y2="-15.5" stroke="#4A5259" strokeWidth="1.6"/>
+    <line x1="14" y1="-11.5" x2="22" y2="-11.5" stroke="#394046" strokeWidth="0.9"/>
+    <line x1="14" y1="-12.8" x2="22" y2="-12.8" stroke="#394046" strokeWidth="0.9"/>
+    <line x1="14" y1="-14.2" x2="22" y2="-14.2" stroke="#394046" strokeWidth="0.9"/>
+    <line x1="14" y1="-15.6" x2="22" y2="-15.6" stroke="#394046" strokeWidth="0.9"/>
+    <circle cx="18" cy="-16.2" r="1.1" fill="#ef4444"/>
+    <polygon points="-40,-14 15,-14 15,-5 -40,-5" fill="url(#leviathan-tank)" stroke="#16191C" strokeWidth="1.2"/>
+    <rect x="-41.5" y="-14.5" width="3" height="10" fill="#394046"/>
+    <rect x="13.5" y="-14.5" width="3" height="10" fill="#394046"/>
+    <line x1="-34" y1="-13.5" x2="-34" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-28" y1="-13.5" x2="-28" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-22" y1="-13.5" x2="-22" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-16" y1="-13.5" x2="-16" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-10" y1="-13.5" x2="-10" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-4" y1="-13.5" x2="-4" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="2" y1="-13.5" x2="2" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="8" y1="-13.5" x2="8" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="14" y1="-13.5" x2="14" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-38" y1="-12.8" x2="13" y2="-12.8" stroke="#C2C8CD" strokeWidth="0.8"/>
+    <polygon points="-9,-17 7,-17 7,-5 -9,-5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.1"/>
+    <line x1="-8" y1="-16" x2="6" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <line x1="6" y1="-16" x2="-8" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <line x1="-5" y1="-16" x2="-5" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <line x1="-1" y1="-16" x2="-1" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <line x1="3" y1="-16" x2="3" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <rect x="-9.8" y="-17" width="1.6" height="1.6" fill="#EA580C"/>
+    <rect x="-9.8" y="-5" width="1.6" height="1.6" fill="#EA580C"/>
+    <rect x="6.2" y="-17" width="1.6" height="1.6" fill="#EA580C"/>
+    <rect x="6.2" y="-5" width="1.6" height="1.6" fill="#EA580C"/>
+    <line x1="-24" y1="-5" x2="-24" y2="7" stroke="#EA580C" strokeWidth="1.0"/>
+    <line x1="-17" y1="-5" x2="-17" y2="7" stroke="#EA580C" strokeWidth="1.0"/>
+    <line x1="-30" y1="2" x2="-12" y2="2" stroke="#EA580C" strokeWidth="1.0"/>
+    <line x1="-27" y1="2" x2="-27" y2="7" stroke="#EA580C" strokeWidth="1.0"/>
+    <line x1="-20" y1="2" x2="-20" y2="-6" stroke="#EA580C" strokeWidth="1.0"/>
+    <rect x="-25.2" y="-2.8" width="2.4" height="1.6" fill="#394046"/>
+    <rect x="-25.2" y="2.2" width="2.4" height="1.6" fill="#394046"/>
+    <rect x="-18.2" y="-0.8" width="2.4" height="1.6" fill="#394046"/>
+    <rect x="-21.2" y="0.19999999999999996" width="2.4" height="1.6" fill="#394046"/>
+    <polygon points="-4,3 10,3 10,12 -4,12" fill="#1D2226" stroke="#16191C" strokeWidth="1.3"/>
+    <polygon points="-2.4,4.6 8.4,4.6 8.4,10.4 -2.4,10.4" fill="none" stroke="#394046" strokeWidth="0.9"/>
+    <line x1="-1.8" y1="5.2" x2="7.8" y2="9.8" stroke="#8A9298" strokeWidth="1.5"/>
+    <line x1="7.8" y1="5.2" x2="-1.8" y2="9.8" stroke="#8A9298" strokeWidth="1.5"/>
+    <circle cx="3" cy="7.5" r="1.4" fill="#4A5259"/>
+    <line x1="-4" y1="7.5" x2="-2" y2="7.5" stroke="#394046" strokeWidth="1.0"/>
+    <line x1="10" y1="7.5" x2="8" y2="7.5" stroke="#394046" strokeWidth="1.0"/>
+    <polygon points="-46,-10 -62,-10 -62,15 -46,15" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.3"/>
+    <rect x="-60" y="-8" width="2" height="6" fill="#262C31"/>
+    <rect x="-57" y="-8" width="2" height="6" fill="#262C31"/>
+    <rect x="-54" y="-8" width="2" height="6" fill="#262C31"/>
+    <rect x="-60" y="8" width="2" height="6" fill="#262C31"/>
+    <rect x="-57" y="8" width="2" height="6" fill="#262C31"/>
+    <rect x="-54" y="8" width="2" height="6" fill="#262C31"/>
+    <line x1="-46" y1="12" x2="-60" y2="12" stroke="#EA580C" strokeWidth="1.0"/>
+    <line x1="-46" y1="3" x2="-58" y2="3" stroke="#EA580C" strokeWidth="1.0"/>
+    <line x1="-60" y1="-6" x2="-48" y2="-6" stroke="#4A5259" strokeWidth="0.7"/>
+    <line x1="-60" y1="-4" x2="-48" y2="-4" stroke="#4A5259" strokeWidth="0.7"/>
+    <path d="M-47.4,-9 A3.4,3.4 0 0 1 -40.6,-9 Z" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <rect x="-47.4" y="-10" width="6.8" height="1.6" fill="#394046"/>
+    <path d="M-48.6,-11 A4.6,4.6 0 0 1 -40.4,-11" fill="none" stroke="#4A5259" strokeWidth="1.6"/>
+    <line x1="-45.8" y1="-8.6" x2="-43.2" y2="-12.4" stroke="#394046" strokeWidth="0.8"/>
+    <circle cx="-43" cy="-12.6" r="1.0" fill="#262C31"/>
+    <circle cx="-47" cy="-8" r="0.8" fill="#22c55e"/>
+    <circle cx="-44" cy="-13.4" r="0.9" fill="#ef4444"/>
+    <polygon points="-58,-1.5 -58,7.5 -73.5,9.5 -73.5,-3.5" fill="#394046" stroke="#16191C" strokeWidth="1.6"/>
+    <line x1="-73.5" y1="-3.5" x2="-73.5" y2="9.5" stroke="#C2410C" strokeWidth="2.0"/>
+    <ellipse cx="-73.5" cy="3" rx="1.6" ry="5.9" fill="#334155" opacity="0.6"/>
+    <polygon points="-58,-6.5 -58,-0.5 -71.5,0.7000000000000002 -71.5,-7.7" fill="#394046" stroke="#16191C" strokeWidth="1.0"/>
+    <line x1="-71.5" y1="-7.7" x2="-71.5" y2="0.7000000000000002" stroke="#C2410C" strokeWidth="1.2"/>
+    <ellipse cx="-71.5" cy="-3.5" rx="1.6" ry="3.6" fill="#334155" opacity="0.6"/>
+    <polygon points="-57,-11.5 -57,-6.5 -70,-5.4 -70,-12.6" fill="#394046" stroke="#16191C" strokeWidth="1.0"/>
+    <line x1="-70" y1="-12.6" x2="-70" y2="-5.4" stroke="#C2410C" strokeWidth="1.2"/>
+    <ellipse cx="-70" cy="-9" rx="1.6" ry="3.0" fill="#334155" opacity="0.6"/>
+    <polygon points="-58,6.5 -58,12.5 -71.5,13.7 -71.5,5.3" fill="#394046" stroke="#16191C" strokeWidth="1.0"/>
+    <line x1="-71.5" y1="5.3" x2="-71.5" y2="13.7" stroke="#C2410C" strokeWidth="1.2"/>
+    <ellipse cx="-71.5" cy="9.5" rx="1.6" ry="3.6" fill="#334155" opacity="0.6"/>
+    <polygon points="-57,12.5 -57,17.5 -70,18.6 -70,11.4" fill="#394046" stroke="#16191C" strokeWidth="1.0"/>
+    <line x1="-70" y1="11.4" x2="-70" y2="18.6" stroke="#C2410C" strokeWidth="1.2"/>
+    <ellipse cx="-70" cy="15" rx="1.6" ry="3.0" fill="#334155" opacity="0.6"/>
+    <rect x="-65" y="-13.5" width="4" height="2" fill="#4A5259" stroke="#16191C" strokeWidth="0.7"/>
+    <rect x="-65" y="18.5" width="4" height="2" fill="#4A5259" stroke="#16191C" strokeWidth="0.7"/>
+    <polygon points="-36,11 44,11 44,12.5 -36,12.5" fill="#565E64"/>
+    <circle cx="31" cy="-3.4" r="0.9" fill="#22c55e"/>
+  </g>
+)}
 
         {/* ========================================================= */}
         {/* MODEL: MAMMOTH RIG (MR-700 Excavator Mobile Base Carrier) */}

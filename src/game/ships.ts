@@ -889,47 +889,77 @@ export const SHIPS: ShipModelConfig[] = [
   {
     id: 'leviathan',
     name: 'Leviathan Titan',
-    codename: 'LV-880 Split-Hull Carrier',
-    tagline: 'Asymmetric Twin-Hull Supercarrier',
-    classType: 'Rover Transporter',
-    description: 'An immense asymmetric catamaran supercarrier with a heavy armored vehicle hangar on the port sponson, an offset starboard sensor spine, and an articulated hydraulic ramp door.',
-    width: 140,
-    height: 141,
-    renderScale: 1.75,
-    maxFuel: 380,
-    thrustMultiplier: 1.55,
-    torqueMultiplier: 0.70,
-    mass: 1.85,
-    armor: 0.70,
-    emptyMassTons: 28.5,
-    maxThrustKn: 410,
-    twr: 1.47,
-    rcsResponseMs: 58,
-    armorRatingMm: 190,
-    cargoHookCapacityKg: 3000,
-    roverBayCapacity: 'Catamaran Dual-Sponson Heavy Hangar',
-    propulsionType: 'Triple High-Volume Deuterium Jets',
-    operationalCeiling: 'Planetary Citadel Logistics',
-    manufactureOrigin: 'Leviathan Oceanic Orbital (Europa)',
-    primaryColor: '#0f172a',
-    accentColor: '#06b6d4',
-    visorColor: '#38bdf8',
-    footpadSpan: 140.0,
+    codename: 'LV-325 Heavy Utility Hauler',
+    tagline: 'Low-Profile Modular Industrial Transport',
+    classType: 'Heavy Utility Hauler',
+    description: 'An elongated low-profile heavy industrial utility vessel with a horizontal battleship-gray silhouette. Features a tapered wedge bow with multi-pane cockpit canopy and comms antenna array, a central pressurized spine tank with structural gantry and exposed orange conduit runs, twin underslung VTOL thruster sponson pods with quad bell-nozzle lift engines, and a massive asymmetric aft propulsion block with one central main engine, four secondary nozzles, and RCS maneuvering ports. White stenciled "325" designation on the forward hull.',
+    width: 225.5,
+    height: 73.6,
+    renderScale: 1.55,
+    maxFuel: 420,
+    thrustMultiplier: 1.65,
+    torqueMultiplier: 0.65,
+    mass: 2.1,
+    armor: 0.75,
+    emptyMassTons: 42.0,
+    maxThrustKn: 580,
+    twr: 1.38,
+    rcsResponseMs: 72,
+    armorRatingMm: 220,
+    cargoHookCapacityKg: 5000,
+    roverBayCapacity: 'Central Bay Hatch + Dual Thruster Sponson Platforms',
+    propulsionType: 'Asymmetric Aft Engine Cluster (1 Main + 4 Secondary) + Dual Quad-Nozzle VTOL Sponson Pods',
+    operationalCeiling: 'Industrial Heavy-Lift & Orbital Transfer',
+    manufactureOrigin: 'Titan Heavy Industries (Luna Prime)',
+    primaryColor: '#7a848a',
+    accentColor: '#ea580c',
+    visorColor: '#94a3b8',
+    footpadSpan: 145.7,
     canCarryVehicles: true,
     isHeavyVehicleCarrier: true,
     localPoints: {
-      nose: { x: 38.5, y: -77.0 },
-      leftShoulder: { x: -66.5, y: -49.0 },
-      rightShoulder: { x: 66.5, y: -28.0 },
-      leftHip: { x: -66.5, y: 28.0 },
-      rightHip: { x: 66.5, y: 28.0 },
-      leftFoot: { x: -70.0, y: 59.5 },
-      rightFoot: { x: 70.0, y: 59.5 },
-      extraLeftFoot: { x: -26.25, y: 59.5 },
-      extraRightFoot: { x: 26.25, y: 59.5 },
-      leftThrusterPos: { x: -42.0, y: 34.13 },
-      rightThrusterPos: { x: 49.0, y: 34.13 },
+      nose: { x: 111.6, y: 1.6 },
+      leftShoulder: { x: -93.0, y: -15.5 },
+      rightShoulder: { x: 74.4, y: -12.4 },
+      leftHip: { x: -93.0, y: 23.2 },
+      rightHip: { x: 93.0, y: 9.3 },
+      leftFoot: { x: -71.3, y: 46.5 },
+      rightFoot: { x: 74.4, y: 46.5 },
+      extraLeftFoot: { x: -27.9, y: 46.5 },
+      extraRightFoot: { x: 34.1, y: 46.5 },
+      leftThrusterPos: { x: -46.5, y: 31.0 },
+      rightThrusterPos: { x: 43.4, y: 31.0 },
     },
+    collisionPolygon: [
+      // Outer silhouette traced from drawLeviathan raw coords x1.55 (renderScale).
+      // Simple CCW hull, no self-intersections, origin inside.
+      { x: 111.6, y: 1.6 },    // nose tip (72,1)
+      { x: 108.5, y: -1.55 },  // nose upper slope (70,-1)
+      { x: 99.2, y: -6.2 },    // bow upper (64,-4)
+      { x: 89.9, y: -9.3 },    // bow mid slope (58,-6)
+      { x: 74.4, y: -12.4 },   // hull top fwd (48,-8)
+      { x: 34.1, y: -24.8 },   // comms antenna rig outer tip (22,-16)
+      { x: 27.9, y: -24.8 },   // comms mast peak (18,-16)
+      { x: 23.2, y: -21.7 },   // spine tank fwd top (15,-14)
+      { x: 10.8, y: -26.4 },   // gantry right top (7,-17)
+      { x: -14.0, y: -26.4 },  // gantry left top (-9,-17)
+      { x: -62.0, y: -21.7 },  // spine tank aft top (-40,-14)
+      { x: -69.8, y: -27.1 },  // radar dome top (-45,-17.5)
+      { x: -96.1, y: -15.5 },  // stern block top (-62,-10)
+      { x: -108.5, y: -19.5 }, // upper-2 bell top lip (-70,-12.6)
+      { x: -113.9, y: -5.4 },  // main bell top lip (-73.5,-3.5)
+      { x: -113.9, y: 14.7 },  // main bell bottom lip (-73.5,9.5)
+      { x: -110.8, y: 21.2 },  // lower-1 bell bottom (-71.5,13.7)
+      { x: -108.5, y: 28.8 },  // lower-2 bell bottom (-70,18.6)
+      { x: -94.5, y: 31.8 },   // RCS bottom (-61,20.5)
+      { x: -71.3, y: 46.5 },   // left outer foot (-46,30)
+      { x: -27.9, y: 46.5 },   // inner left foot (-18,30)
+      { x: 34.1, y: 46.5 },    // inner right foot (22,30)
+      { x: 74.4, y: 46.5 },    // right outer foot (48,30)
+      { x: 77.5, y: 14.0 },    // lower hull front (50,9)
+      { x: 93.0, y: 10.8 },    // chin (60,7)
+      { x: 105.4, y: 7.8 },    // nose lower (68,5)
+    ],
     stats: {
       agility: 1,
       fuelTank: 5,
