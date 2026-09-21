@@ -4998,13 +4998,13 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <rect x="54" y="-15" width="4" height="3" fill="#D5B43D" />
             <rect x="54" y="12" width="4" height="3" fill="#D5B43D" />
 
-            {/* Stern thrusters near rear landing gear (y≈30) - fire together as rear pair */}
-            <ellipse cx="35" cy="30" rx="3.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
-            <ellipse cx="35" cy="29.5" rx="2.5" ry="1.2" fill="#D5B43D" opacity="0.8">
+            {/* Stern thrusters closer to center (y≈30) - fire together as rear pair */}
+            <ellipse cx="20" cy="30" rx="3.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="20" cy="29.5" rx="2.5" ry="1.2" fill="#D5B43D" opacity="0.8">
               <animate attributeName="opacity" values="0.9;0.2;0.9" dur="0.5s" repeatCount="indefinite" />
             </ellipse>
-            <ellipse cx="45" cy="30" rx="4.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
-            <ellipse cx="45" cy="29.5" rx="3" ry="1.2" fill="#D5B43D" opacity="0.8">
+            <ellipse cx="35" cy="30" rx="4.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="35" cy="29.5" rx="3" ry="1.2" fill="#D5B43D" opacity="0.8">
               <animate attributeName="opacity" values="0.9;0.2;0.9" dur="0.5s" repeatCount="indefinite" />
             </ellipse>
 

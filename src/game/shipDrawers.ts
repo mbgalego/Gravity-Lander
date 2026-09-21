@@ -12534,7 +12534,7 @@ export function drawJuggernaut(
     ctx.globalAlpha = 1.0;
   };
 
-  // Thruster positions: 4 total — 2 at bow (between front bogies), 2 at stern (near rear bogie).
+  // Thruster positions: 4 total — 2 at bow (between front bogies), 2 at stern (closer to center).
   // They fire in pairs ("2 by 2"): the two bow thrusters pulse together, then
   // the two stern thrusters pulse together — alternating like a hover-hold pair.
   // All thrusters sit at the hull bottom (y≈30), just above the bogie tracks.
@@ -12542,8 +12542,67 @@ export function drawJuggernaut(
   const sternPulse = 0.5 + 0.5 * Math.sin(t * 4.0 + Math.PI);
   drawThruster(-35, 30, true, bowPulse);   // Front outer (between front bogies)
   drawThruster(-20, 30, true, bowPulse);   // Front inner (between front bogies)
-  drawThruster(35, 30, true, sternPulse);  // Rear inner (near rear bogie)
-  drawThruster(45, 30, true, sternPulse);  // Rear outer (partially behind rear bogie)
+  drawThruster(20, 30, true, sternPulse);  // Rear inner (closer to center)
+  drawThruster(35, 30, true, sternPulse);  // Rear outer (near rear bogie)
+
+  // ACTIVE FLAME PLUMES — shoot down from thruster bells when thrusting.
+  // Uses ship.leftThruster/rightThruster state (0..1). Flame origin matches thruster bell lip (botY = cy + 5 = 35).
+  const leftThrust = ship ? Number(ship.leftThruster || 0) : 0;
+  const rightThrust = ship ? Number(ship.rightThruster || 0) : 0;
+  const isThrusting = leftThrust > 0.05 || rightThrust > 0.05;
+  const thrustPower = Math.max(leftThrust, rightThrust);
+  if (isThrusting && thrustPower > 0.05) {
+    ctx.save();
+    const flameLen = (16 + Math.random() * 10) * Math.min(2.0, thrustPower * 1.8);
+    const thrusterXList = [-35, -20, 20, 35];
+    const thrusterY = 35; // botY = cy + 5 = 30 + 5
+
+    for (const tx of thrusterXList) {
+      // Outer Amber/Red Exhaust Expansion
+      const outerFlame = ctx.createLinearGradient(tx, thrusterY, tx, thrusterY + flameLen);
+      outerFlame.addColorStop(0, 'rgba(239, 68, 68, 0.85)');
+      outerFlame.addColorStop(0.4, 'rgba(245, 158, 11, 0.6)');
+      outerFlame.addColorStop(0.8, 'rgba(234, 179, 8, 0.3)');
+      outerFlame.addColorStop(1, 'rgba(234, 179, 8, 0)');
+
+      ctx.fillStyle = outerFlame;
+      ctx.beginPath();
+      ctx.moveTo(tx - 4.5, thrusterY);
+      ctx.lineTo(tx + 4.5, thrusterY);
+      ctx.lineTo(tx + 1.2, thrusterY + flameLen);
+      ctx.lineTo(tx - 1.2, thrusterY + flameLen);
+      ctx.closePath();
+      ctx.fill();
+
+      // Inner High-Temperature Plasma Core (Gold/White)
+      const coreFlame = ctx.createLinearGradient(tx, thrusterY, tx, thrusterY + flameLen * 0.65);
+      coreFlame.addColorStop(0, '#ffffff');
+      coreFlame.addColorStop(0.3, '#F0D256');
+      coreFlame.addColorStop(0.8, '#D5B43D');
+      coreFlame.addColorStop(1, 'rgba(213, 180, 61, 0)');
+
+      ctx.fillStyle = coreFlame;
+      ctx.beginPath();
+      ctx.moveTo(tx - 2.6, thrusterY);
+      ctx.lineTo(tx + 2.6, thrusterY);
+      ctx.lineTo(tx + 0.6, thrusterY + flameLen * 0.65);
+      ctx.lineTo(tx - 0.6, thrusterY + flameLen * 0.65);
+      ctx.closePath();
+      ctx.fill();
+
+      // Shock Diamonds
+      ctx.fillStyle = '#fffef2';
+      const diamondDist = [4.0, 8.0, 12.0];
+      for (const d of diamondDist) {
+        if (d < flameLen * 0.7) {
+          ctx.beginPath();
+          ctx.ellipse(tx, thrusterY + d, 1.2, 0.6, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+    ctx.restore();
+  }
 
   // Now draw the main circular engine housing OVER the center.
   ctx.save();
