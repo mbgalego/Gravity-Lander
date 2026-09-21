@@ -12415,7 +12415,6 @@ export function drawJuggernaut(
   const rampProg = Math.max(0, Math.min(1, ship.rampProgress ?? 0));
   const blink = Math.sin(t * 6.5) > 0;
   const beaconPulse = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t * 5.0));
-  const exhaustPulse = 0.82 + 0.18 * Math.sin(t * 4.0);
   const footY = 40 + gearSpringOffset;
 
   const olive = '#6D8558';
@@ -12446,63 +12445,38 @@ export function drawJuggernaut(
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
 
-  // 1. Undervessel exhaust glow (three vertical lift engines + auxiliary).
-  ctx.save();
-  const exhaustGrad = ctx.createLinearGradient(0, 18, 0, 50);
-  exhaustGrad.addColorStop(0, `rgba(255,253,242,${0.26 * exhaustPulse})`);
-  exhaustGrad.addColorStop(0.35, `rgba(255,241,168,${0.18 * exhaustPulse})`);
-  exhaustGrad.addColorStop(1, 'rgba(230,198,91,0)');
-  ctx.fillStyle = exhaustGrad;
-  for (const x of [-30, 0, 30]) {
-    ctx.beginPath();
-    ctx.moveTo(x - 5, 19);
-    ctx.lineTo(x - 11, 55);
-    ctx.lineTo(x + 11, 55);
-    ctx.lineTo(x + 5, 19);
-    ctx.closePath();
-    ctx.fill();
-  }
-  // Auxiliary lift engine glow.
-  ctx.beginPath();
-  ctx.moveTo(50, 20);
-  ctx.lineTo(53, 55);
-  ctx.lineTo(60, 55);
-  ctx.lineTo(57, 20);
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore
 
-  // Ramp door animation: 2-phase slide-out-then-descend
-  // Phase 0.0-0.5: slide horizontally out of the hull
-  // Phase 0.5-1.0: rotate down to ground
+  // Ramp door animation: 2-phase slide-out-then-descend.
+  // Phase 0.0-0.5: ramp slides horizontally LEFT out of the hull.
+  // Phase 0.5-1.0: ramp tip descends DOWN to the ground.
   const rampSlidePhase = Math.min(rampProg * 2, 1);
   const rampRotatePhase = Math.max((rampProg - 0.5) * 2, 0);
 
-  // Ramp stowed inside the hull at x ≈ -58 to -38, y ≈ 8 to 14
+  // Ramp stowed inside the hull at x ≈ -58 to -38, door height y ≈ 8 to 14
   const rampStowedLeft = -58;
-  const rampStowedRight = -38;
   const rampStowedTop = 8;
   const rampStowedBottom = 14;
   const rampWidth = 3.2; // thickness
   const rampLength = 35; // full extension length
 
-  // Slide-out: moves from stowed position to protruding forward (15 units out)
+  // Slide-out: hinge moves LEFT from the hull opening (-58) to -73 during slide.
   const slideX = -15 * rampSlidePhase; // slides left by ~15 units
   const hingeX = rampStowedLeft + slideX;
   const hingeY = (rampStowedTop + rampStowedBottom) / 2; // ~11
 
-  // Rotation: from horizontal (0) to downward (-90 deg = -PI/2)
+  // Descent: ramp rotates from horizontal (0) DOWN to ~54° so the tip
+  // reaches the ground (hingeY + sin(54°)*35 ≈ 39.4 ≈ footY=40).
   const angleStart = 0;
-  const angleEnd = -Math.PI / 2;
+  const angleEnd = Math.PI * 0.3;
   const rampAngle = angleStart + (angleEnd - angleStart) * rampRotatePhase;
 
-  // Ramp tip position
-  const tipX = hingeX + Math.cos(rampAngle) * rampLength;
+  // Ramp extends LEFT from the hinge (-cos), and descends DOWN (+sin, canvas +y).
+  const tipX = hingeX - Math.cos(rampAngle) * rampLength;
   const tipY = hingeY + Math.sin(rampAngle) * rampLength;
 
-  // Side offset for thickness
-  const sideX = Math.cos(rampAngle + Math.PI / 2) * rampWidth;
-  const sideY = Math.sin(rampAngle + Math.PI / 2) * rampWidth;
+  // Side offset for thickness (perpendicular to ramp direction (-cos, sin)).
+  const sideX = Math.sin(rampAngle) * rampWidth;
+  const sideY = Math.cos(rampAngle) * rampWidth;
 
   // 2. Main circular stern propulsion assembly (center), with OUTER thrusters at edges.
   // Draw thrusters first (behind the main engine), then main engine on top.
@@ -12560,13 +12534,15 @@ export function drawJuggernaut(
     ctx.globalAlpha = 1.0;
   };
 
-  // Thruster positions: 4 total — 2 at bow, 2 at stern (outer edges only).
-  // They all pulse with exhaustPulse.
-  // Bow thrusters at lower hull (y≈28), stern thrusters at bottom of main engine (y≈16)
-  drawThruster(-62, 28, true, exhaustPulse);  // Outer port (bow side)
-  drawThruster(-48, 28, true, exhaustPulse);  // Inner port (bow side) - both are outer type
-  drawThruster(79, 16, true, exhaustPulse);   // Inner starboard (right edge of main engine) - outer type
-  drawThruster(85, 16, true, exhaustPulse);   // Outer starboard (just outside engine housing)
+  // Thruster positions: 4 total — 2 at bow, 2 at stern, all below the hull.
+  // They fire in pairs ("2 by 2"): the two bow thrusters pulse together, then
+  // the two stern thrusters pulse together — alternating like a hover-hold pair.
+  const bowPulse = 0.5 + 0.5 * Math.sin(t * 4.0);
+  const sternPulse = 0.5 + 0.5 * Math.sin(t * 4.0 + Math.PI);
+  drawThruster(-62, 28, true, bowPulse);   // Outer port (bow side)
+  drawThruster(-48, 28, true, bowPulse);   // Inner port (bow side)
+  drawThruster(58, 28, true, sternPulse);  // Inner starboard (below main engine)
+  drawThruster(79, 28, true, sternPulse);  // Outer starboard
 
   // Now draw the main circular engine housing OVER the center thruster.
   ctx.save();
@@ -12593,67 +12569,6 @@ export function drawJuggernaut(
   ctx.fillStyle = gold;
   ctx.fillRect(54, -15, 4, 3);
   ctx.fillRect(54, 12, 4, 3);
-  ctx.restore();
-
-  // 3. Underside lift-engine bells (three large visible vertical engines).
-  for (const x of [-30, 0, 30]) {
-    ctx.save();
-    ctx.fillStyle = metal;
-    ctx.strokeStyle = line;
-    ctx.lineWidth = 1.0;
-    ctx.beginPath();
-    roundRect(ctx, x - 4, 14, 8, 7, 1.2);
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = '#56564F';
-    ctx.beginPath();
-    ctx.moveTo(x - 5, 20);
-    ctx.lineTo(x + 5, 20);
-    ctx.lineTo(x + 7, 31);
-    ctx.lineTo(x - 7, 31);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    ctx.strokeStyle = metalHi;
-    ctx.lineWidth = 0.7;
-    for (let ry = 22; ry < 30; ry += 3) {
-      ctx.beginPath();
-      ctx.moveTo(x - 5.5, ry);
-      ctx.lineTo(x + 5.5, ry);
-      ctx.stroke();
-    }
-    const core = ctx.createRadialGradient(x, 32, 0, x, 32, 6);
-    core.addColorStop(0, '#FFFDF2');
-    core.addColorStop(0.35, `rgba(255,241,168,${exhaustPulse})`);
-    core.addColorStop(1, 'rgba(230,198,91,0)');
-    ctx.fillStyle = core;
-    ctx.beginPath();
-    ctx.ellipse(x, 32, 6, 3, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  // Rear auxiliary lift bell.
-  ctx.save();
-  ctx.fillStyle = metal;
-  ctx.strokeStyle = line;
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  roundRect(ctx, 51, 17, 8, 6, 1);
-  ctx.fill();
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(50, 22);
-  ctx.lineTo(60, 22);
-  ctx.lineTo(61, 31);
-  ctx.lineTo(49, 31);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-  ctx.fillStyle = 'rgba(255,241,168,0.65)';
-  ctx.beginPath();
-  ctx.ellipse(55, 32, 5, 2.5, 0, 0, Math.PI * 2);
-  ctx.fill();
   ctx.restore();
 
   // 4. Tracked landing bogies and forward articulated support.
@@ -13112,8 +13027,8 @@ export function drawJuggernaut(
     for (let i = 0.15; i < 0.95; i += 0.2) {
       const cx = hingeX + (tipX - hingeX) * i;
       const cy = hingeY + (tipY - hingeY) * i;
-      const sx = Math.cos(rampAngle + Math.PI / 2) * rampWidth * 0.8;
-      const sy = Math.sin(rampAngle + Math.PI / 2) * rampWidth * 0.8;
+      const sx = Math.sin(rampAngle) * rampWidth * 0.8;
+      const sy = Math.cos(rampAngle) * rampWidth * 0.8;
       ctx.beginPath();
       ctx.moveTo(cx - sx, cy - sy);
       ctx.lineTo(cx + sx, cy + sy);
@@ -13121,7 +13036,6 @@ export function drawJuggernaut(
     }
   }
 
-  ctx.restore();
   ctx.restore();
 }
 

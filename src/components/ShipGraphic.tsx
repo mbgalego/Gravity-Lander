@@ -4980,7 +4980,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             {/* Front ramp - NOT VISIBLE in flight mode (stowed inside hull) */}
             {/* Ramp only appears when deployed at base: slides left then rotates down */}
 
-            {/* Bow thrusters (outer port/inner port at y=28) - animated pulse */}
+            {/* Bow thrusters at lower hull (y≈28) - fire together as front pair */}
             <ellipse cx="-62" cy="28" rx="4.5" ry="4" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
             <ellipse cx="-62" cy="27" rx="3" ry="1.5" fill="#D5B43D" opacity="0.8">
               <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
@@ -4998,33 +4998,15 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <rect x="54" y="-15" width="4" height="3" fill="#D5B43D" />
             <rect x="54" y="12" width="4" height="3" fill="#D5B43D" />
 
-            {/* Stern thrusters at bottom of main engine (y≈16) - animated pulse sync with engine */}
-            <ellipse cx="79" cy="16" rx="3.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
-            <ellipse cx="79" cy="15.5" rx="2.5" ry="1.2" fill="#D5B43D" opacity="0.8">
-              <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
+            {/* Stern thrusters below main engine (y≈28) - fire together as rear pair */}
+            <ellipse cx="58" cy="28" rx="3.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="58" cy="27.5" rx="2.5" ry="1.2" fill="#D5B43D" opacity="0.8">
+              <animate attributeName="opacity" values="0.9;0.2;0.9" dur="0.5s" repeatCount="indefinite" />
             </ellipse>
-            <ellipse cx="85" cy="16" rx="4.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
-            <ellipse cx="85" cy="15.5" rx="3" ry="1.2" fill="#D5B43D" opacity="0.8">
-              <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite" />
+            <ellipse cx="79" cy="28" rx="4.5" ry="2.5" fill="#1e293b" stroke="#20251F" strokeWidth="1.2" />
+            <ellipse cx="79" cy="27.5" rx="3" ry="1.2" fill="#D5B43D" opacity="0.8">
+              <animate attributeName="opacity" values="0.9;0.2;0.9" dur="0.5s" repeatCount="indefinite" />
             </ellipse>
-
-            {/* Three downward lift-engine bells with exhaust */}
-            <g fill="#78776D" stroke="#20251F" strokeWidth="1">
-              <rect x="-34" y="14" width="8" height="7" rx="1" />
-              <polygon points="-35,20 -25,20 -23,31 -37,31" />
-              <rect x="-4" y="14" width="8" height="7" rx="1" />
-              <polygon points="-5,20 5,20 7,31 -7,31" />
-              <rect x="26" y="14" width="8" height="7" rx="1" />
-              <polygon points="25,20 35,20 37,31 23,31" />
-            </g>
-            <g stroke="#A09D8F" strokeWidth="0.7">
-              <line x1="-35" y1="23" x2="-25" y2="23" /><line x1="-35" y1="26" x2="-25" y2="26" /><line x1="-35" y1="29" x2="-25" y2="29" />
-              <line x1="-5" y1="23" x2="5" y2="23" /><line x1="-5" y1="26" x2="5" y2="26" /><line x1="-5" y1="29" x2="5" y2="29" />
-              <line x1="25" y1="23" x2="35" y2="23" /><line x1="25" y1="26" x2="35" y2="26" /><line x1="25" y1="29" x2="35" y2="29" />
-            </g>
-            <g fill="#FFF1A8" opacity="0.65">
-              <ellipse cx="-30" cy="32" rx="6" ry="3" /><ellipse cx="0" cy="32" rx="6" ry="3" /><ellipse cx="30" cy="32" rx="6" ry="3" />
-            </g>
 
             {/* Tracked landing bogies and suspension */}
             <g fill="#3E4D39" stroke="#20251F" strokeWidth="1.1">
