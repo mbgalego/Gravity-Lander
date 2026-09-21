@@ -1055,25 +1055,26 @@ export const SHIPS: ShipModelConfig[] = [
     },
     collisionPolygon: [
       // Outer boundary of hull union (main fuselage + lower hull), traced CCW
+      // All coords are RAW draw coords × renderScale (1.8)
       // Main fuselage: bow -> left bridge top -> right bridge top -> right upper hull
-      { x: -70, y: -25 },      // Bow tip (wedge nose)
-      { x: -55, y: -42 },      // Upper left bow
-      { x: -30, y: -48 },      // Left bridge top (highest point)
-      { x: 44, y: -42 },       // Right bridge top
-      { x: 57, y: -30 },       // Right upper hull forward
-      { x: 58, y: 9 },         // Right side upper
+      { x: -126.0, y: -45.0 },      // Bow tip (wedge nose) -70×1.8, -25×1.8
+      { x: -99.0, y: -75.6 },       // Upper left bow -55×1.8, -42×1.8
+      { x: -54.0, y: -86.4 },       // Left bridge top (highest point) -30×1.8, -48×1.8
+      { x: 79.2, y: -75.6 },        // Right bridge top 44×1.8, -42×1.8
+      { x: 102.6, y: -54.0 },       // Right upper hull forward 57×1.8, -30×1.8
+      { x: 104.4, y: 16.2 },        // Right side upper 58×1.8, 9×1.8
 
       // Drop down to lower hull on right side
-      { x: 56, y: 8 },         // Lower hull right (top edge)
-      { x: 58, y: 22 },        // Lower hull right lower
-      { x: 39, y: 25 },        // Lower hull keel right
-      { x: -42, y: 24 },       // Lower hull keel left
-      { x: -65, y: 20 },       // Lower hull left lower
-      { x: -67, y: 8 },        // Lower hull left (top edge)
+      { x: 100.8, y: 14.4 },        // Lower hull right (top edge) 56×1.8, 8×1.8
+      { x: 104.4, y: 39.6 },        // Lower hull right lower 58×1.8, 22×1.8
+      { x: 70.2, y: 45.0 },         // Lower hull keel right 39×1.8, 25×1.8
+      { x: -75.6, y: 43.2 },        // Lower hull keel left -42×1.8, 24×1.8
+      { x: -117.0, y: 36.0 },       // Lower hull left lower -65×1.8, 20×1.8
+      { x: -120.6, y: 14.4 },       // Lower hull left (top edge) -67×1.8, 8×1.8
 
       // Up left side back to main fuselage
-      { x: -68, y: 5 },        // Left side upper
-      { x: -80, y: -40 },      // Left shoulder
+      { x: -122.4, y: 9.0 },        // Left side upper -68×1.8, 5×1.8
+      { x: -144.0, y: -72.0 },      // Left shoulder -80×1.8, -40×1.8
       // (closes back to bow tip)
     ],
     stats: {
