@@ -1054,22 +1054,28 @@ export const SHIPS: ShipModelConfig[] = [
       rightThrusterPos: { x: 35, y: 30 },
     },
     collisionPolygon: [
-      { x: 60, y: -50 },       // Bow tip (wedge nose)
-      { x: 45, y: -58 },       // Bow upper slope
-      { x: 30, y: -62 },       // Bridge forward top
-      { x: -5, y: -62 },       // Bridge rear top
-      { x: -50, y: -55 },      // Crew section rear
-      { x: -80, y: -40 },      // Left shoulder
-      { x: -80, y: 35 },       // Left hip
+      { x: -70, y: -25 },      // Bow tip (wedge nose)
+      { x: -55, y: -42 },      // Upper left bow
+      { x: -30, y: -48 },      // Left bridge top
+      { x: 44, y: -42 },       // Right bridge top
+      { x: 57, y: -30 },       // Right upper hull forward
+      { x: 58, y: 9 },         // Right side upper
+      { x: 38, y: 14 },        // Right side mid
+      { x: -48, y: 13 },       // Left side mid
+      { x: -68, y: 5 },        // Left side upper
+      { x: -67, y: 8 },        // Lower hull left
+      { x: 56, y: 8 },         // Lower hull right
+      { x: 58, y: 22 },        // Lower hull right lower
+      { x: 39, y: 25 },        // Lower hull keel right
+      { x: -42, y: 24 },       // Lower hull keel left
+      { x: -65, y: 20 },       // Lower hull left lower
       { x: -85, y: 72 },       // Left foot
       { x: -45, y: 72 },       // Extra left foot
-      { x: 0, y: 68 },         // Center keel
       { x: 45, y: 72 },        // Extra right foot
       { x: 85, y: 72 },        // Right foot
       { x: 80, y: 35 },        // Right hip
-      { x: 80, y: -25 },       // Right hip upper
-      { x: 65, y: -52 },       // Right upper hull
-      { x: 80, y: -40 },       // Right shoulder
+      { x: -80, y: 35 },       // Left hip
+      { x: -80, y: -40 },      // Left shoulder
     ],
     stats: {
       agility: 1,
