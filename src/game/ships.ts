@@ -1050,8 +1050,8 @@ export const SHIPS: ShipModelConfig[] = [
       rightFoot: { x: 85, y: 72 },
       extraLeftFoot: { x: -45, y: 72 },
       extraRightFoot: { x: 45, y: 72 },
-      leftThrusterPos: { x: -50, y: 30 },
-      rightThrusterPos: { x: 50, y: 30 },
+      leftThrusterPos: { x: -35, y: 30 },
+      rightThrusterPos: { x: 35, y: 30 },
     },
     collisionPolygon: [
       { x: 60, y: -50 },       // Bow tip (wedge nose)

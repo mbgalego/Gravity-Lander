@@ -2963,117 +2963,120 @@ export class GameRenderer {
     const lp = config.localPoints;
 
     // 1. Thruster Plumes / Flame Jets & Bright Afterburner Glow Base
-    const halfWidth = 5.5 * Math.min(1.6, rScale * 0.85);
-    const coreWidth = 3.2 * Math.min(1.6, rScale * 0.85);
+    // Skip for Juggernaut - it has 4 custom thrusters drawn in drawJuggernaut()
+    if (config.id !== 'juggernaut') {
+      const halfWidth = 5.5 * Math.min(1.6, rScale * 0.85);
+      const coreWidth = 3.2 * Math.min(1.6, rScale * 0.85);
 
-    if (hasFuel && ship.leftThruster) {
-      const flameLen = (24 + Math.random() * 18) * config.thrustMultiplier * Math.min(1.8, rScale);
-      ctx.save();
+      if (hasFuel && ship.leftThruster) {
+        const flameLen = (24 + Math.random() * 18) * config.thrustMultiplier * Math.min(1.8, rScale);
+        ctx.save();
 
-      // Bright Afterburner Radial Base Glow
-      const glowGrad = ctx.createRadialGradient(
-        lp.leftThrusterPos.x,
-        lp.leftThrusterPos.y,
-        1,
-        lp.leftThrusterPos.x,
-        lp.leftThrusterPos.y,
-        18 * rScale
-      );
-      glowGrad.addColorStop(0, '#ffffff');
-      glowGrad.addColorStop(0.25, '#38bdf8');
-      glowGrad.addColorStop(0.65, 'rgba(14, 165, 233, 0.4)');
-      glowGrad.addColorStop(1, 'rgba(14, 165, 233, 0)');
-      ctx.fillStyle = glowGrad;
-      ctx.beginPath();
-      ctx.arc(lp.leftThrusterPos.x, lp.leftThrusterPos.y, 18 * rScale, 0, Math.PI * 2);
-      ctx.fill();
+        // Bright Afterburner Radial Base Glow
+        const glowGrad = ctx.createRadialGradient(
+          lp.leftThrusterPos.x,
+          lp.leftThrusterPos.y,
+          1,
+          lp.leftThrusterPos.x,
+          lp.leftThrusterPos.y,
+          18 * rScale
+        );
+        glowGrad.addColorStop(0, '#ffffff');
+        glowGrad.addColorStop(0.25, '#38bdf8');
+        glowGrad.addColorStop(0.65, 'rgba(14, 165, 233, 0.4)');
+        glowGrad.addColorStop(1, 'rgba(14, 165, 233, 0)');
+        ctx.fillStyle = glowGrad;
+        ctx.beginPath();
+        ctx.arc(lp.leftThrusterPos.x, lp.leftThrusterPos.y, 18 * rScale, 0, Math.PI * 2);
+        ctx.fill();
 
-      // Outer Flame Jet
-      ctx.beginPath();
-      ctx.moveTo(lp.leftThrusterPos.x - halfWidth, lp.leftThrusterPos.y);
-      ctx.lineTo(lp.leftThrusterPos.x + halfWidth, lp.leftThrusterPos.y);
-      ctx.lineTo(lp.leftThrusterPos.x, lp.leftThrusterPos.y + flameLen);
-      ctx.closePath();
-      ctx.fillStyle = '#38bdf8';
-      ctx.shadowColor = '#38bdf8';
-      ctx.shadowBlur = 14 * rScale;
-      ctx.fill();
+        // Outer Flame Jet
+        ctx.beginPath();
+        ctx.moveTo(lp.leftThrusterPos.x - halfWidth, lp.leftThrusterPos.y);
+        ctx.lineTo(lp.leftThrusterPos.x + halfWidth, lp.leftThrusterPos.y);
+        ctx.lineTo(lp.leftThrusterPos.x, lp.leftThrusterPos.y + flameLen);
+        ctx.closePath();
+        ctx.fillStyle = '#38bdf8';
+        ctx.shadowColor = '#38bdf8';
+        ctx.shadowBlur = 14 * rScale;
+        ctx.fill();
 
-      // Inner White-Hot Plasma Core
-      ctx.beginPath();
-      ctx.moveTo(lp.leftThrusterPos.x - coreWidth, lp.leftThrusterPos.y);
-      ctx.lineTo(lp.leftThrusterPos.x + coreWidth, lp.leftThrusterPos.y);
-      ctx.lineTo(lp.leftThrusterPos.x, lp.leftThrusterPos.y + flameLen * 0.65);
-      ctx.closePath();
-      ctx.fillStyle = '#ffffff';
-      ctx.fill();
+        // Inner White-Hot Plasma Core
+        ctx.beginPath();
+        ctx.moveTo(lp.leftThrusterPos.x - coreWidth, lp.leftThrusterPos.y);
+        ctx.lineTo(lp.leftThrusterPos.x + coreWidth, lp.leftThrusterPos.y);
+        ctx.lineTo(lp.leftThrusterPos.x, lp.leftThrusterPos.y + flameLen * 0.65);
+        ctx.closePath();
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
 
-      // Supersonic Shock Diamond Beads
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(lp.leftThrusterPos.x, lp.leftThrusterPos.y + flameLen * 0.28, 2.0 * rScale, 0, Math.PI * 2);
-      ctx.arc(lp.leftThrusterPos.x, lp.leftThrusterPos.y + flameLen * 0.52, 1.4 * rScale, 0, Math.PI * 2);
-      ctx.fill();
+        // Supersonic Shock Diamond Beads
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(lp.leftThrusterPos.x, lp.leftThrusterPos.y + flameLen * 0.28, 2.0 * rScale, 0, Math.PI * 2);
+        ctx.arc(lp.leftThrusterPos.x, lp.leftThrusterPos.y + flameLen * 0.52, 1.4 * rScale, 0, Math.PI * 2);
+        ctx.fill();
 
-      // Intense Nozzle Ring Flash
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(lp.leftThrusterPos.x - halfWidth - 1, lp.leftThrusterPos.y - 1.5, (halfWidth + 1) * 2, 3);
-      ctx.restore();
-    }
+        // Intense Nozzle Ring Flash
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(lp.leftThrusterPos.x - halfWidth - 1, lp.leftThrusterPos.y - 1.5, (halfWidth + 1) * 2, 3);
+        ctx.restore();
+      }
 
-    if (hasFuel && ship.rightThruster) {
-      const flameLen = (24 + Math.random() * 18) * config.thrustMultiplier * Math.min(1.8, rScale);
-      ctx.save();
+      if (hasFuel && ship.rightThruster) {
+        const flameLen = (24 + Math.random() * 18) * config.thrustMultiplier * Math.min(1.8, rScale);
+        ctx.save();
 
-      // Bright Afterburner Radial Base Glow
-      const glowGrad = ctx.createRadialGradient(
-        lp.rightThrusterPos.x,
-        lp.rightThrusterPos.y,
-        1,
-        lp.rightThrusterPos.x,
-        lp.rightThrusterPos.y,
-        18 * rScale
-      );
-      glowGrad.addColorStop(0, '#ffffff');
-      glowGrad.addColorStop(0.25, '#38bdf8');
-      glowGrad.addColorStop(0.65, 'rgba(14, 165, 233, 0.4)');
-      glowGrad.addColorStop(1, 'rgba(14, 165, 233, 0)');
-      ctx.fillStyle = glowGrad;
-      ctx.beginPath();
-      ctx.arc(lp.rightThrusterPos.x, lp.rightThrusterPos.y, 18 * rScale, 0, Math.PI * 2);
-      ctx.fill();
+        // Bright Afterburner Radial Base Glow
+        const glowGrad = ctx.createRadialGradient(
+          lp.rightThrusterPos.x,
+          lp.rightThrusterPos.y,
+          1,
+          lp.rightThrusterPos.x,
+          lp.rightThrusterPos.y,
+          18 * rScale
+        );
+        glowGrad.addColorStop(0, '#ffffff');
+        glowGrad.addColorStop(0.25, '#38bdf8');
+        glowGrad.addColorStop(0.65, 'rgba(14, 165, 233, 0.4)');
+        glowGrad.addColorStop(1, 'rgba(14, 165, 233, 0)');
+        ctx.fillStyle = glowGrad;
+        ctx.beginPath();
+        ctx.arc(lp.rightThrusterPos.x, lp.rightThrusterPos.y, 18 * rScale, 0, Math.PI * 2);
+        ctx.fill();
 
-      // Outer Flame Jet
-      ctx.beginPath();
-      ctx.moveTo(lp.rightThrusterPos.x - halfWidth, lp.rightThrusterPos.y);
-      ctx.lineTo(lp.rightThrusterPos.x + halfWidth, lp.rightThrusterPos.y);
-      ctx.lineTo(lp.rightThrusterPos.x, lp.rightThrusterPos.y + flameLen);
-      ctx.closePath();
-      ctx.fillStyle = '#38bdf8';
-      ctx.shadowColor = '#38bdf8';
-      ctx.shadowBlur = 14 * rScale;
-      ctx.fill();
+        // Outer Flame Jet
+        ctx.beginPath();
+        ctx.moveTo(lp.rightThrusterPos.x - halfWidth, lp.rightThrusterPos.y);
+        ctx.lineTo(lp.rightThrusterPos.x + halfWidth, lp.rightThrusterPos.y);
+        ctx.lineTo(lp.rightThrusterPos.x, lp.rightThrusterPos.y + flameLen);
+        ctx.closePath();
+        ctx.fillStyle = '#38bdf8';
+        ctx.shadowColor = '#38bdf8';
+        ctx.shadowBlur = 14 * rScale;
+        ctx.fill();
 
-      // Inner White-Hot Plasma Core
-      ctx.beginPath();
-      ctx.moveTo(lp.rightThrusterPos.x - coreWidth, lp.rightThrusterPos.y);
-      ctx.lineTo(lp.rightThrusterPos.x + coreWidth, lp.rightThrusterPos.y);
-      ctx.lineTo(lp.rightThrusterPos.x, lp.rightThrusterPos.y + flameLen * 0.65);
-      ctx.closePath();
-      ctx.fillStyle = '#ffffff';
-      ctx.fill();
+        // Inner White-Hot Plasma Core
+        ctx.beginPath();
+        ctx.moveTo(lp.rightThrusterPos.x - coreWidth, lp.rightThrusterPos.y);
+        ctx.lineTo(lp.rightThrusterPos.x + coreWidth, lp.rightThrusterPos.y);
+        ctx.lineTo(lp.rightThrusterPos.x, lp.rightThrusterPos.y + flameLen * 0.65);
+        ctx.closePath();
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
 
-      // Supersonic Shock Diamond Beads
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(lp.rightThrusterPos.x, lp.rightThrusterPos.y + flameLen * 0.28, 2.0 * rScale, 0, Math.PI * 2);
-      ctx.arc(lp.rightThrusterPos.x, lp.rightThrusterPos.y + flameLen * 0.52, 1.4 * rScale, 0, Math.PI * 2);
-      ctx.fill();
+        // Supersonic Shock Diamond Beads
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(lp.rightThrusterPos.x, lp.rightThrusterPos.y + flameLen * 0.28, 2.0 * rScale, 0, Math.PI * 2);
+        ctx.arc(lp.rightThrusterPos.x, lp.rightThrusterPos.y + flameLen * 0.52, 1.4 * rScale, 0, Math.PI * 2);
+        ctx.fill();
 
-      // Intense Nozzle Ring Flash
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(lp.rightThrusterPos.x - halfWidth - 1, lp.rightThrusterPos.y - 1.5, (halfWidth + 1) * 2, 3);
-      ctx.restore();
+        // Intense Nozzle Ring Flash
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(lp.rightThrusterPos.x - halfWidth - 1, lp.rightThrusterPos.y - 1.5, (halfWidth + 1) * 2, 3);
+        ctx.restore();
+      }
     }
 
     // 2. Main Full-Fidelity Ship Hull & Model Architecture (1:1 with Menu ShipGraphic)
