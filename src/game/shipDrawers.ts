@@ -12546,25 +12546,23 @@ export function drawJuggernaut(
   drawThruster(35, 30, true, sternPulse);  // Rear outer (near rear bogie)
 
   // ACTIVE FLAME PLUMES — shoot down from thruster bells when thrusting.
-  // Uses ship.leftThruster/rightThruster state (0..1). Flame origin matches thruster bell lip (botY = cy + 5 = 35).
+  // Front pair (-35, -20) fires with leftThruster; rear pair (20, 35) fires with rightThruster.
+  // Flame origin matches thruster bell lip (botY = cy + 5 = 35).
   const leftThrust = ship ? Number(ship.leftThruster || 0) : 0;
   const rightThrust = ship ? Number(ship.rightThruster || 0) : 0;
-  const isThrusting = leftThrust > 0.05 || rightThrust > 0.05;
-  const thrustPower = Math.max(leftThrust, rightThrust);
-  if (isThrusting && thrustPower > 0.05) {
-    ctx.save();
-    const flameLen = (16 + Math.random() * 10) * Math.min(2.0, thrustPower * 1.8);
-    const thrusterXList = [-35, -20, 20, 35];
-    const thrusterY = 35; // botY = cy + 5 = 30 + 5
+  const thrusterY = 35; // botY = cy + 5 = 30 + 5
 
-    for (const tx of thrusterXList) {
+  const drawThrusterFlames = (txList: number[], thrust: number) => {
+    if (thrust <= 0.05) return;
+    ctx.save();
+    const flameLen = (16 + Math.random() * 10) * Math.min(2.0, thrust * 1.8);
+    for (const tx of txList) {
       // Outer Amber/Red Exhaust Expansion
       const outerFlame = ctx.createLinearGradient(tx, thrusterY, tx, thrusterY + flameLen);
       outerFlame.addColorStop(0, 'rgba(239, 68, 68, 0.85)');
       outerFlame.addColorStop(0.4, 'rgba(245, 158, 11, 0.6)');
       outerFlame.addColorStop(0.8, 'rgba(234, 179, 8, 0.3)');
       outerFlame.addColorStop(1, 'rgba(234, 179, 8, 0)');
-
       ctx.fillStyle = outerFlame;
       ctx.beginPath();
       ctx.moveTo(tx - 4.5, thrusterY);
@@ -12580,7 +12578,6 @@ export function drawJuggernaut(
       coreFlame.addColorStop(0.3, '#F0D256');
       coreFlame.addColorStop(0.8, '#D5B43D');
       coreFlame.addColorStop(1, 'rgba(213, 180, 61, 0)');
-
       ctx.fillStyle = coreFlame;
       ctx.beginPath();
       ctx.moveTo(tx - 2.6, thrusterY);
@@ -12602,7 +12599,12 @@ export function drawJuggernaut(
       }
     }
     ctx.restore();
-  }
+  };
+
+  // Front pair fires with left thruster
+  drawThrusterFlames([-35, -20], leftThrust);
+  // Rear pair fires with right thruster
+  drawThrusterFlames([20, 35], rightThrust);
 
   // Now draw the main circular engine housing OVER the center.
   ctx.save();

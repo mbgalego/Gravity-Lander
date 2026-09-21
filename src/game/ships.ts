@@ -1067,6 +1067,8 @@ export const SHIPS: ShipModelConfig[] = [
       { x: 45, y: 72 },        // Extra right foot
       { x: 85, y: 72 },        // Right foot
       { x: 80, y: 35 },        // Right hip
+      { x: 80, y: -25 },       // Right hip upper
+      { x: 65, y: -52 },       // Right upper hull
       { x: 80, y: -40 },       // Right shoulder
     ],
     stats: {
