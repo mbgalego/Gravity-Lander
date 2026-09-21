@@ -12534,17 +12534,18 @@ export function drawJuggernaut(
     ctx.globalAlpha = 1.0;
   };
 
-  // Thruster positions: 4 total — 2 at bow, 2 at stern, all below the hull.
+  // Thruster positions: 4 total — 2 at bow (between front bogies), 2 at stern (near rear bogie).
   // They fire in pairs ("2 by 2"): the two bow thrusters pulse together, then
   // the two stern thrusters pulse together — alternating like a hover-hold pair.
+  // All thrusters sit at the hull bottom (y≈30), just above the bogie tracks.
   const bowPulse = 0.5 + 0.5 * Math.sin(t * 4.0);
   const sternPulse = 0.5 + 0.5 * Math.sin(t * 4.0 + Math.PI);
-  drawThruster(-62, 28, true, bowPulse);   // Outer port (bow side)
-  drawThruster(-48, 28, true, bowPulse);   // Inner port (bow side)
-  drawThruster(58, 28, true, sternPulse);  // Inner starboard (below main engine)
-  drawThruster(79, 28, true, sternPulse);  // Outer starboard
+  drawThruster(-35, 30, true, bowPulse);   // Front outer (between front bogies)
+  drawThruster(-20, 30, true, bowPulse);   // Front inner (between front bogies)
+  drawThruster(35, 30, true, sternPulse);  // Rear inner (near rear bogie)
+  drawThruster(45, 30, true, sternPulse);  // Rear outer (partially behind rear bogie)
 
-  // Now draw the main circular engine housing OVER the center thruster.
+  // Now draw the main circular engine housing OVER the center.
   ctx.save();
   ctx.fillStyle = '#67665E';
   ctx.strokeStyle = line;
