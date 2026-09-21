@@ -12,9 +12,39 @@ export interface VersionRelease {
   }[];
 }
 
-export const CURRENT_GAME_VERSION = 'v1.9.5';
+export const CURRENT_GAME_VERSION = 'v1.9.6';
 
 export const GAME_VERSION_HISTORY: VersionRelease[] = [
+  {
+    version: 'v1.9.6',
+    releaseDate: 'September 21, 2026',
+    title: 'Juggernaut Lifter Fixes: Independent Thruster Flames, Blue Glow Removal & Correct Hitbox',
+    tag: 'MAJOR',
+    tagColor: 'bg-amber-500/20 text-amber-300 border-amber-400/40',
+    summary:
+      'Fixed three critical Juggernaut Lifter rendering and physics issues: (1) removed unwanted blue afterburner glow by skipping generic thruster effects for Juggernaut in renderer, (2) implemented independent left/right thruster flame activation matching default ship mechanics (front pair fires with leftThruster, rear pair with rightThruster), and (3) rebuilt collisionPolygon with renderScale-correct coordinates (1.8× raw draw units) following the proven Nutcracker/Vulcan pattern to fix rocks passing through top/sides.',
+    categories: [
+      {
+        name: 'Juggernaut Visual Fixes',
+        iconType: 'physics',
+        items: [
+          'Blue Afterburner Removed: Generic renderer thruster effects now skipped for Juggernaut (config.id !== "juggernaut"), eliminating cyan radial glow and blue flame jets',
+          'Independent Thruster Flames: Front thrusters (-35, -20) fire only when leftThruster > 0.05; rear thrusters (20, 35) fire only when rightThruster > 0.05 — matches default ship mechanics',
+          'Gold Flame Plumes Only: All 4 thrusters now show correct gold/amber exhaust with shock diamonds, no blue artifacts',
+        ],
+      },
+      {
+        name: 'Juggernaut Hitbox Fix',
+        iconType: 'physics',
+        items: [
+          'Collision Polygon Rebuilt: 14-vertex simple CCW polygon tracing outer hull union (main fuselage + lower hull)',
+          'RenderScale Correct: All vertices multiplied by 1.8 (Juggernaut renderScale) — physics uses transformPoint() with NO scale, renderer uses ctx.scale(1.8)',
+          'Follows Nutcracker/Vulcan Pattern: Same convention as proven collisionPolygon implementations',
+          'Rock Collision Fixed: Rocks now properly collide with top bridge, side hulls, lower hull, and belly — no more passing through',
+        ],
+      },
+    ],
+  },
   {
     version: 'v1.9.5',
     releaseDate: 'September 19, 2026',
