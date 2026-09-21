@@ -1054,28 +1054,27 @@ export const SHIPS: ShipModelConfig[] = [
       rightThrusterPos: { x: 35, y: 30 },
     },
     collisionPolygon: [
+      // Outer boundary of hull union (main fuselage + lower hull), traced CCW
+      // Main fuselage: bow -> left bridge top -> right bridge top -> right upper hull
       { x: -70, y: -25 },      // Bow tip (wedge nose)
       { x: -55, y: -42 },      // Upper left bow
-      { x: -30, y: -48 },      // Left bridge top
+      { x: -30, y: -48 },      // Left bridge top (highest point)
       { x: 44, y: -42 },       // Right bridge top
       { x: 57, y: -30 },       // Right upper hull forward
       { x: 58, y: 9 },         // Right side upper
-      { x: 38, y: 14 },        // Right side mid
-      { x: -48, y: 13 },       // Left side mid
-      { x: -68, y: 5 },        // Left side upper
-      { x: -67, y: 8 },        // Lower hull left
-      { x: 56, y: 8 },         // Lower hull right
+
+      // Drop down to lower hull on right side
+      { x: 56, y: 8 },         // Lower hull right (top edge)
       { x: 58, y: 22 },        // Lower hull right lower
       { x: 39, y: 25 },        // Lower hull keel right
       { x: -42, y: 24 },       // Lower hull keel left
       { x: -65, y: 20 },       // Lower hull left lower
-      { x: -85, y: 72 },       // Left foot
-      { x: -45, y: 72 },       // Extra left foot
-      { x: 45, y: 72 },        // Extra right foot
-      { x: 85, y: 72 },        // Right foot
-      { x: 80, y: 35 },        // Right hip
-      { x: -80, y: 35 },       // Left hip
+      { x: -67, y: 8 },        // Lower hull left (top edge)
+
+      // Up left side back to main fuselage
+      { x: -68, y: 5 },        // Left side upper
       { x: -80, y: -40 },      // Left shoulder
+      // (closes back to bow tip)
     ],
     stats: {
       agility: 1,
