@@ -2997,66 +2997,68 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
     <circle cx="48" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
     <ellipse cx="48" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
     <ellipse cx="52.2" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
-    <polygon points="-44,6 -44,18 -16,18 -16,6" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.2"/>
-    <polygon points="-43,6 -41,2 -19,2 -17,6" fill="url(#leviathan-hull)" stroke="#565E64" strokeWidth="1.1"/>
-    <circle cx="-30.0" cy="3.6" r="3.0" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <circle cx="-30.0" cy="3.6" r="1.9" fill="none" stroke="#565E64" strokeWidth="0.8"/>
-    <rect x="-41" y="3.4" width="3.2" height="1.4" fill="#EA580C"/>
-    <rect x="-21" y="3.4" width="3.2" height="1.4" fill="#EA580C"/>
-    <line x1="-41.5" y1="9" x2="-36.5" y2="9" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="-23.5" y1="9" x2="-18.5" y2="9" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="-41.5" y1="12.5" x2="-36.5" y2="12.5" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="-23.5" y1="12.5" x2="-18.5" y2="12.5" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="-41.5" y1="16" x2="-36.5" y2="16" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="-23.5" y1="16" x2="-18.5" y2="16" stroke="#1D2226" strokeWidth="1.6"/>
-    <rect x="-42.6" y="18" width="3.2" height="2.5" fill="#262C31"/>
-    <polygon points="-44,20.5 -38,20.5 -36.6,25 -45.4,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <line x1="-45.4" y1="25" x2="-36.6" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
-    <ellipse cx="-41" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
-    <rect x="-36.300000000000004" y="18" width="3.2" height="2.5" fill="#262C31"/>
-    <polygon points="-37.7,20.5 -31.700000000000003,20.5 -30.300000000000004,25 -39.1,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <line x1="-39.1" y1="25" x2="-30.300000000000004" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
-    <ellipse cx="-34.7" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
-    <rect x="-30.0" y="18" width="3.2" height="2.5" fill="#262C31"/>
-    <polygon points="-31.4,20.5 -25.4,20.5 -24.0,25 -32.8,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <line x1="-32.8" y1="25" x2="-24.0" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
-    <ellipse cx="-28.4" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
-    <rect x="-20.6" y="18" width="3.2" height="2.5" fill="#262C31"/>
-    <polygon points="-22,20.5 -16,20.5 -14.6,25 -23.4,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <line x1="-23.4" y1="25" x2="-14.6" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
-    <ellipse cx="-19" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
-    <line x1="-34" y1="6" x2="-34" y2="18" stroke="#EA580C" strokeWidth="0.9"/>
-    <line x1="-26" y1="6" x2="-26" y2="18" stroke="#EA580C" strokeWidth="0.9"/>
-    <polygon points="14,6 14,18 42,18 42,6" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.2"/>
-    <polygon points="15,6 17,2 39,2 41,6" fill="url(#leviathan-hull)" stroke="#565E64" strokeWidth="1.1"/>
-    <circle cx="28.0" cy="3.6" r="3.0" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <circle cx="28.0" cy="3.6" r="1.9" fill="none" stroke="#565E64" strokeWidth="0.8"/>
-    <rect x="17" y="3.4" width="3.2" height="1.4" fill="#EA580C"/>
-    <rect x="37" y="3.4" width="3.2" height="1.4" fill="#EA580C"/>
-    <line x1="16.5" y1="9" x2="21.5" y2="9" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="34.5" y1="9" x2="39.5" y2="9" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="16.5" y1="12.5" x2="21.5" y2="12.5" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="34.5" y1="12.5" x2="39.5" y2="12.5" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="16.5" y1="16" x2="21.5" y2="16" stroke="#1D2226" strokeWidth="1.6"/>
-    <line x1="34.5" y1="16" x2="39.5" y2="16" stroke="#1D2226" strokeWidth="1.6"/>
-    <rect x="15.4" y="18" width="3.2" height="2.5" fill="#262C31"/>
-    <polygon points="14,20.5 20,20.5 21.4,25 12.6,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <line x1="12.6" y1="25" x2="21.4" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
-    <ellipse cx="17" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
-    <rect x="21.7" y="18" width="3.2" height="2.5" fill="#262C31"/>
-    <polygon points="20.3,20.5 26.3,20.5 27.700000000000003,25 18.9,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <line x1="18.9" y1="25" x2="27.700000000000003" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
-    <ellipse cx="23.3" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
-    <rect x="28.0" y="18" width="3.2" height="2.5" fill="#262C31"/>
-    <polygon points="26.6,20.5 32.6,20.5 34.0,25 25.200000000000003,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <line x1="25.200000000000003" y1="25" x2="34.0" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
-    <ellipse cx="29.6" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
-    <rect x="37.4" y="18" width="3.2" height="2.5" fill="#262C31"/>
-    <polygon points="36,20.5 42,20.5 43.4,25 34.6,25" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <line x1="34.6" y1="25" x2="43.4" y2="25" stroke="#C2410C" strokeWidth="1.1"/>
-    <ellipse cx="39" cy="21.2" rx="2.0" ry="0.8" fill="#1D2226"/>
-    <line x1="24" y1="6" x2="24" y2="18" stroke="#EA580C" strokeWidth="0.9"/>
-    <line x1="32" y1="6" x2="32" y2="18" stroke="#EA580C" strokeWidth="0.9"/>
+    {/* 2. SPONSON UNITS (2 on fuselage face, straddling hull bottom) */}
+    {/* Rear sponson at x=-32 (near stern, clear of engine block at x=-58) */}
+    <polygon points="-42,2 -22,2 -22,16 -42,16" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.2"/>
+    <polygon points="-41,4 -23,4 -21,16 -43,16" fill="url(#leviathan-hull)" stroke="#565E64" strokeWidth="1.1"/>
+    {/* 4 DOWNWARD thrusters on rear sponson, evenly distributed (left side, fires with leftThruster) */}
+    {/* Bell 1 at y=-1 */}
+    <rect x="-35" y="-2.5" width="6" height="5" fill="#262C31"/>
+    <polygon points="-38,-1.5 -32,-1.5 -30,2.5 -34,2.5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="-34" y1="2.5" x2="-30" y2="2.5" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="-32" cy="0" rx="2.0" ry="2.0" fill="#334155"/>
+    <ellipse cx="-32" cy="0" rx="1.6" ry="0.8" fill="#1D2226"/>
+    {/* Bell 2 at y=3 */}
+    <rect x="-35" y="1" width="6" height="5" fill="#262C31"/>
+    <polygon points="-38,2 -32,2 -30,6 -34,6" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="-34" y1="6" x2="-30" y2="6" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="-32" cy="4" rx="2.0" ry="2.0" fill="#334155"/>
+    <ellipse cx="-32" cy="4" rx="1.6" ry="0.8" fill="#1D2226"/>
+    {/* Bell 3 at y=7 */}
+    <rect x="-35" y="4.5" width="6" height="5" fill="#262C31"/>
+    <polygon points="-38,5.5 -32,5.5 -30,9.5 -34,9.5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="-34" y1="9.5" x2="-30" y2="9.5" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="-32" cy="8" rx="2.0" ry="2.0" fill="#334155"/>
+    <ellipse cx="-32" cy="8" rx="1.6" ry="0.8" fill="#1D2226"/>
+    {/* Bell 4 at y=11 */}
+    <rect x="-35" y="8.5" width="6" height="5" fill="#262C31"/>
+    <polygon points="-38,9.5 -32,9.5 -30,13.5 -34,13.5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="-34" y1="13.5" x2="-30" y2="13.5" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="-32" cy="12" rx="2.0" ry="2.0" fill="#334155"/>
+    <ellipse cx="-32" cy="12" rx="1.6" ry="0.8" fill="#1D2226"/>
+    {/* Conduit line along inner edge */}
+    <line x1="-47" y1="2" x2="-47" y2="16" stroke="#EA580C" strokeWidth="0.9"/>
+
+    {/* Front sponson at x=34 (under cabin/door, clear of hatch) */}
+    <polygon points="24,2 44,2 44,16 24,16" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.2"/>
+    <polygon points="26,4 42,4 40,16 28,16" fill="url(#leviathan-hull)" stroke="#565E64" strokeWidth="1.1"/>
+    {/* 4 DOWNWARD thrusters on front sponson, evenly distributed (right side, fires with rightThruster) */}
+    {/* Bell 1 at y=-1 */}
+    <rect x="29" y="-2.5" width="6" height="5" fill="#262C31"/>
+    <polygon points="29,-1.5 35,-1.5 37,2.5 31,2.5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="31" y1="2.5" x2="37" y2="2.5" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="32" cy="0" rx="2.0" ry="2.0" fill="#334155"/>
+    <ellipse cx="32" cy="0" rx="1.6" ry="0.8" fill="#1D2226"/>
+    {/* Bell 2 at y=3 */}
+    <rect x="29" y="1" width="6" height="5" fill="#262C31"/>
+    <polygon points="29,2 35,2 37,6 31,6" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="31" y1="6" x2="37" y2="6" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="32" cy="4" rx="2.0" ry="2.0" fill="#334155"/>
+    <ellipse cx="32" cy="4" rx="1.6" ry="0.8" fill="#1D2226"/>
+    {/* Bell 3 at y=7 */}
+    <rect x="29" y="4.5" width="6" height="5" fill="#262C31"/>
+    <polygon points="29,5.5 35,5.5 37,9.5 31,9.5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="31" y1="9.5" x2="37" y2="9.5" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="32" cy="8" rx="2.0" ry="2.0" fill="#334155"/>
+    <ellipse cx="32" cy="8" rx="1.6" ry="0.8" fill="#1D2226"/>
+    {/* Bell 4 at y=11 */}
+    <rect x="29" y="8.5" width="6" height="5" fill="#262C31"/>
+    <polygon points="29,9.5 35,9.5 37,13.5 31,13.5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="0.9"/>
+    <line x1="31" y1="13.5" x2="37" y2="13.5" stroke="#C2410C" strokeWidth="1.1"/>
+    <ellipse cx="32" cy="12" rx="2.0" ry="2.0" fill="#334155"/>
+    <ellipse cx="32" cy="12" rx="1.6" ry="0.8" fill="#1D2226"/>
+    {/* Conduit line along inner edge */}
+    <line x1="47" y1="2" x2="47" y2="16" stroke="#EA580C" strokeWidth="0.9"/>
     <polygon points="-46,-8 48,-8 58,-6 64,-4 70,-1 72,1 68,5 60,7 50,9 -40,9 -46,5" fill="url(#leviathan-hull)" stroke="#16191C" strokeWidth="1.8"/>
     <line x1="-44" y1="-6" x2="46" y2="-6" stroke="#6E767C" strokeWidth="0.8"/>
     <polygon points="46,-4 60,-3 68,3 60,7 48,7 44,1" fill="#6E767C" stroke="#16191C" strokeWidth="1.0"/>
