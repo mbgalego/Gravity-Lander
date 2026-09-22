@@ -893,9 +893,9 @@ export const SHIPS: ShipModelConfig[] = [
     tagline: 'Low-Profile Modular Industrial Transport',
     classType: 'Heavy Utility Hauler',
     description: 'An elongated low-profile heavy industrial utility vessel with a horizontal battleship-gray silhouette. Features a tapered wedge bow with multi-pane cockpit canopy and comms antenna array, a central pressurized spine tank with structural gantry and exposed orange conduit runs, twin underslung VTOL thruster sponson pods with quad bell-nozzle lift engines, and a massive asymmetric aft propulsion block with one central main engine, four secondary nozzles, and RCS maneuvering ports. White stenciled "325" designation on the forward hull.',
-    width: 225.5,
-    height: 73.6,
-    renderScale: 1.55,
+    width: 266.0,
+    height: 101.5,
+    renderScale: 1.75,
     maxFuel: 420,
     thrustMultiplier: 1.65,
     torqueMultiplier: 0.65,
@@ -914,51 +914,46 @@ export const SHIPS: ShipModelConfig[] = [
     primaryColor: '#7a848a',
     accentColor: '#ea580c',
     visorColor: '#94a3b8',
-    footpadSpan: 145.7,
+    footpadSpan: 164.5,
     canCarryVehicles: true,
     isHeavyVehicleCarrier: true,
     localPoints: {
-      nose: { x: 111.6, y: 1.6 },
-      leftShoulder: { x: -93.0, y: -15.5 },
-      rightShoulder: { x: 74.4, y: -12.4 },
-      leftHip: { x: -93.0, y: 23.2 },
-      rightHip: { x: 93.0, y: 9.3 },
-      leftFoot: { x: -71.3, y: 46.5 },
-      rightFoot: { x: 74.4, y: 46.5 },
-      extraLeftFoot: { x: -27.9, y: 46.5 },
-      extraRightFoot: { x: 34.1, y: 46.5 },
-      leftThrusterPos: { x: -46.5, y: 31.0 },
-      rightThrusterPos: { x: 43.4, y: 31.0 },
+      nose: { x: 126.0, y: 1.75 },
+      leftShoulder: { x: -108.5, y: -24.5 },
+      rightShoulder: { x: 84.0, y: -19.25 },
+      leftHip: { x: -108.5, y: 28.0 },
+      rightHip: { x: 105.0, y: 14.0 },
+      leftFoot: { x: -80.5, y: 39.38 },
+      rightFoot: { x: 84.0, y: 39.38 },
+      leftThrusterPos: { x: -56.0, y: 28.0 },
+      rightThrusterPos: { x: 59.5, y: 28.0 },
     },
     collisionPolygon: [
-      // Outer silhouette traced from drawLeviathan raw coords x1.55 (renderScale).
-      // Simple CCW hull, no self-intersections, origin inside.
-      { x: 111.6, y: 1.6 },    // nose tip (72,1)
-      { x: 108.5, y: -1.55 },  // nose upper slope (70,-1)
-      { x: 99.2, y: -6.2 },    // bow upper (64,-4)
-      { x: 89.9, y: -9.3 },    // bow mid slope (58,-6)
-      { x: 74.4, y: -12.4 },   // hull top fwd (48,-8)
-      { x: 34.1, y: -24.8 },   // comms antenna rig outer tip (22,-16)
-      { x: 27.9, y: -24.8 },   // comms mast peak (18,-16)
-      { x: 23.2, y: -21.7 },   // spine tank fwd top (15,-14)
-      { x: 10.8, y: -26.4 },   // gantry right top (7,-17)
-      { x: -14.0, y: -26.4 },  // gantry left top (-9,-17)
-      { x: -62.0, y: -21.7 },  // spine tank aft top (-40,-14)
-      { x: -69.8, y: -27.1 },  // radar dome top (-45,-17.5)
-      { x: -96.1, y: -15.5 },  // stern block top (-62,-10)
-      { x: -108.5, y: -19.5 }, // upper-2 bell top lip (-70,-12.6)
-      { x: -113.9, y: -5.4 },  // main bell top lip (-73.5,-3.5)
-      { x: -113.9, y: 14.7 },  // main bell bottom lip (-73.5,9.5)
-      { x: -110.8, y: 21.2 },  // lower-1 bell bottom (-71.5,13.7)
-      { x: -108.5, y: 28.8 },  // lower-2 bell bottom (-70,18.6)
-      { x: -94.5, y: 31.8 },   // RCS bottom (-61,20.5)
-      { x: -71.3, y: 46.5 },   // left outer foot (-46,30)
-      { x: -27.9, y: 46.5 },   // inner left foot (-18,30)
-      { x: 34.1, y: 46.5 },    // inner right foot (22,30)
-      { x: 74.4, y: 46.5 },    // right outer foot (48,30)
-      { x: 77.5, y: 14.0 },    // lower hull front (50,9)
-      { x: 93.0, y: 10.8 },    // chin (60,7)
-      { x: 105.4, y: 7.8 },    // nose lower (68,5)
+      // Outer silhouette traced from drawLeviathan raw coords x1.75 (renderScale).
+      { x: 126.0, y: 1.75 },    // nose tip (72, 1)
+      { x: 122.5, y: -1.75 },   // nose upper slope (70, -1)
+      { x: 112.0, y: -8.75 },   // bow upper (64, -5)
+      { x: 101.5, y: -14.0 },   // bow mid slope (58, -8)
+      { x: 84.0, y: -19.25 },   // hull top fwd (48, -11)
+      { x: 38.5, y: -36.75 },   // comms antenna tip (22, -21)
+      { x: 31.5, y: -36.75 },   // comms mast peak (18, -21)
+      { x: 26.25, y: -33.25 },  // spine tank fwd top (15, -19)
+      { x: 12.25, y: -42.0 },   // gantry right top (7, -24)
+      { x: -15.75, y: -42.0 },  // gantry left top (-9, -24)
+      { x: -70.0, y: -33.25 },  // spine tank aft top (-40, -19)
+      { x: -77.0, y: -34.125 }, // radar dome top (-44, -19.5)
+      { x: -108.5, y: -24.5 },  // stern block top (-62, -14)
+      { x: -122.5, y: -28.875 },// upper-2 bell top lip (-70, -16.5)
+      { x: -128.625, y: -9.625 },// main bell top lip (-73.5, -5.5)
+      { x: -128.625, y: 20.125 },// main bell bottom lip (-73.5, 11.5)
+      { x: -125.125, y: 26.25 }, // lower-1 bell bottom (-71.5, 15.0)
+      { x: -122.5, y: 32.55 },   // lower-2 bell bottom (-70, 18.6)
+      { x: -106.75, y: 35.875 }, // RCS bottom (-61, 20.5)
+      { x: -80.5, y: 39.38 },    // left outer foot (-46, 22.5)
+      { x: 84.0, y: 39.38 },     // right outer foot (48, 22.5)
+      { x: 87.5, y: 17.5 },      // lower hull front (50, 10)
+      { x: 105.0, y: 14.0 },     // chin (60, 8)
+      { x: 119.0, y: 10.5 },     // nose lower (68, 6)
     ],
     stats: {
       agility: 1,

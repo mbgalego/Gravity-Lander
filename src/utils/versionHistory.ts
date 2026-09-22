@@ -12,9 +12,30 @@ export interface VersionRelease {
   }[];
 }
 
-export const CURRENT_GAME_VERSION = 'v1.9.6';
+export const CURRENT_GAME_VERSION = 'v1.9.7';
 
 export const GAME_VERSION_HISTORY: VersionRelease[] = [
+  {
+    version: 'v1.9.7',
+    releaseDate: 'September 22, 2026',
+    title: 'Leviathan Titan Overhaul: Taller Profile, Short-Piston Landing Gear & 2-Strut Layout',
+    tag: 'LATEST',
+    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    summary:
+      'Overhauled the Leviathan Titan utility hauler with a stockier, taller hull profile (+25% vertical bulk and renderScale 1.75), streamlined low-profile landing gear with short-piston struts (ample clearance above VTOL bells), and updated physics collision polygon.',
+    categories: [
+      {
+        name: 'Leviathan Craft Overhaul',
+        iconType: 'physics',
+        items: [
+          'Increased vertical height and stature across hull, spine tank, structural gantry, and command bridge',
+          'Increased renderScale to 1.75 for a grander in-game presence',
+          'Shortened landing gear legs to low-profile pistons while maintaining >11px ground clearance above VTOL thruster bells',
+          'Updated localPoints, footpadSpan, and 24-vertex watertight collisionPolygon',
+        ],
+      },
+    ],
+  },
   {
     version: 'v1.9.6',
     releaseDate: 'September 21, 2026',

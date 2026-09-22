@@ -7284,7 +7284,7 @@ export function drawLeviathan(
   time: number = 0,
   world?: WorldMap
 ) {
-  const footPadY = 30 + gearSpringOffset;
+  const footPadY = 22.5 + gearSpringOffset;
   const isFlying = !ship?.isLanded && !ship?.isCrashed;
   const blink = Math.sin(time * 6.0) > 0;
 
@@ -7306,13 +7306,13 @@ export function drawLeviathan(
   const recess = '#1D2226';
   const outline = '#16191C';
 
-  const hullGrad = ctx.createLinearGradient(0, -17, 0, 18);
+  const hullGrad = ctx.createLinearGradient(0, -22, 0, 18);
   hullGrad.addColorStop(0, hullLight);
   hullGrad.addColorStop(0.35, hull);
   hullGrad.addColorStop(0.8, hullDark);
   hullGrad.addColorStop(1, hullDarker);
 
-  const gunmetalGrad = ctx.createLinearGradient(0, -17, 0, 18);
+  const gunmetalGrad = ctx.createLinearGradient(0, -22, 0, 18);
   gunmetalGrad.addColorStop(0, gunmetalLight);
   gunmetalGrad.addColorStop(0.5, gunmetal);
   gunmetalGrad.addColorStop(1, gunmetalDark);
@@ -7321,21 +7321,21 @@ export function drawLeviathan(
   ctx.lineCap = 'round';
 
   // =====================================================================
-  // 1. LANDING GEAR (struts + 4 isolated footpads, drawn first per spec)
+  // 1. LANDING GEAR (shorter struts + 2 isolated footpads)
   // =====================================================================
-  const feet = [-46, -18, 22, 48];
+  const feet = [-46, 48];
   for (const fx of feet) {
     ctx.save();
     ctx.fillStyle = gunmetalDark;
-    ctx.fillRect(fx - 2.5, 17, 5, 3);
-    const pistonGrad = ctx.createLinearGradient(fx, 19, fx, footPadY);
+    ctx.fillRect(fx - 2.5, 15.5, 5, 2.5);
+    const pistonGrad = ctx.createLinearGradient(fx, 17, fx, footPadY);
     pistonGrad.addColorStop(0, '#cbd5e1');
     pistonGrad.addColorStop(0.5, '#f1f5f9');
     pistonGrad.addColorStop(1, '#94a3b8');
     ctx.strokeStyle = pistonGrad;
     ctx.lineWidth = 2.2;
     ctx.beginPath();
-    ctx.moveTo(fx, 19);
+    ctx.moveTo(fx, 17);
     ctx.lineTo(fx, footPadY - 2);
     ctx.stroke();
     ctx.fillStyle = gunmetal;
@@ -7360,111 +7360,23 @@ export function drawLeviathan(
   }
 
   // =====================================================================
-  // 2. SPONSON UNITS (2 modules on fuselage face, straddling hull bottom)
-  //    Rear sponson near stern (clear of main engine bells at x=-58)
-  //    Front sponson under cabin/door (near x=30, below canopy y=-8)
-  //    Each has 4 vertical thruster bells facing DOWN with yellow flames.
-  // =====================================================================
-  const leftThrust = ship ? Number(ship.leftThruster || 0) : 0;
-  const rightThrust = ship ? Number(ship.rightThruster || 0) : 0;
-
-  const drawSponsonUnit = (cx: number, label: string) => {
-    // Sponson body: straddles hull bottom (y=9), top overlaps hull, bottom below belly
-    const sx1 = cx - 10, sx2 = cx + 10;
-    const syTop = 2, syBot = 16; // overlaps hull (y=9), hangs below
-    ctx.fillStyle = gunmetalGrad;
-    ctx.strokeStyle = outline;
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(sx1, syTop); ctx.lineTo(sx2, syTop); ctx.lineTo(sx2, syBot); ctx.lineTo(sx1, syBot); ctx.closePath();
-    ctx.fill(); ctx.stroke();
-    // Leading fairing (angled toward viewer)
-    ctx.fillStyle = hullGrad;
-    ctx.beginPath();
-    ctx.moveTo(sx1+1, syTop+2); ctx.lineTo(sx1+3, syBot-2); ctx.lineTo(sx2-3, syBot-2); ctx.lineTo(sx2-1, syTop+2); ctx.closePath();
-    ctx.fill(); ctx.stroke();
-    // 4 DOWNWARD THRUSTERS evenly spaced vertically on sponson face
-    const bellYs = [syTop + 3, syTop + 7, syBot - 5, syBot - 1];
-    for (const by of bellYs) {
-      // Bell housing (recessed)
-      ctx.fillStyle = gunmetalDark;
-      ctx.fillRect(cx - 3, by - 2.5, 6, 5);
-      // Bell nozzle facing down
-      ctx.fillStyle = gunmetalGrad;
-      ctx.strokeStyle = outline; ctx.lineWidth = 0.9;
-      ctx.beginPath();
-      ctx.moveTo(cx - 4, by - 2.5); ctx.lineTo(cx + 4, by - 2.5); ctx.lineTo(cx + 2.5, by + 4); ctx.lineTo(cx - 2.5, by + 4); ctx.closePath();
-      ctx.fill(); ctx.stroke();
-      // Yellow nozzle lip (not blue)
-      ctx.strokeStyle = '#EAB308'; ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.moveTo(cx - 2.5, by + 4); ctx.lineTo(cx + 2.5, by + 4); ctx.stroke();
-      // Throat glow - yellow warm, not blue
-      ctx.save();
-      ctx.globalAlpha = 0.6;
-      ctx.fillStyle = '#FDE047';
-      ctx.beginPath(); ctx.ellipse(cx, by + 1.5, 2.0, 2.0, 0, 0, Math.PI*2); ctx.fill();
-      ctx.restore();
-      // Black throat core
-      ctx.fillStyle = recess;
-      ctx.beginPath(); ctx.ellipse(cx, by + 1.5, 1.6, 0.8, 0, 0, Math.PI*2); ctx.fill();
-    }
-    // YELLOW FLAME PLUMES (grouped, like Juggernaut) - down from each bell
-    // All 4 flames fire together when this side's throttle is active
-    const thrustActive = label === 'left' ? (leftThrust > 0.05) : (rightThrust > 0.05);
-    const thrustLevel = label === 'left' ? leftThrust : rightThrust;
-    if (thrustActive && thrustLevel > 0.05) {
-      ctx.save();
-      const flameLen = (14 + Math.random()*8) * Math.min(2.0, thrustLevel * 1.5);
-      for (const by of bellYs) {
-        const fy = by + 4; // flame starts at bell lip (down)
-        // Yellow-orange flame (no blue!)
-        const grad = ctx.createLinearGradient(cx, fy, cx, fy + flameLen);
-        grad.addColorStop(0, '#FDE047');
-        grad.addColorStop(0.35, '#F59E0B');
-        grad.addColorStop(0.7, '#D97706');
-        grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.moveTo(cx - 3.5, fy); ctx.lineTo(cx + 3.5, fy); ctx.lineTo(cx + 0.8, fy + flameLen); ctx.lineTo(cx - 0.8, fy + flameLen); ctx.closePath();
-        ctx.fill();
-        // Inner white-hot core
-        const core = ctx.createLinearGradient(cx, fy, cx, fy + flameLen*0.55);
-        core.addColorStop(0, '#FFFFFF');
-        core.addColorStop(0.3, '#FDE047');
-        core.addColorStop(0.85, '#D97706');
-        core.addColorStop(1, 'rgba(217, 119, 6, 0)');
-        ctx.fillStyle = core;
-        ctx.beginPath();
-        ctx.moveTo(cx - 2.2, fy); ctx.lineTo(cx + 2.2, fy); ctx.lineTo(cx + 0.5, fy + flameLen*0.55); ctx.lineTo(cx - 0.5, fy + flameLen*0.55); ctx.closePath();
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-  };
-
-  // REAR sponson (near stern, left side of profile, clear of engine block at x=-58)
-  drawSponsonUnit(-32, 'left');
-  // FRONT sponson (under cabin/door, near cab at x=30-40)
-  drawSponsonUnit(34, 'right');
-
-  // =====================================================================
-  // 3. MAIN HULL (long low slab + wedge bow, battleship gray)
+  // 3. MAIN HULL (taller slab + wedge bow, battleship gray)
   // =====================================================================
   ctx.fillStyle = hullGrad;
   ctx.strokeStyle = outline;
   ctx.lineWidth = 1.8;
   ctx.beginPath();
-  ctx.moveTo(-46, -8);
-  ctx.lineTo(48, -8);
-  ctx.lineTo(58, -6);
-  ctx.lineTo(64, -4);
+  ctx.moveTo(-46, -11);
+  ctx.lineTo(48, -11);
+  ctx.lineTo(58, -8);
+  ctx.lineTo(64, -5);
   ctx.lineTo(70, -1);
   ctx.lineTo(72, 1);
-  ctx.lineTo(68, 5);
-  ctx.lineTo(60, 7);
-  ctx.lineTo(50, 9);
-  ctx.lineTo(-40, 9);
-  ctx.lineTo(-46, 5);
+  ctx.lineTo(68, 6);
+  ctx.lineTo(60, 8);
+  ctx.lineTo(50, 10);
+  ctx.lineTo(-40, 10);
+  ctx.lineTo(-46, 6);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
@@ -7472,8 +7384,8 @@ export function drawLeviathan(
   ctx.strokeStyle = hullDark;
   ctx.lineWidth = 0.8;
   ctx.beginPath();
-  ctx.moveTo(-44, -6);
-  ctx.lineTo(46, -6);
+  ctx.moveTo(-44, -8.5);
+  ctx.lineTo(46, -8.5);
   ctx.stroke();
 
   // 4. NOSE CONE CHEEK (blunter lower wedge, slightly darker gray)
@@ -7481,11 +7393,11 @@ export function drawLeviathan(
   ctx.strokeStyle = outline;
   ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.moveTo(46, -4);
-  ctx.lineTo(60, -3);
-  ctx.lineTo(68, 3);
-  ctx.lineTo(60, 7);
-  ctx.lineTo(48, 7);
+  ctx.moveTo(46, -5);
+  ctx.lineTo(60, -3.5);
+  ctx.lineTo(68, 4);
+  ctx.lineTo(60, 8);
+  ctx.lineTo(48, 8);
   ctx.lineTo(44, 1);
   ctx.closePath();
   ctx.fill();
@@ -7496,33 +7408,33 @@ export function drawLeviathan(
   ctx.strokeStyle = outline;
   ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.moveTo(36, -8);
-  ctx.lineTo(50, -7.2);
-  ctx.lineTo(56, -5.4);
-  ctx.lineTo(54, -2.6);
-  ctx.lineTo(47, -3.2);
-  ctx.lineTo(36, -4);
+  ctx.moveTo(36, -11);
+  ctx.lineTo(50, -9.8);
+  ctx.lineTo(56, -7.0);
+  ctx.lineTo(54, -3.0);
+  ctx.lineTo(47, -4.0);
+  ctx.lineTo(36, -5.5);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
   ctx.strokeStyle = gunmetalDark;
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(42, -7.7);
-  ctx.lineTo(42, -3.5);
-  ctx.moveTo(48, -7.3);
-  ctx.lineTo(48, -3.0);
+  ctx.moveTo(42, -10.4);
+  ctx.lineTo(42, -4.3);
+  ctx.moveTo(48, -10.0);
+  ctx.lineTo(48, -3.8);
   ctx.stroke();
   ctx.strokeStyle = glassHi;
   ctx.lineWidth = 0.9;
   ctx.beginPath();
-  ctx.moveTo(37.5, -7.2);
-  ctx.lineTo(49, -6.6);
+  ctx.moveTo(37.5, -9.8);
+  ctx.lineTo(49, -8.8);
   ctx.stroke();
   ctx.fillStyle = hullHi;
   for (const rx of [36, 38, 40, 44, 46, 50]) {
     ctx.beginPath();
-    ctx.arc(rx, -4.9, 0.5, 0, Math.PI * 2);
+    ctx.arc(rx, -6.5, 0.5, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -7544,8 +7456,8 @@ export function drawLeviathan(
   ctx.strokeStyle = outline;
   ctx.lineWidth = 1.1;
   ctx.beginPath();
-  ctx.moveTo(24, -5.5);
-  ctx.lineTo(33, -5.5);
+  ctx.moveTo(24, -7.5);
+  ctx.lineTo(33, -7.5);
   ctx.lineTo(33, 4);
   ctx.lineTo(24, 4);
   ctx.closePath();
@@ -7554,36 +7466,36 @@ export function drawLeviathan(
   ctx.strokeStyle = gunmetal;
   ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.moveTo(26, -4);
-  ctx.lineTo(31, -4);
+  ctx.moveTo(26, -6);
+  ctx.lineTo(31, -6);
   ctx.lineTo(31, 2.5);
   ctx.lineTo(26, 2.5);
   ctx.stroke();
   ctx.strokeStyle = orange;
   ctx.lineWidth = 1.1;
   ctx.beginPath();
-  ctx.moveTo(27.5, -2);
-  ctx.lineTo(29.5, -2);
-  ctx.moveTo(27.5, 0.5);
-  ctx.lineTo(29.5, 0.5);
+  ctx.moveTo(27.5, -3.5);
+  ctx.lineTo(29.5, -3.5);
+  ctx.moveTo(27.5, -1);
+  ctx.lineTo(29.5, -1);
   ctx.stroke();
   ctx.fillStyle = gunmetalLight;
-  ctx.fillRect(23.6, -4.5, 1, 1.6);
+  ctx.fillRect(23.6, -6.5, 1, 1.6);
   ctx.fillRect(23.6, 1, 1, 1.6);
 
   // 8. COMMS ANTENNA RIG (multi-element array above forward spine)
   ctx.fillStyle = gunmetal;
-  ctx.fillRect(17, -9, 3, 3);
+  ctx.fillRect(17, -12, 3, 3);
   ctx.strokeStyle = gunmetalLight;
   ctx.lineWidth = 1.6;
   ctx.beginPath();
-  ctx.moveTo(18, -6);
-  ctx.lineTo(18, -15.5);
+  ctx.moveTo(18, -9);
+  ctx.lineTo(18, -20.5);
   ctx.stroke();
   ctx.strokeStyle = gunmetal;
   ctx.lineWidth = 0.9;
   for (let i = 0; i < 4; i++) {
-    const ay = -11.5 - i * 1.35;
+    const ay = -14.5 - i * 1.5;
     ctx.beginPath();
     ctx.moveTo(14, ay);
     ctx.lineTo(22, ay);
@@ -7591,13 +7503,13 @@ export function drawLeviathan(
   }
   ctx.fillStyle = blink ? '#ef4444' : '#7f1d1d';
   ctx.beginPath();
-  ctx.arc(18, -16.2, 1.1, 0, Math.PI * 2);
+  ctx.arc(18, -21.2, 1.1, 0, Math.PI * 2);
   ctx.fill();
 
-  // 9. PRESSURIZED SPINE TANK (thick cylindrical tank along upper spine)
+  // 9. PRESSURIZED SPINE TANK (taller cylindrical tank along upper spine)
   const tankX1 = -40;
   const tankX2 = 15;
-  const tankTop = -14;
+  const tankTop = -19;
   const tankBot = -5;
   const tankGrad = ctx.createLinearGradient(0, tankTop, 0, tankBot);
   tankGrad.addColorStop(0, hullHi);
@@ -7632,19 +7544,37 @@ export function drawLeviathan(
   ctx.lineTo(tankX2 - 2, tankTop + 1.2);
   ctx.stroke();
 
-  // 10. STRUCTURAL GANTRY (reinforced truss casing over tank center)
+  // 10. STRUCTURAL GANTRY (taller reinforced truss casing over tank center)
   const gx1 = -9;
   const gx2 = 7;
   ctx.fillStyle = gunmetalGrad;
   ctx.strokeStyle = outline;
   ctx.lineWidth = 1.1;
   ctx.beginPath();
-  ctx.moveTo(gx1, -17);
-  ctx.lineTo(gx2, -17);
+  ctx.moveTo(gx1, -24);
+  ctx.lineTo(gx2, -24);
   ctx.lineTo(gx2, -5);
   ctx.lineTo(gx1, -5);
   ctx.closePath();
   ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = gunmetalDark;
+  ctx.lineWidth = 0.9;
+  ctx.beginPath();
+  ctx.moveTo(gx1 + 1, -23);
+  ctx.lineTo(gx2 - 1, -6);
+  ctx.moveTo(gx2 - 1, -23);
+  ctx.lineTo(gx1 + 1, -6);
+  for (let ix = gx1 + 4; ix < gx2; ix += 4) {
+    ctx.moveTo(ix, -23);
+    ctx.lineTo(ix, -6);
+  }
+  ctx.stroke();
+  ctx.fillStyle = orange;
+  for (const bx of [gx1, gx2]) {
+    ctx.fillRect(bx - 0.8, -24, 1.6, 1.6);
+    ctx.fillRect(bx - 0.8, -5, 1.6, 1.6);
+  }
   ctx.stroke();
   ctx.strokeStyle = gunmetalDark;
   ctx.lineWidth = 0.9;
@@ -7743,16 +7673,16 @@ export function drawLeviathan(
   ctx.strokeStyle = outline;
   ctx.lineWidth = 1.3;
   ctx.beginPath();
-  ctx.moveTo(-46, -10);
-  ctx.lineTo(-62, -10);
-  ctx.lineTo(-62, 15);
-  ctx.lineTo(-46, 15);
+  ctx.moveTo(-46, -14);
+  ctx.lineTo(-62, -14);
+  ctx.lineTo(-62, 16);
+  ctx.lineTo(-46, 16);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
   // Vertical armor fins (heat dissipation plating) on the block
   ctx.fillStyle = gunmetalDark;
-  const fins: [number, number][] = [[-60, -8], [-57, -8], [-54, -8], [-60, 8], [-57, 8], [-54, 8]];
+  const fins: [number, number][] = [[-60, -11], [-57, -11], [-54, -11], [-60, 9], [-57, 9], [-54, 9]];
   for (const [fx, fy] of fins) {
     ctx.fillRect(fx, fy, 2, 6);
   }
@@ -7760,8 +7690,8 @@ export function drawLeviathan(
   ctx.strokeStyle = orange;
   ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.moveTo(-46, 12);
-  ctx.lineTo(-60, 12);
+  ctx.moveTo(-46, 13);
+  ctx.lineTo(-60, 13);
   ctx.moveTo(-46, 3);
   ctx.lineTo(-58, 3);
   ctx.stroke();
@@ -7769,10 +7699,10 @@ export function drawLeviathan(
   ctx.strokeStyle = gunmetalLight;
   ctx.lineWidth = 0.7;
   ctx.beginPath();
+  ctx.moveTo(-60, -8);
+  ctx.lineTo(-48, -8);
   ctx.moveTo(-60, -6);
   ctx.lineTo(-48, -6);
-  ctx.moveTo(-60, -4);
-  ctx.lineTo(-48, -4);
   ctx.stroke();
 
   // Top radar dish on raised dome housing (rotating)
@@ -7782,15 +7712,15 @@ export function drawLeviathan(
   ctx.strokeStyle = outline;
   ctx.lineWidth = 0.9;
   ctx.beginPath();
-  ctx.arc(domeX, -9, 3.4, Math.PI, 0);
+  ctx.arc(domeX, -13, 3.4, Math.PI, 0);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
-  ctx.fillRect(domeX - 3.4, -10, 6.8, 1.6);
+  ctx.fillRect(domeX - 3.4, -14, 6.8, 1.6);
   // Radar dish (articulated - angle follows a slow sweep)
   const dishAngle = Math.sin(time * 1.4) * 0.5;
   ctx.save();
-  ctx.translate(domeX, -13);
+  ctx.translate(domeX, -17);
   ctx.rotate(dishAngle);
   // Dish bowl (concave toward upper-left)
   ctx.strokeStyle = gunmetalLight;
@@ -7813,13 +7743,13 @@ export function drawLeviathan(
   // Radar platform status LED
   ctx.fillStyle = blink ? '#22c55e' : '#14532d';
   ctx.beginPath();
-  ctx.arc(-47, -8, 0.8, 0, Math.PI * 2);
+  ctx.arc(-47, -12, 0.8, 0, Math.PI * 2);
   ctx.fill();
   // Red anti-collision strobe at the radar mast peak
   const radStrobe = Math.sin(time * 8) > 0;
   ctx.fillStyle = radStrobe ? '#ef4444' : '#450a0a';
   ctx.beginPath();
-  ctx.arc(domeX, -13.4, 0.9, 0, Math.PI * 2);
+  ctx.arc(domeX, -18.5, 0.9, 0, Math.PI * 2);
   ctx.fill();
 
   // ---- MAIN PROPULSION LAYOUT (nozzles face LEFT) ----
@@ -7887,6 +7817,96 @@ export function drawLeviathan(
   ctx.rect(-65, 18.5, 4, 2);
   ctx.fill();
   ctx.stroke();
+
+  // =====================================================================
+  // 2. SPONSON UNITS (2 modules on fuselage face, straddling hull bottom)
+  //    Rear sponson near stern (clear of main engine bells at x=-58)
+  //    Front sponson under cabin/door (near x=30, below canopy y=-8)
+  //    Each has 4 vertical thruster bells facing DOWN with yellow flames.
+  // =====================================================================
+  const leftThrust = ship ? Number(ship.leftThruster || 0) : 0;
+  const rightThrust = ship ? Number(ship.rightThruster || 0) : 0;
+
+  const drawSponsonUnit = (cx: number, label: string) => {
+    // Sponson body: straddles hull bottom (y=9), top overlaps hull, bottom below belly
+    const sx1 = cx - 10, sx2 = cx + 10;
+    const syTop = 2, syBot = 16; // overlaps hull (y=9), hangs below
+    ctx.fillStyle = gunmetalGrad;
+    ctx.strokeStyle = outline;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(sx1, syTop); ctx.lineTo(sx2, syTop); ctx.lineTo(sx2, syBot); ctx.lineTo(sx1, syBot); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // Leading fairing (angled toward viewer)
+    ctx.fillStyle = hullGrad;
+    ctx.beginPath();
+    ctx.moveTo(sx1+1, syTop+2); ctx.lineTo(sx1+3, syBot-2); ctx.lineTo(sx2-3, syBot-2); ctx.lineTo(sx2-1, syTop+2); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // 4 DOWNWARD THRUSTERS evenly spaced vertically on sponson face
+    const bellYs = [syTop + 3, syTop + 7, syBot - 5, syBot - 1];
+    for (const by of bellYs) {
+      // Bell housing (recessed)
+      ctx.fillStyle = gunmetalDark;
+      ctx.fillRect(cx - 3, by - 2.5, 6, 5);
+      // Bell nozzle facing down
+      ctx.fillStyle = gunmetalGrad;
+      ctx.strokeStyle = outline; ctx.lineWidth = 0.9;
+      ctx.beginPath();
+      ctx.moveTo(cx - 4, by - 2.5); ctx.lineTo(cx + 4, by - 2.5); ctx.lineTo(cx + 2.5, by + 4); ctx.lineTo(cx - 2.5, by + 4); ctx.closePath();
+      ctx.fill(); ctx.stroke();
+      // Yellow nozzle lip (not blue)
+      ctx.strokeStyle = '#EAB308'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(cx - 2.5, by + 4); ctx.lineTo(cx + 2.5, by + 4); ctx.stroke();
+      // Throat glow - yellow warm, not blue
+      ctx.save();
+      ctx.globalAlpha = 0.6;
+      ctx.fillStyle = '#FDE047';
+      ctx.beginPath(); ctx.ellipse(cx, by + 1.5, 2.0, 2.0, 0, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+      // Black throat core
+      ctx.fillStyle = recess;
+      ctx.beginPath(); ctx.ellipse(cx, by + 1.5, 1.6, 0.8, 0, 0, Math.PI*2); ctx.fill();
+    }
+    // YELLOW FLAME PLUMES (grouped, like Juggernaut) - down from each bell
+    // All 4 flames fire together when this side's throttle is active
+    const thrustActive = label === 'left' ? (leftThrust > 0.05) : (rightThrust > 0.05);
+    const thrustLevel = label === 'left' ? leftThrust : rightThrust;
+    if (thrustActive && thrustLevel > 0.05) {
+      ctx.save();
+      const flameLen = (14 + Math.random()*8) * Math.min(2.0, thrustLevel * 1.5);
+      for (const by of bellYs) {
+        const fy = by + 4; // flame starts at bell lip (down)
+        // Yellow-orange flame (no blue!)
+        const grad = ctx.createLinearGradient(cx, fy, cx, fy + flameLen);
+        grad.addColorStop(0, '#FDE047');
+        grad.addColorStop(0.35, '#F59E0B');
+        grad.addColorStop(0.7, '#D97706');
+        grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(cx - 3.5, fy); ctx.lineTo(cx + 3.5, fy); ctx.lineTo(cx + 0.8, fy + flameLen); ctx.lineTo(cx - 0.8, fy + flameLen); ctx.closePath();
+        ctx.fill();
+        // Inner white-hot core
+        const core = ctx.createLinearGradient(cx, fy, cx, fy + flameLen*0.55);
+        core.addColorStop(0, '#FFFFFF');
+        core.addColorStop(0.3, '#FDE047');
+        core.addColorStop(0.85, '#D97706');
+        core.addColorStop(1, 'rgba(217, 119, 6, 0)');
+        ctx.fillStyle = core;
+        ctx.beginPath();
+        ctx.moveTo(cx - 2.2, fy); ctx.lineTo(cx + 2.2, fy); ctx.lineTo(cx + 0.5, fy + flameLen*0.55); ctx.lineTo(cx - 0.5, fy + flameLen*0.55); ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  };
+
+  // REAR sponson (near stern, left side of profile, clear of engine block at x=-58)
+  drawSponsonUnit(-32, 'left');
+  // FRONT sponson (under cabin/door, near cab at x=30-40)
+  drawSponsonUnit(34, 'right');
+
+
 
   // 14. LOWER HULL PANELS + FINAL DETAIL (belly skid rail, light)
   // Belly armor skid rail (dark run under the bay hatch gap)

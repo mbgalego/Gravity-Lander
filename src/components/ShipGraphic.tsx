@@ -28,7 +28,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
         : (modelId === 'juggernaut'
           ? '-96 -78 174 122'
           : (modelId === 'leviathan'
-            ? '-76 -20 152 54'
+            ? '-76 -26 152 58'
             : (isLongCraft ? '-72 -24 144 52' : '-40 -40 80 80')))));
 
   const effectiveSize = size === undefined && !className ? 56 : size;
@@ -36,7 +36,7 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
     ? {
         width: effectiveSize,
         height: isLongCraft
-          ? Math.round(effectiveSize * (modelId === 'behemoth' ? 68 / 150 : (modelId === 'mammoth' ? 98 / 140 : (modelId === 'juggernaut' ? 122 / 174 : (modelId === 'leviathan' ? 54 / 152 : ((modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath') ? 54 / 144 : 52 / 144))))))
+          ? Math.round(effectiveSize * (modelId === 'behemoth' ? 68 / 150 : (modelId === 'mammoth' ? 98 / 140 : (modelId === 'juggernaut' ? 122 / 174 : (modelId === 'leviathan' ? 58 / 152 : ((modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath') ? 54 / 144 : 52 / 144))))))
           : effectiveSize,
       }
     : undefined;
@@ -575,18 +575,18 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
           </linearGradient>
 
           {/* Leviathan Hull / Gunmetal / Tank Gradients (matches drawLeviathan) */}
-          <linearGradient id="leviathan-hull" gradientUnits="userSpaceOnUse" x1="0" y1="-17" x2="0" y2="18">
+          <linearGradient id="leviathan-hull" gradientUnits="userSpaceOnUse" x1="0" y1="-22" x2="0" y2="18">
             <stop offset="0" stopColor="#A9B0B6" />
             <stop offset="0.35" stopColor="#8A9298" />
             <stop offset="0.8" stopColor="#6E767C" />
             <stop offset="1" stopColor="#565E64" />
           </linearGradient>
-          <linearGradient id="leviathan-gunmetal" gradientUnits="userSpaceOnUse" x1="0" y1="-17" x2="0" y2="18">
+          <linearGradient id="leviathan-gunmetal" gradientUnits="userSpaceOnUse" x1="0" y1="-22" x2="0" y2="18">
             <stop offset="0" stopColor="#4A5259" />
             <stop offset="0.5" stopColor="#394046" />
             <stop offset="1" stopColor="#262C31" />
           </linearGradient>
-          <linearGradient id="leviathan-tank" gradientUnits="userSpaceOnUse" x1="0" y1="-14" x2="0" y2="-5">
+          <linearGradient id="leviathan-tank" gradientUnits="userSpaceOnUse" x1="0" y1="-19" x2="0" y2="-5">
             <stop offset="0" stopColor="#C2C8CD" />
             <stop offset="0.4" stopColor="#8A9298" />
             <stop offset="1" stopColor="#6E767C" />
@@ -2958,18 +2958,18 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
           </g>
         )}
 
-<linearGradient id="leviathan-hull" x1="0" y1="-17" x2="0" y2="18">
+<linearGradient id="leviathan-hull" x1="0" y1="-22" x2="0" y2="18">
   <stop offset="0" stopColor="#A9B0B6"/>
   <stop offset="0.35" stopColor="#8A9298"/>
   <stop offset="0.8" stopColor="#6E767C"/>
   <stop offset="1" stopColor="#565E64"/>
 </linearGradient>
-<linearGradient id="leviathan-gunmetal" x1="0" y1="-17" x2="0" y2="18">
+<linearGradient id="leviathan-gunmetal" x1="0" y1="-22" x2="0" y2="18">
   <stop offset="0" stopColor="#4A5259"/>
   <stop offset="0.5" stopColor="#394046"/>
   <stop offset="1" stopColor="#262C31"/>
 </linearGradient>
-<linearGradient id="leviathan-tank" x1="0" y1="-14" x2="0" y2="-5">
+<linearGradient id="leviathan-tank" x1="0" y1="-19" x2="0" y2="-5">
   <stop offset="0" stopColor="#C2C8CD"/>
   <stop offset="0.4" stopColor="#8A9298"/>
   <stop offset="1" stopColor="#6E767C"/>
@@ -2977,26 +2977,16 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
 
 {modelId === 'leviathan' && (
   <g>
-    <rect x="-48.5" y="17" width="5" height="3" fill="#262C31"/>
-    <line x1="-46" y1="19" x2="-46" y2="28" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
-    <circle cx="-46" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
-    <ellipse cx="-46" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
-    <ellipse cx="-41.8" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
-    <rect x="-20.5" y="17" width="5" height="3" fill="#262C31"/>
-    <line x1="-18" y1="19" x2="-18" y2="28" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
-    <circle cx="-18" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
-    <ellipse cx="-18" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
-    <ellipse cx="-13.8" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
-    <rect x="19.5" y="17" width="5" height="3" fill="#262C31"/>
-    <line x1="22" y1="19" x2="22" y2="28" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
-    <circle cx="22" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
-    <ellipse cx="22" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
-    <ellipse cx="26.2" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
-    <rect x="45.5" y="17" width="5" height="3" fill="#262C31"/>
-    <line x1="48" y1="19" x2="48" y2="28" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
-    <circle cx="48" cy="28" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
-    <ellipse cx="48" cy="30" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
-    <ellipse cx="52.2" cy="30" rx="2.6" ry="1.5" fill="#EA580C"/>
+    <rect x="-48.5" y="15.5" width="5" height="2.5" fill="#262C31"/>
+    <line x1="-46" y1="17" x2="-46" y2="20.5" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
+    <circle cx="-46" cy="20.5" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
+    <ellipse cx="-46" cy="22.5" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
+    <ellipse cx="-41.8" cy="22.5" rx="2.6" ry="1.5" fill="#EA580C"/>
+    <rect x="45.5" y="15.5" width="5" height="2.5" fill="#262C31"/>
+    <line x1="48" y1="17" x2="48" y2="20.5" stroke="url(#leviathan-piston)" strokeWidth="2.2"/>
+    <circle cx="48" cy="20.5" r="1.8" fill="#394046" stroke="#16191C" strokeWidth="0.8"/>
+    <ellipse cx="48" cy="22.5" rx="7.5" ry="2.6" fill="#262C31" stroke="#16191C" strokeWidth="0.9"/>
+    <ellipse cx="52.2" cy="22.5" rx="2.6" ry="1.5" fill="#EA580C"/>
     {/* 2. SPONSON UNITS (2 on fuselage face, straddling hull bottom) */}
     {/* Rear sponson at x=-32 (near stern, clear of engine block at x=-58) */}
     <polygon points="-42,2 -22,2 -22,16 -42,16" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.2"/>
@@ -3059,56 +3049,56 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
     <ellipse cx="32" cy="12" rx="1.6" ry="0.8" fill="#1D2226"/>
     {/* Conduit line along inner edge */}
     <line x1="47" y1="2" x2="47" y2="16" stroke="#EA580C" strokeWidth="0.9"/>
-    <polygon points="-46,-8 48,-8 58,-6 64,-4 70,-1 72,1 68,5 60,7 50,9 -40,9 -46,5" fill="url(#leviathan-hull)" stroke="#16191C" strokeWidth="1.8"/>
-    <line x1="-44" y1="-6" x2="46" y2="-6" stroke="#6E767C" strokeWidth="0.8"/>
-    <polygon points="46,-4 60,-3 68,3 60,7 48,7 44,1" fill="#6E767C" stroke="#16191C" strokeWidth="1.0"/>
-    <polygon points="36,-8 50,-7.2 56,-5.4 54,-2.6 47,-3.2 36,-4" fill="#4C5C68" stroke="#16191C" strokeWidth="1.2"/>
-    <line x1="42" y1="-7.7" x2="42" y2="-3.5" stroke="#262C31" strokeWidth="1.5"/>
-    <line x1="48" y1="-7.3" x2="48" y2="-3.0" stroke="#262C31" strokeWidth="1.5"/>
-    <line x1="37.5" y1="-7.2" x2="49" y2="-6.6" stroke="#8FA0AD" strokeWidth="0.9"/>
-    <circle cx="36" cy="-4.9" r="0.5" fill="#C2C8CD"/>
-    <circle cx="38" cy="-4.9" r="0.5" fill="#C2C8CD"/>
-    <circle cx="40" cy="-4.9" r="0.5" fill="#C2C8CD"/>
-    <circle cx="44" cy="-4.9" r="0.5" fill="#C2C8CD"/>
-    <circle cx="46" cy="-4.9" r="0.5" fill="#C2C8CD"/>
-    <circle cx="50" cy="-4.9" r="0.5" fill="#C2C8CD"/>
+    <polygon points="-46,-11 48,-11 58,-8 64,-5 70,-1 72,1 68,6 60,8 50,10 -40,10 -46,6" fill="url(#leviathan-hull)" stroke="#16191C" strokeWidth="1.8"/>
+    <line x1="-44" y1="-8.5" x2="46" y2="-8.5" stroke="#6E767C" strokeWidth="0.8"/>
+    <polygon points="46,-5 60,-3.5 68,4 60,8 48,8 44,1" fill="#6E767C" stroke="#16191C" strokeWidth="1.0"/>
+    <polygon points="36,-11 50,-9.8 56,-7.0 54,-3.0 47,-4.0 36,-5.5" fill="#4C5C68" stroke="#16191C" strokeWidth="1.2"/>
+    <line x1="42" y1="-10.4" x2="42" y2="-4.3" stroke="#262C31" strokeWidth="1.5"/>
+    <line x1="48" y1="-10.0" x2="48" y2="-3.8" stroke="#262C31" strokeWidth="1.5"/>
+    <line x1="37.5" y1="-9.8" x2="49" y2="-8.8" stroke="#8FA0AD" strokeWidth="0.9"/>
+    <circle cx="36" cy="-6.5" r="0.5" fill="#C2C8CD"/>
+    <circle cx="38" cy="-6.5" r="0.5" fill="#C2C8CD"/>
+    <circle cx="40" cy="-6.5" r="0.5" fill="#C2C8CD"/>
+    <circle cx="44" cy="-6.5" r="0.5" fill="#C2C8CD"/>
+    <circle cx="46" cy="-6.5" r="0.5" fill="#C2C8CD"/>
+    <circle cx="50" cy="-6.5" r="0.5" fill="#C2C8CD"/>
     <text x="46" y="4.4" fill="#F4F4F5" fontSize="4.2" fontFamily="monospace" fontWeight="bold" textAnchor="middle" dominantBaseline="middle">325</text>
     <line x1="36" y1="7.6" x2="56" y2="7.6" stroke="#F4F4F5" strokeWidth="0.6" opacity="0.5"/>
-    <polygon points="24,-5.5 33,-5.5 33,4 24,4" fill="#1D2226" stroke="#16191C" strokeWidth="1.1"/>
-    <polygon points="26,-4 31,-4 31,2.5 26,2.5" fill="none" stroke="#394046" strokeWidth="1.0"/>
-    <line x1="27.5" y1="-2" x2="29.5" y2="-2" stroke="#EA580C" strokeWidth="1.1"/>
-    <line x1="27.5" y1="0.5" x2="29.5" y2="0.5" stroke="#EA580C" strokeWidth="1.1"/>
-    <rect x="23.6" y="-4.5" width="1" height="1.6" fill="#4A5259"/>
+    <polygon points="24,-7.5 33,-7.5 33,4 24,4" fill="#1D2226" stroke="#16191C" strokeWidth="1.1"/>
+    <polygon points="26,-6 31,-6 31,2.5 26,2.5" fill="none" stroke="#394046" strokeWidth="1.0"/>
+    <line x1="27.5" y1="-3.5" x2="29.5" y2="-3.5" stroke="#EA580C" strokeWidth="1.1"/>
+    <line x1="27.5" y1="-1" x2="29.5" y2="-1" stroke="#EA580C" strokeWidth="1.1"/>
+    <rect x="23.6" y="-6.5" width="1" height="1.6" fill="#4A5259"/>
     <rect x="23.6" y="1" width="1" height="1.6" fill="#4A5259"/>
-    <rect x="17" y="-9" width="3" height="3" fill="#394046"/>
-    <line x1="18" y1="-6" x2="18" y2="-15.5" stroke="#4A5259" strokeWidth="1.6"/>
-    <line x1="14" y1="-11.5" x2="22" y2="-11.5" stroke="#394046" strokeWidth="0.9"/>
-    <line x1="14" y1="-12.8" x2="22" y2="-12.8" stroke="#394046" strokeWidth="0.9"/>
-    <line x1="14" y1="-14.2" x2="22" y2="-14.2" stroke="#394046" strokeWidth="0.9"/>
-    <line x1="14" y1="-15.6" x2="22" y2="-15.6" stroke="#394046" strokeWidth="0.9"/>
-    <circle cx="18" cy="-16.2" r="1.1" fill="#ef4444"/>
-    <polygon points="-40,-14 15,-14 15,-5 -40,-5" fill="url(#leviathan-tank)" stroke="#16191C" strokeWidth="1.2"/>
-    <rect x="-41.5" y="-14.5" width="3" height="10" fill="#394046"/>
-    <rect x="13.5" y="-14.5" width="3" height="10" fill="#394046"/>
-    <line x1="-34" y1="-13.5" x2="-34" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="-28" y1="-13.5" x2="-28" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="-22" y1="-13.5" x2="-22" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="-16" y1="-13.5" x2="-16" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="-10" y1="-13.5" x2="-10" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="-4" y1="-13.5" x2="-4" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="2" y1="-13.5" x2="2" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="8" y1="-13.5" x2="8" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="14" y1="-13.5" x2="14" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
-    <line x1="-38" y1="-12.8" x2="13" y2="-12.8" stroke="#C2C8CD" strokeWidth="0.8"/>
-    <polygon points="-9,-17 7,-17 7,-5 -9,-5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.1"/>
-    <line x1="-8" y1="-16" x2="6" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
-    <line x1="6" y1="-16" x2="-8" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
-    <line x1="-5" y1="-16" x2="-5" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
-    <line x1="-1" y1="-16" x2="-1" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
-    <line x1="3" y1="-16" x2="3" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
-    <rect x="-9.8" y="-17" width="1.6" height="1.6" fill="#EA580C"/>
+    <rect x="17" y="-12" width="3" height="3" fill="#394046"/>
+    <line x1="18" y1="-9" x2="18" y2="-20.5" stroke="#4A5259" strokeWidth="1.6"/>
+    <line x1="14" y1="-14.5" x2="22" y2="-14.5" stroke="#394046" strokeWidth="0.9"/>
+    <line x1="14" y1="-16.0" x2="22" y2="-16.0" stroke="#394046" strokeWidth="0.9"/>
+    <line x1="14" y1="-17.5" x2="22" y2="-17.5" stroke="#394046" strokeWidth="0.9"/>
+    <line x1="14" y1="-19.0" x2="22" y2="-19.0" stroke="#394046" strokeWidth="0.9"/>
+    <circle cx="18" cy="-21.2" r="1.1" fill="#ef4444"/>
+    <polygon points="-40,-19 15,-19 15,-5 -40,-5" fill="url(#leviathan-tank)" stroke="#16191C" strokeWidth="1.2"/>
+    <rect x="-41.5" y="-19.5" width="3" height="15" fill="#394046"/>
+    <rect x="13.5" y="-19.5" width="3" height="15" fill="#394046"/>
+    <line x1="-34" y1="-18.5" x2="-34" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-28" y1="-18.5" x2="-28" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-22" y1="-18.5" x2="-22" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-16" y1="-18.5" x2="-16" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-10" y1="-18.5" x2="-10" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-4" y1="-18.5" x2="-4" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="2" y1="-18.5" x2="2" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="8" y1="-18.5" x2="8" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="14" y1="-18.5" x2="14" y2="-5.5" stroke="#565E64" strokeWidth="0.9"/>
+    <line x1="-38" y1="-17.8" x2="13" y2="-17.8" stroke="#C2C8CD" strokeWidth="0.8"/>
+    <polygon points="-9,-24 7,-24 7,-5 -9,-5" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.1"/>
+    <line x1="-8" y1="-23" x2="6" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <line x1="6" y1="-23" x2="-8" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <line x1="-5" y1="-23" x2="-5" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <line x1="-1" y1="-23" x2="-1" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <line x1="3" y1="-23" x2="3" y2="-6" stroke="#262C31" strokeWidth="0.9"/>
+    <rect x="-9.8" y="-24" width="1.6" height="1.6" fill="#EA580C"/>
     <rect x="-9.8" y="-5" width="1.6" height="1.6" fill="#EA580C"/>
-    <rect x="6.2" y="-17" width="1.6" height="1.6" fill="#EA580C"/>
+    <rect x="6.2" y="-24" width="1.6" height="1.6" fill="#EA580C"/>
     <rect x="6.2" y="-5" width="1.6" height="1.6" fill="#EA580C"/>
     <line x1="-24" y1="-5" x2="-24" y2="7" stroke="#EA580C" strokeWidth="1.0"/>
     <line x1="-17" y1="-5" x2="-17" y2="7" stroke="#EA580C" strokeWidth="1.0"/>
@@ -3126,24 +3116,24 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
     <circle cx="3" cy="7.5" r="1.4" fill="#4A5259"/>
     <line x1="-4" y1="7.5" x2="-2" y2="7.5" stroke="#394046" strokeWidth="1.0"/>
     <line x1="10" y1="7.5" x2="8" y2="7.5" stroke="#394046" strokeWidth="1.0"/>
-    <polygon points="-46,-10 -62,-10 -62,15 -46,15" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.3"/>
-    <rect x="-60" y="-8" width="2" height="6" fill="#262C31"/>
-    <rect x="-57" y="-8" width="2" height="6" fill="#262C31"/>
-    <rect x="-54" y="-8" width="2" height="6" fill="#262C31"/>
-    <rect x="-60" y="8" width="2" height="6" fill="#262C31"/>
-    <rect x="-57" y="8" width="2" height="6" fill="#262C31"/>
-    <rect x="-54" y="8" width="2" height="6" fill="#262C31"/>
-    <line x1="-46" y1="12" x2="-60" y2="12" stroke="#EA580C" strokeWidth="1.0"/>
+    <polygon points="-46,-14 -62,-14 -62,16 -46,16" fill="url(#leviathan-gunmetal)" stroke="#16191C" strokeWidth="1.3"/>
+    <rect x="-60" y="-11" width="2" height="6" fill="#262C31"/>
+    <rect x="-57" y="-11" width="2" height="6" fill="#262C31"/>
+    <rect x="-54" y="-11" width="2" height="6" fill="#262C31"/>
+    <rect x="-60" y="9" width="2" height="6" fill="#262C31"/>
+    <rect x="-57" y="9" width="2" height="6" fill="#262C31"/>
+    <rect x="-54" y="9" width="2" height="6" fill="#262C31"/>
+    <line x1="-46" y1="13" x2="-60" y2="13" stroke="#EA580C" strokeWidth="1.0"/>
     <line x1="-46" y1="3" x2="-58" y2="3" stroke="#EA580C" strokeWidth="1.0"/>
+    <line x1="-60" y1="-8" x2="-48" y2="-8" stroke="#4A5259" strokeWidth="0.7"/>
     <line x1="-60" y1="-6" x2="-48" y2="-6" stroke="#4A5259" strokeWidth="0.7"/>
-    <line x1="-60" y1="-4" x2="-48" y2="-4" stroke="#4A5259" strokeWidth="0.7"/>
-    <path d="M-47.4,-9 A3.4,3.4 0 0 1 -40.6,-9 Z" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
-    <rect x="-47.4" y="-10" width="6.8" height="1.6" fill="#394046"/>
-    <path d="M-48.6,-11 A4.6,4.6 0 0 1 -40.4,-11" fill="none" stroke="#4A5259" strokeWidth="1.6"/>
-    <line x1="-45.8" y1="-8.6" x2="-43.2" y2="-12.4" stroke="#394046" strokeWidth="0.8"/>
-    <circle cx="-43" cy="-12.6" r="1.0" fill="#262C31"/>
-    <circle cx="-47" cy="-8" r="0.8" fill="#22c55e"/>
-    <circle cx="-44" cy="-13.4" r="0.9" fill="#ef4444"/>
+    <path d="M-47.4,-13 A3.4,3.4 0 0 1 -40.6,-13 Z" fill="#394046" stroke="#16191C" strokeWidth="0.9"/>
+    <rect x="-47.4" y="-14" width="6.8" height="1.6" fill="#394046"/>
+    <path d="M-48.6,-16.5 A4.6,4.6 0 0 1 -40.4,-16.5" fill="none" stroke="#4A5259" strokeWidth="1.6"/>
+    <line x1="-45.8" y1="-14.1" x2="-43.2" y2="-17.9" stroke="#394046" strokeWidth="0.8"/>
+    <circle cx="-43" cy="-18.1" r="1.0" fill="#262C31"/>
+    <circle cx="-47" cy="-12" r="0.8" fill="#22c55e"/>
+    <circle cx="-44" cy="-18.5" r="0.9" fill="#ef4444"/>
     <polygon points="-58,-1.5 -58,7.5 -73.5,9.5 -73.5,-3.5" fill="#394046" stroke="#16191C" strokeWidth="1.6"/>
     <line x1="-73.5" y1="-3.5" x2="-73.5" y2="9.5" stroke="#C2410C" strokeWidth="2.0"/>
     <ellipse cx="-73.5" cy="3" rx="1.6" ry="5.9" fill="#334155" opacity="0.6"/>
