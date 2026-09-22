@@ -2963,8 +2963,8 @@ export class GameRenderer {
     const lp = config.localPoints;
 
     // 1. Thruster Plumes / Flame Jets & Bright Afterburner Glow Base
-    // Skip for Juggernaut - it has 4 custom thrusters drawn in drawJuggernaut()
-    if (config.id !== 'juggernaut') {
+    // Skip for Juggernaut & Leviathan - they have custom thruster plumes in their draw functions
+    if (config.id !== 'juggernaut' && config.id !== 'leviathan') {
       const halfWidth = 5.5 * Math.min(1.6, rScale * 0.85);
       const coreWidth = 3.2 * Math.min(1.6, rScale * 0.85);
 

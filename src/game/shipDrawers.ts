@@ -7360,99 +7360,92 @@ export function drawLeviathan(
   }
 
   // =====================================================================
-  // 2. VTOL SPONSON PODS (twin rectangular platforms w/ 4 bells each)
+  // 2. SPONSON UNITS (2 modules on fuselage face, straddling hull bottom)
+  //    Rear sponson near stern (clear of main engine bells at x=-58)
+  //    Front sponson under cabin/door (near x=30, below canopy y=-8)
+  //    Each has 4 vertical thruster bells facing DOWN with yellow flames.
   // =====================================================================
-  const drawSponson = (x1: number, x2: number) => {
-    const cx = (x1 + x2) / 2;
+  const leftThrust = ship ? Number(ship.leftThruster || 0) : 0;
+  const rightThrust = ship ? Number(ship.rightThruster || 0) : 0;
+
+  const drawSponsonUnit = (cx: number, label: string) => {
+    // Sponson body: straddles hull bottom (y=9), top overlaps hull, bottom below belly
+    const sx1 = cx - 10, sx2 = cx + 10;
+    const syTop = 2, syBot = 16; // overlaps hull (y=9), hangs below
     ctx.fillStyle = gunmetalGrad;
     ctx.strokeStyle = outline;
     ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.moveTo(x1, 6);
-    ctx.lineTo(x1, 18);
-    ctx.lineTo(x2, 18);
-    ctx.lineTo(x2, 6);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+    ctx.moveTo(sx1, syTop); ctx.lineTo(sx2, syTop); ctx.lineTo(sx2, syBot); ctx.lineTo(sx1, syBot); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // Leading fairing (angled toward viewer)
     ctx.fillStyle = hullGrad;
-    ctx.strokeStyle = hullDarker;
-    ctx.lineWidth = 1.1;
     ctx.beginPath();
-    ctx.moveTo(x1 + 1, 6);
-    ctx.lineTo(x1 + 3, 2);
-    ctx.lineTo(x2 - 3, 2);
-    ctx.lineTo(x2 - 1, 6);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = gunmetal;
-    ctx.strokeStyle = outline;
-    ctx.lineWidth = 0.9;
-    ctx.beginPath();
-    ctx.arc(cx, 3.6, 3.0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-    ctx.strokeStyle = hullDarker;
-    ctx.lineWidth = 0.8;
-    ctx.beginPath();
-    ctx.arc(cx, 3.6, 1.9, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.fillStyle = orange;
-    for (const hx of [x1 + 3, x2 - 5]) {
-      ctx.fillRect(hx, 3.4, 3.2, 1.4);
-    }
-    ctx.strokeStyle = recess;
-    ctx.lineWidth = 1.6;
-    for (let sy = 9; sy <= 16; sy += 3.5) {
-      ctx.beginPath();
-      ctx.moveTo(x1 + 2.5, sy);
-      ctx.lineTo(x1 + 7.5, sy);
-      ctx.moveTo(x2 - 7.5, sy);
-      ctx.lineTo(x2 - 2.5, sy);
-      ctx.stroke();
-    }
-    const bellXs = [x1 + 3, x1 + 9.3, x1 + 15.6, x2 - 3];
-    for (const bx of bellXs) {
+    ctx.moveTo(sx1+1, syTop+2); ctx.lineTo(sx1+3, syBot-2); ctx.lineTo(sx2-3, syBot-2); ctx.lineTo(sx2-1, syTop+2); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // 4 DOWNWARD THRUSTERS evenly spaced vertically on sponson face
+    const bellYs = [syTop + 3, syTop + 7, syBot - 5, syBot - 1];
+    for (const by of bellYs) {
+      // Bell housing (recessed)
       ctx.fillStyle = gunmetalDark;
-      ctx.fillRect(bx - 1.6, 18, 3.2, 2.5);
-      const bellGrad = ctx.createLinearGradient(bx, 18, bx, 25);
-      bellGrad.addColorStop(0, gunmetalLight);
-      bellGrad.addColorStop(1, gunmetalDark);
-      ctx.fillStyle = bellGrad;
-      ctx.strokeStyle = outline;
-      ctx.lineWidth = 0.9;
+      ctx.fillRect(cx - 3, by - 2.5, 6, 5);
+      // Bell nozzle facing down
+      ctx.fillStyle = gunmetalGrad;
+      ctx.strokeStyle = outline; ctx.lineWidth = 0.9;
       ctx.beginPath();
-      ctx.moveTo(bx - 3.0, 20.5);
-      ctx.lineTo(bx + 3.0, 20.5);
-      ctx.lineTo(bx + 4.4, 25);
-      ctx.lineTo(bx - 4.4, 25);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      ctx.strokeStyle = orangeDark;
-      ctx.lineWidth = 1.1;
-      ctx.beginPath();
-      ctx.moveTo(bx - 4.4, 25);
-      ctx.lineTo(bx + 4.4, 25);
-      ctx.stroke();
+      ctx.moveTo(cx - 4, by - 2.5); ctx.lineTo(cx + 4, by - 2.5); ctx.lineTo(cx + 2.5, by + 4); ctx.lineTo(cx - 2.5, by + 4); ctx.closePath();
+      ctx.fill(); ctx.stroke();
+      // Yellow nozzle lip (not blue)
+      ctx.strokeStyle = '#EAB308'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(cx - 2.5, by + 4); ctx.lineTo(cx + 2.5, by + 4); ctx.stroke();
+      // Throat glow - yellow warm, not blue
+      ctx.save();
+      ctx.globalAlpha = 0.6;
+      ctx.fillStyle = '#FDE047';
+      ctx.beginPath(); ctx.ellipse(cx, by + 1.5, 2.0, 2.0, 0, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+      // Black throat core
       ctx.fillStyle = recess;
-      ctx.beginPath();
-      ctx.ellipse(bx, 21.2, 2.0, 0.8, 0, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx, by + 1.5, 1.6, 0.8, 0, 0, Math.PI*2); ctx.fill();
     }
-    ctx.strokeStyle = orange;
-    ctx.lineWidth = 0.9;
-    ctx.beginPath();
-    ctx.moveTo(x1 + 10, 6);
-    ctx.lineTo(x1 + 10, 18);
-    ctx.moveTo(x2 - 10, 6);
-    ctx.lineTo(x2 - 10, 18);
-    ctx.stroke();
+    // YELLOW FLAME PLUMES (grouped, like Juggernaut) - down from each bell
+    // All 4 flames fire together when this side's throttle is active
+    const thrustActive = label === 'left' ? (leftThrust > 0.05) : (rightThrust > 0.05);
+    const thrustLevel = label === 'left' ? leftThrust : rightThrust;
+    if (thrustActive && thrustLevel > 0.05) {
+      ctx.save();
+      const flameLen = (14 + Math.random()*8) * Math.min(2.0, thrustLevel * 1.5);
+      for (const by of bellYs) {
+        const fy = by + 4; // flame starts at bell lip (down)
+        // Yellow-orange flame (no blue!)
+        const grad = ctx.createLinearGradient(cx, fy, cx, fy + flameLen);
+        grad.addColorStop(0, '#FDE047');
+        grad.addColorStop(0.35, '#F59E0B');
+        grad.addColorStop(0.7, '#D97706');
+        grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(cx - 3.5, fy); ctx.lineTo(cx + 3.5, fy); ctx.lineTo(cx + 0.8, fy + flameLen); ctx.lineTo(cx - 0.8, fy + flameLen); ctx.closePath();
+        ctx.fill();
+        // Inner white-hot core
+        const core = ctx.createLinearGradient(cx, fy, cx, fy + flameLen*0.55);
+        core.addColorStop(0, '#FFFFFF');
+        core.addColorStop(0.3, '#FDE047');
+        core.addColorStop(0.85, '#D97706');
+        core.addColorStop(1, 'rgba(217, 119, 6, 0)');
+        ctx.fillStyle = core;
+        ctx.beginPath();
+        ctx.moveTo(cx - 2.2, fy); ctx.lineTo(cx + 2.2, fy); ctx.lineTo(cx + 0.5, fy + flameLen*0.55); ctx.lineTo(cx - 0.5, fy + flameLen*0.55); ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
   };
 
-  drawSponson(-44, -16);
-  drawSponson(14, 42);
+  // REAR sponson (near stern, left side of profile, clear of engine block at x=-58)
+  drawSponsonUnit(-32, 'left');
+  // FRONT sponson (under cabin/door, near cab at x=30-40)
+  drawSponsonUnit(34, 'right');
 
   // =====================================================================
   // 3. MAIN HULL (long low slab + wedge bow, battleship gray)
