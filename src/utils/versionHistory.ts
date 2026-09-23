@@ -12,15 +12,131 @@ export interface VersionRelease {
   }[];
 }
 
-export const CURRENT_GAME_VERSION = 'v1.9.7';
+export const CURRENT_GAME_VERSION = 'v1.9.11';
 
 export const GAME_VERSION_HISTORY: VersionRelease[] = [
+  {
+    version: 'v1.9.11',
+    releaseDate: 'September 23, 2026',
+    title: 'Fleet Craft Visual Scaling Overhaul & ViewBox Optimization',
+    tag: 'LATEST',
+    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    summary:
+      'Comprehensive preview and close-up overhaul across all 21 spacecraft in the hangar. Re-architected individual SVG viewBox framing to eliminate dead margins, and enlarged the main start-menu preview deck and inspect close-up stage by 25%–45%, allowing intricate hull paneling, thrusters, sensor suites, and liveries to command the screen.',
+    categories: [
+      {
+        name: 'Precision ViewBox Framing',
+        iconType: 'physics',
+        items: [
+          'Engineered tailored viewBoxes with balanced 2–4 unit margins for all 21 spacecraft in the fleet',
+          'Eliminated wide empty padding on delta fighters (Viper, Wasp, Kestrel, Spectre, Vanguard), increasing rendered detail by +25%–40%',
+          'Fixed Nutcracker mining excavator preview clipping, fully revealing its rotated drill arm and searchlight beam',
+          'Tightly framed side-profile cruisers and transports (Apollo, Nautilus, Aegis, Orion, Titan, Goliath, Valkyrie) for maximum visual impact',
+        ],
+      },
+      {
+        name: 'Hangar Preview & Stage Enlargement',
+        iconType: 'system',
+        items: [
+          'Enlarged main menu start deck stage across all breakpoints (up to 420px on desktop and 240px on mobile)',
+          'Expanded the technical inspection modal showcase stage with enhanced radial hangar lighting and responsive height',
+          'Boosted catalogue ship card preview resolution and thumbnail sizes for immediate recognition',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.9.10',
+    releaseDate: 'September 23, 2026',
+    title: 'Serenity Clamshell Ramp Kinematics Correction & Articulation Overhaul',
+    tag: 'MAJOR',
+    tagColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/40',
+    summary:
+      'Corrected the cargo door and vehicle ramp deployment kinematics on Serenity. The articulated lower ramp now naturally unrolls downward and forward from the cargo bay threshold to the landing deck with hydraulic guide pistons and hazard traction treads, while the upper clamshell visor lifts upward for vehicle clearance.',
+    categories: [
+      {
+        name: 'Cargo Door Kinematics Correction',
+        iconType: 'physics',
+        items: [
+          'Corrected hinge knuckle placement to the lower cargo hold threshold at x=-10, y=12',
+          'Eliminated inverted rotation trajectory: ramp now smoothly descends counter-clockwise by 36° from flush belly alignment down to the terrain deck without clipping through the ground',
+          'Integrated upper clamshell visor articulation: visor slides upward during loading to clear rover cabs',
+          'Added dual hydraulic guide pistons that extend dynamically as the ramp lowers and retract when sealed',
+          'Updated locking seal state: when closed, status LED glows emerald green and latch pins lock into the hull',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.9.9',
+    releaseDate: 'September 23, 2026',
+    title: 'Serenity Scale Expansion (+40% Bulk) & Clamshell Cargo Deployment',
+    tag: 'MAJOR',
+    tagColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/40',
+    summary:
+      'Substantially enlarged Serenity by 40% across both in-game rigid-body physics and UI menus. Now comfortably dwarfs planetary rovers, revealing all intricate technical details including the Chinese calligraphy crest, Geoffrey Mandel diamond lattice trusses, interactive clamshell vehicle ramp deployment, dynamic VTOL nacelle pivoting, and enhanced high-resolution textures.',
+    categories: [
+      {
+        name: 'Scale & Detail Overhaul (+40%)',
+        iconType: 'physics',
+        items: [
+          'Enlarged in-game rigid-body scale from renderScale 1.55 to 2.17 (+40% physical dimensions, length 304px, height 109px)',
+          'Proportioned hull to realistically accommodate and dwarf planetary exploration rovers and heavy haulers',
+          'Recalibrated watertight rigid-body collision polygon (21 vertices) and local landing gear contact anchors to exact 2.17x world scale',
+          'Updated UI presentation: tightened menu & catalogue viewBox for +27.3% larger display in cards and hangar deck',
+          'Enhanced legible resolution of Chinese calligraphy medallion (宁静), serif SERENITY logotype, and 03-K64 military hull stencils',
+        ],
+      },
+      {
+        name: 'Interactive Mechanics & FX',
+        iconType: 'missions',
+        items: [
+          'Interactive clamshell vehicle loading ramp: smoothly lowers down to terrain deck when loading/unloading rovers with illuminated interior bay',
+          'Dynamic in-flight vectoring: rotating VTOL nacelles tilt automatically to provide forward and reverse thrust vectoring during flight',
+          'Pulsing Radion Accelerator core glow synchronized with thruster activity and engine throat flash',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.9.8',
+    releaseDate: 'September 23, 2026',
+    title: 'Serenity (Firefly-Class Transport) Arrives & Colonial Viper Battlestar Galactica Tribute',
+    tag: 'MAJOR',
+    tagColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/40',
+    summary:
+      'Introduced the iconic Serenity Firefly-Class 03-K64 mid-bulk transport craft with its signature arched neck, panoramic cockpit, rotating VTOL nacelles, cargo belly, docked shuttle, and incandescent pulsing "Firefly" reactor drive. Updated the Colonial Viper description with its Battlestar Galactica lineage.',
+    categories: [
+      {
+        name: 'New Craft: Firefly-Class Serenity',
+        iconType: 'missions',
+        items: [
+          'Added Serenity (03-K64 Mid-Bulk Transport) to the hangar registry with full specs, balanced flight handling, and vehicle bay',
+          'Dual-source visual fidelity: full SVG menu & catalogue graphic and real-time interactive canvas renderer',
+          'Modeled arched neck, bird-like cockpit bridge with multi-pane glass, pilot silhouette, and searchlight',
+          'Bulbous underbelly cargo deck with clamshell loading ramp, hazard warnings, and SERENITY fleet insignia stencil',
+          'Docked upper auxiliary passenger shuttle, catwalk spine, communications mast with blinking nav strobe',
+          'Rotating VTOL engine nacelles with forward intake cowls, cooling louvers, and downward rocket bells',
+          'Incandescent pulsing Firefly reactor core tail and dual trailing stabilizer fins',
+          'Articulated quad landing gear with chrome oleo shock struts, scissor links, and titanium saucer footpads',
+          'Watertight 26-vertex collision polygon enclosing full nose-to-tail and gear footprint',
+        ],
+      },
+      {
+        name: 'Lore & Tribute Updates',
+        iconType: 'system',
+        items: [
+          'Updated Colonial Viper (Mk II) description and manufacturer origin to proudly honor its iconic Battlestar Galactica heritage',
+        ],
+      },
+    ],
+  },
   {
     version: 'v1.9.7',
     releaseDate: 'September 22, 2026',
     title: 'Leviathan Titan Overhaul: Taller Profile, Short-Piston Landing Gear & 2-Strut Layout',
-    tag: 'LATEST',
-    tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+    tag: 'MAJOR',
+    tagColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-400/40',
     summary:
       'Overhauled the Leviathan Titan utility hauler with a stockier, taller hull profile (+25% vertical bulk and renderScale 1.75), streamlined low-profile landing gear with short-piston struts (ample clearance above VTOL bells), and updated physics collision polygon.',
     categories: [

@@ -170,7 +170,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
           >
             {/* Big craft render */}
             <div
-              className="w-full h-36 xs:h-44 sm:h-60 md:h-72 lg:h-80 max-h-[35vh] flex items-center justify-center relative rounded-xl sm:rounded-2xl bg-slate-950/40 border border-white/10 overflow-hidden shrink-0 pointer-events-none select-none"
+              className="w-full h-40 xs:h-52 sm:h-64 md:h-76 lg:h-84 max-h-[42vh] flex items-center justify-center relative rounded-xl sm:rounded-2xl bg-slate-950/40 border border-white/10 overflow-hidden shrink-0 pointer-events-none select-none p-2 sm:p-4"
               style={{
                 background:
                   'radial-gradient(ellipse at center, rgba(30,41,59,0.65) 0%, rgba(2,6,23,0.4) 60%, rgba(2,6,23,0.9) 100%)',
@@ -532,7 +532,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                         className="w-20 h-16 sm:w-24 sm:h-18 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shrink-0 cursor-pointer touch-manipulation"
                         aria-label={`View ${ship.name} close-up`}
                       >
-                        <ShipGraphic ship={ship} className="w-full h-full max-h-16" showGlow={isSelected} />
+                        <ShipGraphic ship={ship} className="w-full h-full max-h-18 sm:max-h-20" showGlow={isSelected} />
                       </div>
 
                       <div className="flex flex-col flex-1 min-w-0">
@@ -801,7 +801,7 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
                     openDetail(currentShip);
                   }
                 }}
-                className="w-48 h-32 sm:w-64 sm:h-44 md:w-72 md:h-48 flex items-center justify-center relative my-1 sm:my-2 transition-transform duration-200 cursor-pointer select-none touch-manipulation group"
+                className="w-56 h-38 sm:w-76 sm:h-52 md:w-92 md:h-60 lg:w-[420px] lg:h-64 flex items-center justify-center relative my-1 sm:my-2 transition-transform duration-200 cursor-pointer select-none touch-manipulation group"
                 aria-label={`View ${currentShip.name} close-up`}
               >
                 <ShipGraphic
@@ -986,8 +986,8 @@ export const ShipSelector: React.FC<ShipSelectorProps> = ({
               {/* Header */}
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-16 h-14 sm:w-20 sm:h-16 flex items-center justify-center relative shrink-0 pointer-events-none">
-                    <ShipGraphic ship={currentShip} className="w-full h-full max-h-16 pointer-events-none" showGlow={true} />
+                  <div className="w-20 h-16 sm:w-24 sm:h-18 flex items-center justify-center relative shrink-0 pointer-events-none">
+                    <ShipGraphic ship={currentShip} className="w-full h-full max-h-18 pointer-events-none" showGlow={true} />
                   </div>
                   <div>
                     <h3 className="font-mono text-base font-bold text-slate-100 flex items-center gap-2">

@@ -8,9 +8,9 @@ export const SHIPS: ShipModelConfig[] = [
     id: 'viper',
     name: 'Colonial Viper',
     codename: 'Mk II Interceptor',
-    tagline: 'Colonial Fleet Starfighter',
+    tagline: 'Battlestar Galactica Starfighter',
     classType: 'Interceptor',
-    description: 'The legendary Colonial Fleet starfighter — a fast, agile interceptor with a needle nose, broad delta wings and twin turbo-fusion engines. Its golden wing-root cannons and deep-blue faceted canopy are recognizable across the fleet.',
+    description: 'The iconic space-superiority starfighter from Battlestar Galactica (Viper Mk II) — a legendary, high-agility interceptor with a needle nose, broad delta wings, and twin turbo-fusion drives. Armed with twin wing-root kinetic cannons and a distinctive faceted canopy, it served as the frontline guardian of the Battlestar Galactica and the Colonial Fleet.',
     width: 90,
     height: 95,
     renderScale: 1.4,
@@ -28,7 +28,7 @@ export const SHIPS: ShipModelConfig[] = [
     roverBayCapacity: 'None (Starfighter Hull)',
     propulsionType: 'Twin Turbo-Fusion Reaction Drives',
     operationalCeiling: 'Atmospheric & Space Intercept',
-    manufactureOrigin: 'Colonial Fleet Yards (Ragnar Anchorage)',
+    manufactureOrigin: 'Battlestar Galactica Flight Deck / Colonial Fleet',
     primaryColor: '#cbd5e1',
     accentColor: '#ef4444',
     visorColor: '#1e1b4b',
@@ -1358,6 +1358,80 @@ export const SHIPS: ShipModelConfig[] = [
       stability: 5,
       thrust: 5,
       armor: 5,
+    },
+  },
+  {
+    id: 'serenity',
+    name: 'Serenity',
+    codename: '03-K64 Firefly Transport',
+    tagline: 'Class B Mid-Bulk Cargo Transport',
+    classType: 'Mid-Bulk Transport',
+    description: 'A pixel-perfect recreation of the iconic Firefly-class 03-K64 mid-bulk transport Serenity from the master technical schematics. Features the signature arched neck, forward-raked faceted observation cockpit, dual photovoltaic solar cell arrays, midships rotating VTOL turbofan nacelles with diamond lattice structural truss, clamshell cargo hold, and the massive aft spherical radion accelerator Firefly fusion drive with external coolant plumbing and ventral stabilizer wing.',
+    width: 304,
+    height: 109,
+    renderScale: 2.17,
+    maxFuel: 320,
+    thrustMultiplier: 1.36,
+    torqueMultiplier: 1.05,
+    mass: 1.68,
+    armor: 0.52,
+    emptyMassTons: 148.5,
+    maxThrustKn: 645,
+    twr: 1.62,
+    rcsResponseMs: 36,
+    armorRatingMm: 125,
+    cargoHookCapacityKg: 3200,
+    roverBayCapacity: 'Internal Clamshell Cargo Hold (MF-813 Mule & Rover Compatible)',
+    propulsionType: 'Standard Radion/Accelerator Core + Twin Rotating VTOL Turbofans',
+    operationalCeiling: 'Planetary Atmospheric Entry & Deep Border-Space Transport',
+    manufactureOrigin: 'Allied Spacecraft Corp. (Osiris) / Firefly Ship Works (Hera)',
+    primaryColor: '#cbd5e1',
+    accentColor: '#2563eb',
+    visorColor: '#38bdf8',
+    footpadSpan: 67.27,
+    canCarryVehicles: true,
+    isHeavyVehicleCarrier: false,
+    localPoints: {
+      nose: { x: -143.22, y: -13.02 },
+      leftShoulder: { x: -104.16, y: -30.38 },
+      rightShoulder: { x: 91.14, y: -34.72 },
+      leftHip: { x: -138.88, y: 0.0 },
+      rightHip: { x: 130.2, y: 0.0 },
+      leftFoot: { x: -34.72, y: 43.4 },
+      rightFoot: { x: 32.55, y: 43.4 },
+      leftThrusterPos: { x: -4.34, y: 34.72 },
+      rightThrusterPos: { x: 78.12, y: 34.72 },
+    },
+    // Watertight 21-vertex polygon tracing the official Firefly schematic profile (+40% scale, raw × 2.17)
+    collisionPolygon: [
+      { x: -143.22, y: -13.02 }, // Nose tip / sensor nose cap
+      { x: -138.88, y: 0.0 },    // Cockpit lower chin
+      { x: -117.18, y: 6.51 },   // Chin sensor pod base
+      { x: -78.12, y: 13.02 },   // Lower neck transition
+      { x: -45.57, y: 43.4 },    // Forward landing gear front footpad edge
+      { x: -23.87, y: 43.4 },    // Forward landing gear rear footpad edge
+      { x: 0.0, y: 32.55 },      // Mid-keel cargo hold lower belly
+      { x: 21.7, y: 43.4 },      // Aft landing gear front footpad edge
+      { x: 43.4, y: 43.4 },      // Aft landing gear rear footpad edge
+      { x: 52.08, y: 32.55 },    // Lower interstage collar junction
+      { x: 86.8, y: 39.06 },     // Ventral stabilizer wing underside
+      { x: 125.86, y: 30.38 },   // Ventral stabilizer wing trailing tip
+      { x: 130.2, y: 8.68 },     // Main aft engine nozzle lower lip
+      { x: 130.2, y: -8.68 },    // Main aft engine nozzle upper lip
+      { x: 117.18, y: -21.7 },   // Aft dorsal pod trailing curve
+      { x: 91.14, y: -34.72 },   // Aft dorsal pod top peak
+      { x: 39.06, y: -30.38 },   // Interstage collar upper rim
+      { x: -8.68, y: -32.55 },   // Cargo hold upper arched roof
+      { x: -60.76, y: -26.04 },  // Neck dorsal arch junction
+      { x: -104.16, y: -30.38 }, // Cockpit raised visor / brow
+      { x: -125.86, y: -21.7 },  // Cockpit windshield upper apex
+    ],
+    stats: {
+      agility: 3,
+      fuelTank: 4,
+      stability: 4,
+      thrust: 4,
+      armor: 4,
     },
   },
 ];

@@ -9,6 +9,30 @@ interface ShipGraphicProps {
   showGlow?: boolean;
 }
 
+const CRAFT_VIEWBOX_MAP: Record<string, { viewBox: string; heightToWidth: number }> = {
+  viper: { viewBox: '-35 -41 70 73', heightToWidth: 73 / 70 },
+  wasp: { viewBox: '-39 -42 78 76', heightToWidth: 76 / 78 },
+  kestrel: { viewBox: '-39 -42 78 76', heightToWidth: 76 / 78 },
+  spectre: { viewBox: '-36 -42 72 75', heightToWidth: 75 / 72 },
+  apollo: { viewBox: '-36 -30 72 63', heightToWidth: 63 / 72 },
+  vanguard: { viewBox: '-32 -42 64 75', heightToWidth: 75 / 64 },
+  aegis: { viewBox: '-43 -33 86 57', heightToWidth: 57 / 86 },
+  nebula: { viewBox: '-68 -25 136 46', heightToWidth: 46 / 136 },
+  orion: { viewBox: '-57 -26 120 53', heightToWidth: 53 / 120 },
+  valkyrie: { viewBox: '-73 -24 146 48', heightToWidth: 48 / 146 },
+  nautilus: { viewBox: '-51 -26 99 59', heightToWidth: 59 / 99 },
+  titan: { viewBox: '-69 -19 138 44', heightToWidth: 44 / 138 },
+  goliath: { viewBox: '-69 -25 138 48', heightToWidth: 48 / 138 },
+  behemoth: { viewBox: '-75 -41 144 65', heightToWidth: 65 / 144 },
+  leviathan: { viewBox: '-76 -43 152 68', heightToWidth: 68 / 152 },
+  mammoth: { viewBox: '-65 -57 166 104', heightToWidth: 104 / 166 },
+  juggernaut: { viewBox: '-88 -76 158 119', heightToWidth: 119 / 158 },
+  nutcracker: { viewBox: '-55 -46 124 86', heightToWidth: 86 / 124 },
+  eagle: { viewBox: '-71 -20 142 46', heightToWidth: 46 / 142 },
+  vulcan: { viewBox: '-74 -28 148 52', heightToWidth: 52 / 148 },
+  serenity: { viewBox: '-69 -21 133 44', heightToWidth: 44 / 133 },
+};
+
 export const ShipGraphic: React.FC<ShipGraphicProps> = ({
   ship,
   size,
@@ -17,27 +41,18 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
   showGlow = true,
 }) => {
   const modelId = ship.id;
-  const isLongCraft = modelId === 'eagle' || modelId === 'vulcan' || modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath' || modelId === 'behemoth' || modelId === 'mammoth' || modelId === 'juggernaut' || modelId === 'leviathan';
-  const isEagle = modelId === 'eagle';
-  const viewBox = (modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath')
-    ? '-72 -26 144 54'
-    : (modelId === 'behemoth'
-      ? '-75 -42 150 68'
-      : (modelId === 'mammoth'
-        ? '-68 -56 140 98'
-        : (modelId === 'juggernaut'
-          ? '-96 -78 174 122'
-          : (modelId === 'leviathan'
-            ? '-76 -26 152 58'
-            : (isLongCraft ? '-72 -24 144 52' : '-40 -40 80 80')))));
+  const craftConfig = CRAFT_VIEWBOX_MAP[modelId] || {
+    viewBox: '-40 -40 80 80',
+    heightToWidth: 1,
+  };
+  const viewBox = craftConfig.viewBox;
 
   const effectiveSize = size === undefined && !className ? 56 : size;
+
   const sizeStyle = effectiveSize
     ? {
         width: effectiveSize,
-        height: isLongCraft
-          ? Math.round(effectiveSize * (modelId === 'behemoth' ? 68 / 150 : (modelId === 'mammoth' ? 98 / 140 : (modelId === 'juggernaut' ? 122 / 174 : (modelId === 'leviathan' ? 58 / 152 : ((modelId === 'nebula' || modelId === 'orion' || modelId === 'valkyrie' || modelId === 'titan' || modelId === 'goliath') ? 54 / 144 : 52 / 144))))))
-          : effectiveSize,
+        height: Math.round(effectiveSize * craftConfig.heightToWidth),
       }
     : undefined;
 
@@ -159,6 +174,60 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
           <linearGradient id="terra-ion-glow" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.45" />
             <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+          </linearGradient>
+
+          {/* Serenity (Firefly-Class): Weathered Bronze-Steel Hull */}
+          <linearGradient id="serenity-hull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#c2b29f" />
+            <stop offset="25%" stopColor="#8c7f70" />
+            <stop offset="65%" stopColor="#574c40" />
+            <stop offset="100%" stopColor="#2e2720" />
+          </linearGradient>
+
+          {/* Serenity: Underbelly Cargo Deck */}
+          <linearGradient id="serenity-belly-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#4a4035" />
+            <stop offset="60%" stopColor="#2e2720" />
+            <stop offset="100%" stopColor="#17130f" />
+          </linearGradient>
+
+          {/* Serenity: Rotating Turbofan/VTOL Engine Nacelle */}
+          <linearGradient id="serenity-engine-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#788896" />
+            <stop offset="40%" stopColor="#475569" />
+            <stop offset="70%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#1e293b" />
+          </linearGradient>
+
+          {/* Serenity: Firefly Reactor Core Incandescent Glow */}
+          <radialGradient id="serenity-firefly-glow" cx="45%" cy="50%" r="55%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="30%" stopColor="#38bdf8" />
+            <stop offset="70%" stopColor="#0284c7" />
+            <stop offset="100%" stopColor="#082f49" />
+          </radialGradient>
+
+          {/* Serenity: Multi-Pane Panoramic Cockpit Glass */}
+          <linearGradient id="serenity-cockpit-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#bae6fd" />
+            <stop offset="35%" stopColor="#38bdf8" />
+            <stop offset="75%" stopColor="#0369a1" />
+            <stop offset="100%" stopColor="#082f49" />
+          </linearGradient>
+
+          {/* Serenity: Chrome Oleo Landing Struts */}
+          <linearGradient id="serenity-chrome" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#f8fafc" />
+            <stop offset="45%" stopColor="#cbd5e1" />
+            <stop offset="70%" stopColor="#94a3b8" />
+            <stop offset="100%" stopColor="#475569" />
+          </linearGradient>
+
+          {/* Serenity: Titanium Saucer Footpad */}
+          <linearGradient id="serenity-footpad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#64748b" />
+            <stop offset="50%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#0f172a" />
           </linearGradient>
 
           {/* Goliath Carrier (CT-950) Diagram-Matched Gradients */}
@@ -979,6 +1048,76 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
             <stop offset="70%" stopColor="#d97706" stopOpacity="0.25" />
             <stop offset="100%" stopColor="#b45309" stopOpacity="0" />
           </radialGradient>
+
+          {/* Firefly Class Transport Serenity Gradients (Geoffrey Mandel Schematic) */}
+          <linearGradient id="firefly-hull-base" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="25%" stopColor="#e2e8f0" />
+            <stop offset="65%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#94a3b8" />
+          </linearGradient>
+
+          <linearGradient id="firefly-hull-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#64748b" />
+            <stop offset="50%" stopColor="#475569" />
+            <stop offset="100%" stopColor="#1e293b" />
+          </linearGradient>
+
+          <radialGradient id="firefly-reactor-sphere" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="25%" stopColor="#f1f5f9" />
+            <stop offset="55%" stopColor="#cbd5e1" />
+            <stop offset="85%" stopColor="#94a3b8" />
+            <stop offset="100%" stopColor="#475569" />
+          </radialGradient>
+
+          <linearGradient id="firefly-cockpit-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#e0f2fe" />
+            <stop offset="35%" stopColor="#7dd3fc" />
+            <stop offset="70%" stopColor="#0284c7" />
+            <stop offset="100%" stopColor="#082f49" />
+          </linearGradient>
+
+          <linearGradient id="firefly-solar-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#1d4ed8" />
+            <stop offset="35%" stopColor="#2563eb" />
+            <stop offset="75%" stopColor="#1e40af" />
+            <stop offset="100%" stopColor="#172554" />
+          </linearGradient>
+
+          <linearGradient id="firefly-nacelle-cone" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#1e293b" />
+            <stop offset="40%" stopColor="#334155" />
+            <stop offset="75%" stopColor="#475569" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          <radialGradient id="firefly-serenity-crest" cx="45%" cy="40%" r="60%">
+            <stop offset="0%" stopColor="#f87171" />
+            <stop offset="40%" stopColor="#dc2626" />
+            <stop offset="80%" stopColor="#991b1b" />
+            <stop offset="100%" stopColor="#450a0a" />
+          </radialGradient>
+
+          <linearGradient id="firefly-pipe-chrome" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="45%" stopColor="#cbd5e1" />
+            <stop offset="75%" stopColor="#94a3b8" />
+            <stop offset="100%" stopColor="#475569" />
+          </linearGradient>
+
+          <linearGradient id="firefly-piston-chrome" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#94a3b8" />
+            <stop offset="35%" stopColor="#f8fafc" />
+            <stop offset="70%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#475569" />
+          </linearGradient>
+
+          <linearGradient id="firefly-footpad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#64748b" />
+            <stop offset="45%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
 
           {/* Cockpit Canopy Shader */}
           <radialGradient
@@ -6971,6 +7110,462 @@ export const ShipGraphic: React.FC<ShipGraphicProps> = ({
                 rx="0.2"
                 fill="#38bdf8"
               />
+            </g>
+          </g>
+        )}
+
+        {/* =================================================================== */}
+        {/* SERENITY (Firefly-Class 03-K64 Mid-Bulk Transport)                */}
+        {/* Pixel-perfect clone of official Geoffrey Mandel technical schematic*/}
+        {/* Facing Left: Cockpit Left, Spherical Firefly Drive Right           */}
+        {/* =================================================================== */}
+        {modelId === 'serenity' && (
+          <g id="serenity-model">
+            {/* 1. Background Layer: Far-Side (Port) Nacelle & Upper Port Shuttle */}
+            <g id="firefly-bg-elements" opacity="0.55">
+              {/* Port VTOL Engine Nacelle */}
+              <rect
+                x="-12"
+                y="-3"
+                width="20"
+                height="8.5"
+                rx="1.5"
+                fill="#1e293b"
+                stroke="#0f172a"
+                strokeWidth="0.8"
+              />
+              <path d="M-12,-3 L-16,-1 L-16,4 L-12,5 Z" fill="#0f172a" />
+              <path d="M8,-3 L12,-1 L12,4 L8,5 Z" fill="#0f172a" />
+              {/* Port Auxiliary Shuttle docked on port shoulder */}
+              <path
+                d="M-8,-17 C-4,-19 2,-19 6,-17 L7,-14 L-9,-14 Z"
+                fill="#94a3b8"
+                stroke="#475569"
+                strokeWidth="0.6"
+              />
+            </g>
+
+            {/* 2. Main Fuselage Upper Body, Arched Neck & Lower Cargo Belly */}
+            <g id="firefly-main-hull">
+              {/* Lower Cargo Belly & Keel Plating (Shadowed Underside) */}
+              <path
+                d="M-48,2 C-38,5 -26,7 -18,9 C-10,13 4,16 14,12 L14,4 L-48,2 Z"
+                fill="url(#firefly-hull-shadow)"
+                stroke="#1e293b"
+                strokeWidth="1.1"
+              />
+
+              {/* Main Structural Fuselage (Off-White / Light Silver-Gray Armor) */}
+              <path
+                d="M-66,-6 L-56,-11 C-52,-13 -48,-14 -46,-14 C-38,-13 -32,-11 -22,-10 C-12,-14 -4,-15 14,-13 L14,12 C4,16 -10,13 -18,9 C-26,7 -38,5 -48,2 C-52,2 -53,0 -54,0 L-66,-6 Z"
+                fill="url(#firefly-hull-base)"
+                stroke="#334155"
+                strokeWidth="1.1"
+              />
+
+              {/* Longitudinal Armor Panel Seams & Rivet Lines */}
+              <path d="M-44,-10 C-36,-9 -30,-8 -20,-7 C-10,-9 0,-10 12,-9" fill="none" stroke="#94a3b8" strokeWidth="0.6" />
+              <path d="M-46,-4 C-36,-3 -26,-2 -16,-2 C-6,-2 4,-3 14,-3" fill="none" stroke="#94a3b8" strokeWidth="0.6" />
+              <path d="M-42,1 C-34,2 -24,4 -14,5 C-4,6 6,5 14,3" fill="none" stroke="#64748b" strokeWidth="0.6" />
+
+              {/* Forward Cargo Clamshell Ramp Outline & Hinge */}
+              <path
+                d="M-22,8 L-10,11 L-10,14.5 L-22,10.5 Z"
+                fill="#475569"
+                stroke="#1e293b"
+                strokeWidth="0.8"
+              />
+              <circle cx="-21.5" cy="8.5" r="0.8" fill="#cbd5e1" stroke="#0f172a" strokeWidth="0.3" />
+              <line x1="-22" y1="8" x2="-10" y2="14.5" stroke="#334155" strokeWidth="0.5" />
+              <line x1="-10" y1="11" x2="-22" y2="10.5" stroke="#334155" strokeWidth="0.5" />
+
+              {/* Hull Identification Stencil */}
+              <text
+                x="-12"
+                y="1"
+                fontSize="2.1"
+                fontFamily="monospace"
+                fontWeight="bold"
+                letterSpacing="0.4"
+                fill="#475569"
+                opacity="0.85"
+              >
+                03-K64
+              </text>
+            </g>
+
+            {/* 3. Photovoltaic Blue Solar Cell Arrays */}
+            <g id="firefly-solar-arrays">
+              {/* A. Neck Angled Solar Array Panel */}
+              <polygon
+                points="-39,-6 -24,-5 -23,1 -38,0"
+                fill="url(#firefly-solar-blue)"
+                stroke="#0f172a"
+                strokeWidth="0.8"
+              />
+              {/* Photovoltaic Grid Lines */}
+              <line x1="-36" y1="-5.8" x2="-35" y2="0.2" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-33" y1="-5.6" x2="-32" y2="0.4" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-30" y1="-5.4" x2="-29" y2="0.6" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-27" y1="-5.2" x2="-26" y2="0.8" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-38.5" y1="-3" x2="-23.5" y2="-2" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+
+              {/* B. Upper Cargo Bay Solar Array Panel */}
+              <polygon
+                points="-14,-13 3,-13 4,-7 -13,-7"
+                fill="url(#firefly-solar-blue)"
+                stroke="#0f172a"
+                strokeWidth="0.8"
+              />
+              <line x1="-10" y1="-13" x2="-9" y2="-7" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-6" y1="-13" x2="-5" y2="-7" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-2" y1="-13" x2="-1" y2="-7" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="1" y1="-13" x2="2" y2="-7" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-13.5" y1="-10" x2="3.5" y2="-10" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+
+              {/* C. Lower Flank Solar Array Panel */}
+              <polygon
+                points="-12,7 3,7 2,12 -13,12"
+                fill="url(#firefly-solar-blue)"
+                stroke="#0f172a"
+                strokeWidth="0.8"
+              />
+              <line x1="-8" y1="7" x2="-9" y2="12" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-4" y1="7" x2="-5" y2="12" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="0" y1="7" x2="-1" y2="12" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+              <line x1="-12.5" y1="9.5" x2="2.5" y2="9.5" stroke="#bfdbfe" strokeWidth="0.3" opacity="0.8" />
+            </g>
+
+            {/* 4. The Iconic Serenity Red Sun Logo & Chinese Calligraphy */}
+            <g id="firefly-serenity-emblem">
+              {/* Crimson / Rust Red Sun Medallion */}
+              <circle
+                cx="-42.5"
+                cy="-2"
+                r="3.2"
+                fill="url(#firefly-serenity-crest)"
+                stroke="#7f1d1d"
+                strokeWidth="0.5"
+              />
+              {/* Chinese characters "萤火虫" (Firefly) in gold */}
+              <text
+                x="-42.5"
+                y="-1"
+                textAnchor="middle"
+                fontSize="2.4"
+                fontFamily="sans-serif"
+                fontWeight="900"
+                fill="#fef08a"
+                opacity="0.95"
+              >
+                宁静
+              </text>
+              {/* Serif SERENITY Logotype */}
+              <text
+                x="-42.5"
+                y="3"
+                textAnchor="middle"
+                fontSize="1.7"
+                fontFamily="Georgia, serif"
+                fontWeight="bold"
+                letterSpacing="0.4"
+                fill="#ffffff"
+                stroke="#0f172a"
+                strokeWidth="0.3"
+                paintOrder="stroke fill"
+              >
+                SERENITY
+              </text>
+            </g>
+
+            {/* 5. Bird-Like Cockpit Head, Multi-Faceted Bridge Windows & Sensor Chin */}
+            <g id="firefly-cockpit-bridge">
+              {/* Recessed Mechanical Neck Junction (Dark Cooling Louvers) */}
+              <rect x="-47" y="-12.5" width="2" height="7" fill="#1e293b" />
+              <line x1="-46.5" y1="-12" x2="-46.5" y2="-6" stroke="#475569" strokeWidth="0.4" strokeDasharray="0.8,0.8" />
+
+              {/* Cockpit Chin Sensor Box */}
+              <polygon
+                points="-54,0 -48,0 -48,3 -53,2"
+                fill="#334155"
+                stroke="#1e293b"
+                strokeWidth="0.6"
+              />
+              {/* Forward Sensor Probes / Cannon Barrels under the Chin */}
+              <rect x="-62" y="-1.8" width="8" height="1.1" rx="0.3" fill="#1e293b" stroke="#0f172a" strokeWidth="0.3" />
+              <rect x="-60" y="-0.4" width="6" height="0.9" rx="0.3" fill="#334155" stroke="#0f172a" strokeWidth="0.3" />
+              <circle cx="-62" cy="-1.25" r="0.6" fill="#38bdf8" />
+
+              {/* Cockpit Canopy Multi-Pane Faceted Glass */}
+              {/* Main Forward Sloping Observation Pane */}
+              <polygon
+                points="-64,-6 -56,-11 -55,-6 -62,-3"
+                fill="url(#firefly-cockpit-glass)"
+                stroke="#0f172a"
+                strokeWidth="0.6"
+              />
+              {/* Side Observation Window */}
+              <polygon
+                points="-55,-11 -48,-13 -48,-7 -54,-6"
+                fill="url(#firefly-cockpit-glass)"
+                stroke="#0f172a"
+                strokeWidth="0.6"
+              />
+              {/* Window Mullions / Structural Dividers */}
+              <line x1="-56" y1="-11" x2="-55" y2="-6" stroke="#0f172a" strokeWidth="0.7" />
+              <line x1="-59" y1="-8.5" x2="-55" y2="-8.5" stroke="#0f172a" strokeWidth="0.5" />
+              <line x1="-51" y1="-12" x2="-51" y2="-6.5" stroke="#0f172a" strokeWidth="0.5" />
+
+              {/* Cockpit Specular Glare Highlights */}
+              <path d="M-63,-5.5 L-57,-10" stroke="#ffffff" strokeWidth="0.5" strokeLinecap="round" opacity="0.8" />
+              <path d="M-54,-10.5 L-49,-12" stroke="#ffffff" strokeWidth="0.4" strokeLinecap="round" opacity="0.7" />
+
+              {/* Amber Pilot Instrument Glow in the Cockpit */}
+              <rect x="-53" y="-8.5" width="3" height="1.8" rx="0.3" fill="#f59e0b" opacity="0.5" />
+
+              {/* Raised Dorsal Brow / Visor with Angled Heat Slits */}
+              <path
+                d="M-56,-11 L-46,-14 L-45,-12 L-55,-9.5 Z"
+                fill="#cbd5e1"
+                stroke="#334155"
+                strokeWidth="0.6"
+              />
+              <line x1="-53" y1="-11.8" x2="-51.5" y2="-10.5" stroke="#475569" strokeWidth="0.4" />
+              <line x1="-50" y1="-12.6" x2="-48.5" y2="-11.3" stroke="#475569" strokeWidth="0.4" />
+              <line x1="-47" y1="-13.4" x2="-45.5" y2="-12.1" stroke="#475569" strokeWidth="0.4" />
+            </g>
+
+            {/* 6. Midships Rotating VTOL Turbofan Nacelle (Near Side / Starboard) */}
+            <g id="firefly-starboard-nacelle">
+              {/* Heavy Mounting Pylon on the Hull */}
+              <rect
+                x="-14"
+                y="-1"
+                width="24"
+                height="8"
+                rx="1"
+                fill="#475569"
+                stroke="#1e293b"
+                strokeWidth="0.7"
+              />
+              {/* Pylon Heat Dissipation Louvers */}
+              <line x1="-10" y1="0.5" x2="-10" y2="5.5" stroke="#1e293b" strokeWidth="0.6" />
+              <line x1="-8" y1="0.5" x2="-8" y2="5.5" stroke="#1e293b" strokeWidth="0.6" />
+              <line x1="-6" y1="0.5" x2="-6" y2="5.5" stroke="#1e293b" strokeWidth="0.6" />
+              <line x1="4" y1="0.5" x2="4" y2="5.5" stroke="#1e293b" strokeWidth="0.6" />
+              <line x1="6" y1="0.5" x2="6" y2="5.5" stroke="#1e293b" strokeWidth="0.6" />
+
+              {/* Forward Intake Cowl Cone (Facing Left) */}
+              <path
+                d="M-8,-2 L-15,-1 C-16,1 -16,5 -15,7 L-8,8 Z"
+                fill="url(#firefly-nacelle-cone)"
+                stroke="#0f172a"
+                strokeWidth="0.8"
+              />
+              {/* Stepped Intake Collar & Dark Fan Aperture */}
+              <ellipse cx="-15" cy="3" rx="0.8" ry="3.5" fill="#0f172a" />
+              <ellipse cx="-14.8" cy="3" rx="0.5" ry="2.2" fill="#38bdf8" opacity="0.75" />
+
+              {/* Center Cylindrical Nacelle Barrel */}
+              <rect
+                x="-8"
+                y="-2.5"
+                width="14"
+                height="11"
+                rx="1.5"
+                fill="#1e293b"
+                stroke="#0f172a"
+                strokeWidth="1.0"
+              />
+
+              {/* DIAMOND LATTICE STRUCTURAL TRUSS (Signature Geoffrey Mandel Detail) */}
+              <g stroke="#cbd5e1" strokeWidth="0.8" strokeLinecap="round">
+                {/* 4 Diamond X-Braces */}
+                <line x1="-7.5" y1="-2.5" x2="-4" y2="8.5" />
+                <line x1="-4" y1="-2.5" x2="-7.5" y2="8.5" />
+                <line x1="-4" y1="-2.5" x2="-0.5" y2="8.5" />
+                <line x1="-0.5" y1="-2.5" x2="-4" y2="8.5" />
+                <line x1="-0.5" y1="-2.5" x2="3" y2="8.5" />
+                <line x1="3" y1="-2.5" x2="-0.5" y2="8.5" />
+                <line x1="3" y1="-2.5" x2="5.5" y2="8.5" />
+                <line x1="5.5" y1="-2.5" x2="3" y2="8.5" />
+                {/* Longitudinal Frame Rails */}
+                <line x1="-8" y1="3" x2="6" y2="3" stroke="#94a3b8" strokeWidth="0.6" />
+              </g>
+
+              {/* Aft Fluted Exhaust Bell Cone (Facing Right) */}
+              <path
+                d="M6,-2 L11,-1 C12,1 12,5 11,7 L6,8 Z"
+                fill="url(#firefly-nacelle-cone)"
+                stroke="#0f172a"
+                strokeWidth="0.8"
+              />
+              {/* Fluted Vertical Cooling Vanes */}
+              <line x1="7.5" y1="-1.5" x2="7.5" y2="7.5" stroke="#64748b" strokeWidth="0.5" />
+              <line x1="9" y1="-1.2" x2="9" y2="7.2" stroke="#64748b" strokeWidth="0.5" />
+              <line x1="10.5" y1="-0.8" x2="10.5" y2="6.8" stroke="#64748b" strokeWidth="0.5" />
+
+              {/* Rotatable Pivot Hub & Actuator */}
+              <circle cx="-1" cy="3" r="2.2" fill="#475569" stroke="#0f172a" strokeWidth="0.8" />
+              <circle cx="-1" cy="3" r="1.1" fill="#cbd5e1" />
+              <circle cx="-1" cy="3" r="0.4" fill="#0f172a" />
+
+              {/* Downward VTOL Thrust Nozzle Bell */}
+              <path
+                d="M-4,8.5 L-6,11.5 L0,11.5 L-2,8.5 Z"
+                fill="#0f172a"
+                stroke="#334155"
+                strokeWidth="0.6"
+              />
+              <ellipse cx="-3" cy="11.2" rx="2.5" ry="0.6" fill="#38bdf8" />
+            </g>
+
+            {/* 7. Articulated Landing Gear (Dual Forward & Aft Assemblies) */}
+            <g id="firefly-landing-gear">
+              {/* A. FORWARD LANDING GEAR (Mount x = -16, Footpad x = -16, y = 20.0) */}
+              <circle cx="-16" cy="9" r="1.2" fill="#334155" stroke="#0f172a" strokeWidth="0.5" />
+              {/* Upper Diagonal Strut */}
+              <line x1="-16" y1="9" x2="-18" y2="15" stroke="#475569" strokeWidth="2.0" />
+              <line x1="-16" y1="9" x2="-18" y2="15" stroke="url(#firefly-pipe-chrome)" strokeWidth="1.2" />
+              {/* Chrome Lower Hydraulic Piston */}
+              <line x1="-18" y1="15" x2="-16" y2="19.5" stroke="url(#firefly-piston-chrome)" strokeWidth="1.4" />
+              {/* Scissor Torque Linkage */}
+              <path d="M-17,11 L-20,13.5 L-18,15" fill="none" stroke="#64748b" strokeWidth="0.7" />
+              {/* Forward Saucer Footpad Skid */}
+              <circle cx="-16" cy="19.2" r="1.1" fill="#334155" stroke="#0f172a" strokeWidth="0.5" />
+              <polygon
+                points="-21,19.5 -11,19.5 -10,20.8 -22,20.8"
+                fill="url(#firefly-footpad)"
+                stroke="#0f172a"
+                strokeWidth="0.8"
+              />
+              <rect x="-21" y="20.3" width="10" height="0.8" rx="0.2" fill="#090d16" />
+
+              {/* B. AFT LANDING GEAR (Mount x = 12, Footpad x = 15, y = 20.0) */}
+              <circle cx="12" cy="9" r="1.2" fill="#334155" stroke="#0f172a" strokeWidth="0.5" />
+              {/* Upper Diagonal Strut */}
+              <line x1="12" y1="9" x2="14" y2="15" stroke="#475569" strokeWidth="2.0" />
+              <line x1="12" y1="9" x2="14" y2="15" stroke="url(#firefly-pipe-chrome)" strokeWidth="1.2" />
+              {/* Chrome Lower Hydraulic Piston */}
+              <line x1="14" y1="15" x2="15" y2="19.5" stroke="url(#firefly-piston-chrome)" strokeWidth="1.4" />
+              {/* Scissor Torque Linkage */}
+              <path d="M13,11 L16,13.5 L14,15" fill="none" stroke="#64748b" strokeWidth="0.7" />
+              {/* Aft Saucer Footpad Skid */}
+              <circle cx="15" cy="19.2" r="1.1" fill="#334155" stroke="#0f172a" strokeWidth="0.5" />
+              <polygon
+                points="10,19.5 20,19.5 21,20.8 9,20.8"
+                fill="url(#firefly-footpad)"
+                stroke="#0f172a"
+                strokeWidth="0.8"
+              />
+              <rect x="10" y="20.3" width="10" height="0.8" rx="0.2" fill="#090d16" />
+            </g>
+
+            {/* 8. Rear Engine Section (The "Firefly" Radion Accelerator Drive) */}
+            <g id="firefly-reactor-drive">
+              {/* A. Massive Interstage Collar / Structural Ring */}
+              <path
+                d="M14,-13 L17,-15 L23,-15 L23,15 L17,15 L14,12 Z"
+                fill="url(#firefly-hull-base)"
+                stroke="#1e293b"
+                strokeWidth="1.1"
+              />
+              {/* Flared Outer Collar Flange */}
+              <line x1="17" y1="-15" x2="17" y2="15" stroke="#64748b" strokeWidth="0.8" />
+              {/* Open Structural Lattice Windows (Truss Bays into Reactor Bay) */}
+              <rect x="18" y="-12" width="4" height="4.5" rx="0.4" fill="#0f172a" stroke="#475569" strokeWidth="0.4" />
+              <rect x="18" y="-6" width="4" height="4.5" rx="0.4" fill="#0f172a" stroke="#475569" strokeWidth="0.4" />
+              <rect x="18" y="0" width="4" height="4.5" rx="0.4" fill="#0f172a" stroke="#475569" strokeWidth="0.4" />
+              <rect x="18" y="6" width="4" height="4.5" rx="0.4" fill="#0f172a" stroke="#475569" strokeWidth="0.4" />
+              {/* Subtle Blue Radion Accelerator Glow in Open Bays */}
+              <rect x="19" y="-11" width="2" height="2.5" fill="#38bdf8" opacity="0.65" />
+              <rect x="19" y="-5" width="2" height="2.5" fill="#38bdf8" opacity="0.75" />
+              <rect x="19" y="1" width="2" height="2.5" fill="#38bdf8" opacity="0.75" />
+              <rect x="19" y="7" width="2" height="2.5" fill="#38bdf8" opacity="0.65" />
+
+              {/* B. Ventral Stabilizer Wing / Skid */}
+              <path
+                d="M18,14 C26,16 38,18 50,17 C54,16.5 58,15.5 58,13.5 C55,14 46,14.5 36,13.5 C26,12.5 20,13 18,14 Z"
+                fill="url(#firefly-hull-shadow)"
+                stroke="#0f172a"
+                strokeWidth="0.9"
+              />
+              <line x1="24" y1="15" x2="48" y2="16.5" stroke="#94a3b8" strokeWidth="0.5" />
+
+              {/* C. Spherical Radion Accelerator Reactor Dome */}
+              <path
+                d="M23,-14 C27,-14.5 32,-15 38,-15 C46,-15 52,-8 52,0 C52,8 46,14.5 38,14.5 C32,14.5 27,14 23,13.5 Z"
+                fill="url(#firefly-reactor-sphere)"
+                stroke="#1e293b"
+                strokeWidth="1.2"
+              />
+
+              {/* Latitudinal Concentric Panel Seams on the Dome */}
+              <path d="M23,-9 C30,-10 38,-10 48,-5" fill="none" stroke="#94a3b8" strokeWidth="0.6" />
+              <path d="M23,9 C30,10 38,10 48,5" fill="none" stroke="#94a3b8" strokeWidth="0.6" />
+
+              {/* D. Equatorial Louver Grille (8 Vertical Radiator Slots) */}
+              <g id="firefly-cooling-louvers">
+                <rect x="23" y="-2" width="28" height="4" fill="#1e293b" opacity="0.4" />
+                <rect x="28" y="-2.5" width="1.2" height="5" rx="0.3" fill="#0f172a" />
+                <rect x="30.5" y="-2.5" width="1.2" height="5" rx="0.3" fill="#0f172a" />
+                <rect x="33" y="-2.5" width="1.2" height="5" rx="0.3" fill="#0f172a" />
+                <rect x="35.5" y="-2.5" width="1.2" height="5" rx="0.3" fill="#0f172a" />
+                <rect x="38" y="-2.5" width="1.2" height="5" rx="0.3" fill="#0f172a" />
+                <rect x="40.5" y="-2.5" width="1.2" height="5" rx="0.3" fill="#0f172a" />
+                <rect x="43" y="-2.5" width="1.2" height="5" rx="0.3" fill="#0f172a" />
+                <rect x="45.5" y="-2.5" width="1.2" height="5" rx="0.3" fill="#0f172a" />
+              </g>
+
+              {/* E. External Plumbing & Coolant Manifolds (Geoffrey Mandel Plumbing) */}
+              {/* Drop Shadow for Pipes */}
+              <path
+                d="M23,-11 C26,-8 32,-7 35,-6 C39,-5 42,-1 41,3 C40,7 34,9 29,10 L23,10.5"
+                fill="none"
+                stroke="#0f172a"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                opacity="0.45"
+              />
+              {/* Chrome Coolant Pipe 1 */}
+              <path
+                d="M23,-11 C26,-8 32,-7 35,-6 C39,-5 42,-1 41,3 C40,7 34,9 29,10 L23,10.5"
+                fill="none"
+                stroke="url(#firefly-pipe-chrome)"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+              />
+              {/* Pipe Mounting Brackets */}
+              <circle cx="27" cy="-7.5" r="0.8" fill="#475569" stroke="#0f172a" strokeWidth="0.3" />
+              <circle cx="39" cy="-1.5" r="0.8" fill="#475569" stroke="#0f172a" strokeWidth="0.3" />
+              <circle cx="36" cy="7.5" r="0.8" fill="#475569" stroke="#0f172a" strokeWidth="0.3" />
+
+              {/* F. Upper Aerodynamic Dorsal Pod */}
+              <path
+                d="M34,-14 C38,-16 46,-16 54,-10 C50,-9 42,-11 34,-11 Z"
+                fill="url(#firefly-hull-base)"
+                stroke="#1e293b"
+                strokeWidth="0.8"
+              />
+              {/* 4 Small Oval Portholes / Vents on Dorsal Pod */}
+              <ellipse cx="40" cy="-12.5" rx="0.7" ry="0.4" fill="#0f172a" />
+              <ellipse cx="42.5" cy="-12.3" rx="0.7" ry="0.4" fill="#0f172a" />
+              <ellipse cx="45" cy="-12.0" rx="0.7" ry="0.4" fill="#0f172a" />
+              <ellipse cx="47.5" cy="-11.5" rx="0.7" ry="0.4" fill="#0f172a" />
+
+              {/* G. Main Propulsion Rocket Nozzle Bell */}
+              <path
+                d="M50,-3.5 L58,-5 C59.5,-5 60,-3 60,0 C60,3 59.5,5 58,5 L50,3.5 Z"
+                fill="#1e293b"
+                stroke="#0f172a"
+                strokeWidth="1.0"
+              />
+              {/* Nozzle Cooling Rings */}
+              <line x1="53" y1="-4" x2="53" y2="4" stroke="#475569" strokeWidth="0.7" />
+              <line x1="56" y1="-4.5" x2="56" y2="4.5" stroke="#475569" strokeWidth="0.7" />
+              {/* Incandescent Radion Throat Glow */}
+              <ellipse cx="59" cy="0" rx="0.9" ry="3.5" fill="#38bdf8" />
+              <ellipse cx="59.3" cy="0" rx="0.4" ry="2.0" fill="#ffffff" />
             </g>
           </g>
         )}
