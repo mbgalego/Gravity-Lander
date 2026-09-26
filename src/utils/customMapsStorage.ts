@@ -11949,6 +11949,294 @@ export const OFFICIAL_PROMETHEAN_MAP: CustomMapData = {
       { id: 'volcano-1788119447821', x: 3083, y: 2951, width: 260, height: 160, calderaWidth: 83, eruptionHeight: 320, eruptionInterval: 6, eruptionDuration: 1.8, colorTheme: 'magma' },
   ],
 };
+
+export const OFFICIAL_ABYSSUS_MAP: CustomMapData = {
+  id: 'official-abyssus',
+  name: 'Abyssus Void',
+  description: 'A cavernous 15.5km deep void chasm containing 5 distinct subterranean strata, floating magnetic monoliths, and severe descending drafts.',
+  author: 'Planetary Federation',
+  createdAt: 1790378423585,
+  updatedAt: 1790378423585,
+  themeId: 'custom',
+  customTheme: {
+    id: 'theme-abyssus',
+    name: 'Abyssus Void Atmosphere',
+    skyTop: '#0d0417',
+    skyBottom: '#1c0832',
+    terrainFill: '#17062a',
+    terrainBorder: '#d946ef',
+    terrainAccent: '#f0abfc',
+    gridColor: 'rgba(217, 70, 239, 0.07)',
+    dustColor: '#f5d0fe',
+    glowColor: 'rgba(217, 70, 239, 0.35)',
+    starDensity: 1.2,
+  },
+  terrainLineStyle: 'straight',
+  worldWidth: 8600,
+  worldHeight: 15600,
+  gravity: 3.3,
+  airResistance: 0.0022,
+  fuelBurnRate: 16,
+  targetTimeSec: 360,
+  difficulty: 'Extreme',
+  launchPad: { x: 5912, y: 2821, width: 320 },
+  landingPad: { x: 628, y: 10541, width: 340 },
+  groundNodes: [
+    { x: 0, y: 70 }, { x: 214, y: 494 }, { x: 258, y: 669 }, { x: 410, y: 589 },
+    { x: 504, y: 679 }, { x: 640, y: 647 }, { x: 768, y: 1060 }, { x: 896, y: 1673 },
+    { x: 816, y: 1821 }, { x: 786, y: 1970 }, { x: 756, y: 2141 }, { x: 776, y: 2264 },
+    { x: 830, y: 2394 }, { x: 1027, y: 2420 }, { x: 1216, y: 2447 }, { x: 1429, y: 2470 },
+    { x: 1631, y: 2575 }, { x: 1752, y: 2766 }, { x: 1664, y: 2884 }, { x: 1805, y: 2993 },
+    { x: 1918, y: 3050 }, { x: 2023, y: 3114 }, { x: 2148, y: 3183 }, { x: 2274, y: 3264 },
+    { x: 2419, y: 3345 }, { x: 2548, y: 3413 }, { x: 2679, y: 3486 }, { x: 2774, y: 3530 },
+    { x: 2891, y: 3593 }, { x: 2993, y: 3638 }, { x: 3097, y: 3624 }, { x: 3242, y: 3630 },
+    { x: 3359, y: 3632 }, { x: 3431, y: 3679 }, { x: 3505, y: 3722 }, { x: 3586, y: 3756 },
+    { x: 3624, y: 3803 }, { x: 3691, y: 3796 }, { x: 3730, y: 3758 }, { x: 3773, y: 3732 },
+    { x: 3807, y: 3712 }, { x: 3845, y: 3674 }, { x: 3876, y: 3643 }, { x: 3917, y: 3612 },
+    { x: 3967, y: 3601 }, { x: 4043, y: 3608 }, { x: 4106, y: 3641 }, { x: 4187, y: 3664 },
+    { x: 4288, y: 3659 }, { x: 4387, y: 3657 }, { x: 4477, y: 3662 }, { x: 4580, y: 3674 },
+    { x: 4675, y: 3724 }, { x: 4720, y: 3776 }, { x: 4730, y: 3842 }, { x: 4731, y: 3903 },
+    { x: 4764, y: 3946 }, { x: 4798, y: 3997 }, { x: 4828, y: 4033 }, { x: 4757, y: 4153 },
+    { x: 4765, y: 4212 }, { x: 4803, y: 4291 }, { x: 4835, y: 4342 }, { x: 4912, y: 4353 },
+    { x: 4951, y: 4413 }, { x: 4934, y: 4474 }, { x: 4919, y: 4537 }, { x: 4845, y: 4616 },
+    { x: 4801, y: 4691 }, { x: 4776, y: 4748 }, { x: 4749, y: 4806 }, { x: 4638, y: 4867 },
+    { x: 4551, y: 4916 }, { x: 4493, y: 4948 }, { x: 4353, y: 5020 }, { x: 4246, y: 5089 },
+    { x: 4190, y: 5178 }, { x: 4144, y: 5262 }, { x: 4139, y: 5346 }, { x: 4165, y: 5377 },
+    { x: 4204, y: 5423 }, { x: 4234, y: 5457 }, { x: 4257, y: 5485 }, { x: 4284, y: 5529 },
+    { x: 4315, y: 5573 }, { x: 4325, y: 5604 }, { x: 4342, y: 5639 }, { x: 4361, y: 5682 },
+    { x: 4324, y: 5721 }, { x: 4301, y: 5759 }, { x: 4272, y: 5796 }, { x: 4240, y: 5827 },
+    { x: 4189, y: 5828 }, { x: 4177, y: 5863 }, { x: 4132, y: 5876 }, { x: 4101, y: 5896 },
+    { x: 4091, y: 5932 }, { x: 4059, y: 5947 }, { x: 4034, y: 5979 }, { x: 4038, y: 6026 },
+    { x: 4031, y: 6061 }, { x: 4012, y: 6100 }, { x: 3965, y: 6115 }, { x: 3947, y: 6156 },
+    { x: 3929, y: 6187 }, { x: 3905, y: 6213 }, { x: 3868, y: 6235 }, { x: 3843, y: 6231 },
+    { x: 3811, y: 6245 }, { x: 3774, y: 6275 }, { x: 3749, y: 6332 }, { x: 3716, y: 6346 },
+    { x: 3677, y: 6375 }, { x: 3650, y: 6405 }, { x: 3633, y: 6430 }, { x: 3607, y: 6454 },
+    { x: 3592, y: 6484 }, { x: 3569, y: 6523 }, { x: 3542, y: 6555 }, { x: 3502, y: 6555 },
+    { x: 3482, y: 6587 }, { x: 3457, y: 6614 }, { x: 3427, y: 6643 }, { x: 3361, y: 6647 },
+    { x: 3332, y: 6648 }, { x: 3286, y: 6658 }, { x: 3246, y: 6673 }, { x: 3198, y: 6702 },
+    { x: 3165, y: 6754 }, { x: 3147, y: 6784 }, { x: 3106, y: 6823 }, { x: 3083, y: 6845 },
+    { x: 3039, y: 6882 }, { x: 3015, y: 6911 }, { x: 2972, y: 6934 }, { x: 2943, y: 6955 },
+    { x: 2898, y: 6972 }, { x: 2897, y: 7037 }, { x: 2921, y: 7079 }, { x: 2947, y: 7146 },
+    { x: 2986, y: 7213 }, { x: 2997, y: 7273 }, { x: 2872, y: 7291 }, { x: 2787, y: 7340 },
+    { x: 2670, y: 7299 }, { x: 2573, y: 7283 }, { x: 2507, y: 7289 }, { x: 2413, y: 7271 },
+    { x: 2273, y: 7211 }, { x: 2210, y: 7170 }, { x: 2127, y: 7108 }, { x: 2063, y: 7099 },
+    { x: 1996, y: 7125 }, { x: 1954, y: 7157 }, { x: 1874, y: 7186 }, { x: 1808, y: 7168 },
+    { x: 1781, y: 7219 }, { x: 1738, y: 7285 }, { x: 1695, y: 7323 }, { x: 1624, y: 7330 },
+    { x: 1569, y: 7336 }, { x: 1507, y: 7363 }, { x: 1410, y: 7408 }, { x: 1360, y: 7431 },
+    { x: 1287, y: 7488 }, { x: 1288, y: 7544 }, { x: 1227, y: 7591 }, { x: 1167, y: 7645 },
+    { x: 1114, y: 7698 }, { x: 1140, y: 7798 }, { x: 1126, y: 8000 }, { x: 1136, y: 8063 },
+    { x: 1187, y: 8138 }, { x: 1254, y: 8169 }, { x: 1333, y: 8221 }, { x: 1437, y: 8284 },
+    { x: 1491, y: 8390 }, { x: 1514, y: 8473 }, { x: 1552, y: 8552 }, { x: 1635, y: 8590 },
+    { x: 1727, y: 8615 }, { x: 1808, y: 8641 }, { x: 1905, y: 8686 }, { x: 1970, y: 8844 },
+    { x: 2110, y: 9273 }, { x: 2059, y: 9628 }, { x: 2082, y: 9685 }, { x: 2111, y: 9729 },
+    { x: 2138, y: 9780 }, { x: 2150, y: 9830 }, { x: 2163, y: 9882 }, { x: 2179, y: 9941 },
+    { x: 2183, y: 10007 }, { x: 2160, y: 10053 }, { x: 2106, y: 10064 }, { x: 2074, y: 10096 },
+    { x: 2106, y: 10145 }, { x: 2140, y: 10177 }, { x: 2169, y: 10216 }, { x: 2210, y: 10261 },
+    { x: 2243, y: 10302 }, { x: 2269, y: 10364 }, { x: 2289, y: 10423 }, { x: 2313, y: 10479 },
+    { x: 2337, y: 10541 }, { x: 2352, y: 10597 }, { x: 2359, y: 10679 }, { x: 2333, y: 10755 },
+    { x: 2271, y: 10797 }, { x: 2250, y: 10915 }, { x: 2264, y: 10985 }, { x: 2278, y: 11057 },
+    { x: 2287, y: 11131 }, { x: 2305, y: 11181 }, { x: 2324, y: 11247 }, { x: 2461, y: 11240 },
+    { x: 2594, y: 11202 }, { x: 2759, y: 11193 }, { x: 2902, y: 11217 }, { x: 3001, y: 11275 },
+    { x: 3003, y: 11352 }, { x: 2963, y: 11441 }, { x: 2882, y: 11467 }, { x: 2814, y: 11501 },
+    { x: 2713, y: 11552 }, { x: 2601, y: 11574 }, { x: 2505, y: 11586 }, { x: 2427, y: 11634 },
+    { x: 2344, y: 11662 }, { x: 2270, y: 11717 }, { x: 2227, y: 11741 }, { x: 2187, y: 11788 },
+    { x: 2150, y: 11836 }, { x: 2093, y: 11907 }, { x: 2101, y: 11979 }, { x: 2101, y: 12063 },
+    { x: 2058, y: 12083 }, { x: 2014, y: 12064 }, { x: 1959, y: 12064 }, { x: 1917, y: 12096 },
+    { x: 1874, y: 12137 }, { x: 1838, y: 12235 }, { x: 1818, y: 12272 }, { x: 1665, y: 12369 },
+    { x: 1560, y: 12399 }, { x: 1331, y: 12287 }, { x: 1080, y: 12193 }, { x: 902, y: 11814 },
+    { x: 949, y: 11753 }, { x: 1007, y: 11693 }, { x: 1077, y: 11627 }, { x: 1133, y: 11578 },
+    { x: 1215, y: 11517 }, { x: 1320, y: 11468 }, { x: 1406, y: 11440 }, { x: 1510, y: 11480 },
+    { x: 1632, y: 11381 }, { x: 1851, y: 11317 }, { x: 1929, y: 10961 }, { x: 1924, y: 10617 },
+    { x: 1771, y: 10418 }, { x: 1634, y: 10263 }, { x: 1545, y: 10202 }, { x: 1481, y: 10144 },
+    { x: 1415, y: 10089 }, { x: 1340, y: 10048 }, { x: 1260, y: 10023 }, { x: 1146, y: 9999 },
+    { x: 1062, y: 10021 }, { x: 1023, y: 9975 }, { x: 984, y: 9932 }, { x: 931, y: 9896 },
+    { x: 871, y: 9896 }, { x: 822, y: 9845 }, { x: 798, y: 9790 }, { x: 762, y: 9752 },
+    { x: 717, y: 9706 }, { x: 613, y: 9693 }, { x: 565, y: 9706 }, { x: 507, y: 9723 },
+    { x: 447, y: 9756 }, { x: 402, y: 9797 }, { x: 397, y: 9868 }, { x: 364, y: 9902 },
+    { x: 330, y: 9950 }, { x: 298, y: 10008 }, { x: 266, y: 10063 }, { x: 237, y: 10123 },
+    { x: 219, y: 10181 }, { x: 217, y: 10262 }, { x: 253, y: 10432 }, { x: 418, y: 10732 },
+    { x: 384, y: 10777 }, { x: 364, y: 10852 }, { x: 342, y: 10931 }, { x: 320, y: 11019 },
+    { x: 319, y: 11103 }, { x: 372, y: 11198 }, { x: 339, y: 11250 }, { x: 321, y: 11311 },
+    { x: 338, y: 11396 }, { x: 359, y: 11460 }, { x: 329, y: 11550 }, { x: 307, y: 11630 },
+    { x: 318, y: 11725 }, { x: 351, y: 11784 }, { x: 333, y: 11836 }, { x: 317, y: 11893 },
+    { x: 300, y: 11966 }, { x: 291, y: 12039 }, { x: 283, y: 12090 }, { x: 288, y: 12164 },
+    { x: 296, y: 12243 }, { x: 344, y: 12315 }, { x: 351, y: 12380 }, { x: 361, y: 12443 },
+    { x: 374, y: 12492 }, { x: 406, y: 12575 }, { x: 465, y: 12642 }, { x: 517, y: 12700 },
+    { x: 595, y: 12719 }, { x: 599, y: 12841 }, { x: 608, y: 12918 }, { x: 611, y: 12994 },
+    { x: 624, y: 13060 }, { x: 640, y: 13136 }, { x: 681, y: 13196 }, { x: 758, y: 13228 },
+    { x: 824, y: 13298 }, { x: 882, y: 13378 }, { x: 879, y: 13492 }, { x: 858, y: 13609 },
+    { x: 842, y: 13721 }, { x: 901, y: 13798 }, { x: 876, y: 13921 }, { x: 963, y: 14032 },
+    { x: 963, y: 14183 }, { x: 960, y: 14334 }, { x: 963, y: 14433 }, { x: 978, y: 14609 },
+    { x: 1015, y: 14766 }, { x: 1046, y: 14880 }, { x: 1101, y: 15013 }, { x: 1216, y: 15108 },
+    { x: 1361, y: 15041 }, { x: 1487, y: 14998 }, { x: 1651, y: 14923 }, { x: 1805, y: 14834 },
+    { x: 1993, y: 14723 }, { x: 2138, y: 14612 }, { x: 2252, y: 14498 }, { x: 2369, y: 14350 },
+    { x: 2375, y: 14152 }, { x: 2428, y: 14057 }, { x: 2512, y: 14020 }, { x: 2629, y: 13962 },
+    { x: 2539, y: 13825 }, { x: 2512, y: 13704 }, { x: 2445, y: 13645 }, { x: 2370, y: 13568 },
+    { x: 2300, y: 13468 }, { x: 2238, y: 13393 }, { x: 2185, y: 13302 }, { x: 2131, y: 13208 },
+    { x: 2124, y: 13143 }, { x: 2132, y: 13105 }, { x: 2160, y: 13097 }, { x: 2539, y: 13094 },
+    { x: 2647, y: 13150 }, { x: 2852, y: 13168 }, { x: 2983, y: 13202 }, { x: 3150, y: 13292 },
+    { x: 3236, y: 13263 }, { x: 3383, y: 13263 }, { x: 3452, y: 13239 }, { x: 3613, y: 13209 },
+    { x: 3727, y: 13209 }, { x: 3817, y: 13265 }, { x: 3856, y: 13197 }, { x: 3894, y: 13030 },
+    { x: 3916, y: 12843 }, { x: 3926, y: 12638 }, { x: 3926, y: 12447 }, { x: 3836, y: 12319 },
+    { x: 3779, y: 12184 }, { x: 3719, y: 12086 }, { x: 3665, y: 11953 }, { x: 3627, y: 11855 },
+    { x: 3587, y: 11700 }, { x: 3575, y: 11597 }, { x: 3613, y: 11505 }, { x: 3694, y: 11512 },
+    { x: 3785, y: 11583 }, { x: 3912, y: 11561 }, { x: 4061, y: 11543 }, { x: 4213, y: 11523 },
+    { x: 4370, y: 11527 }, { x: 4533, y: 11565 }, { x: 4590, y: 11626 }, { x: 4724, y: 11654 },
+    { x: 4838, y: 11640 }, { x: 5017, y: 11617 }, { x: 5140, y: 11593 }, { x: 5184, y: 11535 },
+    { x: 5278, y: 11531 }, { x: 5431, y: 11501 }, { x: 5491, y: 11421 }, { x: 5559, y: 11342 },
+    { x: 5634, y: 11264 }, { x: 5702, y: 11202 }, { x: 5811, y: 11153 }, { x: 5996, y: 11026 },
+    { x: 6208, y: 10884 }, { x: 6391, y: 10858 }, { x: 6559, y: 10863 }, { x: 6742, y: 10833 },
+    { x: 6976, y: 10826 }, { x: 7036, y: 10686 }, { x: 7092, y: 10552 }, { x: 7115, y: 10385 },
+    { x: 7143, y: 10199 }, { x: 7030, y: 10074 }, { x: 7101, y: 9898 }, { x: 7023, y: 9684 },
+    { x: 6893, y: 9434 }, { x: 6818, y: 9216 }, { x: 6767, y: 9030 }, { x: 6739, y: 8847 },
+    { x: 6746, y: 8633 }, { x: 6752, y: 8413 }, { x: 6858, y: 8279 }, { x: 6837, y: 8096 },
+    { x: 6831, y: 7901 }, { x: 6770, y: 7690 }, { x: 6654, y: 7535 }, { x: 6608, y: 7291 },
+    { x: 6564, y: 7151 }, { x: 6510, y: 7043 }, { x: 6405, y: 7023 }, { x: 6326, y: 7021 },
+    { x: 6281, y: 6980 }, { x: 6204, y: 6937 }, { x: 6125, y: 6926 }, { x: 6034, y: 6920 },
+    { x: 5954, y: 6935 }, { x: 5875, y: 6937 }, { x: 5844, y: 6877 }, { x: 5809, y: 6802 },
+    { x: 5767, y: 6735 }, { x: 5740, y: 6661 }, { x: 5728, y: 6580 }, { x: 5708, y: 6519 },
+    { x: 5693, y: 6488 }, { x: 5683, y: 6459 }, { x: 5625, y: 6427 }, { x: 5580, y: 6327 },
+    { x: 5443, y: 6165 }, { x: 5296, y: 5976 }, { x: 5245, y: 5695 }, { x: 5278, y: 5543 },
+    { x: 5321, y: 5366 }, { x: 5306, y: 5164 }, { x: 5263, y: 4963 }, { x: 5300, y: 4913 },
+    { x: 5316, y: 4854 }, { x: 5319, y: 4789 }, { x: 5330, y: 4721 }, { x: 5377, y: 4666 },
+    { x: 5411, y: 4616 }, { x: 5456, y: 4560 }, { x: 5499, y: 4487 }, { x: 5528, y: 4428 },
+    { x: 5552, y: 4357 }, { x: 5576, y: 4288 }, { x: 5637, y: 4212 }, { x: 5660, y: 4114 },
+    { x: 5614, y: 4038 }, { x: 5562, y: 3958 }, { x: 5495, y: 3842 }, { x: 5410, y: 3791 },
+    { x: 5316, y: 3711 }, { x: 5230, y: 3624 }, { x: 5122, y: 3537 }, { x: 5052, y: 3455 },
+    { x: 5046, y: 3350 }, { x: 5126, y: 3226 }, { x: 5260, y: 3189 }, { x: 5358, y: 3152 },
+    { x: 5516, y: 3049 }, { x: 5578, y: 2944 }, { x: 5632, y: 2846 }, { x: 5760, y: 2833 },
+    { x: 5888, y: 2825 }, { x: 6020, y: 2830 }, { x: 6144, y: 2817 }, { x: 6272, y: 2681 },
+    { x: 6400, y: 2467 }, { x: 6528, y: 2262 }, { x: 6656, y: 2070 }, { x: 6784, y: 1895 },
+    { x: 6912, y: 1738 }, { x: 7040, y: 1603 }, { x: 7168, y: 1493 }, { x: 7218, y: 1028 },
+    { x: 7318, y: 920 }, { x: 7606, y: 920 }, { x: 7814, y: 863 }, { x: 7968, y: 714 },
+    { x: 8078, y: 826 }, { x: 8256, y: 822 }, { x: 8344, y: 610 }, { x: 8600, y: 226 }
+  ],
+  ceilingNodes: [
+    { x: 0, y: 70 }, { x: 216, y: 494 }, { x: 258, y: 670 }, { x: 410, y: 590 },
+    { x: 504, y: 681 }, { x: 640, y: 647 }, { x: 768, y: 1101 }, { x: 896, y: 1662 },
+    { x: 1080, y: 1456 }, { x: 1012, y: 1332 }, { x: 1008, y: 1161 }, { x: 1062, y: 1010 },
+    { x: 1118, y: 869 }, { x: 1236, y: 878 }, { x: 1420, y: 980 }, { x: 1510, y: 1083 },
+    { x: 1618, y: 1202 }, { x: 1708, y: 1313 }, { x: 1790, y: 1454 }, { x: 1928, y: 1551 },
+    { x: 2018, y: 1647 }, { x: 2164, y: 1588 }, { x: 2350, y: 1529 }, { x: 2468, y: 1476 },
+    { x: 2598, y: 1590 }, { x: 2728, y: 1529 }, { x: 2934, y: 1527 }, { x: 3026, y: 1412 },
+    { x: 3220, y: 1327 }, { x: 3430, y: 1291 }, { x: 3588, y: 1319 }, { x: 3666, y: 1375 },
+    { x: 3746, y: 1505 }, { x: 3874, y: 1583 }, { x: 4048, y: 1638 }, { x: 4344, y: 1609 },
+    { x: 4512, y: 1601 }, { x: 4686, y: 1491 }, { x: 4870, y: 1318 }, { x: 5044, y: 1206 },
+    { x: 5302, y: 1102 }, { x: 5460, y: 1031 }, { x: 5680, y: 1016 }, { x: 5788, y: 1093 },
+    { x: 5890, y: 1141 }, { x: 5980, y: 1175 }, { x: 6220, y: 1094 }, { x: 6396, y: 945 },
+    { x: 6544, y: 808 }, { x: 6666, y: 779 }, { x: 6750, y: 818 }, { x: 6840, y: 819 },
+    { x: 6970, y: 797 }, { x: 7060, y: 865 }, { x: 7108, y: 962 }, { x: 7214, y: 1028 },
+    { x: 7318, y: 927 }, { x: 7604, y: 921 }, { x: 7818, y: 855 }, { x: 7968, y: 718 },
+    { x: 8082, y: 824 }, { x: 8258, y: 826 }, { x: 8344, y: 610 }, { x: 8600, y: 232 }
+  ],
+  obstacles: [
+    { id: 'obs-1790378944610', name: 'ISLAND Layer', type: 'island', points: [{ x: 318, y: 10554 }, { x: 918, y: 10552 }, { x: 868, y: 10652 }, { x: 416, y: 10734 }] },
+    { id: 'obs-1790379115023', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 1663, y: 11374 }, { x: 1601, y: 11336 }, { x: 1602, y: 11186 }, { x: 1647, y: 11272 }, { x: 1654, y: 11123 }, { x: 1701, y: 11280 }, { x: 1714, y: 11172 }, { x: 1749, y: 11263 }, { x: 1732, y: 11354 }] },
+    { id: 'obs-1790379132356', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 1407, y: 11441 }, { x: 1387, y: 11381 }, { x: 1406, y: 11267 }, { x: 1439, y: 11359 }, { x: 1458, y: 11204 }, { x: 1475, y: 11365 }, { x: 1528, y: 11285 }, { x: 1539, y: 11408 }, { x: 1476, y: 11465 }] },
+    { id: 'obs-1790379162250', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 1246, y: 11502 }, { x: 1204, y: 11454 }, { x: 1183, y: 11340 }, { x: 1246, y: 11412 }, { x: 1219, y: 11285 }, { x: 1280, y: 11394 }, { x: 1289, y: 11314 }, { x: 1324, y: 11401 }, { x: 1319, y: 11468 }] },
+    { id: 'obs-1790379656864', name: 'SHELF Layer', type: 'strata', points: [{ x: 2569, y: 9757 }, { x: 3677, y: 9761 }, { x: 3711, y: 10097 }, { x: 2619, y: 9857 }] },
+    { id: 'obs-1790379681546', name: 'MAGMA SHELF Layer', type: 'strata', points: [{ x: 3420, y: 9761 }, { x: 3804, y: 9506 }, { x: 4360, y: 9690 }, { x: 4430, y: 9991 }, { x: 3972, y: 9882 }, { x: 3684, y: 9760 }] },
+    { id: 'obs-1790379744165', name: 'ARCH Layer', type: 'arch', points: [{ x: 3024, y: 9161 }, { x: 3424, y: 9121 }, { x: 3804, y: 9505 }, { x: 3724, y: 9557 }, { x: 3430, y: 9327 }, { x: 3064, y: 9251 }] },
+    { id: 'obs-1790379781303', name: 'ISLAND Layer', type: 'island', points: [{ x: 3422, y: 9123 }, { x: 4286, y: 9049 }, { x: 4236, y: 9149 }, { x: 3536, y: 9231 }] },
+    { id: 'obs-1790379840553', name: 'MAGMA SHELF Layer', type: 'strata', points: [{ x: 4363, y: 9692 }, { x: 5141, y: 9641 }, { x: 5741, y: 9691 }, { x: 6173, y: 9686 }, { x: 6291, y: 9771 }, { x: 4429, y: 9993 }] },
+    { id: 'obs-1790379893307', name: 'ARCH Layer', type: 'arch', points: [{ x: 4287, y: 9049 }, { x: 4911, y: 9013 }, { x: 5413, y: 9125 }, { x: 5273, y: 9247 }, { x: 4911, y: 9173 }, { x: 4233, y: 9151 }] },
+    { id: 'obs-1790379949242', name: 'ARCH Layer', type: 'arch', points: [{ x: 4084, y: 9066 }, { x: 4634, y: 8484 }, { x: 5116, y: 8480 }, { x: 5028, y: 8644 }, { x: 4668, y: 8674 }, { x: 4382, y: 9044 }] },
+    { id: 'obs-1790379972357', name: 'MAGMA SHELF Layer', type: 'strata', points: [{ x: 3321, y: 8377 }, { x: 3535, y: 8116 }, { x: 4523, y: 8402 }, { x: 5005, y: 8385 }, { x: 5073, y: 8482 }, { x: 3837, y: 8498 }] },
+    { id: 'obs-1790380017028', name: 'ARCH Layer', type: 'arch', points: [{ x: 5116, y: 8480 }, { x: 5568, y: 8396 }, { x: 5976, y: 8502 }, { x: 5936, y: 8592 }, { x: 5776, y: 8728 }, { x: 5030, y: 8644 }] },
+    { id: 'obs-1790380061952', name: 'ARCH Layer', type: 'arch', points: [{ x: 5855, y: 7532 }, { x: 6247, y: 7534 }, { x: 6655, y: 7532 }, { x: 6773, y: 7690 }, { x: 6249, y: 7756 }, { x: 5895, y: 7622 }] },
+    { id: 'obs-1790380083425', name: 'ARCH Layer', type: 'arch', points: [{ x: 5060, y: 7827 }, { x: 5502, y: 7585 }, { x: 5902, y: 7625 }, { x: 6120, y: 7707 }, { x: 5502, y: 7745 }, { x: 5190, y: 7997 }] },
+    { id: 'obs-1790380214959', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 3345, y: 9130 }, { x: 3299, y: 9082 }, { x: 3288, y: 8980 }, { x: 3349, y: 9056 }, { x: 3360, y: 8859 }, { x: 3399, y: 9008 }, { x: 3420, y: 8908 }, { x: 3451, y: 9061 }, { x: 3424, y: 9120 }] },
+    { id: 'obs-1790380254050', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 3538, y: 9114 }, { x: 3506, y: 9038 }, { x: 3513, y: 8940 }, { x: 3560, y: 9008 }, { x: 3587, y: 8823 }, { x: 3612, y: 8984 }, { x: 3647, y: 8872 }, { x: 3670, y: 9025 }, { x: 3637, y: 9106 }] },
+    { id: 'obs-1790380539575', name: 'ARCH Layer', type: 'arch', points: [{ x: 3309, y: 10487 }, { x: 3629, y: 10449 }, { x: 3727, y: 10479 }, { x: 3583, y: 10617 }, { x: 3405, y: 10645 }, { x: 3269, y: 10579 }] },
+    { id: 'obs-1790380557711', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 3393, y: 10477 }, { x: 3367, y: 10409 }, { x: 3366, y: 10329 }, { x: 3413, y: 10391 }, { x: 3418, y: 10238 }, { x: 3457, y: 10377 }, { x: 3482, y: 10291 }, { x: 3499, y: 10394 }, { x: 3484, y: 10463 }] },
+    { id: 'obs-1790380560719', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 3821, y: 11578 }, { x: 3789, y: 11528 }, { x: 3788, y: 11424 }, { x: 3833, y: 11498 }, { x: 3870, y: 11321 }, { x: 3883, y: 11480 }, { x: 3932, y: 11410 }, { x: 3945, y: 11505 }, { x: 3910, y: 11562 }] },
+    { id: 'obs-1790380564214', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 3271, y: 10578 }, { x: 3189, y: 10574 }, { x: 3110, y: 10510 }, { x: 3199, y: 10524 }, { x: 3134, y: 10435 }, { x: 3219, y: 10488 }, { x: 3210, y: 10402 }, { x: 3247, y: 10423 }, { x: 3294, y: 10522 }] },
+    { id: 'obs-1790380569231', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 2942, y: 9926 }, { x: 2936, y: 9984 }, { x: 2893, y: 10064 }, { x: 2886, y: 9994 }, { x: 2811, y: 10097 }, { x: 2850, y: 9990 }, { x: 2801, y: 10020 }, { x: 2834, y: 9955 }, { x: 2879, y: 9914 }] },
+    { id: 'obs-1790380572929', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 3670, y: 10533 }, { x: 3760, y: 10521 }, { x: 3843, y: 10553 }, { x: 3740, y: 10589 }, { x: 3875, y: 10636 }, { x: 3710, y: 10623 }, { x: 3767, y: 10675 }, { x: 3674, y: 10650 }, { x: 3631, y: 10571 }] },
+    { id: 'obs-pasted-1790380773194', name: 'Crystalline Spire Cluster (Copy)', type: 'crystals', points: [{ x: 3150, y: 9271 }, { x: 3174, y: 9339 }, { x: 3119, y: 9441 }, { x: 3130, y: 9333 }, { x: 3067, y: 9418 }, { x: 3088, y: 9319 }, { x: 3033, y: 9369 }, { x: 3044, y: 9306 }, { x: 3095, y: 9257 }] },
+    { id: 'obs-pasted-1790380818026', name: 'Crystalline Spire Cluster (Copy)', type: 'crystals', points: [{ x: 2963, y: 11439 }, { x: 2987, y: 11479 }, { x: 2988, y: 11535 }, { x: 2955, y: 11481 }, { x: 2958, y: 11586 }, { x: 2927, y: 11499 }, { x: 2900, y: 11577 }, { x: 2891, y: 11482 }, { x: 2914, y: 11453 }] },
+    { id: 'obs-pasted-1790380889685', name: 'Crystalline Spire Cluster (Copy) (Copy)', type: 'crystals', points: [{ x: 5582, y: 9855 }, { x: 5602, y: 9901 }, { x: 5595, y: 9989 }, { x: 5570, y: 9923 }, { x: 5539, y: 10080 }, { x: 5510, y: 9903 }, { x: 5475, y: 9971 }, { x: 5470, y: 9894 }, { x: 5493, y: 9863 }] },
+    { id: 'obs-1790380974739', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 1807, y: 8641 }, { x: 1795, y: 8575 }, { x: 1818, y: 8487 }, { x: 1847, y: 8573 }, { x: 1910, y: 8448 }, { x: 1889, y: 8591 }, { x: 1974, y: 8533 }, { x: 1945, y: 8624 }, { x: 1882, y: 8677 }] },
+    { id: 'obs-pasted-1790381015123', name: 'Crystalline Spire Cluster (Copy) (Copy) (Copy)', type: 'crystals', points: [{ x: 3602, y: 11753 }, { x: 3588, y: 11775 }, { x: 3485, y: 11857 }, { x: 3544, y: 11771 }, { x: 3455, y: 11820 }, { x: 3524, y: 11741 }, { x: 3459, y: 11735 }, { x: 3536, y: 11702 }, { x: 3585, y: 11699 }] },
+    { id: 'obs-pasted-1790381415264', name: 'Crystalline Spire Cluster (Copy)', type: 'crystals', points: [{ x: 5245, y: 5694 }, { x: 5177, y: 5702 }, { x: 5092, y: 5648 }, { x: 5179, y: 5642 }, { x: 5098, y: 5543 }, { x: 5183, y: 5596 }, { x: 5174, y: 5510 }, { x: 5211, y: 5531 }, { x: 5258, y: 5630 }] },
+    { id: 'obs-pasted-1790381556925', name: 'Crystalline Spire Cluster (Copy)', type: 'crystals', points: [{ x: 4258, y: 5488 }, { x: 4246, y: 5422 }, { x: 4293, y: 5330 }, { x: 4298, y: 5448 }, { x: 4375, y: 5337 }, { x: 4346, y: 5468 }, { x: 4413, y: 5426 }, { x: 4364, y: 5523 }, { x: 4297, y: 5546 }] },
+    { id: 'obs-pasted-1790382297740', name: 'Crystalline Spire Cluster (Copy) (Copy) (Copy)', type: 'crystals', points: [{ x: 5372, y: 9882 }, { x: 5392, y: 9928 }, { x: 5395, y: 10016 }, { x: 5360, y: 9950 }, { x: 5341, y: 10089 }, { x: 5300, y: 9930 }, { x: 5273, y: 10006 }, { x: 5270, y: 9927 }, { x: 5283, y: 9890 }] },
+    { id: 'obs-1790382471698', name: 'ARCH Layer', type: 'arch', points: [{ x: 1137, y: 7832 }, { x: 1553, y: 7810 }, { x: 1947, y: 7818 }, { x: 1913, y: 7940 }, { x: 1577, y: 8002 }, { x: 1127, y: 7992 }] },
+    { id: 'obs-1790382492818', name: 'ARCH Layer', type: 'arch', points: [{ x: 1947, y: 7816 }, { x: 2431, y: 7802 }, { x: 2827, y: 8000 }, { x: 2783, y: 8100 }, { x: 2431, y: 8068 }, { x: 1911, y: 7942 }] },
+    { id: 'obs-1790382595027', name: 'SPIRE Layer', type: 'spire', points: [{ x: 2333, y: 7237 }, { x: 2415, y: 7273 }, { x: 2377, y: 7321 }, { x: 2351, y: 7393 }] },
+    { id: 'obs-pasted-1790382623606', name: 'SPIRE Layer (Copy)', type: 'spire', points: [{ x: 2249, y: 7200 }, { x: 2331, y: 7236 }, { x: 2293, y: 7284 }, { x: 2267, y: 7356 }] },
+    { id: 'obs-pasted-1790382631976', name: 'SPIRE Layer (Copy)', type: 'spire', points: [{ x: 2200, y: 7161 }, { x: 2244, y: 7193 }, { x: 2206, y: 7241 }, { x: 2180, y: 7313 }] },
+    { id: 'obs-pasted-1790382642799', name: 'SPIRE Layer (Copy)', type: 'spire', points: [{ x: 2141, y: 7119 }, { x: 2185, y: 7153 }, { x: 2139, y: 7191 }, { x: 2093, y: 7255 }] },
+    { id: 'obs-pasted-1790382659247', name: 'SPIRE Layer (Copy)', type: 'spire', points: [{ x: 2433, y: 7274 }, { x: 2499, y: 7288 }, { x: 2467, y: 7354 }, { x: 2451, y: 7430 }] },
+    { id: 'obs-pasted-1790382670024', name: 'SPIRE Layer (Copy)', type: 'spire', points: [{ x: 2543, y: 7288 }, { x: 2601, y: 7286 }, { x: 2587, y: 7372 }, { x: 2561, y: 7444 }] },
+    { id: 'obs-pasted-1790382679565', name: 'SPIRE Layer (Copy)', type: 'spire', points: [{ x: 2636, y: 7295 }, { x: 2704, y: 7311 }, { x: 2680, y: 7383 }, { x: 2654, y: 7455 }] },
+    { id: 'obs-1790382711539', name: 'ARCH Layer', type: 'arch', points: [{ x: 2567, y: 7872 }, { x: 3043, y: 7700 }, { x: 3443, y: 7740 }, { x: 3403, y: 7830 }, { x: 3043, y: 7860 }, { x: 2827, y: 7998 }] },
+    { id: 'obs-pasted-1790382828940', name: 'Crystalline Spire Cluster (Copy) (Copy)', type: 'crystals', points: [{ x: 4913, y: 4353 }, { x: 4913, y: 4315 }, { x: 4970, y: 4227 }, { x: 4959, y: 4325 }, { x: 5066, y: 4238 }, { x: 4997, y: 4357 }, { x: 5092, y: 4321 }, { x: 4991, y: 4404 }, { x: 4952, y: 4411 }] },
+    { id: 'obs-1790383170028', name: 'SHELF Layer', type: 'strata', points: [{ x: 2048, y: 2172 }, { x: 2878, y: 2254 }, { x: 2656, y: 2406 }, { x: 1812, y: 2388 }] },
+    { id: 'obs-1790383187893', name: 'MAGMA SHELF Layer', type: 'strata', points: [{ x: 2603, y: 2228 }, { x: 2891, y: 2021 }, { x: 3179, y: 1867 }, { x: 3533, y: 1830 }, { x: 3483, y: 2159 }, { x: 2879, y: 2259 }] },
+    { id: 'obs-1790383223233', name: 'ARCH Layer', type: 'arch', points: [{ x: 2930, y: 1528 }, { x: 3258, y: 1632 }, { x: 3572, y: 1746 }, { x: 3532, y: 1836 }, { x: 3172, y: 1866 }, { x: 2992, y: 1740 }] },
+    { id: 'obs-1790383264213', name: 'ARCH Layer', type: 'arch', points: [{ x: 2755, y: 2343 }, { x: 3171, y: 2471 }, { x: 3571, y: 2511 }, { x: 3531, y: 2601 }, { x: 3171, y: 2631 }, { x: 2657, y: 2407 }] },
+    { id: 'obs-1790383283218', name: 'PILLAR Layer', type: 'pillar', points: [{ x: 2303, y: 2563 }, { x: 2417, y: 3007 }, { x: 2423, y: 3349 }, { x: 2273, y: 3263 }] },
+    { id: 'obs-pasted-1790383303621', name: 'PILLAR Layer (Copy)', type: 'pillar', points: [{ x: 2650, y: 2730 }, { x: 2614, y: 3118 }, { x: 2620, y: 3460 }, { x: 2470, y: 3374 }] },
+    { id: 'obs-pasted-1790383314039', name: 'PILLAR Layer (Copy)', type: 'pillar', points: [{ x: 2776, y: 2780 }, { x: 2792, y: 3354 }, { x: 2838, y: 3574 }, { x: 2688, y: 3488 }] },
+    { id: 'obs-pasted-1790383327809', name: 'PILLAR Layer (Copy)', type: 'pillar', points: [{ x: 3016, y: 2878 }, { x: 3114, y: 3468 }, { x: 3104, y: 3624 }, { x: 2988, y: 3642 }] },
+    { id: 'obs-1790383363821', name: 'ARCH Layer', type: 'arch', points: [{ x: 3154, y: 2630 }, { x: 3554, y: 2590 }, { x: 3954, y: 2630 }, { x: 3914, y: 2720 }, { x: 3554, y: 2750 }, { x: 3194, y: 2720 }] },
+    { id: 'obs-1790383375287', name: 'ARCH Layer', type: 'arch', points: [{ x: 3873, y: 2723 }, { x: 4245, y: 3087 }, { x: 4255, y: 3265 }, { x: 4089, y: 3323 }, { x: 3847, y: 3239 }, { x: 3681, y: 2741 }] },
+    { id: 'obs-1790383408564', name: 'MAGMA SHELF Layer', type: 'strata', points: [{ x: 3556, y: 2591 }, { x: 4182, y: 2346 }, { x: 4532, y: 2358 }, { x: 4606, y: 2565 }, { x: 4216, y: 2642 }, { x: 3956, y: 2630 }] },
+    { id: 'obs-1790383447355', name: 'Crystalline Spire Cluster', type: 'crystals', points: [{ x: 4531, y: 2360 }, { x: 4535, y: 2316 }, { x: 4584, y: 2220 }, { x: 4571, y: 2318 }, { x: 4654, y: 2237 }, { x: 4597, y: 2366 }, { x: 4694, y: 2324 }, { x: 4633, y: 2423 }, { x: 4560, y: 2436 }] }
+  ],
+  fuelPickups: [
+    { id: 'fuel-1790379923135', x: 3933, y: 10015, amount: 100 },
+    { id: 'fuel-1790380285144', x: 3908, y: 8766, amount: 100 },
+    { id: 'fuel-1790380307478', x: 5578, y: 8889, amount: 100 },
+    { id: 'fuel-1790381058304', x: 4791, y: 11520, amount: 65 },
+    { id: 'fuel-1790382431415', x: 1391, y: 14549, amount: 100 },
+    { id: 'fuel-1790383487981', x: 1243, y: 2259, amount: 100 },
+    { id: 'fuel-1790383947041', x: 4173, y: 6036, amount: 100 },
+    { id: 'fuel-1790383952035', x: 4385, y: 8293, amount: 100 },
+    { id: 'fuel-1790383959858', x: 3420, y: 6756, amount: 100 },
+    { id: 'fuel-1790383966277', x: 2250, y: 8153, amount: 100 },
+    { id: 'fuel-1790383975000', x: 5970, y: 7823, amount: 100 },
+    { id: 'fuel-1790383985606', x: 5886, y: 9954, amount: 100 },
+    { id: 'fuel-1790384001684', x: 797, y: 13023, amount: 100 },
+    { id: 'fuel-1790384007925', x: 1915, y: 14205, amount: 100 },
+    { id: 'fuel-1790384010738', x: 1206, y: 13745, amount: 100 },
+    { id: 'fuel-1790384115414', x: 2997, y: 11161, amount: 100 },
+    { id: 'fuel-1790384120867', x: 2652, y: 11674, amount: 100 },
+    { id: 'fuel-1790384127467', x: 3684, y: 12388, amount: 100 },
+    { id: 'fuel-1790384137256', x: 5750, y: 11032, amount: 100 },
+    { id: 'fuel-1790384153223', x: 6964, y: 9875, amount: 100 },
+    { id: 'fuel-1790384369694', x: 5165, y: 5304, amount: 100 },
+    { id: 'fuel-1790384380142', x: 2173, y: 9063, amount: 100 }
+  ],
+  cargoPlatforms: [
+    { id: 'cargo-pickup-1790379729051', type: 'pickup', x: 3299, y: 9753, width: 140, weightClass: 'heavy', cargoType: 'explosive', label: 'HIGH-EXPLOSIVE MUNITIONS DEPOT' },
+    { id: 'cargo-pickup-1790379880633', type: 'pickup', x: 4425, y: 9682, width: 140, weightClass: 'heavy', cargoType: 'plasma', label: 'PLASMA BATTERY RECHARGE HUB' },
+    { id: 'vehicle-depot-1790380105684', type: 'vehicle_depot', x: 6220, y: 7519, width: 480, label: 'SURFACE VEHICLE & ROVER LOGISTICS BASE', truckCount: 2 },
+    { id: 'vehicle-depot-1790382514755', type: 'vehicle_depot', x: 1932, y: 7803, width: 480, label: 'SURFACE VEHICLE & ROVER LOGISTICS BASE', truckCount: 2 },
+    { id: 'cargo-pickup-1790383861189', type: 'pickup', x: 3308, y: 13257, width: 140, weightClass: 'medium', cargoType: 'isotope', label: 'QUANTUM ISOTOPE FACILITY' }
+  ],
+  signposts: [
+    { id: 'sign-1790381089010', x: 5673, y: 9130, direction: 'down_left', targetType: 'pickup', targetName: 'CARGO VAULT', subText: 'SUPPLY POD DEPOT', color: '#f59e0b' },
+    { id: 'sign-1790381110085', x: 2612, y: 9165, direction: 'down_right', targetType: 'pickup', targetName: 'CARGO VAULT', subText: 'SUPPLY POD DEPOT', color: '#f59e0b' },
+    { id: 'sign-1790381121844', x: 5322, y: 6955, direction: 'down_right', targetType: 'vehicle_depot', targetName: 'ROVER DEPOT', subText: 'VEHICLE BAY', color: '#38bdf8' },
+    { id: 'sign-1790381131685', x: 2608, y: 9310, direction: 'down', targetType: 'landing', targetName: 'BASE LZ', subText: 'PRIMARY OUTPOST', color: '#22c55e' },
+    { id: 'sign-1790381152002', x: 5962, y: 9132, direction: 'down', targetType: 'landing', targetName: 'BASE LZ', subText: 'PRIMARY OUTPOST', color: '#22c55e' },
+    { id: 'sign-1790382733642', x: 3244, y: 7269, direction: 'left', targetType: 'vehicle_depot', targetName: 'ROVER DEPOT', subText: 'VEHICLE BAY', color: '#38bdf8' },
+    { id: 'sign-1790382751853', x: 3501, y: 7270, direction: 'down', targetType: 'landing', targetName: 'BASE LZ', subText: 'PRIMARY OUTPOST', color: '#22c55e' },
+    { id: 'sign-1790382775492', x: 5054, y: 6957, direction: 'down', targetType: 'landing', targetName: 'BASE LZ', subText: 'PRIMARY OUTPOST', color: '#22c55e' }
+  ],
+  textNotes: [],
+  difficultyMode: 'auto',
+  volcanoes: [
+    { id: 'volcano-1790379361037', x: 2353, y: 13097, width: 380, height: 240, calderaWidth: 122, eruptionHeight: 480, eruptionInterval: 4.5, eruptionDuration: 1.8, colorTheme: 'cryo' },
+    { id: 'volcano-1790379474612', x: 2722, y: 11224, width: 380, height: 240, calderaWidth: 122, eruptionHeight: 480, eruptionInterval: 10, eruptionDuration: 1.8, colorTheme: 'plasma' },
+    { id: 'volcano-1790380193876', x: 4650, y: 8403, width: 260, height: 160, calderaWidth: 83, eruptionHeight: 320, eruptionInterval: 10, eruptionDuration: 1.8, colorTheme: 'cryo' },
+    { id: 'volcano-1790381202837', x: 4340, y: 11564, width: 380, height: 240, calderaWidth: 122, eruptionHeight: 480, eruptionInterval: 10, eruptionDuration: 1.8, colorTheme: 'cryo' },
+    { id: 'volcano-1790381234742', x: 6443, y: 10874, width: 380, height: 240, calderaWidth: 122, eruptionHeight: 480, eruptionInterval: 10, eruptionDuration: 1.8, colorTheme: 'plasma' }
+  ]
+};
+
 export const STARTER_TEMPLATES: CustomMapData[] = [
   OFFICIAL_LUNA_MAP,
   OFFICIAL_TITAN_MAP,
@@ -11964,6 +12252,7 @@ export const STARTER_TEMPLATES: CustomMapData[] = [
   OFFICIAL_TARTARUS_MAP,
   OFFICIAL_HYPERION_MAP,
   OFFICIAL_PROMETHEAN_MAP,
+  OFFICIAL_ABYSSUS_MAP,
   {
     id: 'starter-abyssal-cavern',
     name: 'Abyssal Chasm',
@@ -12511,6 +12800,7 @@ export function getSavedCustomMaps(): CustomMapData[] {
       syncOfficialMap(OFFICIAL_TITAN_MAP);
       syncOfficialMap(OFFICIAL_LUNA_MAP);
       syncOfficialMap(OFFICIAL_PROMETHEAN_MAP);
+      syncOfficialMap(OFFICIAL_ABYSSUS_MAP);
 
       return parsed;
     }
@@ -12523,7 +12813,7 @@ export function getSavedCustomMaps(): CustomMapData[] {
 
 /**
  * Returns any saved user custom map that overrides an official campaign planet,
- * e.g. when a user edits Luna, Titan, Ares, Vesta, Phobos, Europa, Ceres, Glacies, Vespera, Calypso, Zephyr, Tartarus, or Hyperion and saves it.
+ * e.g. when a user edits Luna, Titan, Ares, Vesta, Phobos, Europa, Ceres, Glacies, Vespera, Calypso, Zephyr, Tartarus, Hyperion, or Abyssus and saves it.
  */
 export function getSavedMapForPlanet(planetId: string): CustomMapData | null {
   try {
@@ -12583,6 +12873,9 @@ export function getSavedMapForPlanet(planetId: string): CustomMapData | null {
     if (cleanId === 'promethean') {
       return OFFICIAL_PROMETHEAN_MAP;
     }
+    if (cleanId === 'abyssus') {
+      return OFFICIAL_ABYSSUS_MAP;
+    }
     return null;
   } catch (e) {
     console.error('[CustomMapsStorage] Error in getSavedMapForPlanet:', e);
@@ -12600,6 +12893,7 @@ export function getSavedMapForPlanet(planetId: string): CustomMapData | null {
     if (planetId === 'tartarus' || planetId === 'official-tartarus') return OFFICIAL_TARTARUS_MAP;
     if (planetId === 'hyperion' || planetId === 'official-hyperion') return OFFICIAL_HYPERION_MAP;
     if (planetId === 'promethean' || planetId === 'official-promethean') return OFFICIAL_PROMETHEAN_MAP;
+    if (planetId === 'abyssus' || planetId === 'official-abyssus') return OFFICIAL_ABYSSUS_MAP;
     return null;
   }
 }
@@ -12611,7 +12905,7 @@ export function getSavedMapForPlanet(planetId: string): CustomMapData | null {
 export function isOfficialMap(mapId: string): boolean {
   if (!mapId) return false;
   const cleanId = mapId.replace(/^official-/, '').replace(/^custom-/, '');
-  return ['luna', 'titan', 'ares', 'vesta', 'phobos', 'europa', 'ceres', 'glacies', 'vespera', 'calypso', 'zephyr', 'tartarus', 'hyperion', 'promethean'].includes(cleanId);
+  return ['luna', 'titan', 'ares', 'vesta', 'phobos', 'europa', 'ceres', 'glacies', 'vespera', 'calypso', 'zephyr', 'tartarus', 'hyperion', 'promethean', 'abyssus'].includes(cleanId);
 }
 
 /**
@@ -12633,7 +12927,8 @@ export function getOfficialDefaultMap(planetId: string): CustomMapData | null {
   if (cleanId === 'tartarus') return OFFICIAL_TARTARUS_MAP;
   if (cleanId === 'hyperion') return OFFICIAL_HYPERION_MAP;
   if (cleanId === 'promethean') return OFFICIAL_PROMETHEAN_MAP;
-  return null;
+   if (cleanId === 'abyssus') return OFFICIAL_ABYSSUS_MAP;
+   return null;
 }
 
 /**

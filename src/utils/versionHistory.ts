@@ -12,14 +12,45 @@ export interface VersionRelease {
   }[];
 }
 
-export const CURRENT_GAME_VERSION = 'v1.9.11';
+export const CURRENT_GAME_VERSION = 'v1.9.12';
 
 export const GAME_VERSION_HISTORY: VersionRelease[] = [
+  {
+    version: 'v1.9.12',
+    releaseDate: 'September 26, 2026',
+    title: 'Abyssus Void — New Extreme Official Planet Map',
+    tag: 'LATEST',
+    tagColor: 'bg-purple-500/20 text-purple-300 border-purple-400/40',
+    summary:
+      'Added the Abyssus Void official campaign planet — a cavernous 15.5km deep void chasm containing 5 distinct subterranean strata, floating magnetic monoliths, and severe descending drafts. Features 27 custom obstacles (arches, shelves, pillars, spires, crystalline clusters), 5 volcanic vents with cryo/plasma themes, 21 fuel pickups, 5 cargo platforms including 2 vehicle depots, 8 directional signposts, and a unique magenta-themed atmospheric palette.',
+    categories: [
+      {
+        name: 'New Official Planet',
+        iconType: 'missions',
+        items: [
+          'Abyssus Void: Extreme difficulty (3.3g gravity, 360s target time)',
+          '15,600-unit deep vertical chasm with stratified terrain layers',
+          'Custom magenta/lavender theme with glowing monolith aesthetic',
+          '5 cryo/plasma volcanic vents at varying depths',
+        ],
+      },
+      {
+        name: 'Mission Content',
+        iconType: 'editor',
+        items: [
+          '27 hand-crafted obstacles: arches, magma shelves, strata layers, pillars, spires, crystalline spire clusters, islands',
+          '21 strategically placed fuel pickups (65-100 units)',
+          '5 cargo platforms: 2 heavy explosive/plasma depots, 2 vehicle depots, 1 medium isotope facility',
+          '8 directional signposts guiding to cargo vaults, rover depots, and primary landing zone',
+        ],
+      },
+    ],
+  },
   {
     version: 'v1.9.11',
     releaseDate: 'September 23, 2026',
     title: 'Fleet Craft Visual Scaling Overhaul & ViewBox Optimization',
-    tag: 'LATEST',
+    tag: 'MAJOR',
     tagColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
     summary:
       'Comprehensive preview and close-up overhaul across all 21 spacecraft in the hangar. Re-architected individual SVG viewBox framing to eliminate dead margins, and enlarged the main start-menu preview deck and inspect close-up stage by 25%–45%, allowing intricate hull paneling, thrusters, sensor suites, and liveries to command the screen.',
